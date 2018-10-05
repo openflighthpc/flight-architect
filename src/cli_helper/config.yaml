@@ -282,27 +282,6 @@ commands:
       use: *repo_use
       update: *repo_update
 
-  status:
-    syntax: metal status NODE_IDENTIFIER [options]
-    summary: Display the current network status of the nodes
-    description: >
-      The status tool will attempt to determine the power and ping status of the
-      node(s).
-    action: Commands::Status
-    options:
-      - *gender_option
-      - tags: [--wait-limit WAIT_LIMIT]
-        type: Integer
-        default: 10
-        description: >
-          Sets how long (in seconds) wait for a response from the node before
-          assuming an error has occurred. Minimum 1 seconds.
-      - tags: [--thread-limit THREAD_LIMIT]
-        type: Integer
-        default: 50
-        description: >
-          Sets the maximum number of network operations
-
   sync:
     syntax: metal sync [options]
     summary: Moves staged files into place and service management

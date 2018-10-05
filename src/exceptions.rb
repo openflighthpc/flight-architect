@@ -63,12 +63,6 @@ module Metalware
     end
   end
 
-  class StatusDataIncomplete < MetalwareError
-    def initialize(msg = 'Failed to receive data for all nodes')
-      super
-    end
-  end
-
   class InternalError < MetalwareError; end
   class AnswerJSONSyntax < MetalwareError; end
   class ScopeError < MetalwareError; end

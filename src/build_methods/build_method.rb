@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'staging'
-require 'keyword_struct'
 
 module Metalware
   module BuildMethods
@@ -10,11 +9,6 @@ module Metalware
       def initialize(node)
         @node = node
         @file_path = FilePath # Inherited class still require file_path
-      end
-
-      def render_staging_templates(templater)
-        staging_templates.each { |t| render_to_staging(templater, t) }
-        render_build_files_to_staging(templater)
       end
 
       def start_hook
@@ -52,32 +46,10 @@ module Metalware
         raise NotImplementedError
       end
 
-      def render_build_files_to_staging(templater)
-        BuildFilesRenderer.new(templater: templater, namespace: node).render
-        node.plugins.map do |plugin|
-          BuildFilesRenderer.new(templater: templater, namespace: plugin).render
-        end
-      end
-
       def render_to_staging(templater, template_type, sync: nil)
         template_type_path = FilePath.template_path(template_type, node: node)
         sync ||= FilePath.template_save_path(template_type, node: node)
         templater.render(node, template_type_path, sync)
-      end
-
-      BuildFilesRenderer = KeywordStruct.new(:templater, :namespace) do
-        def render
-          namespace.files.each_value do |files|
-            files.select { |file| file[:error].nil? }.map do |file|
-              templater.render(
-                namespace,
-                file[:template_path],
-                file[:rendered_path],
-                mkdir: true
-              )
-            end
-          end
-        end
       end
     end
   end

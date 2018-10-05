@@ -282,21 +282,6 @@ commands:
       use: *repo_use
       update: *repo_update
 
-  template:
-    syntax: metal template NODE_IDENTIFIER [options]
-    summary: Template the files for a node or group to staging
-    description: >
-      The template command renders the files for a node or group. This includes
-      the templates for the particular build method used as well as the build
-      files as defined in the configs.
-
-
-      All the templates are rendered to the staging directory. This is so they
-      can be reviewed before the are moved into place using the sync command.
-    action: Commands::Template
-    options:
-      - *gender_option
-
   view-answers:
     syntax: metal view-answers [SUB_COMMAND] [options]
     summary: View configured answers

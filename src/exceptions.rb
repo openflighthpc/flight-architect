@@ -38,7 +38,6 @@ module Metalware
   class SystemCommandError < UserMetalwareError; end
   class StrictWarningError < UserMetalwareError; end
   class InvalidInput < UserMetalwareError; end
-  class InvalidConfigParameter < UserMetalwareError; end
   class FileDoesNotExistError < UserMetalwareError; end
   class DataError < UserMetalwareError; end
   class UninitializedLocalNode < UserMetalwareError; end

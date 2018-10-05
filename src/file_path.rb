@@ -94,10 +94,6 @@ module Metalware
         )
       end
 
-      def named_zone(zone)
-        File.join(var_named, zone)
-      end
-
       def build_complete(node_namespace)
         event(node_namespace, 'complete')
       end

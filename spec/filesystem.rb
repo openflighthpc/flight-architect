@@ -160,22 +160,6 @@ class FileSystem
     with_fixtures(fixture_file, at: fixtures_path(fixture_file))
   end
 
-  def with_config_fixture(config_fixture_file, target)
-    with_fixtures(
-      config_fixture_file,
-      at: File.join('/var/lib/metalware/repo/config', target)
-    )
-  end
-
-  def with_templates_fixtures(template_path, target)
-    with_fixtures(
-      template_path,
-      at: File.join(
-        Metalware::Constants::METALWARE_INSTALL_PATH, 'templates', target
-      )
-    )
-  end
-
   def with_asset_types
     asset_types_dir_path = File.dirname(Metalware::FilePath.asset_type(''))
     FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)

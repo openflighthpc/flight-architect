@@ -35,3 +35,4 @@
       - MetalBench
       - debug!
       - body
+      - run_command

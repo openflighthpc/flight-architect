@@ -252,49 +252,6 @@ commands:
     autocomplete:
       files_relative_to: /var/lib/metalware/rendered
 
-  hunter:
-    syntax: metal hunter [options]
-    summary: Detects and caches DHCP discover messages
-    description: >
-      Hunter is used in conjunction with the dhcp command to update
-      dhcp server. Hunter listens out for dhcp discovery messages from the
-      booting nodes. Hunter assigns the nodes a node name based of PREFIX or
-      user input. The node's name and MAC address is then cached.
-
-
-      Hunter will continue
-      listening for nodes until it is interrupted. A single MAC address will
-      only be cached once per run even if the compute node reboots. Refer to
-      dhcp command to updated the dhcp server.
-    action: Commands::Hunter
-    options:
-      - tags: [-i INTERFACE, --interface INTERFACE]
-        type: String
-        default:
-          dynamic: build_interface
-        description: >
-          Local interface to hunt on; defaults to standard build interface if
-          unspecified
-      - tags: [-p PREFIX, --prefix PREFIX]
-        type: String
-        default: node
-        description: >
-          Root to suggest for detected node names
-      - tags: [-l LENGTH, --length LENGTH]
-        type: Integer
-        default: 2
-        description: >
-          Numeric sequence length to use for suggested detected node names
-      - tags: [-s START_NUMBER, --start START_NUMBER]
-        type: Integer
-        default: 1
-        description: >
-          Start integer to use for suggested detected node names
-      - tags: [-d, --ignore-duplicate-macs]
-        description: >
-          Ignore any MAC addresses found which are already associated with a
-          node name in the hunter cache
-
   ipmi:
     syntax: metal ipmi NODE_IDENTIFIER [COMMAND] [options]
     summary: Perform ipmi commands on single or multiple machines

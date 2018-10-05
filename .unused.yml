@@ -34,3 +34,4 @@
       allowedTerms:
       - MetalBench
       - debug!
+      - body

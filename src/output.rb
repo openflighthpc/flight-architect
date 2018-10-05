@@ -44,10 +44,6 @@ module Metalware
       # Methods to output/store for displaying in GUI appropriately depending
       # on if we are in CLI or GUI.
 
-      def cli_only(*lines)
-        stderr(*lines) unless in_gui?
-      end
-
       def info(*lines)
         output_to_cli_or_gui(lines, type: :info)
       end

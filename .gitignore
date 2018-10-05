@@ -1,0 +1,6 @@
+coverage
+tmp
+spec/examples.txt
+vendor
+.bundle
+.vagrant

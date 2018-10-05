@@ -1,0 +1,126 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+#==============================================================================
+# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+#
+# This file/package is part of Alces Metalware.
+#
+# Alces Metalware is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Alces Metalware is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+#
+# For more information on the Alces Metalware, please visit:
+# https://github.com/alces-software/metalware
+#==============================================================================
+
+require 'pathname'
+require 'yaml'
+
+class AutoComplete
+  def initialize
+    @cur = (ARGV[0] == '__CUR_IS_EMPTY__' ? nil : ARGV[0])
+    @complete = ARGV[2..-1] # skips the second input as this is always `metal`
+    @complete.pop unless @cur.nil? # Remove the current element from completed
+    @values = []
+    config = File.join(File.dirname(__FILE__), '../src/cli_helper/config.yaml')
+
+    # NOTE: Now that Metalware has a `Data` module the majority of yaml
+    # handling occurs through that.
+    # CliHelper and autocomplete are exceptions as they should only ever be
+    # altered by developers and need to load the file as is, instead of
+    # Metalware altering it to what it thinks it needs to be.
+    @yaml = YAML.load_file(config)
+    @input_only_contains_commands = true
+  end
+
+  def run
+    auto_complete_commands
+    auto_complete_options
+    command_dependent_auto_complete
+    return_values
+  end
+
+  def auto_complete_commands
+    if @complete.empty?
+      add_return_values(current_hash.keys)
+    elsif current_hash.key?('subcommands') && @input_only_contains_commands
+      add_return_values(current_hash['subcommands'].keys)
+    end
+  end
+
+  def auto_complete_options
+    return if @cur.to_s[0] != '-'
+    add_return_values(['-h', '--help', '--trace', '--version'])
+    @yaml['global_options'].each do |opt|
+      add_return_values(opt['tags'])
+    end
+    if current_hash['options'].is_a?(Array)
+      current_hash['options'].each do |opt|
+        add_return_values(opt['tags'])
+      end
+    end
+  end
+
+  def command_dependent_auto_complete
+    autocomplete_definition = current_hash.fetch('autocomplete', {})
+
+    # Currently only a single command-dependent auto-complete definition is
+    # supported, to auto-complete file paths relative to a given root path.
+    relative_paths_root = autocomplete_definition['files_relative_to']
+    if relative_paths_root
+      auto_complete_relative_file_paths(relative_paths_root)
+    end
+  end
+
+  def auto_complete_relative_file_paths(relative_paths_root)
+    base_path = Pathname.new(relative_paths_root)
+
+    paths = Pathname
+            .glob("#{relative_paths_root}/**/*")
+            .select(&:file?)
+            .map { |path| path.relative_path_from(base_path).to_s }
+
+    add_return_values(paths)
+  end
+
+  def current_hash
+    @current_hash ||= lambda do
+      cmd_hash = @yaml['commands']
+      @complete.each_with_index do |cmd, idx|
+        new_hash = if cmd_hash.key?('subcommands')
+                     cmd_hash['subcommands'][cmd]
+                   elsif idx == 0
+                     cmd_hash[cmd]
+                   else
+                     {}
+                   end
+        if new_hash.nil? || new_hash.empty?
+          @input_only_contains_commands = false
+          break
+        end
+        cmd_hash = new_hash
+      end
+      cmd_hash
+    end.call
+  end
+
+  def add_return_values(values)
+    values.is_a?(Array) ? @values.concat(values) : @values.push(values)
+  end
+
+  def return_values
+    puts @values.join(' ')
+  end
+end
+
+AutoComplete.new.run

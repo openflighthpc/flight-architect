@@ -114,20 +114,6 @@ subcommands:
     summary: Edit an existing layout record
     action: Commands::Layout::Edit
 
-  orchestrate_create: &orchestrate_create
-    syntax: metal orchestrate create NODE_IDENTIFIER [options]
-    summary: Creates a new virtual machine or group of machines
-    action: Commands::Orchestrate::Create
-    options:
-      - *gender_option
-
-  orchestrate_destroy: &orchestrate_destroy
-    syntax: metal orchestrate destroy NODE_IDENTIFIER [options]
-    summary: Destroys a single or group of virtual machines
-    action: Commands::Orchestrate::Destroy
-    options:
-      - *gender_option
-
   remove_group: &remove_group
     syntax: metal remove group GROUP_NAME [options]
     summary: Removes a previously configured group
@@ -258,13 +244,6 @@ commands:
     subcommands:
       add: *layout_add
       edit: *layout_edit
-
-  orchestrate:
-    syntax: metal orchestrate [SUB_COMMAND] [options]
-    summary: Orchestrate virtual machines
-    subcommands:
-      create: *orchestrate_create
-      destroy: *orchestrate_destroy
 
   overview:
     syntax: metal overview [options]

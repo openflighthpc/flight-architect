@@ -232,14 +232,6 @@ commands:
       node: *configure_node
       local: *configure_local
 
-  console:
-    syntax: metal console NODE_NAME [options]
-    summary: Display a node's console in the terminal
-    description: >
-      Displays the console of a node in the terminal. The console command
-      operates over the BMC network and can be used as node is booting.
-    action: Commands::Console
-
   each:
     syntax: metal each NODE_IDENTIFIER COMMAND [options]
     summary: Runs a command for a node(s)

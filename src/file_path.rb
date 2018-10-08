@@ -85,15 +85,6 @@ module Metalware
         )
       end
 
-      def template_save_path(template_type, node: nil)
-        node = Node.new(config, nil) if node.nil?
-        File.join(
-          rendered_files,
-          template_type.to_s,
-          node.name
-        )
-      end
-
       def build_complete(node_namespace)
         event(node_namespace, 'complete')
       end
@@ -129,10 +120,6 @@ module Metalware
 
       def event(node_namespace, event = '')
         File.join(events_dir, node_namespace.name, event)
-      end
-
-      def pxelinux_cfg
-        '/var/lib/tftpboot/pxelinux.cfg'
       end
 
       def log

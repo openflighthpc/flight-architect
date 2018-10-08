@@ -41,7 +41,6 @@ module Metalware
   class FileDoesNotExistError < UserMetalwareError; end
   class DataError < UserMetalwareError; end
   class UninitializedLocalNode < UserMetalwareError; end
-  class InvalidLocalBuild < UserMetalwareError; end
   class MissingRecordError < UserMetalwareError; end
 
   class RecursiveConfigDepthExceededError < UserMetalwareError

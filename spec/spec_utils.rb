@@ -54,12 +54,6 @@ module SpecUtils
     )
   end
 
-  def use_mock_dependency
-    allow_any_instance_of(
-      Metalware::Dependency
-    ).to receive(:enforce)
-  end
-
   def fake_download_error
     http_error = "418 I'm a teapot"
     allow(Metalware::Input).to receive(:download).and_raise(
@@ -76,23 +70,6 @@ module SpecUtils
 
   def enable_output_to_stderr
     $rspec_suppress_output_to_stderr = false
-  end
-
-  def stub_build_method_for(node)
-    stub_build_method = instance_double(
-      Metalware::BuildMethods::BuildMethod
-    ).as_null_object
-
-    # Expect build method to be created, and stub the created object.
-    expect(
-      Metalware::BuildMethods
-    ).to receive(
-      :build_method_for
-    ).at_least(:once).with(
-      node
-    ).and_return(stub_build_method)
-
-    stub_build_method
   end
 
   private

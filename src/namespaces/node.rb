@@ -1,7 +1,6 @@
 
 # frozen_string_literal: true
 
-require 'build_methods'
 require 'namespaces/plugin'
 
 module Metalware

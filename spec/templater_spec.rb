@@ -31,7 +31,6 @@ require 'filesystem'
 require 'validation/answer'
 require 'namespaces/alces'
 
-TEST_HUNTER_PATH = File.join(FIXTURES_PATH, 'cache/hunter.yaml')
 EMPTY_REPO_PATH = File.join(FIXTURES_PATH, 'configs/empty-repo.yaml')
 
 RSpec.describe Metalware::Templater do

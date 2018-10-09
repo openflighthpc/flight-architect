@@ -145,10 +145,6 @@ module AlcesUtils
       stub_const('Metalware::Constants::SKIP_VALIDATION', true)
     end
 
-    def build_poll_sleep(time)
-      stub_const('Metalware::Constants::BUILD_POLL_SLEEP', time)
-    end
-
     def with_blank_config_and_answer(namespace)
       allow(namespace).to receive(:config).and_return(OpenStruct.new)
       allow(namespace).to receive(:answer).and_return(OpenStruct.new)

@@ -229,15 +229,6 @@ commands:
     options:
       - *gender_option
 
-  edit:
-    syntax: metal edit FILE [options]
-    summary: Opens a rendered file for editing
-    description: >
-      Opens the specified rendered file in the default system text editor.
-    action: Commands::Edit
-    autocomplete:
-      files_relative_to: /var/lib/metalware/rendered
-
   layout:
     syntax: metal layout [SUB_COMMAND] [options]
     summary: Manage the layout record files

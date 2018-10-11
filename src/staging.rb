@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/string/filters'
+
 require 'data'
 require 'file_path'
 require 'recursive-open-struct'
-require 'templater'
 
 module Metalware
   class Staging
@@ -63,6 +65,27 @@ module Metalware
 
     def blank_manifest
       { files: {}, services: [] }
+    end
+
+    class Templater
+      def initialize(staging)
+        @staging = staging
+      end
+
+      def render(
+        namespace,
+        template,
+        sync_location,
+        dynamic: {},
+        **staging_options
+      )
+        rendered = namespace.render_file(template, **dynamic)
+        staging.push_file(sync_location, rendered, **staging_options)
+      end
+
+      private
+
+      attr_reader :staging
     end
   end
 end

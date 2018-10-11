@@ -3,6 +3,16 @@
 module Metalware
   module Utils
     class << self
+      def commentify(string, comment_char: '#', line_length: 80)
+        comment_string = "#{comment_char} "
+        max_commented_line_length = line_length - comment_string.length
+
+        wrap(string, max_commented_line_length)
+          .split("\n")
+          .map { |line| line.prepend(comment_string) }
+          .join("\n")
+      end
+
       def run_command(command_class, *args, stderr: $stderr, **options_hash)
         old_stderr = $stderr
         $stderr = stderr

@@ -35,10 +35,6 @@ module Metalware
       cache.save
     end
 
-    def initialize(force_reload_file: false)
-      @force_reload = force_reload_file
-    end
-
     def group?(group)
       primary_groups.include? group
     end
@@ -100,8 +96,6 @@ module Metalware
 
     private
 
-    attr_reader :force_reload
-
     def loader
       @loader ||= Validation::Loader.new
     end
@@ -121,7 +115,7 @@ module Metalware
     end
 
     def data
-      force_reload ? load : @data ||= load
+      @data ||= load
     end
 
     def primary_groups_hash

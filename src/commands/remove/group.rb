@@ -39,7 +39,7 @@ module Metalware
 
         def run
           delete_answer_files
-          cache.remove(primary_group)
+          GroupCache.update { |c| c.remove(primary_group) }
           Staging.template do |templater|
             RenderMethods::Genders.render_to_staging(alces.domain, templater)
           end

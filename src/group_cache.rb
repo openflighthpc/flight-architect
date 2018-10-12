@@ -25,6 +25,18 @@
 require 'validation/loader'
 require 'data'
 
+# Note: the GroupCache won't actually be updated unless methods are called
+# within an `update` block or if `save` is explicitly called (see
+# https://alces.slack.com/archives/C5FL99R89/p1539342488000100).
+#
+# XXX This could be improved by any of:
+# - implicitly save when methods are called on a GroupCache outside of
+# `update`;
+# - prevent directly creating a GroupCache, so this must always be done via
+# `update`, and so it is always possible for this to be saved;
+# - just have methods always save and remove the idea of `update`, it is
+# possibly more trouble than it's worth.
+
 module Metalware
   class GroupCache
     include Enumerable

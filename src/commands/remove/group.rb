@@ -25,8 +25,6 @@
 require 'nodeattr_interface'
 require 'active_support/core_ext/string/strip'
 require 'data'
-require 'staging'
-require 'render_methods'
 
 module Metalware
   module Commands
@@ -40,9 +38,7 @@ module Metalware
         def run
           delete_answer_files
           GroupCache.update { |c| c.remove(primary_group) }
-          Staging.template do |templater|
-            RenderMethods::Genders.render_to_staging(alces.domain, templater)
-          end
+          CommandHelpers::ConfigureCommand.render_genders
         end
 
         private

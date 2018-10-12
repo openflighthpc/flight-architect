@@ -37,6 +37,9 @@
       allowedTerms:
       - MetalBench
       - debug!
+      # Not currently used, but will be again as soon as we add back genders
+      # file validation.
+      - validate_genders_file
 
     # Things flagged up as unused which are actually used.
     - name: False positives

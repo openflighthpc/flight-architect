@@ -33,13 +33,6 @@ module Metalware
     class ConfigureCommand < BaseCommand
       private
 
-      GENDERS_INVALID_MESSAGE = <<-EOF.strip_heredoc
-        You should be able to fix this error by re-running the `configure`
-        command and correcting the invalid input, or by manually editing the
-        appropriate answers file or template and using the `configure rerender`
-        command to re-render the templates.
-      EOF
-
       def run
         configurator.configure(answers)
         custom_configuration

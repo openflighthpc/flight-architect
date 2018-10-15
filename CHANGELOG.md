@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 ## [alpha-01] - 2018-10-15
 
 - Initial Underware alpha release, adapted from Metalware as of
-  https://github.com/alces-software/metalware/commit/5aa35770.
+  https://github.com/alces-software/metalware/commit/5aa35770
+  (https://github.com/alces-software/underware/pull/1).
 - The following commands adapted from the Metalware versions are initially
   available: `asset`, `configure`, `each`, `eval`, `help`, `layout`,
   `overview`, `plugin`, `remove`, `render`, `repo`, `view`, and `view-answers`

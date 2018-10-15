@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Utils
     class << self
       def commentify(string, comment_char: '#', line_length: 80)
@@ -30,10 +30,6 @@ module Metalware
         raise e
       ensure
         $stderr = old_stderr
-      end
-
-      def in_gui?
-        defined? Rails
       end
 
       def copy_via_temp_file(source, destination)

@@ -1,6 +1,6 @@
 ################################################################################
 ##
-## Alces Metalware - Shell configuration
+## Alces Underware - Shell configuration
 ## Copyright (c) 2008-2015 Alces Software Ltd
 ##
 ################################################################################
@@ -28,8 +28,7 @@ if ($?noglob) then
 endif
 set postfix = "set _exit="'$status'"; $postfix; test 0 = "'$_exit;'
 
-alias met 'metal'
-alias metal $prefix'if ( -e /opt/metalware/bin/metal ) /opt/metalware/bin/metal \!*; '$postfix
+alias underware $prefix'if ( -e /opt/underware/bin/underware ) /opt/underware/bin/underware \!*; '$postfix
 
 unset prefix
 unset postfix

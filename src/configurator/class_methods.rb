@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   class Configurator
     class << self
       def for_domain(alces)

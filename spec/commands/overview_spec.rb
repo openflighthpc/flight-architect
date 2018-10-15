@@ -3,24 +3,24 @@
 require 'commands'
 require 'fixtures/shared_context/overview'
 
-RSpec.describe Metalware::Commands::Overview do
+RSpec.describe Underware::Commands::Overview do
   include_context 'overview context'
 
   let(:name_hash) { { header: 'Group Name', value: '<%= group.name %>' } }
 
   def run_command
     AlcesUtils.redirect_std(:stdout) do
-      Metalware::Utils.run_command(Metalware::Commands::Overview)
+      Underware::Utils.run_command(Underware::Commands::Overview)
     end
   end
 
   before do
-    allow(Metalware::Overview::Table).to \
+    allow(Underware::Overview::Table).to \
       receive(:new).with(any_args).and_call_original
   end
 
   def expect_table_with(*inputs)
-    expect(Metalware::Overview::Table).to \
+    expect(Underware::Overview::Table).to \
       receive(:new).once.with(*inputs).and_call_original
   end
 
@@ -45,7 +45,7 @@ RSpec.describe Metalware::Commands::Overview do
     end
 
     before do
-      Metalware::Data.dump Metalware::FilePath.overview, overview_hash
+      Underware::Data.dump Underware::FilePath.overview, overview_hash
     end
 
     it 'includes the group name and additional fields' do

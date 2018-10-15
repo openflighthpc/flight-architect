@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-RSpec.describe Metalware::Plugins::Plugin do
+RSpec.describe Underware::Plugins::Plugin do
   subject { described_class.new(plugin_dir_path) }
 
   let(:plugin_dir_path) { Pathname.new('/path/to/some-plugin') }
@@ -10,7 +10,7 @@ RSpec.describe Metalware::Plugins::Plugin do
     it 'gives correct identifier for generated plugin enabled question' do
       expect(
         subject.enabled_question_identifier
-      ).to eq 'metalware_internal--plugin_enabled--some-plugin'
+      ).to eq 'underware_internal--plugin_enabled--some-plugin'
     end
   end
 

@@ -10,13 +10,13 @@ RSpec.shared_examples 'asset command that assigns a node' do
   include AlcesUtils
 
   # Stops the editor from running the bash command
-  before { allow(Metalware::Utils::Editor).to receive(:open) }
+  before { allow(Underware::Utils::Editor).to receive(:open) }
 
-  let(:asset_cache) { Metalware::Cache::Asset.new }
+  let(:asset_cache) { Underware::Cache::Asset.new }
   let(:node_name) { 'test-node' }
 
   def run_command
-    Metalware::Utils.run_command(described_class,
+    Underware::Utils.run_command(described_class,
                                  *command_arguments,
                                  node: node_name,
                                  stderr: StringIO.new)
@@ -24,7 +24,7 @@ RSpec.shared_examples 'asset command that assigns a node' do
 
   context 'when the node is missing' do
     it 'raise an invalid input error' do
-      expect { run_command }.to raise_error(Metalware::InvalidInput)
+      expect { run_command }.to raise_error(Underware::InvalidInput)
     end
   end
 

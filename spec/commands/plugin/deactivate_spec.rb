@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,19 +18,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'filesystem'
 require 'alces_utils'
 
-RSpec.describe Metalware::Commands::Plugin::Deactivate do
+RSpec.describe Underware::Commands::Plugin::Deactivate do
   include AlcesUtils
 
   def run_plugin_deactivate(plugin_name)
-    Metalware::Utils.run_command(
-      Metalware::Commands::Plugin::Deactivate, plugin_name
+    Underware::Utils.run_command(
+      Underware::Commands::Plugin::Deactivate, plugin_name
     )
   end
 
@@ -42,12 +42,12 @@ RSpec.describe Metalware::Commands::Plugin::Deactivate do
   end
 
   let(:example_plugin_dir) do
-    File.join Metalware::FilePath.plugins_dir, example_plugin_name
+    File.join Underware::FilePath.plugins_dir, example_plugin_name
   end
   let(:example_plugin_name) { 'example' }
 
   def example_plugin
-    Metalware::Plugins.all.find do |plugin|
+    Underware::Plugins.all.find do |plugin|
       plugin.name == example_plugin_name
     end
   end
@@ -67,7 +67,7 @@ RSpec.describe Metalware::Commands::Plugin::Deactivate do
       run_plugin_deactivate(example_plugin_name)
       run_plugin_deactivate(example_plugin_name)
 
-      matching_deactivated_plugins = Metalware::Plugins.all.select do |plugin|
+      matching_deactivated_plugins = Underware::Plugins.all.select do |plugin|
         !plugin.activated? && plugin.name == example_plugin_name
       end
       expect(matching_deactivated_plugins.length).to eq 1
@@ -82,7 +82,7 @@ RSpec.describe Metalware::Commands::Plugin::Deactivate do
         AlcesUtils.redirect_std(:stderr) do
           run_plugin_deactivate(unknown_plugin_name)
         end
-      end.to raise_error Metalware::MetalwareError,
+      end.to raise_error Underware::UnderwareError,
                          "Unknown plugin: #{unknown_plugin_name}"
     end
   end

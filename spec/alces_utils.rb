@@ -9,7 +9,7 @@ require 'filesystem'
 
 module AlcesUtils
   GENDERS_FILE_REGEX = /-f [[:graph:]]+/
-  # Causes the testing version of alces (/config) to be used by metalware
+  # Causes the testing version of alces (/config) to be used by underware
   class << self
     def start(example_group)
       example_group.instance_exec do
@@ -17,14 +17,14 @@ module AlcesUtils
         # This allows it to be mocked during the spec
         # It can also be reset in the test (see below)
         before do
-          allow(Metalware::Namespaces::Alces).to \
+          allow(Underware::Namespaces::Alces).to \
             receive(:new).and_wrap_original do |m, *a|
               @spec_alces ||= m.call(*a)
             end
         end
 
         # `alces` is defined as a method so it can be reset
-        define_method(:alces) { Metalware::Namespaces::Alces.new }
+        define_method(:alces) { Underware::Namespaces::Alces.new }
         define_method(:reset_alces) do
           @spec_alces = nil
           alces
@@ -39,7 +39,7 @@ module AlcesUtils
     end
 
     def nodeattr_genders_file_path(command)
-      return Metalware::FilePath.genders unless command.include?('-f')
+      return Underware::FilePath.genders unless command.include?('-f')
       command.match(AlcesUtils::GENDERS_FILE_REGEX)[0].sub('-f ', '')
     end
 
@@ -50,11 +50,11 @@ module AlcesUtils
     # Mocks nodeattr to use faked genders file
     def spoof_nodeattr(context)
       context.instance_exec do
-        genders_path = Metalware::FilePath.genders
+        genders_path = Underware::FilePath.genders
         genders_exist = File.exist? genders_path
         File.write(genders_path, "local local\n") unless genders_exist
 
-        allow(Metalware::NodeattrInterface)
+        allow(Underware::NodeattrInterface)
           .to receive(:nodeattr).and_wrap_original do |method, *args|
           AlcesUtils.check_and_raise_fakefs_error
           path = AlcesUtils.nodeattr_genders_file_path(args[0])
@@ -91,13 +91,6 @@ module AlcesUtils
       $stderr = hash[:stderr] if hash[:stderr]
     end
 
-    def kill_other_threads
-      Thread.list
-            .reject { |t| t == Thread.current }
-            .tap { |t| t.each(&:kill) }
-            .tap { |t| t.each(&:join) }
-    end
-
     def mock(test, *a, &b)
       mock_block = lambda do |*_inputs|
         mock_alces = AlcesUtils::Mock.new(self)
@@ -119,12 +112,6 @@ module AlcesUtils
     def default_group
       'default-test-group'
     end
-  end
-
-  # The following method(s) will be included with AlcesUtils
-  # Use AlcesUtils.start to skip the include but still setup mocking
-  def render_template(template)
-    alces.render_erb_template(template)
   end
 
   # The following methods have to be initialized with a individual test
@@ -149,11 +136,7 @@ module AlcesUtils
     end
 
     def validation_off
-      stub_const('Metalware::Constants::SKIP_VALIDATION', true)
-    end
-
-    def build_poll_sleep(time)
-      stub_const('Metalware::Constants::BUILD_POLL_SLEEP', time)
+      stub_const('Underware::Constants::SKIP_VALIDATION', true)
     end
 
     def with_blank_config_and_answer(namespace)
@@ -171,10 +154,10 @@ module AlcesUtils
       AlcesUtils.check_and_raise_fakefs_error
       raise_if_node_exists(name)
       add_node_to_genders_file(name, *genders)
-      Metalware::Namespaces::Node.create(alces, name).tap do |node|
+      Underware::Namespaces::Node.create(alces, name).tap do |node|
         new_nodes = alces.nodes.reduce([node], &:push)
-        metal_nodes = Metalware::Namespaces::MetalArray.new(new_nodes)
-        allow(alces).to receive(:nodes).and_return(metal_nodes)
+        underware_nodes = Underware::Namespaces::UnderwareArray.new(new_nodes)
+        allow(alces).to receive(:nodes).and_return(underware_nodes)
       end
     end
 
@@ -188,17 +171,17 @@ module AlcesUtils
     end
 
     def create_asset(asset_name, data, type: 'server')
-      path = Metalware::FilePath.asset(type.pluralize, asset_name)
+      path = Underware::FilePath.asset(type.pluralize, asset_name)
       FileUtils.mkdir_p(File.dirname(path))
-      Metalware::Data.dump(path, data)
+      Underware::Data.dump(path, data)
       alces.instance_variable_set(:@asset_cache, nil)
       alces.instance_variable_set(:@assets, nil)
     end
 
     def create_layout(layout_name, data, type: 'rack')
-      path = Metalware::FilePath.layout(type.pluralize, layout_name)
+      path = Underware::FilePath.layout(type.pluralize, layout_name)
       FileUtils.mkdir_p(File.dirname(path))
-      Metalware::Data.dump(path, data)
+      Underware::Data.dump(path, data)
     end
 
     private
@@ -206,15 +189,15 @@ module AlcesUtils
     attr_reader :alces, :test
 
     def raise_if_node_exists(name)
-      return unless File.exist? Metalware::FilePath.genders
+      return unless File.exist? Underware::FilePath.genders
       msg = "Node '#{name}' already exists"
-      raise Metalware::InternalError, msg if alces.nodes.find_by_name(name)
+      raise Underware::InternalError, msg if alces.nodes.find_by_name(name)
     end
 
     def add_node_to_genders_file(name, *genders)
       genders = [AlcesUtils.default_group] if genders.empty?
       genders_entry = "#{name} #{genders.join(',')}\n"
-      File.write(Metalware::FilePath.genders, genders_entry, mode: 'a')
+      File.write(Underware::FilePath.genders, genders_entry, mode: 'a')
     end
 
     # Allows the RSpec methods to be accessed
@@ -227,11 +210,11 @@ module AlcesUtils
     end
 
     def group_cache
-      Metalware::GroupCache.update { |c| yield c }
+      Underware::GroupCache.update { |c| yield c }
     end
 
     def hash_object(h = {})
-      Metalware::Constants::HASH_MERGER_DATA_STRUCTURE.new(h) do |str|
+      Underware::Constants::HASH_MERGER_DATA_STRUCTURE.new(h) do |str|
         str
       end
     end

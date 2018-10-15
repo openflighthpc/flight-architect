@@ -3,7 +3,7 @@
 
 require 'exceptions'
 
-module Metalware
+module Underware
   module CommandHelpers
     module AlcesCommand
       private

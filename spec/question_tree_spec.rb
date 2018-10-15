@@ -3,9 +3,9 @@
 
 require 'validation/configure'
 
-RSpec.describe Metalware::QuestionTree do
+RSpec.describe Underware::QuestionTree do
   context 'with a nexted question hash' do
-    subject { Metalware::Validation::Configure.new(question_hash).tree }
+    subject { Underware::Validation::Configure.new(question_hash).tree }
 
     let(:identifier_hash) do
       {
@@ -83,7 +83,7 @@ RSpec.describe Metalware::QuestionTree do
       end
     end
 
-    Metalware::QuestionTree::BASE_TRAVERSALS.each do |base_method|
+    Underware::QuestionTree::BASE_TRAVERSALS.each do |base_method|
       describe "#filtered_#{base_method}" do
         it_behaves_like 'a filtered traversal', base_method
       end
@@ -168,7 +168,7 @@ RSpec.describe Metalware::QuestionTree do
       end
     end
 
-    let(:tree) { Metalware::Validation::Configure.new(question_hash).tree }
+    let(:tree) { Underware::Validation::Configure.new(question_hash).tree }
 
     [:domain, :group, :node, :local].each do |section|
       context "when called on the '#{section}' section" do

@@ -1,15 +1,15 @@
 
 # frozen_string_literal: true
 
-RSpec.describe Metalware::CliHelper::Parser do
+RSpec.describe Underware::CliHelper::Parser do
   subject do
     described_class.new(
-      Metalware::Cli.new
+      Underware::Cli.new
     )
   end
 
   before do
-    stub_const('Metalware::CliHelper::CONFIG_PATH', test_config_path)
+    stub_const('Underware::CliHelper::CONFIG_PATH', test_config_path)
   end
 
   let(:test_config_path) { '/tmp/config.yaml' }
@@ -47,7 +47,7 @@ RSpec.describe Metalware::CliHelper::Parser do
 
       stubbed_dynamic_default = 'eth3'
       expect(
-        Metalware::CliHelper::DynamicDefaults
+        Underware::CliHelper::DynamicDefaults
       ).to receive(:build_interface).and_return(stubbed_dynamic_default)
 
       expect_any_instance_of(Commander::Command).to receive(:option).with(

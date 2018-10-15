@@ -1,10 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'build_methods'
 require 'deployment_server'
 
-module Metalware
+module Underware
   module Namespaces
     class Local < Node
       class << self
@@ -25,10 +24,6 @@ module Metalware
 
       def white_list_for_hasher
         super.push(:build_interface)
-      end
-
-      def build_method_class
-        BuildMethods::Local
       end
     end
   end

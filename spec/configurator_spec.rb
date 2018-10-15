@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'tempfile'
@@ -30,7 +30,7 @@ require 'configurator'
 require 'validation/loader'
 require 'alces_utils'
 
-RSpec.describe Metalware::Configurator do
+RSpec.describe Underware::Configurator do
   include AlcesUtils
 
   let(:input) do
@@ -54,22 +54,22 @@ RSpec.describe Metalware::Configurator do
 
   let(:higher_level_answer_files) { [] }
 
-  let(:loader) { Metalware::Validation::Loader.new }
+  let(:loader) { Underware::Validation::Loader.new }
 
   let(:configurator) do
     make_configurator
   end
 
   def make_configurator
-    Metalware::Configurator.new(
+    Underware::Configurator.new(
       alces,
       questions_section: :domain
     )
   end
 
   def define_questions(**h)
-    v = Metalware::Validation::Configure.new(h)
-    allow(Metalware::Validation::Configure).to receive(:new).and_return(v)
+    v = Underware::Validation::Configure.new(h)
+    allow(Underware::Validation::Configure).to receive(:new).and_return(v)
   end
 
   def redirect_stdout
@@ -424,7 +424,7 @@ RSpec.describe Metalware::Configurator do
     let(:configure_orphan) { described_class.for_node(alces, orphan) }
 
     def new_group_cache
-      Metalware::GroupCache.new
+      Underware::GroupCache.new
     end
 
     before do
@@ -499,7 +499,7 @@ RSpec.describe Metalware::Configurator do
     end
 
     def configure_group(answer_input: answer)
-      conf = Metalware::Configurator.for_group(alces, group_name)
+      conf = Underware::Configurator.for_group(alces, group_name)
       configure_with_answers([answer_input], test_obj: conf)
     end
 
@@ -519,8 +519,8 @@ RSpec.describe Metalware::Configurator do
       before { configure_group }
 
       let(:load_answer) do
-        path = Metalware::FilePath.group_answers(group_name)
-        Metalware::Data.load(path)[identifier]
+        path = Underware::FilePath.group_answers(group_name)
+        Underware::Data.load(path)[identifier]
       end
 
       context 'when the answer matches the original default' do
@@ -564,8 +564,8 @@ RSpec.describe Metalware::Configurator do
       let(:group_answer) { 'I am the group level answer' }
 
       let(:load_answer) do
-        path = Metalware::FilePath.node_answers(node_name)
-        Metalware::Data.load(path)[identifier]
+        path = Underware::FilePath.node_answers(node_name)
+        Underware::Data.load(path)[identifier]
       end
 
       AlcesUtils.mock self, :each do
@@ -601,8 +601,8 @@ RSpec.describe Metalware::Configurator do
       end
 
       let(:load_answer) do
-        path = Metalware::FilePath.local_answers
-        Metalware::Data.load(path)[identifier]
+        path = Underware::FilePath.local_answers
+        Underware::Data.load(path)[identifier]
       end
 
       before do

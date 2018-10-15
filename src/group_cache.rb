@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,14 +18,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'validation/loader'
 require 'data'
 
-module Metalware
+# Note: the GroupCache won't actually be updated unless methods are called
+# within an `update` block or if `save` is explicitly called (see
+# https://alces.slack.com/archives/C5FL99R89/p1539342488000100).
+#
+# XXX This could be improved by any of:
+# - implicitly save when methods are called on a GroupCache outside of
+# `update`;
+# - prevent directly creating a GroupCache, so this must always be done via
+# `update`, and so it is always possible for this to be saved;
+# - just have methods always save and remove the idea of `update`, it is
+# possibly more trouble than it's worth.
+
+module Underware
   class GroupCache
     include Enumerable
 
@@ -33,10 +45,6 @@ module Metalware
       cache = new
       yield cache
       cache.save
-    end
-
-    def initialize(force_reload_file: false)
-      @force_reload = force_reload_file
     end
 
     def group?(group)
@@ -100,8 +108,6 @@ module Metalware
 
     private
 
-    attr_reader :force_reload
-
     def loader
       @loader ||= Validation::Loader.new
     end
@@ -121,7 +127,7 @@ module Metalware
     end
 
     def data
-      force_reload ? load : @data ||= load
+      @data ||= load
     end
 
     def primary_groups_hash

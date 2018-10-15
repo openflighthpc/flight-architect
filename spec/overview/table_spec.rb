@@ -3,7 +3,7 @@
 require 'overview/table'
 require 'fixtures/shared_context/overview'
 
-RSpec.describe Metalware::Overview::Table do
+RSpec.describe Underware::Overview::Table do
   include_context 'overview context'
 
   let(:namespaces) { alces.groups }

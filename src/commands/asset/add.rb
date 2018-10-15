@@ -2,7 +2,7 @@
 
 require 'utils/editor'
 
-module Metalware
+module Underware
   module Commands
     module Asset
       class Add < CommandHelpers::AssetEditor

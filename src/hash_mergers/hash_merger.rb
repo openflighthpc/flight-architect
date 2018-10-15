@@ -7,7 +7,7 @@ require 'data'
 require 'constants'
 require 'active_support/core_ext/object/deep_dup'
 
-module Metalware
+module Underware
   module HashMergers
     class HashMerger
       # NOTE: `_args` argument is needed so child classes can take arguments

@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,61 +18,53 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
-module Metalware
-  # MetalwareError is the base error class to distinguish the custom errors
-  # from the built ins/ other libraries. The UserMetalwareError is a subset
-  # of the errors that result from a user action (as opposed to metalware
+module Underware
+  # UnderwareError is the base error class to distinguish the custom errors
+  # from the built ins/ other libraries. The UserUnderwareError is a subset
+  # of the errors that result from a user action (as opposed to underware
   # failing). The user errors suppress the `--trace` prompt, which should
-  # make it clearer that it isn't an internal metalware error.
-  class MetalwareError < StandardError; end
-  class UserMetalwareError < MetalwareError; end
+  # make it clearer that it isn't an internal underware error.
+  class UnderwareError < StandardError; end
+  class UserUnderwareError < UnderwareError; end
 
   # NOTE: Can these be condensed?
-  class NoGenderGroupError < UserMetalwareError; end
-  class NodeNotInGendersError < UserMetalwareError; end
+  class NoGenderGroupError < UserUnderwareError; end
+  class NodeNotInGendersError < UserUnderwareError; end
 
-  class SystemCommandError < UserMetalwareError; end
-  class StrictWarningError < UserMetalwareError; end
-  class InvalidInput < UserMetalwareError; end
-  class InvalidConfigParameter < UserMetalwareError; end
-  class FileDoesNotExistError < UserMetalwareError; end
-  class DataError < UserMetalwareError; end
-  class UninitializedLocalNode < UserMetalwareError; end
-  class InvalidLocalBuild < UserMetalwareError; end
-  class MissingRecordError < UserMetalwareError; end
+  class SystemCommandError < UserUnderwareError; end
+  class StrictWarningError < UserUnderwareError; end
+  class InvalidInput < UserUnderwareError; end
+  class FileDoesNotExistError < UserUnderwareError; end
+  class DataError < UserUnderwareError; end
+  class UninitializedLocalNode < UserUnderwareError; end
+  class MissingRecordError < UserUnderwareError; end
 
-  class RecursiveConfigDepthExceededError < UserMetalwareError
+  class RecursiveConfigDepthExceededError < UserUnderwareError
     def initialize(msg = 'Input hash may contain infinitely recursive ERB')
       super
     end
   end
 
-  class CombineHashError < UserMetalwareError
+  class CombineHashError < UserUnderwareError
     def initialize(msg = 'Could not combine config or answer hashes')
       super
     end
   end
 
-  class UnexpectedError < MetalwareError
+  class UnexpectedError < UnderwareError
     def initialize(msg = 'An unexpected error has occurred')
       super
     end
   end
 
-  class StatusDataIncomplete < MetalwareError
-    def initialize(msg = 'Failed to receive data for all nodes')
-      super
-    end
-  end
-
-  class InternalError < MetalwareError; end
-  class AnswerJSONSyntax < MetalwareError; end
-  class ScopeError < MetalwareError; end
-  class ValidationFailure < UserMetalwareError; end
+  class InternalError < UnderwareError; end
+  class AnswerJSONSyntax < UnderwareError; end
+  class ScopeError < UnderwareError; end
+  class ValidationFailure < UserUnderwareError; end
 
   # XXX, we need think about the future of the DependencyFailure,
   # It maybe completely replaced with Validation::Loader and a file cache.
@@ -82,15 +74,15 @@ module Metalware
   # Use this error as the general catch all in Dependencies
   # The dependency can't be checked as the logic doesn't make sense
   # NOTE: We should try and prevent these errors from appearing in production
-  class DependencyInternalError < MetalwareError
+  class DependencyInternalError < UnderwareError
   end
 
   # Use this error when the dependency is checked but isn't met
   # NOTE: This is the only dependency error we see in production
-  class DependencyFailure < UserMetalwareError
+  class DependencyFailure < UserUnderwareError
   end
 
-  class RuggedError < UserMetalwareError; end
+  class RuggedError < UserUnderwareError; end
   class RuggedCloneError < RuggedError; end
 
   class LocalAheadOfRemote < RuggedError
@@ -109,7 +101,7 @@ module Metalware
     end
   end
 
-  class SaverNoData < MetalwareError
+  class SaverNoData < UnderwareError
     def initialize(msg = 'No data provided to Validation::Saver'); end
   end
 end

@@ -89,7 +89,7 @@ RSpec/NamedSubject:
 
 # Allow RSpec to suppress Output using a global variable. It already used a global
 # variable previously and it will not be used in the installed version of
-# Metalware. It is however useful to turn the Output off in the specs
+# Underware. It is however useful to turn the Output off in the specs
 
 # TODO: Remove spec/commander_extensions_spec.rb from this list eventually
 # It needs to be included here as the array is overridding the todo list

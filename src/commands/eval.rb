@@ -3,7 +3,7 @@
 
 require 'command_helpers/inspect_command'
 
-module Metalware
+module Underware
   module Commands
     class Eval < CommandHelpers::InspectCommand
       private

@@ -5,7 +5,7 @@ require 'fileutils'
 require 'tempfile'
 require 'highline'
 
-module Metalware
+module Underware
   module Utils
     class Editor
       DEFAULT_EDITOR = 'vi'

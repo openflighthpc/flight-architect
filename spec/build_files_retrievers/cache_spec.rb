@@ -3,14 +3,14 @@
 require 'input'
 require 'spec_utils'
 
-RSpec.describe Metalware::BuildFilesRetrievers::Cache do
+RSpec.describe Underware::BuildFilesRetrievers::Cache do
   include AlcesUtils
 
   subject { described_class.new }
 
   let(:test_node_name) { 'testnode01' }
   let(:test_node) { alces.nodes.find_by_name(test_node_name) }
-  let(:data_path) { Metalware::FilePath.metalware_data }
+  let(:data_path) { Underware::FilePath.underware_data }
   let(:test_url) { 'http://example.com/url' }
   let(:test_files_hash) do
     {
@@ -30,7 +30,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
   end
 
   before do
-    SpecUtils.use_mock_determine_hostip_script(self)
+    use_mock_determine_hostip_script
   end
 
   def hash_url(url)
@@ -42,8 +42,8 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
       FileSystem.root_setup do |fs|
         fs.with_clone_fixture('configs/unit-test.yaml')
       end
-      SpecUtils.use_unit_test_config(self)
-      allow(Metalware::Input).to receive(:download)
+      use_unit_test_config
+      allow(Underware::Input).to receive(:download)
         .and_wrap_original do |_, _, to_path|
         FileUtils.touch(to_path)
       end
@@ -53,7 +53,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
       it 'returns the correct files object' do
         file_path = '/rendered/testnode01/files/repo/namespace01/file_in_repo'
         some_path = File
-                    .join(Metalware::FilePath.repo, 'files/some/file_in_repo')
+                    .join(Underware::FilePath.repo, 'files/some/file_in_repo')
         FileUtils.mkdir_p File.dirname(some_path)
         FileUtils.touch(some_path)
         other_path = '/some/other/path'
@@ -67,7 +67,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
           name: 'file_in_repo',
           template_path: some_path,
           rendered_path: data_path + file_path,
-          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/file_in_repo'
+          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/file_in_repo'
         )
 
         expect(retrieved_files[:namespace01][1]).to eq(
@@ -76,22 +76,22 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
           template_path: other_path,
           rendered_path: data_path +
             '/rendered/testnode01/files/repo/namespace01/path',
-          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/path'
+          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/path'
         )
 
         expect(retrieved_files[:namespace01][2]).to eq(
           raw: test_url,
           name: 'url',
-          template_path: '/var/lib/metalware/cache/templates/' +
+          template_path: '/var/lib/underware/cache/templates/' +
             hash_url(test_url),
           rendered_path: data_path +
             '/rendered/testnode01/files/repo/namespace01/url',
-          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/url'
+          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/url'
         )
       end
 
       it 'downloads any URL identifiers to cache' do
-        expect(Metalware::Input).to receive(:download).with(
+        expect(Underware::Input).to receive(:download).with(
           test_url, data_path + '/cache/templates/' + hash_url(test_url)
         )
 
@@ -109,7 +109,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
           retrieved_files = subject.retrieve(test_node)
 
           repo_file_entry = retrieved_files[:namespace01][0]
-          template_path = "#{Metalware::FilePath.repo}/files/some/file_in_repo"
+          template_path = "#{Underware::FilePath.repo}/files/some/file_in_repo"
           expect(repo_file_entry[:error])
             .to match(/#{template_path}.*does not exist/)
 
@@ -136,7 +136,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
     end
 
     context 'when error retrieving URL file' do
-      let!(:http_error) { SpecUtils.fake_download_error(self) }
+      let!(:http_error) { fake_download_error }
 
       it 'adds error to file entry' do
         retrieved_files = subject.retrieve(test_node)
@@ -155,18 +155,18 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
   context 'when retrieving a plugins files' do
     let(:plugin_name) { 'some_plugin' }
     let(:plugin_path) do
-      File.join(Metalware::FilePath.plugins_dir, plugin_name)
+      File.join(Underware::FilePath.plugins_dir, plugin_name)
     end
 
     let(:plugin) do
       FileUtils.mkdir_p(plugin_path)
-      Metalware::Plugins.all.find { |p| p.name == plugin_name }
+      Underware::Plugins.all.find { |p| p.name == plugin_name }
     end
 
     before do
       FileSystem.root_setup do |fs|
         # This must exist so can attempt to get node groups.
-        fs.touch Metalware::Constants::GENDERS_PATH
+        fs.touch Underware::Constants::GENDERS_PATH
       end
     end
 
@@ -182,12 +182,12 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
       # Create plugin config specifying file.
       plugin_config_dir = File.join(plugin_path, 'config')
       FileUtils.mkdir_p(plugin_config_dir)
-      Metalware::Data.dump(
+      Underware::Data.dump(
         plugin.domain_config,
         files: { some_section: [plugin_file_path] }
       )
 
-      plugin_namespace = Metalware::Namespaces::Plugin
+      plugin_namespace = Underware::Namespaces::Plugin
                          .new(plugin, node: test_node)
       retrieved_files = subject.retrieve(plugin_namespace)
 
@@ -200,7 +200,7 @@ RSpec.describe Metalware::BuildFilesRetrievers::Cache do
           name: plugin_file_name,
           template_path: absolute_plugin_file_path,
           rendered_path: data_path + "/rendered/#{relative_rendered_path}",
-          url: "http://1.2.3.4/metalware/#{relative_rendered_path}",
+          url: "http://1.2.3.4/underware/#{relative_rendered_path}",
         }]
       )
     end

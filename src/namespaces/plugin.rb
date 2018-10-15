@@ -6,7 +6,7 @@ require 'namespaces/hash_merger_namespace'
 # A Plugin namespace contains the values configured for a particular plugin for
 # a particular node.
 
-module Metalware
+module Underware
   module Namespaces
     class Plugin < HashMergerNamespace
       attr_reader :node_namespace, :plugin

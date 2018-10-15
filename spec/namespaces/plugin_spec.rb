@@ -3,31 +3,31 @@
 
 require 'spec_utils'
 
-RSpec.describe Metalware::Namespaces::Plugin do
+RSpec.describe Underware::Namespaces::Plugin do
   include AlcesUtils
 
   subject { described_class.new(plugin, node: node) }
 
   let(:node) do
-    Metalware::Namespaces::Node.create(alces, node_name)
+    Underware::Namespaces::Node.create(alces, node_name)
   end
   let(:node_name) { 'some_node' }
   let(:node_group_name) { 'some_group' }
 
   let(:plugin_name) { 'my_plugin' }
   let(:plugin) do
-    Metalware::Plugins.all.find { |plugin| plugin.name == plugin_name }
+    Underware::Plugins.all.find { |plugin| plugin.name == plugin_name }
   end
 
   before do
     FileSystem.root_setup do |fs|
       fs.setup do
-        plugins_path = Metalware::FilePath.plugins_dir
+        plugins_path = Underware::FilePath.plugins_dir
         plugin_config_dir = File.join(plugins_path, plugin_name, 'config')
         FileUtils.mkdir_p plugin_config_dir
 
         File.write(
-          Metalware::FilePath.genders, "#{node_name} #{node_group_name}\n"
+          Underware::FilePath.genders, "#{node_name} #{node_group_name}\n"
         )
       end
     end
@@ -55,7 +55,7 @@ RSpec.describe Metalware::Namespaces::Plugin do
           node_parameter: 'node_value',
         },
       }.each do |plugin_config, config_data|
-        Metalware::Data.dump(plugin_config, config_data)
+        Underware::Data.dump(plugin_config, config_data)
       end
 
       expect(subject.config.domain_parameter).to eq('domain_value')
@@ -64,7 +64,7 @@ RSpec.describe Metalware::Namespaces::Plugin do
     end
 
     it 'supports templating, with access to node namespace values' do
-      Metalware::Data.dump(plugin.domain_config,
+      Underware::Data.dump(plugin.domain_config,
                            node_name: '<%= node.name %>')
 
       expect(subject.config.node_name).to eq(node.name)
@@ -73,7 +73,7 @@ RSpec.describe Metalware::Namespaces::Plugin do
 
   describe '#files' do
     it 'provides access to build file hashes for plugin' do
-      Metalware::Data.dump(plugin.domain_config,
+      Underware::Data.dump(plugin.domain_config,
                            files: {
                              some_files_section: [
                                '/path/to/some/file',
@@ -81,7 +81,7 @@ RSpec.describe Metalware::Namespaces::Plugin do
                            })
 
       expect(subject.files)
-        .to be_a(Metalware::HashMergers::MetalRecursiveOpenStruct)
+        .to be_a(Underware::HashMergers::UnderwareRecursiveOpenStruct)
       expected_files_hash = subject.files.some_files_section.first
       expect(expected_files_hash.raw).to eq('/path/to/some/file')
     end

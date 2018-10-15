@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,15 +18,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 require 'validation/answer'
 require 'data'
 require 'filesystem'
 require 'alces_utils'
 
-RSpec.describe Metalware::Validation::Answer do
+RSpec.describe Underware::Validation::Answer do
   include AlcesUtils
   let(:question_tree) do
     {
@@ -63,8 +63,8 @@ RSpec.describe Metalware::Validation::Answer do
 
   def run_answer_validation(answers)
     FileSystem.test do
-      Metalware::Data.dump(Metalware::FilePath.configure_file, question_tree)
-      validator = Metalware::Validation::Answer.new(answers,
+      Underware::Data.dump(Underware::FilePath.configure_file, question_tree)
+      validator = Underware::Validation::Answer.new(answers,
                                                     answer_section: :domain)
       [validator.validate, validator]
     end

@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'commands/each'
@@ -28,7 +28,7 @@ require 'ostruct'
 require 'hash_mergers'
 require 'namespaces/alces'
 
-RSpec.describe Metalware::Commands::Each do
+RSpec.describe Underware::Commands::Each do
   include AlcesUtils
 
   before do
@@ -36,12 +36,12 @@ RSpec.describe Metalware::Commands::Each do
       fs.with_genders_fixtures
       fs.with_clone_fixture('configs/unit-test.yaml')
     end
-    SpecUtils.use_unit_test_config(self)
+    use_unit_test_config
   end
 
   let(:groups) do
-    g = Metalware::Namespaces::Group.new(alces, 'nodes', index: 1)
-    Metalware::Namespaces::MetalArray.new([g])
+    g = Underware::Namespaces::Group.new(alces, 'nodes', index: 1)
+    Underware::Namespaces::UnderwareArray.new([g])
   end
 
   # Spoofs the nodes group
@@ -51,7 +51,7 @@ RSpec.describe Metalware::Commands::Each do
 
   # Turns off loading of answers as they are not needed
   before do
-    allow(Metalware::HashMergers::Answer).to \
+    allow(Underware::HashMergers::Answer).to \
       receive(:new).and_return(double('answer', merge: {}))
   end
 
@@ -62,7 +62,7 @@ RSpec.describe Metalware::Commands::Each do
     file.close
     cmd = "echo <%= node.name %> >> #{file.path}"
     FakeFS.with do
-      Metalware::Commands::Each.new([node, cmd], opt)
+      Underware::Commands::Each.new([node, cmd], opt)
     end
     File.read(file.path)
   ensure

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Namespaces
     class Group < HashMergerNamespace
       include Mixins::Name
@@ -18,7 +18,7 @@ module Metalware
           arr = NodeattrInterface.nodes_in_gender(name).map do |node_name|
             alces.nodes.send(node_name)
           end
-          MetalArray.new(arr)
+          UnderwareArray.new(arr)
         end
       end
 

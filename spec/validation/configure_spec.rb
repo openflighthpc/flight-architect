@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'validation/configure'
@@ -29,12 +29,12 @@ require 'filesystem'
 require 'constants'
 require 'alces_utils'
 
-RSpec.describe Metalware::Validation::Configure do
+RSpec.describe Underware::Validation::Configure do
   include AlcesUtils
 
   before { FileSystem.root_setup(&:with_validation_error_file) }
 
-  let(:file_path) { Metalware::FilePath }
+  let(:file_path) { Underware::FilePath }
 
   let(:correct_hash) do
     {
@@ -146,25 +146,25 @@ RSpec.describe Metalware::Validation::Configure do
   end
 
   def run_configure_validation(my_hash = {})
-    Metalware::Validation::Configure.new(my_hash).tree
+    Underware::Validation::Configure.new(my_hash).tree
   end
 
   def expect_validation_failure(my_hash, msg_regex)
     expect do
       run_configure_validation(my_hash)
-    end.to raise_error(Metalware::ValidationFailure, msg_regex)
+    end.to raise_error(Underware::ValidationFailure, msg_regex)
   end
 
   context 'with a valid input' do
     it 'passes with questions key' do
       expect(run_configure_validation(correct_hash))
-        .to be_a(Metalware::QuestionTree)
+        .to be_a(Underware::QuestionTree)
     end
 
     it 'passes without questions key' do
       correct_hash.delete(:questions)
       expect(run_configure_validation(correct_hash))
-        .to be_a(Metalware::QuestionTree)
+        .to be_a(Underware::QuestionTree)
     end
   end
 

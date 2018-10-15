@@ -7,18 +7,18 @@ require 'templating/nil_detection_wrapper'
 require 'utils/dynamic_require'
 require 'deployment_server'
 
-Metalware::Utils::DynamicRequire.relative('mixins')
+Underware::Utils::DynamicRequire.relative('mixins')
 
-require 'namespaces/metal_array'
+require 'namespaces/underware_array'
 require 'namespaces/hash_merger_namespace'
 require 'namespaces/node'
 require 'hash_mergers.rb'
 require 'ostruct'
-require 'metal_log'
+require 'underware_log'
 
-Metalware::Utils::DynamicRequire.relative('.')
+Underware::Utils::DynamicRequire.relative('.')
 
-module Metalware
+module Underware
   module Namespaces
     class Alces
       include Mixins::AlcesStatic
@@ -32,7 +32,7 @@ module Metalware
       class << self
         LOG_MESSAGE = <<-EOF.strip_heredoc
           Create new Alces namespace. Building multiple namespaces will slow
-          down metalware as they do not share a file cache. Only build a new
+          down underware as they do not share a file cache. Only build a new
           namespace when required.
         EOF
 
@@ -43,7 +43,7 @@ module Metalware
         end
 
         def alces_new_log
-          @alces_new_log ||= MetalLog.new('alces-new')
+          @alces_new_log ||= UnderwareLog.new('alces-new')
         end
       end
 
@@ -67,11 +67,19 @@ module Metalware
         dynamic.node || dynamic.group || domain
       end
 
-      def render_erb_template(template_string, dynamic_namespace = {})
+      def render_string(template_string, **dynamic_namespace)
         run_with_dynamic(dynamic_namespace) do
           Templating::Renderer
             .replace_erb_with_binding(template_string, wrapped_binding)
         end
+      end
+
+      def render_file(template_path, **dynamic_namespace)
+        template = File.read(template_path)
+        render_string(template, dynamic_namespace)
+      rescue StandardError => e
+        msg = "Failed to render template: #{template_path}"
+        raise e, "#{msg}\n#{e}", e.backtrace
       end
 
       ##
@@ -111,7 +119,7 @@ module Metalware
 
       def dynamic_hash(namespace)
         Constants::HASH_MERGER_DATA_STRUCTURE.new(namespace) do |template|
-          alces.render_erb_template(template)
+          alces.render_string(template)
         end
       end
 

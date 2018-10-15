@@ -4,17 +4,17 @@ require 'shared_examples/asset_command_that_assigns_a_node'
 require 'shared_examples/record_add_command'
 require 'alces_utils'
 
-RSpec.describe Metalware::Commands::Asset::Add do
+RSpec.describe Underware::Commands::Asset::Add do
   let(:record_path) do
-    Metalware::FilePath.asset(type.pluralize, saved_record_name)
+    Underware::FilePath.asset(type.pluralize, saved_record_name)
   end
 
   it_behaves_like 'record add command'
 
   it 'warns if the type does not exist' do
-    SpecUtils.enable_output_to_stderr
+    enable_output_to_stderr
     expect do
-      Metalware::Utils.run_command(described_class,
+      Underware::Utils.run_command(described_class,
                                    'missing-type',
                                    'record-name')
     end.to output(/Could not find layout/).to_stderr
@@ -47,20 +47,20 @@ RSpec.describe Metalware::Commands::Asset::Add do
 
     AlcesUtils.mock(self, :each) do
       FileSystem.root_setup(&:with_asset_types)
-      allow(Metalware::Utils::Editor).to receive(:open)
+      allow(Underware::Utils::Editor).to receive(:open)
       allow(HighLine).to receive(:new).and_return(mocked_highline)
       create_layout(layout_name, layout_content)
     end
 
     def run_sub_asseting_command
-      Metalware::Utils.run_command(described_class,
+      Underware::Utils.run_command(described_class,
                                    layout_name,
                                    parent_asset_name)
     end
 
     shared_examples 'creates the sub asset' do |editor_count|
       it "opens the editor #{editor_count} times" do
-        expect(Metalware::Utils::Editor).to receive(:open_copy)
+        expect(Underware::Utils::Editor).to receive(:open_copy)
           .exactly(editor_count)
           .and_call_original
         run_sub_asseting_command

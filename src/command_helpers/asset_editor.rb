@@ -2,7 +2,7 @@
 
 require 'asset_builder'
 
-module Metalware
+module Underware
   module CommandHelpers
     class AssetEditor < BaseCommand
       private

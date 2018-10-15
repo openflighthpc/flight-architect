@@ -32,104 +32,90 @@ global_options:
 
 subcommands:
   asset_add: &asset_add
-    syntax: metal asset add ASSET_TYPE ASSET_NAME [options]
+    syntax: underware asset add ASSET_TYPE ASSET_NAME [options]
     summary: Add a new asset record
     action: Commands::Asset::Add
     options:
       - *asset_node_option
 
   asset_edit: &asset_edit
-    syntax: metal asset edit ASSET_NAME [options]
+    syntax: underware asset edit ASSET_NAME [options]
     summary: Edit an existing asset record
     action: Commands::Asset::Edit
     options:
       - *asset_node_option
 
   asset_delete: &asset_delete
-    syntax: metal asset delete ASSET_NAME [options]
+    syntax: underware asset delete ASSET_NAME [options]
     summary: Delete an existing asset record
     action: Commands::Asset::Delete
 
   asset_link: &asset_link
-    syntax: metal asset link NODE_NAME ASSET_NAME [options]
+    syntax: underware asset link NODE_NAME ASSET_NAME [options]
     summary: Add a relationship between an asset and a node
     action: Commands::Asset::Link
 
   asset_unlink: &asset_unlink
-    syntax: metal asset unlink NODE_NAME [options]
+    syntax: underware asset unlink NODE_NAME [options]
     summary: Remove a relationship between an asset and a node
     action: Commands::Asset::Unlink
 
   configure_domain: &configure_domain
-    syntax: metal configure domain [options]
-    summary: Configure Metalware domain
+    syntax: underware configure domain [options]
+    summary: Configure Underware domain
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure the domain for this Metalware installation. The configuration
+      configure the domain for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
 
   configure_group: &configure_group
-    syntax: metal configure group GROUP_NAME [options]
-    summary: Configure a Metalware group
+    syntax: underware configure group GROUP_NAME [options]
+    summary: Configure a Underware group
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure a group for this Metalware installation. The configuration
+      configure a group for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
 
   configure_node: &configure_node
-    syntax: metal configure node NODE_NAME [options]
-    summary: Configure a Metalware node
+    syntax: underware configure node NODE_NAME [options]
+    summary: Configure a Underware node
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure a node for this Metalware installation. The configuration
+      configure a node for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option
 
   configure_local: &configure_local
-    syntax: metal configure local [options]
-    summary: Configure the master Metalware node
+    syntax: underware configure local [options]
+    summary: Configure the master Underware node
     description: >
-      Configures the node that metalware is running on. This is treated as the
-      metalware master node. This must be ran to configure metalware to match
+      Configures the node that underware is running on. This is treated as the
+      underware master node. This must be ran to configure underware to match
       the system environment. This command is intended to only be ran once.
     action: Commands::Configure::Local
     options:
       - *configure_answers_option
 
   layout_add: &layout_add
-    syntax: metal layout add TYPE_OR_LAYOUT LAYOUT_NAME [options]
+    syntax: underware layout add TYPE_OR_LAYOUT LAYOUT_NAME [options]
     summary: Add a new layout record
     action: Commands::Layout::Add
 
   layout_edit: &layout_edit
-    syntax: metal layout edit LAYOUT_NAME [options]
+    syntax: underware layout edit LAYOUT_NAME [options]
     summary: Edit an existing layout record
     action: Commands::Layout::Edit
 
-  orchestrate_create: &orchestrate_create
-    syntax: metal orchestrate create NODE_IDENTIFIER [options]
-    summary: Creates a new virtual machine or group of machines
-    action: Commands::Orchestrate::Create
-    options:
-      - *gender_option
-
-  orchestrate_destroy: &orchestrate_destroy
-    syntax: metal orchestrate destroy NODE_IDENTIFIER [options]
-    summary: Destroys a single or group of virtual machines
-    action: Commands::Orchestrate::Destroy
-    options:
-      - *gender_option
-
   remove_group: &remove_group
-    syntax: metal remove group GROUP_NAME [options]
+    syntax: underware remove group GROUP_NAME [options]
     summary: Removes a previously configured group
     description: >
       Removes the configuration answer file for the group and updates the
@@ -139,7 +125,7 @@ subcommands:
     action: Commands::Remove::Group
 
   repo_use: &repo_use
-    syntax: metal repo use REPO_URL [options]
+    syntax: underware repo use REPO_URL [options]
     summary: Clone a new template git repo
     description: >
       Clones a new git repo from a URL. The repo should contain the default
@@ -154,7 +140,7 @@ subcommands:
           current repo
 
   repo_update: &repo_update
-    syntax: metal repo update [options]
+    syntax: underware repo update [options]
     summary: Updates the git repository
     description: >
       Updates the local git repository to match the remote. The update command
@@ -168,53 +154,53 @@ subcommands:
           Force update even if local changes have been made to the repo
 
   plugin_list: &plugin_list
-    syntax: metal plugin list [options]
+    syntax: underware plugin list [options]
     summary: List available and activated plugins
     description: >
-      List all available Metalware plugins, along with which of these are
+      List all available Underware plugins, along with which of these are
       currently activated.
     action: Commands::Plugin::List
 
   plugin_activate: &plugin_activate
-    syntax: metal plugin activate PLUGIN_NAME [options]
+    syntax: underware plugin activate PLUGIN_NAME [options]
     summary: Activate given plugin for domain
     action: Commands::Plugin::Activate
 
   plugin_deactivate: &plugin_deactivate
-    syntax: metal plugin deactivate PLUGIN_NAME [options]
+    syntax: underware plugin deactivate PLUGIN_NAME [options]
     summary: Deactivate given plugin for domain
     action: Commands::Plugin::Deactivate
 
   view-answers_domain: &view-answers_domain
-    syntax: metal view-answers domain [options]
+    syntax: underware view-answers domain [options]
     summary: View configured answers for the overall domain
     description: >
       View configuration questions along with configured answers for the
-      overall Metalware domain
+      overall Underware domain
     action:
       Commands::ViewAnswers::Domain
 
   view-answers_group: &view-answers_group
-    syntax: metal view-answers group GROUP_NAME [options]
+    syntax: underware view-answers group GROUP_NAME [options]
     summary: View configured answers for a group
     description: >
       View configuration questions along with configured answers for given
-      group and the overall Metalware domain
+      group and the overall Underware domain
     action:
       Commands::ViewAnswers::Group
 
   view-answers_node: &view-answers_node
-    syntax: metal view-answers node NODE [options]
+    syntax: underware view-answers node NODE [options]
     summary: View configured answers for a node
     description: >
       View configuration questions along with configured answers for given
-      node, its primary group, and the overall Metalware domain
+      node, its primary group, and the overall Underware domain
     action:
       Commands::ViewAnswers::Node
 
 commands:
   asset:
-    syntax: metal asset [SUB_COMMAND] [options]
+    syntax: underware asset [SUB_COMMAND] [options]
     summary: Manage the asset record files
     subcommands:
       add: *asset_add
@@ -223,65 +209,17 @@ commands:
       link: *asset_link
       unlink: *asset_unlink
 
-  build:
-    syntax: metal build NODE_IDENTIFIER [options]
-    summary: Renders the templates used to build the nodes
-    description: >
-      Build handles the build process for a given node or group. This consists
-      of retrieving and rendering the specified 'files' for each node,
-      rendering the 'pxelinux' and 'kickstart' templates for each node, and
-      then waiting for each node to report itself as built and re-rendering its
-      'pxelinux' template for permanent booting. The build command will keep
-      running until all nodes have reported as built, or until it is
-      interrupted. The 'self' build is a special case that is handled separately.
-      See below for more details.
-
-
-      The 'files' for each node are specified under the 'files' key in the repo
-      config for that node, while the 'pxelinux' and 'kickstart' templates are
-      specified by the corresponding key in the 'templates' section of the
-      config.
-
-
-      In order to have a node report itself as built it must make a request to
-      the 'alces.build_complete_url' when it has finished building.
-
-
-      The 'pxelinux' template rendering can be modified using the
-      'alces.firstboot' parameter within the template, which will be set to
-      'true' the first time this is rendered and 'false' the second.
-
-
-      As the 'build local' command is repsonsible for configuring the metalware
-      master node, it functions differently to the other nodes. The build self
-      command is responsible for starting the http server and thus can not curl
-      for files. Instead it must directly access the file system to obtain the
-      rendered files. Once the build has been completed, it can either curl the
-      build_complete_url or create the build_complete file directly.
-
-    action: Commands::Build
-    options:
-      - *gender_option
-
   configure:
-    syntax: metal configure [SUB_COMMAND] [options]
-    summary: Configure different aspects of this Metalware installation
+    syntax: underware configure [SUB_COMMAND] [options]
+    summary: Configure different aspects of this Underware installation
     subcommands:
       domain: *configure_domain
       group: *configure_group
       node: *configure_node
       local: *configure_local
 
-  console:
-    syntax: metal console NODE_NAME [options]
-    summary: Display a node's console in the terminal
-    description: >
-      Displays the console of a node in the terminal. The console command
-      operates over the BMC network and can be used as node is booting.
-    action: Commands::Console
-
   each:
-    syntax: metal each NODE_IDENTIFIER COMMAND [options]
+    syntax: underware each NODE_IDENTIFIER COMMAND [options]
     summary: Runs a command for a node(s)
     description: >
       Runs the COMMAND for the node/ group specified by NODE_IDENTIFIER.
@@ -291,139 +229,35 @@ commands:
     options:
       - *gender_option
 
-  edit:
-    syntax: metal edit FILE [options]
-    summary: Opens a rendered file for editing
-    description: >
-      Opens the specified rendered file in the default system text editor.
-    action: Commands::Edit
-    autocomplete:
-      files_relative_to: /var/lib/metalware/rendered
-
-  hunter:
-    syntax: metal hunter [options]
-    summary: Detects and caches DHCP discover messages
-    description: >
-      Hunter is used in conjunction with the dhcp command to update
-      dhcp server. Hunter listens out for dhcp discovery messages from the
-      booting nodes. Hunter assigns the nodes a node name based of PREFIX or
-      user input. The node's name and MAC address is then cached.
-
-
-      Hunter will continue
-      listening for nodes until it is interrupted. A single MAC address will
-      only be cached once per run even if the compute node reboots. Refer to
-      dhcp command to updated the dhcp server.
-    action: Commands::Hunter
-    options:
-      - tags: [-i INTERFACE, --interface INTERFACE]
-        type: String
-        default:
-          dynamic: build_interface
-        description: >
-          Local interface to hunt on; defaults to standard build interface if
-          unspecified
-      - tags: [-p PREFIX, --prefix PREFIX]
-        type: String
-        default: node
-        description: >
-          Root to suggest for detected node names
-      - tags: [-l LENGTH, --length LENGTH]
-        type: Integer
-        default: 2
-        description: >
-          Numeric sequence length to use for suggested detected node names
-      - tags: [-s START_NUMBER, --start START_NUMBER]
-        type: Integer
-        default: 1
-        description: >
-          Start integer to use for suggested detected node names
-      - tags: [-d, --ignore-duplicate-macs]
-        description: >
-          Ignore any MAC addresses found which are already associated with a
-          node name in the hunter cache
-
-  ipmi:
-    syntax: metal ipmi NODE_IDENTIFIER [COMMAND] [options]
-    summary: Perform ipmi commands on single or multiple machines
-    description: >
-       Perform ipmi commands on single or multiple machines
-    action: Commands::Ipmi
-    options:
-      - *gender_option
-      - tags: [-k, -c, --command LEGACY_COMMAND]
-        type: String
-        description: >
-          Legacy tags used to specify the input. Their use has been
-          deprecated by the COMMAND input.
-
   layout:
-    syntax: metal layout [SUB_COMMAND] [options]
+    syntax: underware layout [SUB_COMMAND] [options]
     summary: Manage the layout record files
     subcommands:
       add: *layout_add
       edit: *layout_edit
 
-  orchestrate:
-    syntax: metal orchestrate [SUB_COMMAND] [options]
-    summary: Orchestrate virtual machines
-    subcommands:
-      create: *orchestrate_create
-      destroy: *orchestrate_destroy
-
   overview:
-    syntax: metal overview [options]
+    syntax: underware overview [options]
     summary: Gives an overview of the configured groups
     action: Commands::Overview
 
   plugin:
-    syntax: metal plugin [SUB_COMMAND] [options]
+    syntax: underware plugin [SUB_COMMAND] [options]
     summary: View and manage activated plugins
     subcommands:
       list: *plugin_list
       activate: *plugin_activate
       deactivate: *plugin_deactivate
 
-  power:
-    syntax: metal power NODE_IDENTIFIER COMMAND [options]
-    summary: Run power commands on a node.
-    description: >
-      Allows ipmi power commands to be run on a node or group
-      of nodes as specified in the genders file.
-
-      The following commands are supported:
-
-      on        - Turns the node on
-
-      off       - Turns the node off
-
-      status    - Display the power status
-
-      locate    - Turns the node locater light on
-
-      locateoff - Turns the node locater light off
-
-      cycle     - Power cycle the node
-
-      reset     - Warm reset the node
-    action: Commands::Power
-    options:
-      - *gender_option
-      - tags: [-s SECONDS, --sleep SECONDS]
-        type: Float
-        default: 0.5
-        description: >
-          Time to wait between running power command on each node.
-
   remove:
-    syntax: metal remove [SUB_COMMAND] [options]
-    summary: Remove metalware controlled files/ objects
+    syntax: underware remove [SUB_COMMAND] [options]
+    summary: Remove underware controlled files/ objects
     # Description can be added for subcommand
     subcommands:
       group: *remove_group
 
   render:
-    syntax: metal render TEMPLATE [NODE] [options]
+    syntax: underware render TEMPLATE [NODE] [options]
     summary: Render a given template
     description: >
       Renders the file specified by TEMPLATE and sends the output to standard
@@ -432,62 +266,15 @@ commands:
     action: Commands::Render
 
   repo:
-    syntax: metal repo [SUB_COMMAND] [options]
+    syntax: underware repo [SUB_COMMAND] [options]
     summary: Manage template and config repository
     # description can also be used for subcommands
     subcommands:
       use: *repo_use
       update: *repo_update
 
-  status:
-    syntax: metal status NODE_IDENTIFIER [options]
-    summary: Display the current network status of the nodes
-    description: >
-      The status tool will attempt to determine the power and ping status of the
-      node(s).
-    action: Commands::Status
-    options:
-      - *gender_option
-      - tags: [--wait-limit WAIT_LIMIT]
-        type: Integer
-        default: 10
-        description: >
-          Sets how long (in seconds) wait for a response from the node before
-          assuming an error has occurred. Minimum 1 seconds.
-      - tags: [--thread-limit THREAD_LIMIT]
-        type: Integer
-        default: 50
-        description: >
-          Sets the maximum number of network operations
-
-  sync:
-    syntax: metal sync [options]
-    summary: Moves staged files into place and service management
-    description: >
-      Moves rendered files generated by `template`. These files are moved from
-      staging to there sync location occurding to the staging manifest. The
-      rendered section are also updated by sync. Once a file has been synced,
-      it is removed from staging directory and the staging manifest is
-      updated.
-    action: Commands::Sync
-
-  template:
-    syntax: metal template NODE_IDENTIFIER [options]
-    summary: Template the files for a node or group to staging
-    description: >
-      The template command renders the files for a node or group. This includes
-      the templates for the particular build method used as well as the build
-      files as defined in the configs.
-
-
-      All the templates are rendered to the staging directory. This is so they
-      can be reviewed before the are moved into place using the sync command.
-    action: Commands::Template
-    options:
-      - *gender_option
-
   view-answers:
-    syntax: metal view-answers [SUB_COMMAND] [options]
+    syntax: underware view-answers [SUB_COMMAND] [options]
     summary: View configured answers
     subcommands:
       domain: *view-answers_domain
@@ -495,7 +282,7 @@ commands:
       node: *view-answers_node
 
   view:
-    syntax: metal view ALCES_COMMAND [options]
+    syntax: underware view ALCES_COMMAND [options]
     summary: View domain templating config, optionally in context for given node
     description: >
       View the templating object that will be used for rendering templates. It
@@ -515,15 +302,15 @@ commands:
       - *color_output
 
   eval:
-    syntax: metal eval ALCES_COMMAND [options]
+    syntax: underware eval ALCES_COMMAND [options]
     summary: Evaluate argument in context of `alces` namespace
     description: >
-      Similar to 'metal view', but evaluates argument directly in 'alces'
+      Similar to 'underware view', but evaluates argument directly in 'alces'
       namespace without any preprocessing, and then returns result as JSON.
 
 
-      Intended to have more stable behaviour than 'metal view', and to provide
-      external programs with access to Metalware data, whereas 'metal view' is
+      Intended to have more stable behaviour than 'underware view', and to provide
+      external programs with access to Underware data, whereas 'underware view' is
       intended purely for human usage and its behaviour may change as needed to
       whatever is most useful for this.
     action: Commands::Eval

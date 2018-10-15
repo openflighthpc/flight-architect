@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Commands
     module Layout
       class Edit < CommandHelpers::LayoutEditor

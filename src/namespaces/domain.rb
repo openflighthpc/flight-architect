@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Namespaces
     class Domain < HashMergerNamespace
       def hostip

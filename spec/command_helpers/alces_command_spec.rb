@@ -4,7 +4,7 @@
 require 'command_helpers/alces_command'
 require 'alces_utils'
 
-RSpec.describe Metalware::CommandHelpers::AlcesCommand do
+RSpec.describe Underware::CommandHelpers::AlcesCommand do
   include AlcesUtils
 
   let(:domain_config) { Hash.new(key: 'I am the domain config') }
@@ -24,7 +24,7 @@ RSpec.describe Metalware::CommandHelpers::AlcesCommand do
   #
   def test_command(command)
     double('TestDouble', alces: alces, raw_alces_command: command)
-      .extend(Metalware::CommandHelpers::AlcesCommand)
+      .extend(Underware::CommandHelpers::AlcesCommand)
       .send(:alces_command)
   end
 

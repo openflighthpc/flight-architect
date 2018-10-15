@@ -9,7 +9,7 @@ require 'hash_mergers'
 require 'recursive_open_struct'
 require 'spec_utils'
 
-RSpec.describe Metalware::Namespaces::Node do
+RSpec.describe Underware::Namespaces::Node do
   context 'with AlcesUtils' do
     include AlcesUtils
 
@@ -20,16 +20,16 @@ RSpec.describe Metalware::Namespaces::Node do
 
     subject { alces.nodes.first }
 
-    include_examples Metalware::Namespaces::HashMergerNamespace
+    include_examples Underware::Namespaces::HashMergerNamespace
   end
 
   context 'without AlcesUtils' do
     let(:alces) do
-      a = Metalware::Namespaces::Alces.new
+      a = Underware::Namespaces::Alces.new
       allow(a).to receive(:groups).and_return(
-        Metalware::Namespaces::MetalArray.new(
+        Underware::Namespaces::UnderwareArray.new(
           [
-            Metalware::Namespaces::Group
+            Underware::Namespaces::Group
               .new(a, 'primary_group', index: primary_group_index),
           ]
         )
@@ -43,10 +43,10 @@ RSpec.describe Metalware::Namespaces::Node do
     let(:node_array) { ['some_other_node', node_name] }
 
     let(:config_hash) do
-      Metalware::Constants::HASH_MERGER_DATA_STRUCTURE.new(
+      Underware::Constants::HASH_MERGER_DATA_STRUCTURE.new(
         key: test_value,
         erb_value1: '<%= alces.node.config.key  %>'
-      ) { |template_string| node.render_erb_template(template_string) }
+      ) { |template_string| node.render_string(template_string) }
     end
 
     let(:node) { described_class.create(alces, node_name) }
@@ -55,27 +55,27 @@ RSpec.describe Metalware::Namespaces::Node do
     # Mocks the HashMergers
     #
     before do
-      config_double = instance_double(Metalware::HashMergers::Config,
+      config_double = instance_double(Underware::HashMergers::Config,
                                       merge: config_hash)
-      answer_double = instance_double(Metalware::HashMergers::Answer,
+      answer_double = instance_double(Underware::HashMergers::Answer,
                                       merge: {})
-      allow(Metalware::HashMergers::Config).to receive(:new)
+      allow(Underware::HashMergers::Config).to receive(:new)
         .and_return(config_double)
-      allow(Metalware::HashMergers::Answer).to receive(:new)
+      allow(Underware::HashMergers::Answer).to receive(:new)
         .and_return(answer_double)
 
       ##
       # Spoofs the results of NodeattrInterface
       #
-      allow(Metalware::NodeattrInterface).to \
+      allow(Underware::NodeattrInterface).to \
         receive(:genders_for_node).and_return(['primary_group'])
-      allow(Metalware::NodeattrInterface).to \
+      allow(Underware::NodeattrInterface).to \
         receive(:nodes_in_gender).and_return(node_array)
-      allow(Metalware::NodeattrInterface).to \
+      allow(Underware::NodeattrInterface).to \
         receive(:all_nodes).and_return(node_array)
 
       # Spoofs the hostip
-      SpecUtils.use_mock_determine_hostip_script(self)
+      use_mock_determine_hostip_script
     end
 
     it 'can access the node name' do
@@ -99,12 +99,12 @@ RSpec.describe Metalware::Namespaces::Node do
     end
 
     it 'has a kickstart_url' do
-      expected = "http://1.2.3.4/metalware/kickstart/#{node_name}"
+      expected = "http://1.2.3.4/underware/kickstart/#{node_name}"
       expect(node.kickstart_url).to eq(expected)
     end
 
     it 'has a build complete url' do
-      exp = "http://1.2.3.4/metalware/exec/kscomplete.php?name=#{node_name}"
+      exp = "http://1.2.3.4/underware/exec/kscomplete.php?name=#{node_name}"
       expect(node.build_complete_url).to eq(exp)
     end
 
@@ -126,77 +126,17 @@ RSpec.describe Metalware::Namespaces::Node do
       end
     end
 
-    describe '#build_method' do
-      let(:node) { described_class.create(alces, 'node01') }
-
-      def mock_build_method(method, my_node = node)
-        config = OpenStruct.new(build_method: method)
-        allow(my_node).to receive(:config).and_return(config)
-        my_node.instance_variable_set(:@build_method, nil)
-      end
-
+    describe '#local?' do
       context 'with a regular node' do
-        it 'defaults to kickstart if not specified' do
-          mock_build_method(nil)
-          exp = Metalware::BuildMethods::Kickstarts::Pxelinux
-          expect(node.build_method.class).to eq(exp)
-        end
+        subject { described_class.create(alces, 'node01') }
 
-        it 'uses the config value' do
-          mock_build_method(:basic)
-          exp = Metalware::BuildMethods::Basic
-          expect(node.build_method.class).to eq(exp)
-        end
-
-        it 'errors if tries to use local build' do
-          mock_build_method(:local)
-          expect do
-            node.build_method
-          end.to raise_error(Metalware::InvalidLocalBuild)
-        end
-
-        it 'returns false when local? is called' do
-          expect(node.local?).to eq(false)
-        end
-
-        it 'uses correct build method class when build_method specified as a string' do
-          mock_build_method('uefi-kickstart')
-
-          expect(node.build_method.class).to eq(
-            Metalware::BuildMethods::Kickstarts::UEFI
-          )
-        end
+        it { is_expected.not_to be_local }
       end
 
       context "with the 'local' node" do
-        let(:local) do
-          described_class.create(alces, 'local')
-        end
+        subject { described_class.create(alces, 'local') }
 
-        let(:local_build) { Metalware::BuildMethods::Local }
-
-        def local_node_uses_local_build?(config_build_method)
-          mock_build_method(config_build_method, local)
-          expect(local.build_method).to be_a(local_build)
-        end
-
-        it 'returns the local build method if not specified' do
-          local_node_uses_local_build?(nil)
-        end
-
-        it 'returns the local build method if specified' do
-          local_node_uses_local_build?(:local)
-        end
-
-        # Their is no point adding additional ways metalware can fail
-        # Instead, always force the local node to use the local build
-        it 'ignores incorrect config values' do
-          local_node_uses_local_build?(:pxelinux)
-        end
-
-        it 'returns true when local? is called' do
-          expect(local.local?).to eq(true)
-        end
+        it { is_expected.to be_local }
       end
     end
 
@@ -205,7 +145,7 @@ RSpec.describe Metalware::Namespaces::Node do
         { node: { node_name.to_sym => 'asset_test' } }
       end
       let(:asset_name) { 'asset_test' }
-      let(:cache) { Metalware::Cache::Asset.new }
+      let(:cache) { Underware::Cache::Asset.new }
 
       context 'with an assigned asset' do
         AlcesUtils.mock(self, :each) do
@@ -230,7 +170,7 @@ RSpec.describe Metalware::Namespaces::Node do
   # Test `#plugins` without the rampant mocking above.
   describe '#plugins' do
     let(:node) { described_class.create(alces, 'node01') }
-    let(:alces) { Metalware::Namespaces::Alces.new }
+    let(:alces) { Underware::Namespaces::Alces.new }
 
     # XXX Need to handle situation of plugin being enabled for node but not
     # available globally?
@@ -250,7 +190,7 @@ RSpec.describe Metalware::Namespaces::Node do
           unconfigured_plugin,
           deactivated_plugin,
         ].each do |plugin|
-          fs.mkdir_p File.join(Metalware::FilePath.plugins_dir, plugin)
+          fs.mkdir_p File.join(Underware::FilePath.plugins_dir, plugin)
         end
 
         fs.setup do
@@ -260,7 +200,7 @@ RSpec.describe Metalware::Namespaces::Node do
             disabled_plugin,
             unconfigured_plugin,
           ].each do |plugin|
-            Metalware::Plugins.activate!(plugin)
+            Underware::Plugins.activate!(plugin)
           end
         end
       end
@@ -271,15 +211,15 @@ RSpec.describe Metalware::Namespaces::Node do
 
       # Enable/disable plugins for node as needed.
       enabled_identifier = \
-        Metalware::Plugins.enabled_question_identifier(enabled_plugin)
+        Underware::Plugins.enabled_question_identifier(enabled_plugin)
       disabled_identitifer = \
-        Metalware::Plugins.enabled_question_identifier(disabled_plugin)
+        Underware::Plugins.enabled_question_identifier(disabled_plugin)
       answers = {
         enabled_identifier => true,
         disabled_identitifer => false,
       }.to_json
-      Metalware::Utils.run_command(
-        Metalware::Commands::Configure::Node, node.name, answers: answers
+      Underware::Utils.run_command(
+        Underware::Commands::Configure::Node, node.name, answers: answers
       )
     end
 
@@ -295,7 +235,7 @@ RSpec.describe Metalware::Namespaces::Node do
     it 'uses plugin namespace for each enabled plugin' do
       first_plugin = node.plugins.first
 
-      expect(first_plugin).to be_a(Metalware::Namespaces::Plugin)
+      expect(first_plugin).to be_a(Underware::Namespaces::Plugin)
     end
 
     it 'provides access to plugin namespaces by plugin name' do

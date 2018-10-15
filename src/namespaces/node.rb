@@ -1,10 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'build_methods'
 require 'namespaces/plugin'
 
-module Metalware
+module Underware
   module Namespaces
     class Node < HashMergerNamespace
       class << self
@@ -58,10 +57,6 @@ module Metalware
         @hexadecimal_ip ||= SystemCommand.run("gethostip -x #{name}").chomp
       end
 
-      def build_method
-        @build_method ||= build_method_class.new(self)
-      end
-
       def files
         @files ||= begin
           data = alces.build_files_retriever.retrieve(self)
@@ -73,7 +68,7 @@ module Metalware
         Constants::HASH_MERGER_DATA_STRUCTURE.new(
           build_file_hashes
         ) do |template|
-          render_erb_template(template)
+          render_string(template)
         end
       end
 
@@ -82,7 +77,7 @@ module Metalware
       end
 
       def plugins
-        @plugins ||= MetalArray.new(enabled_plugin_namespaces)
+        @plugins ||= UnderwareArray.new(enabled_plugin_namespaces)
       end
 
       def asset
@@ -108,7 +103,6 @@ module Metalware
                        :build_complete_url,
                        :build_complete_path,
                        :hexadecimal_ip,
-                       :build_method,
                      ])
       end
 
@@ -132,20 +126,6 @@ module Metalware
 
       def additional_dynamic_namespace
         { node: self }
-      end
-
-      def build_method_class
-        case config.build_method&.to_sym
-        when :local
-          msg = "node '#{name}' can not use the local build"
-          raise InvalidLocalBuild, msg
-        when :'uefi-kickstart'
-          BuildMethods::Kickstarts::UEFI
-        when :basic
-          BuildMethods::Basic
-        else
-          BuildMethods::Kickstarts::Pxelinux
-        end
       end
 
       def enabled_plugin_namespaces

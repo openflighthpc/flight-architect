@@ -3,7 +3,7 @@
 require 'cache/asset'
 require 'fileutils'
 
-module Metalware
+module Underware
   module Commands
     module Asset
       class Delete < CommandHelpers::BaseCommand

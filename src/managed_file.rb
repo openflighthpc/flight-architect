@@ -1,12 +1,12 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   class ManagedFile
-    MANAGED_START_MARKER = 'METALWARE_START'
-    MANAGED_END_MARKER = 'METALWARE_END'
+    MANAGED_START_MARKER = 'UNDERWARE_START'
+    MANAGED_END_MARKER = 'UNDERWARE_END'
     MANAGED_COMMENT_TEXT = <<-EOF.squish
-      This section of this file is managed by Alces Metalware. Any changes made
+      This section of this file is managed by Alces Underware. Any changes made
       to this file between the #{MANAGED_START_MARKER} and
       #{MANAGED_END_MARKER} markers may be lost; you should make any changes
       you want to persist outside of this section or to the template directly.
@@ -29,7 +29,8 @@ module Metalware
         def create
           pre, post = split_on_managed_section(current_file_contents)
           new_managed_section = managed_section(rendered_content.strip)
-          [pre, new_managed_section, post].join
+          new_content = [pre, new_managed_section, post].join
+          new_content + (new_content.end_with?("\n") ? '' : "\n")
         end
 
         private
@@ -40,7 +41,7 @@ module Metalware
           :comment_char
 
         def current_file_contents
-          File.exist?(managed_file) ? File.read(managed_file).strip : ''
+          File.exist?(managed_file) ? File.read(managed_file) : ''
         end
 
         def split_on_managed_section(file_contents)
@@ -49,7 +50,7 @@ module Metalware
             _, post = rest.split(managed_end)
             [pre, post]
           else
-            [file_contents + "\n\n", nil]
+            [file_contents, nil]
           end
         end
 
@@ -59,7 +60,7 @@ module Metalware
             managed_comment,
             rendered_template,
             managed_end,
-          ].join("\n") + "\n"
+          ].join("\n")
         end
 
         def managed_start

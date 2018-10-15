@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Validation
     class Configure
       TopLevelSchema = Dry::Validation.Schema do

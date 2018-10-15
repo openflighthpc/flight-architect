@@ -1,8 +1,8 @@
 
-# Metalware templating system
+# Underware templating system
 
-Various Metalware commands render templates as all or part of their
-functionality. To do this Metalware provides a flexible templating system,
+Various Underware commands render templates as all or part of their
+functionality. To do this Underware provides a flexible templating system,
 which broadly functions as follows:
 
 - Config files in the repo `config` directory are loaded. If a template is not
@@ -39,7 +39,7 @@ which broadly functions as follows:
   networks['pri']['hostname'] %>`. Additionally, an `each` function is made
   available on these objects at any level within the config to iterate through
   the config values available at that level, for example see
-  [here](https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/files/core/networking.sh#L9)
+  [here](https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/files/core/networking.sh#L9)
   for a usage of this.
 
 
@@ -74,8 +74,8 @@ file remains consistent.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L3'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L3'>
+underware-default
 </a>
 </td>
 </tr>
@@ -110,8 +110,8 @@ The name of the current node being templated.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L26'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L26'>
+underware-default
 </a>
 </td>
 </tr>
@@ -129,8 +129,8 @@ command.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/pxelinux/default#L6'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/pxelinux/default#L6'>
+underware-default
 </a>
 </td>
 </tr>
@@ -141,9 +141,9 @@ metalware-default
 <td>
 
 A hash/object with details of the specified build files for the node. See <a
-href='design/01-metalware-improvements.md#metalware-config-files-parameter#'>here</a>
+href='design/01-underware-improvements.md#underware-config-files-parameter#'>here</a>
 for details of how this is formed, and <a
-href='design/01-metalware-improvements.md#magic-namespace'>here</a> for the
+href='design/01-underware-improvements.md#magic-namespace'>here</a> for the
 structure of this object. Only available when rendering templates in `metal
 build`.
 
@@ -151,8 +151,8 @@ build`.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/master/files/main.sh#L21'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/master/files/main.sh#L21'>
+underware-default
 </a>
 </td>
 </tr>
@@ -191,8 +191,8 @@ are the corresponding MAC address found for the node.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/dhcp/default#L2'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/dhcp/default#L2'>
+underware-default
 </a>
 
 </td>
@@ -203,15 +203,15 @@ metalware-default
 <td><code>hosts_url</code></td>
 <td>
 
-A URL from which the Metalware deployment server `/etc/hosts` file can be
+A URL from which the Underware deployment server `/etc/hosts` file can be
 retrieved via a HTTP GET request.
 
 </td>
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/files/core/base.sh#L6'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/files/core/base.sh#L6'>
+underware-default
 </a>
 
 </td>
@@ -222,8 +222,8 @@ metalware-default
 <td><code>genders_url</code></td>
 <td>
 
-A URL from which the Metalware deployment server `genders` file
-(`/var/lib/metalware/rendered/system/genders`) can be retrieved via a HTTP GET
+A URL from which the Underware deployment server `genders` file
+(`/var/lib/underware/rendered/system/genders`) can be retrieved via a HTTP GET
 request.
 
 </td>
@@ -249,8 +249,8 @@ HTTP GET request.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/pxelinux/default#L10'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/pxelinux/default#L10'>
+underware-default
 </a>
 
 </td>
@@ -269,8 +269,8 @@ of GET, but is kept for now for legacy purposes).
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/kickstart/default#L93'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/kickstart/default#L93'>
+underware-default
 </a>
 
 </td>
@@ -281,7 +281,7 @@ metalware-default
 <td><code>hostip</code></td>
 <td>
 
-The IP of the Metalware deployment server on the deployment network. The IP on
+The IP of the Underware deployment server on the deployment network. The IP on
 the specified private/primary network is used if the deployment server is a
 Controller appliance; otherwise <code>hostname -i</code> is used to determine
 the IP, which may or may not be on the desired network.
@@ -290,8 +290,8 @@ the IP, which may or may not be on the desired network.
 
 <td>
 <a
-href='https://github.com/alces-software/metalware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L17'>
-metalware-default
+href='https://github.com/alces-software/underware-default/blob/226cf530d4ce6bdc09a6c65ba3f4bfc553032752/config/domain.yaml#L17'>
+underware-default
 </a>
 
 </td>

@@ -154,11 +154,5 @@ Please login again, or manually run the following:
 source /etc/profile.d/alces-underware.${rc_script_ext}
 
 Afterwards, execute 'underware --help' for further information.
-
-If the Libvirt integration is required, please copy the following certificates
-to the Libvirt host(s):
-
-  from (local): $CA_DIR/cacert.pem
-   to (remote): /etc/pki/CA/cacert.pem (remote)
 [0m
 EOF

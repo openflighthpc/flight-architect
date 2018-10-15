@@ -9,7 +9,10 @@ Alces Underware currently supports the following platforms/distributions:
 
 ## Prerequisites
 
-The install scripts handle the installation of all required packages from your distribution and will install on a minimal base.  For Enterprise Linux distributions installation of the `@core` and `@base` package groups is sufficient.
+The install scripts handle the installation of all required packages from your
+distribution and will install on a minimal base.  For Enterprise Linux
+distributions installation of the `@core` and `@base` package groups is
+sufficient.
 
 ## Basic Installation
 
@@ -21,7 +24,8 @@ Underware is a system-level package and must be installed by the `root` user.
    sudo -s
    ```
 
-2. Set the `alces_OS` environment variable to match the distribution on which you are installing. Currently supported options are `el6` and `el7`:
+2. Set the `alces_OS` environment variable to match the distribution on which
+   you are installing. Currently supported options are `el6` and `el7`:
 
      ```bash
      export alces_OS=el7
@@ -33,7 +37,9 @@ Underware is a system-level package and must be installed by the `root` user.
    curl -sL http://git.io/underware-installer | /bin/bash
    ```
 
-   If you want to you can download the script first.  You might want to do this if you want to inspect what it's going to do, or if you're nervous about it being truncated during download:
+   If you want to you can download the script first.  You might want to do this
+   if you want to inspect what it's going to do, or if you're nervous about it
+   being truncated during download:
 
    ```bash
    curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
@@ -41,7 +47,9 @@ Underware is a system-level package and must be installed by the `root` user.
    bash /tmp/bootstrap.sh
    ```
 
-4. After installation, you can logout and login again in order to set up the appropriate shell configuration, or you can source the shell configuration manually:
+4. After installation, you can logout and login again in order to set up the
+   appropriate shell configuration, or you can source the shell configuration
+   manually:
 
    ```bash
    source /etc/profile.d/alces-underware.sh
@@ -49,11 +57,15 @@ Underware is a system-level package and must be installed by the `root` user.
 
 ## Advanced installation parameters
 
-Additional environment variables may be set to influence the installation process.
+Additional environment variables may be set to influence the installation
+process.
 
 ### Build from upstream source
 
-Set the `alces_SOURCE` variable to indicate that you want to build from upstream source code rather than installing prebuilt binaries for your distribution.  Choose `fresh` to download and build components from upstream sources, or `dist` to use prebuilt binaries downloaded on Amazon S3.
+Set the `alces_SOURCE` variable to indicate that you want to build from
+upstream source code rather than installing prebuilt binaries for your
+distribution.  Choose `fresh` to download and build components from upstream
+sources, or `dist` to use prebuilt binaries downloaded on Amazon S3.
    
 ```bash
 export alces_SOURCE=fresh
@@ -62,7 +74,10 @@ curl -sL http://git.io/underware-installer | /bin/bash
 
 ### Build from existing directory
 
-Set the `alces_SRC_DIR` variable to point to an existing clone of the repository.  If a clone isn't available in the path you specify the path will be used to house the downloaded code rather than the default `/tmp/underware.XXXXXX` temporary directory.
+Set the `alces_SRC_DIR` variable to point to an existing clone of the
+repository.  If a clone isn't available in the path you specify the path will
+be used to house the downloaded code rather than the default
+`/tmp/underware.XXXXXX` temporary directory.
 
 ```bash
 cd /usr/src
@@ -73,10 +88,10 @@ export alces_SRC_DIR=/usr/src/underware
 
 ### Build from an alternative branch
 
-Set the `alces_SOURCE_BRANCH` variable with the name of the branch you wish to build.  Defaults to `master`. e.g.:
+Set the `alces_SOURCE_BRANCH` variable with the name of the branch you wish to
+build.  Defaults to `master`. e.g.:
 
 ```bash
 export alces_SOURCE_BRANCH=0.1.0
 curl -sL http://git.io/underware-installer | /bin/bash
 ```
-

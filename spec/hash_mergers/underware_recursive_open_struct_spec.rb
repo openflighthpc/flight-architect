@@ -6,7 +6,7 @@ require 'filesystem'
 require 'namespaces/alces'
 require 'alces_utils'
 
-module Metalware
+module Underware
   module Namespaces
     class Alces
       def testing; end
@@ -14,15 +14,15 @@ module Metalware
   end
 end
 
-module Metalware
-  class TestInheritedMetalRecursiveOpenStruct < \
-    Metalware::HashMergers::MetalRecursiveOpenStruct
+module Underware
+  class TestInheritedUnderwareRecursiveOpenStruct < \
+    Underware::HashMergers::UnderwareRecursiveOpenStruct
   end
 end
 
-RSpec.describe Metalware::HashMergers::MetalRecursiveOpenStruct do
+RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   let(:alces) do
-    namespace = Metalware::Namespaces::Alces.new
+    namespace = Underware::Namespaces::Alces.new
     allow(namespace).to receive(:testing).and_return(build_default_hash)
     namespace
   end
@@ -44,7 +44,7 @@ RSpec.describe Metalware::HashMergers::MetalRecursiveOpenStruct do
   end
 
   def build_hash(my_hash)
-    Metalware::HashMergers::MetalRecursiveOpenStruct
+    Underware::HashMergers::UnderwareRecursiveOpenStruct
       .new(my_hash) do |template_string|
       alces.render_string(template_string)
     end
@@ -96,7 +96,7 @@ RSpec.describe Metalware::HashMergers::MetalRecursiveOpenStruct do
 
     let(:data) { { sub_hash: { key: 'value' } } }
     let(:inherited_class) do
-      Metalware::TestInheritedMetalRecursiveOpenStruct
+      Underware::TestInheritedUnderwareRecursiveOpenStruct
     end
 
     it 'returns sub hashes of that class' do

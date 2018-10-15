@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'nodeattr_interface'
@@ -27,7 +27,7 @@ require 'spec_utils'
 require 'exceptions'
 require 'filesystem'
 
-RSpec.describe Metalware::NodeattrInterface do
+RSpec.describe Underware::NodeattrInterface do
   include AlcesUtils
 
   context 'with setup1 genders' do
@@ -66,7 +66,7 @@ RSpec.describe Metalware::NodeattrInterface do
       it 'raises if cannot find gender group' do
         expect do
           described_class.nodes_in_gender('non_existent')
-        end.to raise_error Metalware::NoGenderGroupError
+        end.to raise_error Underware::NoGenderGroupError
       end
     end
 
@@ -84,7 +84,7 @@ RSpec.describe Metalware::NodeattrInterface do
       it 'raises if cannot find node' do
         expect do
           described_class.genders_for_node('non_existent')
-        end.to raise_error Metalware::NodeNotInGendersError
+        end.to raise_error Underware::NodeNotInGendersError
       end
     end
   end
@@ -107,7 +107,7 @@ RSpec.describe Metalware::NodeattrInterface do
       # This genders file is invalid as `node01` is given `nodes` group twice.
       File.write(genders_path, "node01 nodes,other,groups\nnode01 nodes\n")
 
-      expect { subject }.to raise_error Metalware::SystemCommandError
+      expect { subject }.to raise_error Underware::SystemCommandError
     end
 
     it 'raises if given file does not exist' do
@@ -119,7 +119,7 @@ RSpec.describe Metalware::NodeattrInterface do
 
       expect do
         described_class.validate_genders_file(path)
-      end.to raise_error(Metalware::FileDoesNotExistError)
+      end.to raise_error(Underware::FileDoesNotExistError)
     end
   end
 end

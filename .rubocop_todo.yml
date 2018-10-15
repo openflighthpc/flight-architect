@@ -40,7 +40,7 @@ RSpec/AnyInstance:
     - 'spec/command_helpers/configure_command_spec.rb'
     - 'spec/commands/console_spec.rb'
     - 'spec/dependency_specifications_spec.rb'
-    - 'spec/metal_log_spec.rb'
+    - 'spec/underware_log_spec.rb'
     - 'spec/slow/status/monitor_spec.rb'
     - 'spec/spec_utils.rb'
     - 'spec/utils/editor_spec.rb'
@@ -163,7 +163,7 @@ Style/GuardClause:
     - 'src/commands/status.rb'
     - 'src/dependency.rb'
     - 'src/deployment_server.rb'
-    - 'src/metal_log.rb'
+    - 'src/underware_log.rb'
 
 # Offense count: 9
 # Cop supports --auto-correct.
@@ -182,8 +182,8 @@ Style/IfUnlessModifier:
 Style/MethodMissing:
   Exclude:
     - 'spec/filesystem.rb'
-    - 'src/hash_mergers/metal_recursive_open_struct.rb'
-    - 'src/metal_log.rb'
+    - 'src/hash_mergers/underware_recursive_open_struct.rb'
+    - 'src/underware_log.rb'
 
 # Offense count: 1
 Style/MultilineBlockChain:

@@ -4,14 +4,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -19,8 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'spec_utils'
@@ -29,7 +29,7 @@ require 'filesystem'
 require 'answers_table_creator'
 require 'validation/loader'
 
-RSpec.describe Metalware::AnswersTableCreator do
+RSpec.describe Underware::AnswersTableCreator do
   include AlcesUtils
 
   subject do
@@ -73,13 +73,13 @@ RSpec.describe Metalware::AnswersTableCreator do
   end
 
   let(:question_tree) do
-    Metalware::Validation::Configure.new(raw_configure_data).tree
+    Underware::Validation::Configure.new(raw_configure_data).tree
   end
 
   let!(:loader) do
-    l = Metalware::Validation::Loader.new
+    l = Underware::Validation::Loader.new
     allow(l).to receive(:question_tree).and_return(question_tree)
-    allow(Metalware::Validation::Loader).to receive(:new).and_return(l)
+    allow(Underware::Validation::Loader).to receive(:new).and_return(l)
     l
   end
 

@@ -67,7 +67,7 @@ RSpec.shared_examples 'record' do |file_path_proc|
       it 'errors with the missing_error flag' do
         expect do
           described_class.path(missing, missing_error: true)
-        end.to raise_error(Metalware::MissingRecordError)
+        end.to raise_error(Underware::MissingRecordError)
       end
     end
   end
@@ -112,7 +112,7 @@ RSpec.shared_examples 'record' do |file_path_proc|
     it 'errors if given a path not matching record_dir' do
       expect do
         described_class.type_from_path(invalid_path)
-      end.to raise_error(Metalware::InvalidInput)
+      end.to raise_error(Underware::InvalidInput)
     end
 
     it 'returns the correct type' do

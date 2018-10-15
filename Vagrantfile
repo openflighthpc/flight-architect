@@ -7,13 +7,13 @@
 # you're doing.
 
 
-$dev_path='/tmp/metalware'
+$dev_path='/tmp/underware'
 $script = <<SCRIPT
 
 export alces_OS=el7
-curl -sL http://git.io/metalware-installer | /bin/bash
+curl -sL http://git.io/underware-installer | /bin/bash
 
-echo "pathmunge /opt/metalware/opt/ruby/bin" > /etc/profile.d/metalware-ruby.sh
+echo "pathmunge /opt/underware/opt/ruby/bin" > /etc/profile.d/underware-ruby.sh
 . /etc/profile
 
 cd #{$dev_path}

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Validation
     class Asset
       def self.valid_file?(path)

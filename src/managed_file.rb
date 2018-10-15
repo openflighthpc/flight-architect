@@ -1,12 +1,12 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   class ManagedFile
-    MANAGED_START_MARKER = 'METALWARE_START'
-    MANAGED_END_MARKER = 'METALWARE_END'
+    MANAGED_START_MARKER = 'UNDERWARE_START'
+    MANAGED_END_MARKER = 'UNDERWARE_END'
     MANAGED_COMMENT_TEXT = <<-EOF.squish
-      This section of this file is managed by Alces Metalware. Any changes made
+      This section of this file is managed by Alces Underware. Any changes made
       to this file between the #{MANAGED_START_MARKER} and
       #{MANAGED_END_MARKER} markers may be lost; you should make any changes
       you want to persist outside of this section or to the template directly.

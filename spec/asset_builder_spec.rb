@@ -12,14 +12,14 @@ RSpec.shared_examples 'pushes the asset' do
   end
 end
 
-RSpec.describe Metalware::AssetBuilder do
+RSpec.describe Underware::AssetBuilder do
   include AlcesUtils
 
   subject { described_class.new }
 
   let(:test_asset) { 'type-asset-name' }
   let(:type) { 'rack' }
-  let(:type_path) { Metalware::FilePath.asset_type(type) }
+  let(:type_path) { Underware::FilePath.asset_type(type) }
 
   def push_test_asset
     subject.push_asset(test_asset, type)
@@ -48,7 +48,7 @@ RSpec.describe Metalware::AssetBuilder do
       let(:layout) { 'new-layout' }
       let(:layout_asset) { 'layout-asset-name' }
       let(:layout_path) do
-        Metalware::FilePath.layout(type.pluralize, layout)
+        Underware::FilePath.layout(type.pluralize, layout)
       end
 
       def push_layout_asset
@@ -58,7 +58,7 @@ RSpec.describe Metalware::AssetBuilder do
       context 'when the layout exists' do
         before do
           FileUtils.mkdir_p(File.dirname(layout_path))
-          Metalware::Data.dump(layout_path, {})
+          Underware::Data.dump(layout_path, {})
           push_layout_asset
         end
 
@@ -110,7 +110,7 @@ RSpec.describe Metalware::AssetBuilder do
 
   shared_examples 'save asset methods' do
     let(:asset) { subject.pop_asset }
-    let(:source_content) { Metalware::Data.load(asset.source_path) }
+    let(:source_content) { Underware::Data.load(asset.source_path) }
 
     before { FileSystem.root_setup(&:with_asset_types) }
 
@@ -126,10 +126,10 @@ RSpec.describe Metalware::AssetBuilder do
       end
 
       it 'errors if the file is invalid' do
-        allow(Metalware::Data).to receive(:load).and_return([])
+        allow(Underware::Data).to receive(:load).and_return([])
         expect do
           run_save.call
-        end.to raise_error(Metalware::ValidationFailure)
+        end.to raise_error(Underware::ValidationFailure)
       end
     end
 
@@ -196,14 +196,14 @@ RSpec.describe Metalware::AssetBuilder do
 
     before do
       allow(HighLine).to receive(:new).and_return(mock_highline)
-      allow(Metalware::Utils::Editor).to receive(:open)
+      allow(Underware::Utils::Editor).to receive(:open)
     end
 
     include_examples 'save asset methods'
   end
 
   describe '#edit_asset' do
-    let(:path) { Metalware::Records::Asset.path(test_asset) }
+    let(:path) { Underware::Records::Asset.path(test_asset) }
     let(:expected_content) { { key: 'content' } }
 
     AlcesUtils.mock(self, :each) do
@@ -212,8 +212,8 @@ RSpec.describe Metalware::AssetBuilder do
     end
 
     it 'calls the asset to edited and saved' do
-      allow(Metalware::Utils::Editor).to receive(:open).and_wrap_original do |_, path|
-        Metalware::Data.dump(path, expected_content)
+      allow(Underware::Utils::Editor).to receive(:open).and_wrap_original do |_, path|
+        Underware::Data.dump(path, expected_content)
       end
       subject.edit_asset(test_asset)
       expect(alces.assets.find_by_name(test_asset).to_h).to include(expected_content)

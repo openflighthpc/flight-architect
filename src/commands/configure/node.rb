@@ -4,7 +4,7 @@
 require 'command_helpers/configure_command'
 require 'constants'
 
-module Metalware
+module Underware
   module Commands
     module Configure
       class Node < CommandHelpers::ConfigureCommand

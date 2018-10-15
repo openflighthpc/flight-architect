@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Commands
     module Asset
       class Unlink < CommandHelpers::BaseCommand

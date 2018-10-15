@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 require 'filesystem'
 require 'commands/remove/group'
@@ -28,7 +28,7 @@ require 'ostruct'
 require 'validation/loader'
 require 'spec_utils'
 
-RSpec.describe Metalware::Commands::Remove::Group do
+RSpec.describe Underware::Commands::Remove::Group do
   include AlcesUtils
 
   AlcesUtils.mock self, :each do
@@ -44,7 +44,7 @@ RSpec.describe Metalware::Commands::Remove::Group do
     end
   end
 
-  let(:loader) { Metalware::Validation::Loader.new }
+  let(:loader) { Underware::Validation::Loader.new }
   let(:cache) { loader.group_cache[:primary_groups] }
 
   let(:initial_files) { answer_files }
@@ -56,20 +56,20 @@ RSpec.describe Metalware::Commands::Remove::Group do
   end
 
   def answer_files
-    Dir[File.join(Metalware::FilePath.answer_files, '**/*.yaml')]
+    Dir[File.join(Underware::FilePath.answer_files, '**/*.yaml')]
   end
 
   def expected_deleted_files(group)
-    Metalware::NodeattrInterface
+    Underware::NodeattrInterface
       .nodes_in_group(group)
       .map { |node| "nodes/#{node}.yaml" }
       .unshift(["groups/#{group}.yaml"])
-      .map { |f| File.join(Metalware::FilePath.answer_files, f) }
+      .map { |f| File.join(Underware::FilePath.answer_files, f) }
   end
 
   def test_remove_group(group)
     filesystem.test do |_fs|
-      Metalware::Commands::Remove::Group.new([group], OpenStruct.new)
+      Underware::Commands::Remove::Group.new([group], OpenStruct.new)
       expect(expected_deleted_files(group)).to include(*deleted_files)
       expect(answer_files).not_to include(*expected_deleted_files(group))
       expect(cache).not_to include(group)

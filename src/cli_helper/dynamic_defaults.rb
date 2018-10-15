@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module CliHelper
     module DynamicDefaults
       class << self

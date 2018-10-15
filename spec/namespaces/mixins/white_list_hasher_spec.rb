@@ -4,7 +4,7 @@
 require 'namespaces/mixins/white_list_hasher'
 require 'ostruct'
 
-RSpec.describe Metalware::Namespaces::Mixins::WhiteListHasher do
+RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
   let(:test_obj) do
     double(
       white_method1: 1,

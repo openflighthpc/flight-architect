@@ -5,7 +5,7 @@ require 'namespaces/alces'
 require 'hash_mergers'
 require 'alces_utils'
 
-RSpec.describe Metalware::Namespaces::Alces do
+RSpec.describe Underware::Namespaces::Alces do
   # TODO: The Alces class should not be tested with AlcesUtils
   # Remove AlcesUtils and mock the configs blank manually
   include AlcesUtils
@@ -17,7 +17,7 @@ RSpec.describe Metalware::Namespaces::Alces do
   describe '#render_string' do
     AlcesUtils.mock self, :each do
       define_method_testing do
-        Metalware::HashMergers::MetalRecursiveOpenStruct.new(
+        Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
           key: 'value',
           embedded_key: '<%= alces.testing.key %>',
           infinite_value1: '<%= alces.testing.infinite_value2 %>',
@@ -42,7 +42,7 @@ RSpec.describe Metalware::Namespaces::Alces do
       expect do
         output = alces.render_string('<%= alces.testing.infinite_value1 %>')
         STDERR.puts "Template output: #{output}"
-      end.to raise_error(Metalware::RecursiveConfigDepthExceededError)
+      end.to raise_error(Underware::RecursiveConfigDepthExceededError)
     end
 
     it 'evalutes the false string as Falsey' do
@@ -109,11 +109,11 @@ RSpec.describe Metalware::Namespaces::Alces do
   describe '#local' do
     it 'errors if not initialized' do
       allow(alces).to receive(:nodes)
-        .and_return(Metalware::Namespaces::MetalArray.new([]))
+        .and_return(Underware::Namespaces::UnderwareArray.new([]))
 
       expect do
         alces.local
-      end.to raise_error(Metalware::UninitializedLocalNode)
+      end.to raise_error(Underware::UninitializedLocalNode)
     end
   end
 
@@ -151,8 +151,8 @@ RSpec.describe Metalware::Namespaces::Alces do
 
   describe '#data' do
     it 'provides access to data in corresponding data directory file' do
-      data_file_path = Metalware::FilePath.namespace_data_file('mydata')
-      Metalware::Data.dump(data_file_path, foo: { bar: 'baz' })
+      data_file_path = Underware::FilePath.namespace_data_file('mydata')
+      Underware::Data.dump(data_file_path, foo: { bar: 'baz' })
 
       expect(alces.data.mydata.foo.bar).to eq('baz')
       expect(alces.data.mydata.non_existent).to be nil
@@ -160,18 +160,18 @@ RSpec.describe Metalware::Namespaces::Alces do
     end
 
     it 'gives useful error when try to access data for non-existent file' do
-      data_file_path = Metalware::FilePath.namespace_data_file('non_existent')
+      data_file_path = Underware::FilePath.namespace_data_file('non_existent')
 
       expect do
         alces.data.non_existent.foo
       end.to raise_error(
-        Metalware::UserMetalwareError,
+        Underware::UserUnderwareError,
         "Requested data file doesn't exist: #{data_file_path}"
       )
     end
 
     it 'appropriately handles respond_to? as whether data file exists' do
-      existent_path = Metalware::FilePath.namespace_data_file('existent')
+      existent_path = Underware::FilePath.namespace_data_file('existent')
       FileUtils.touch(existent_path)
 
       expect(alces.data).to respond_to(:existent)
@@ -180,17 +180,17 @@ RSpec.describe Metalware::Namespaces::Alces do
   end
 
   context 'when a template returns nil' do
-    let(:metal_log) { instance_spy(Metalware::MetalLog) }
+    let(:underware_log) { instance_spy(Underware::UnderwareLog) }
 
     AlcesUtils.mock(self, :each) do
-      allow(Metalware::MetalLog).to \
-        receive(:metal_log).and_return(metal_log)
+      allow(Underware::UnderwareLog).to \
+        receive(:underware_log).and_return(underware_log)
       config(alces.domain, nil: nil)
     end
 
     it 'templates have nil detection' do
       alces.render_string('<%= domain.config.nil %>')
-      expect(metal_log).to \
+      expect(underware_log).to \
         have_received(:warn).once.with(/.*domain.config.nil\Z/)
     end
   end
@@ -200,8 +200,8 @@ RSpec.describe Metalware::Namespaces::Alces do
   # template
   describe '#scope' do
     let(:scope_template) { '<%= alces.scope.class %>' }
-    let(:node_class) { Metalware::Namespaces::Node }
-    let(:group_class) { Metalware::Namespaces::Group }
+    let(:node_class) { Underware::Namespaces::Node }
+    let(:group_class) { Underware::Namespaces::Group }
     let(:node_double) do
       instance_double(node_class, class: node_class)
     end
@@ -220,7 +220,7 @@ RSpec.describe Metalware::Namespaces::Alces do
     it 'errors if a group and node are both in scope' do
       expect do
         render_scope_template(node: node_double, group: group_double)
-      end.to raise_error(Metalware::ScopeError)
+      end.to raise_error(Underware::ScopeError)
     end
 
     it 'can set a node as the scope' do
@@ -250,14 +250,14 @@ RSpec.describe Metalware::Namespaces::Alces do
 
     describe '#domain' do
       it 'returns the domain namespace' do
-        domain_class = Metalware::Namespaces::Domain.to_s
+        domain_class = Underware::Namespaces::Domain.to_s
         expect(alces.render_string('<%= alces.domain.class %>')).to eq(domain_class)
       end
     end
 
     describe '#local' do
       it 'returns the local node' do
-        local_class = Metalware::Namespaces::Local.to_s
+        local_class = Underware::Namespaces::Local.to_s
         expect(alces.render_string('<%= alces.local.class %>')).to eq(local_class)
       end
     end
@@ -278,7 +278,7 @@ RSpec.describe Metalware::Namespaces::Alces do
   shared_examples '#node errors' do
     describe '#node' do
       it 'errors' do
-        expect { alces.node }.to raise_error(Metalware::ScopeError)
+        expect { alces.node }.to raise_error(Underware::ScopeError)
       end
     end
   end
@@ -286,42 +286,42 @@ RSpec.describe Metalware::Namespaces::Alces do
   shared_examples '#group errors' do
     describe '#group' do
       it 'errors' do
-        expect { alces.group }.to raise_error(Metalware::ScopeError)
+        expect { alces.group }.to raise_error(Underware::ScopeError)
       end
     end
   end
 
   context 'with a Domain scope' do
-    include_examples 'scope method tests', Metalware::Namespaces::Domain
+    include_examples 'scope method tests', Underware::Namespaces::Domain
     include_examples '#node errors'
     include_examples '#group errors'
   end
 
   context 'with a Node in scope' do
-    include_examples 'scope method tests', Metalware::Namespaces::Node
+    include_examples 'scope method tests', Underware::Namespaces::Node
     include_examples '#group errors'
 
     describe '#node' do
       it 'returns a Node' do
-        expect(alces.node.class).to eq(Metalware::Namespaces::Node.to_s)
+        expect(alces.node.class).to eq(Underware::Namespaces::Node.to_s)
       end
     end
   end
 
   context 'with a Group in scope' do
-    include_examples 'scope method tests', Metalware::Namespaces::Group
+    include_examples 'scope method tests', Underware::Namespaces::Group
     include_examples '#node errors'
 
     describe '#group' do
       it 'returns a Group' do
-        expect(alces.group.class).to eq(Metalware::Namespaces::Group.to_s)
+        expect(alces.group.class).to eq(Underware::Namespaces::Group.to_s)
       end
     end
   end
 end
 
-RSpec.describe Metalware::Namespaces::Alces do
-  # These tests were formerly tests of the `Metalware::Templater` class, but
+RSpec.describe Underware::Namespaces::Alces do
+  # These tests were formerly tests of the `Underware::Templater` class, but
   # are no longer applicable to that now rendering has been moved to the
   # namespaces. They have been moved here (and slightly tweaked to still work),
   # since I think they may still have some value as they test additional things

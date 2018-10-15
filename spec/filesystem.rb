@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'fakefs/safe'
@@ -45,10 +45,10 @@ class FileSystem
 
     delegate :mkdir_p, :touch, :rm_rf, to: FileUtils
     delegate :write, to: File
-    delegate :dump, to: Metalware::Data
+    delegate :dump, to: Underware::Data
 
     def activate_plugin(plugin_name)
-      Metalware::Plugins.activate!(plugin_name)
+      Underware::Plugins.activate!(plugin_name)
     end
 
     # Create an empty file given any path, by creating every needed parent
@@ -118,10 +118,10 @@ class FileSystem
     end
   end
 
-  # This should construct the most minimal possible valid Metalware repo, at
+  # This should construct the most minimal possible valid Underware repo, at
   # the default repo path.
   def with_minimal_repo
-    MinimalRepo.create_at('/var/lib/metalware/repo')
+    MinimalRepo.create_at('/var/lib/underware/repo')
   end
 
   def with_fixtures(fixtures_dir, at:)
@@ -130,29 +130,29 @@ class FileSystem
   end
 
   def with_validation_error_file
-    FakeFS::FileSystem.clone(Metalware::FilePath.dry_validation_errors)
+    FakeFS::FileSystem.clone(Underware::FilePath.dry_validation_errors)
   end
 
   def with_repo_fixtures(repo_fixtures_dir)
-    # Create the minimal parts of a Metalware repo, these can then be
+    # Create the minimal parts of a Underware repo, these can then be
     # overridden by the specified fixtures.
     with_minimal_repo
 
-    with_fixtures(repo_fixtures_dir, at: '/var/lib/metalware/repo')
+    with_fixtures(repo_fixtures_dir, at: '/var/lib/underware/repo')
   end
 
   def with_answer_fixtures(answer_fixtures_dir)
-    with_fixtures(answer_fixtures_dir, at: '/var/lib/metalware/answers')
+    with_fixtures(answer_fixtures_dir, at: '/var/lib/underware/answers')
   end
 
   def with_genders_fixtures(genders_file = 'genders/default')
-    with_fixtures(genders_file, at: Metalware::Constants::GENDERS_PATH)
+    with_fixtures(genders_file, at: Underware::Constants::GENDERS_PATH)
   end
 
   def with_group_cache_fixture(group_cache_file)
     with_fixtures(
       group_cache_file,
-      at: Metalware::Constants::GROUP_CACHE_PATH
+      at: Underware::Constants::GROUP_CACHE_PATH
     )
   end
 
@@ -161,35 +161,35 @@ class FileSystem
   end
 
   def with_asset_types
-    asset_types_dir_path = File.dirname(Metalware::FilePath.asset_type(''))
+    asset_types_dir_path = File.dirname(Underware::FilePath.asset_type(''))
     FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)
   end
 
-  # Create same directory hierarchy that would be created by a Metalware
+  # Create same directory hierarchy that would be created by a Underware
   # install.
   def create_initial_directory_hierarchy
     [
       '/tmp',
       '/etc',
-      '/var/log/metalware',
-      '/var/lib/metalware/rendered/kickstart',
-      '/var/lib/metalware/rendered/system',
-      '/var/lib/metalware/events',
-      '/var/lib/metalware/cache/templates',
-      '/var/lib/metalware/repo',
-      '/var/lib/metalware/answers/groups',
-      '/var/lib/metalware/answers/nodes',
-      '/var/lib/metalware/assets',
-      '/var/lib/metalware/data',
+      '/var/log/underware',
+      '/var/lib/underware/rendered/kickstart',
+      '/var/lib/underware/rendered/system',
+      '/var/lib/underware/events',
+      '/var/lib/underware/cache/templates',
+      '/var/lib/underware/repo',
+      '/var/lib/underware/answers/groups',
+      '/var/lib/underware/answers/nodes',
+      '/var/lib/underware/assets',
+      '/var/lib/underware/data',
       '/var/named',
-      '/var/log/metalware',
-      File.join(Metalware::Constants::METALWARE_INSTALL_PATH, 'templates'),
+      '/var/log/underware',
+      File.join(Underware::Constants::UNDERWARE_INSTALL_PATH, 'templates'),
     ].each do |path|
       FileUtils.mkdir_p(path)
     end
 
-    FileUtils.mkdir_p Metalware::Constants::METALWARE_CONFIGS_PATH
-    FileUtils.touch Metalware::Constants::DEFAULT_CONFIG_PATH
+    FileUtils.mkdir_p Underware::Constants::UNDERWARE_CONFIGS_PATH
+    FileUtils.touch Underware::Constants::DEFAULT_CONFIG_PATH
   end
 
   # Print every directory and file loaded in the FakeFS.

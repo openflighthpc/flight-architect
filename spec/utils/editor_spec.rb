@@ -2,7 +2,7 @@
 
 require 'utils/editor'
 
-RSpec.describe Metalware::Utils::Editor do
+RSpec.describe Underware::Utils::Editor do
   let(:default_editor) { described_class::DEFAULT_EDITOR }
 
   before { allow_any_instance_of(HighLine).to receive(:agree) }
@@ -44,7 +44,7 @@ RSpec.describe Metalware::Utils::Editor do
 
       it 'opens the file in the default editor' do
         cmd = "#{default_editor} #{file}"
-        expect(Metalware::SystemCommand).to receive(:no_capture).with(cmd)
+        expect(Underware::SystemCommand).to receive(:no_capture).with(cmd)
         thr = Thread.new { described_class.open(file) }
         sleep 0.1
         thr.kill
@@ -59,7 +59,7 @@ RSpec.describe Metalware::Utils::Editor do
 
       before do
         allow(described_class).to receive(:open)
-        Metalware::Data.dump(source, initial_content)
+        Underware::Data.dump(source, initial_content)
       end
 
       def run_open_copy(&validation)
@@ -74,7 +74,7 @@ RSpec.describe Metalware::Utils::Editor do
       it 'saves the content to the destination' do
         expect(described_class).to receive(:open)
         run_open_copy
-        expect(Metalware::Data.load(destination)).to eq(initial_content)
+        expect(Underware::Data.load(destination)).to eq(initial_content)
       end
 
       context 'with a validation block' do
@@ -84,13 +84,13 @@ RSpec.describe Metalware::Utils::Editor do
             # will fail and needs to be caught
             expect do
               run_open_copy(&b)
-            end.to raise_error(Metalware::ValidationFailure)
+            end.to raise_error(Underware::ValidationFailure)
           end.to yield_control
         end
 
         it 'passes the temp file into the validation block' do
           run_open_copy do |path|
-            content = Metalware::Data.load(path)
+            content = Underware::Data.load(path)
             expect(path).not_to match(source)
             expect(path).not_to match(destination)
             expect(content).to eq(initial_content)
@@ -99,14 +99,14 @@ RSpec.describe Metalware::Utils::Editor do
 
         it 'saves the file if the validation passes' do
           run_open_copy { |_path| true }
-          content = Metalware::Data.load(destination)
+          content = Underware::Data.load(destination)
           expect(content).to eq(initial_content)
         end
 
         it 'errors if the validation fails' do
           expect do
             run_open_copy { |_path| false }
-          end.to raise_error(Metalware::ValidationFailure)
+          end.to raise_error(Underware::ValidationFailure)
         end
       end
     end

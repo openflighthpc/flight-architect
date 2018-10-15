@@ -4,33 +4,33 @@
 require 'command_helpers/base_command'
 require 'alces_utils'
 
-RSpec.describe Metalware::MetalLog do
+RSpec.describe Underware::UnderwareLog do
   describe '#warn' do
-    # MetalLog receives `strict`/`quiet` from the command, so need to create a
+    # UnderwareLog receives `strict`/`quiet` from the command, so need to create a
     # 'real' command to use in tests.
-    base_command = Metalware::CommandHelpers::BaseCommand
-    class Metalware::Commands::TestCommand < base_command
+    base_command = Underware::CommandHelpers::BaseCommand
+    class Underware::Commands::TestCommand < base_command
       def run
-        Metalware::MetalLog.warn 'message'
+        Underware::UnderwareLog.warn 'message'
       end
     end
 
     def run_test_command(**options)
       AlcesUtils.redirect_std(:stderr) do
-        Metalware::Utils.run_command(
-          Metalware::Commands::TestCommand, **options
+        Underware::Utils.run_command(
+          Underware::Commands::TestCommand, **options
         )
       end
     end
 
     let!(:output) do
-      class_spy(Metalware::Output).as_stubbed_const
+      class_spy(Underware::Output).as_stubbed_const
     end
 
     let(:test_warning) { 'warning: message' }
 
     after do
-      # Reset global options passed to MetalLog by command.
+      # Reset global options passed to UnderwareLog by command.
       described_class.strict = false
       described_class.quiet = false
     end
@@ -51,7 +51,7 @@ RSpec.describe Metalware::MetalLog do
       expect_any_instance_of(Logger).not_to receive(:warn)
       expect do
         run_test_command(strict: true)
-      end.to raise_error(Metalware::StrictWarningError)
+      end.to raise_error(Underware::StrictWarningError)
 
       expect(output).not_to \
         have_received(:warning).with(test_warning)

@@ -8,7 +8,7 @@ require 'constants'
 require 'spec_utils'
 require 'alces_utils'
 
-RSpec.describe Metalware::HashMergers::HashMerger do
+RSpec.describe Underware::HashMergers::HashMerger do
   include AlcesUtils
 
   AlcesUtils.mock self, :each do
@@ -17,7 +17,7 @@ RSpec.describe Metalware::HashMergers::HashMerger do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      default_config_path = Metalware::FilePath.default_config
+      default_config_path = Underware::FilePath.default_config
       fs.with_repo_fixtures('merged_hash')
       fs.with_answer_fixtures('merged_hash/answers')
       fs.with_fixtures('configs/validation-off.yaml', at: default_config_path)
@@ -25,7 +25,7 @@ RSpec.describe Metalware::HashMergers::HashMerger do
   end
 
   def build_merged_hash(**hash_input)
-    hm = Metalware::HashMergers
+    hm = Underware::HashMergers
     OpenStruct.new(
       config: hm::Config.new.merge(**hash_input, &:itself),
       answer: hm::Answer.new(alces).merge(**hash_input, &:itself)

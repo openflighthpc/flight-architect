@@ -6,7 +6,7 @@ require 'templating/renderer'
 require 'nodeattr_interface'
 require 'hash_mergers'
 
-module Metalware
+module Underware
   module Namespaces
     class HashMergerNamespace
       include Mixins::WhiteListHasher

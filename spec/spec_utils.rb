@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'alces_utils'
@@ -36,27 +36,27 @@ module SpecUtils
   def use_mock_genders(genders_file: 'genders/default')
     genders_path = File.join(FIXTURES_PATH, genders_file)
 
-    nodeattr_command = 'Metalware::Constants::NODEATTR_COMMAND'
+    nodeattr_command = 'Underware::Constants::NODEATTR_COMMAND'
     stub_const(nodeattr_command, "nodeattr -f #{genders_path}")
   end
 
   def use_unit_test_config
     stub_const(
-      'Metalware::Constants::DEFAULT_CONFIG_PATH',
+      'Underware::Constants::DEFAULT_CONFIG_PATH',
       fixtures_config('unit-test.yaml')
     )
   end
 
   def use_mock_determine_hostip_script
     stub_const(
-      'Metalware::Constants::METALWARE_INSTALL_PATH',
+      'Underware::Constants::UNDERWARE_INSTALL_PATH',
       FIXTURES_PATH
     )
   end
 
   def fake_download_error
     http_error = "418 I'm a teapot"
-    allow(Metalware::Input).to receive(:download).and_raise(
+    allow(Underware::Input).to receive(:download).and_raise(
       OpenURI::HTTPError.new(http_error, nil)
     )
     http_error
@@ -75,7 +75,7 @@ module SpecUtils
   private
 
   def mock_validate_genders(valid, error)
-    allow(Metalware::NodeattrInterface).to receive(
+    allow(Underware::NodeattrInterface).to receive(
       :validate_genders_file
     ).and_return([valid, error])
   end

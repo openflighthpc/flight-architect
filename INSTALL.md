@@ -1,8 +1,8 @@
-# Installing Alces Metalware
+# Installing Alces Underware
 
 ## Supported platforms
 
-Alces Metalware currently supports the following platforms/distributions:
+Alces Underware currently supports the following platforms/distributions:
 
 * Enterprise Linux 6 distributions: RHEL, CentOS, Scientific Linux (`el6`)
 * Enterprise Linux 7 distributions: RHEL, CentOS, Scientific Linux (`el7`)
@@ -13,7 +13,7 @@ The install scripts handle the installation of all required packages from your d
 
 ## Basic Installation
 
-Metalware is a system-level package and must be installed by the `root` user.
+Underware is a system-level package and must be installed by the `root` user.
 
 1. Become root.
 
@@ -30,13 +30,13 @@ Metalware is a system-level package and must be installed by the `root` user.
 3. Invoke installation by piping output from `curl` to `bash`:
 
    ```bash
-   curl -sL http://git.io/metalware-installer | /bin/bash
+   curl -sL http://git.io/underware-installer | /bin/bash
    ```
 
    If you want to you can download the script first.  You might want to do this if you want to inspect what it's going to do, or if you're nervous about it being truncated during download:
 
    ```bash
-   curl -sL http://git.io/metalware-installer > /tmp/bootstrap.sh
+   curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
    less /tmp/bootstrap.sh
    bash /tmp/bootstrap.sh
    ```
@@ -44,7 +44,7 @@ Metalware is a system-level package and must be installed by the `root` user.
 4. After installation, you can logout and login again in order to set up the appropriate shell configuration, or you can source the shell configuration manually:
 
    ```bash
-   source /etc/profile.d/alces-metalware.sh
+   source /etc/profile.d/alces-underware.sh
    ```
 
 ## Advanced installation parameters
@@ -57,18 +57,18 @@ Set the `alces_SOURCE` variable to indicate that you want to build from upstream
    
 ```bash
 export alces_SOURCE=fresh
-curl -sL http://git.io/metalware-installer | /bin/bash
+curl -sL http://git.io/underware-installer | /bin/bash
 ```
 
 ### Build from existing directory
 
-Set the `alces_SRC_DIR` variable to point to an existing clone of the repository.  If a clone isn't available in the path you specify the path will be used to house the downloaded code rather than the default `/tmp/metalware.XXXXXX` temporary directory.
+Set the `alces_SRC_DIR` variable to point to an existing clone of the repository.  If a clone isn't available in the path you specify the path will be used to house the downloaded code rather than the default `/tmp/underware.XXXXXX` temporary directory.
 
 ```bash
 cd /usr/src
-git clone https://github.com/alces-software/metalware
-export alces_SRC_DIR=/usr/src/metalware
-/usr/src/metalware/scripts/bootstrap
+git clone https://github.com/alces-software/underware
+export alces_SRC_DIR=/usr/src/underware
+/usr/src/underware/scripts/bootstrap
 ```
 
 ### Build from an alternative branch
@@ -77,6 +77,6 @@ Set the `alces_SOURCE_BRANCH` variable with the name of the branch you wish to b
 
 ```bash
 export alces_SOURCE_BRANCH=0.1.0
-curl -sL http://git.io/metalware-installer | /bin/bash
+curl -sL http://git.io/underware-installer | /bin/bash
 ```
 

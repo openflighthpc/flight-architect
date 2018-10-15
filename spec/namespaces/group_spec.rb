@@ -5,7 +5,7 @@ require 'shared_examples/hash_merger_namespace'
 require 'namespaces/alces'
 require 'spec_utils'
 
-RSpec.describe Metalware::Namespaces::Group do
+RSpec.describe Underware::Namespaces::Group do
   include AlcesUtils
 
   context 'with mocked group' do
@@ -18,7 +18,7 @@ RSpec.describe Metalware::Namespaces::Group do
       mock_node('random_node', test_group)
     end
 
-    include_examples Metalware::Namespaces::HashMergerNamespace
+    include_examples Underware::Namespaces::HashMergerNamespace
   end
 
   context 'with a mocked genders file' do
@@ -32,7 +32,7 @@ RSpec.describe Metalware::Namespaces::Group do
         node[01-10]    group1,group2
         nodeA    group2
       EOF
-      File.write Metalware::FilePath.genders, genders
+      File.write Underware::FilePath.genders, genders
     end
 
     describe '#short_nodes_string' do

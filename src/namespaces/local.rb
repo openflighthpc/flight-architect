@@ -3,7 +3,7 @@
 
 require 'deployment_server'
 
-module Metalware
+module Underware
   module Namespaces
     class Local < Node
       class << self

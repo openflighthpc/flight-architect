@@ -4,7 +4,7 @@
 require 'json'
 require 'command_helpers/base_command'
 
-module Metalware
+module Underware
   module CommandHelpers
     class InspectCommand < BaseCommand
       private

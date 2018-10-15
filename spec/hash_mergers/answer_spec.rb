@@ -6,7 +6,7 @@ require 'alces_utils'
 require 'data'
 require 'file_path'
 
-RSpec.describe Metalware::HashMergers::Answer do
+RSpec.describe Underware::HashMergers::Answer do
   include AlcesUtils
 
   let(:group) { AlcesUtils.mock(self) { mock_group('new_group') } }
@@ -38,11 +38,11 @@ RSpec.describe Metalware::HashMergers::Answer do
 
   def answers(namespace)
     case namespace
-    when Metalware::Namespaces::Domain
+    when Underware::Namespaces::Domain
       'domain_answer'
-    when Metalware::Namespaces::Group
+    when Underware::Namespaces::Group
       'group_answer'
-    when Metalware::Namespaces::Node
+    when Underware::Namespaces::Node
       'node_answer'
     else
       raise 'unexpected error'
@@ -50,7 +50,7 @@ RSpec.describe Metalware::HashMergers::Answer do
   end
 
   before do
-    Metalware::Data.dump Metalware::FilePath.configure_file, questions
+    Underware::Data.dump Underware::FilePath.configure_file, questions
   end
 
   shared_examples 'run contexts with shared' do |spec_group|
@@ -84,16 +84,16 @@ RSpec.describe Metalware::HashMergers::Answer do
 
   context 'with answer files' do
     before do
-      Metalware::Data.dump(
-        Metalware::FilePath.domain_answers,
+      Underware::Data.dump(
+        Underware::FilePath.domain_answers,
         identifier => answers(alces.domain)
       )
-      Metalware::Data.dump(
-        Metalware::FilePath.group_answers(group.name),
+      Underware::Data.dump(
+        Underware::FilePath.group_answers(group.name),
         identifier => answers(group)
       )
-      Metalware::Data.dump(
-        Metalware::FilePath.node_answers(node.name),
+      Underware::Data.dump(
+        Underware::FilePath.node_answers(node.name),
         identifier => answers(node)
       )
     end

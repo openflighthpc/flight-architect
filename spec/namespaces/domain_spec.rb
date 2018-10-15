@@ -5,12 +5,12 @@ require 'shared_examples/hash_merger_namespace'
 require 'namespaces/alces'
 require 'spec_utils'
 
-RSpec.describe Metalware::Namespaces::Domain do
+RSpec.describe Underware::Namespaces::Domain do
   include AlcesUtils
 
   subject { alces.domain }
 
-  include_examples Metalware::Namespaces::HashMergerNamespace
+  include_examples Underware::Namespaces::HashMergerNamespace
 
   before { use_mock_determine_hostip_script }
 
@@ -19,12 +19,12 @@ RSpec.describe Metalware::Namespaces::Domain do
   end
 
   it 'has a hosts url' do
-    url = 'http://1.2.3.4/metalware/system/hosts'
+    url = 'http://1.2.3.4/underware/system/hosts'
     expect(alces.domain.hosts_url).to eq(url)
   end
 
   it 'has a genders url' do
-    url = 'http://1.2.3.4/metalware/system/genders'
+    url = 'http://1.2.3.4/underware/system/genders'
     expect(alces.domain.genders_url).to eq(url)
   end
 end

@@ -4,14 +4,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -19,24 +19,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'spec_utils'
 require 'dependency_specifications'
 require 'namespaces/alces'
 
-RSpec.describe Metalware::DependencySpecifications do
+RSpec.describe Underware::DependencySpecifications do
   subject do
     described_class.new(alces)
   end
 
-  let(:alces) { Metalware::Namespaces::Alces.new }
+  let(:alces) { Underware::Namespaces::Alces.new }
 
   before do
     use_mock_genders
-    allow_any_instance_of(Metalware::Namespaces::Node).to \
+    allow_any_instance_of(Underware::Namespaces::Node).to \
       receive(:group).and_return(double('group', name: 'testnodes'))
   end
 
@@ -54,7 +54,7 @@ RSpec.describe Metalware::DependencySpecifications do
     it 'raises if node not in configured primary group' do
       expect do
         subject.for_node_in_configured_group('node_not_in_configured_group')
-      end.to raise_error Metalware::NodeNotInGendersError
+      end.to raise_error Underware::NodeNotInGendersError
     end
   end
 end

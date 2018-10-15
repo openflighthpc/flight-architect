@@ -3,7 +3,7 @@
 
 require 'hash_mergers/hash_merger'
 
-module Metalware
+module Underware
   module HashMergers
     class Answer < HashMerger
       def initialize(alces)

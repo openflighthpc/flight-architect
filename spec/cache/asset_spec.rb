@@ -3,7 +3,7 @@
 require 'alces_utils'
 require 'cache/asset'
 
-RSpec.describe Metalware::Cache::Asset do
+RSpec.describe Underware::Cache::Asset do
   include AlcesUtils
 
   def update(&b)
@@ -11,7 +11,7 @@ RSpec.describe Metalware::Cache::Asset do
   end
 
   let(:cache) { described_class.new }
-  let(:cache_path) { Metalware::FilePath.asset_cache }
+  let(:cache_path) { Underware::FilePath.asset_cache }
   let(:initial_content) do
     { node: { node_name.to_sym => 'asset_test' } }
   end
@@ -30,7 +30,7 @@ RSpec.describe Metalware::Cache::Asset do
     end
 
     it 'returns populated cache' do
-      Metalware::Data.dump(cache_path, initial_content)
+      Underware::Data.dump(cache_path, initial_content)
       expect(cache.data).to eq(initial_content)
     end
   end
@@ -98,7 +98,7 @@ RSpec.describe Metalware::Cache::Asset do
       end
 
       before do
-        Metalware::Data.dump(cache_path, initial_content)
+        Underware::Data.dump(cache_path, initial_content)
       end
 
       it 'unassigns the asset from all found instances ' do

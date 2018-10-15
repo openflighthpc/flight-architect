@@ -2,14 +2,14 @@
 #==============================================================================
 # Copyright (C) 2007-2015 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -17,12 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 source=$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)
-target=/opt/metalware
-dist_url=https://s3-eu-west-1.amazonaws.com/packages.alces-software.com/metalware/dist
+target=/opt/underware
+dist_url=https://s3-eu-west-1.amazonaws.com/packages.alces-software.com/underware/dist
 source $source/scripts/lib/ui.functions.sh
 source $source/scripts/lib/fetch.functions.sh
 source $source/scripts/lib/install.functions.sh
@@ -34,7 +34,7 @@ if [ -z "$2" ]; then
   cat <<EOF
 Usage: $0 <OS> <fresh|dist>
 
-OS must be one of the systems supported by metalware: 'el6', 'el7'
+OS must be one of the systems supported by underware: 'el6', 'el7'
 
 Supply 'fresh' or 'dist' to select whether to build dependencies from
 source or to download prebuilt distributions of the dependencies.
@@ -76,23 +76,23 @@ say_done $?
 
 title "Creating initial directory structure"
 doing 'Create'
-mkdir -p /var/log/metalware
-mkdir -p /var/lib/metalware/rendered/{basic,kickstart,system}
-mkdir -p /var/lib/metalware/cache/templates
-mkdir -p /var/lib/metalware/events
-mkdir -p /var/lib/metalware/repo
-mkdir -p /var/lib/metalware/plugins
-mkdir -p /var/lib/metalware/answers/{groups,nodes}
-mkdir -p /var/lib/metalware/assets
-mkdir -p /var/lib/metalware/build_hooks
-mkdir -p /var/lib/metalware/data
+mkdir -p /var/log/underware
+mkdir -p /var/lib/underware/rendered/{basic,kickstart,system}
+mkdir -p /var/lib/underware/cache/templates
+mkdir -p /var/lib/underware/events
+mkdir -p /var/lib/underware/repo
+mkdir -p /var/lib/underware/plugins
+mkdir -p /var/lib/underware/answers/{groups,nodes}
+mkdir -p /var/lib/underware/assets
+mkdir -p /var/lib/underware/build_hooks
+mkdir -p /var/lib/underware/data
 mkdir -p /etc/named
-touch /etc/named/metalware.conf
-chmod a+rw /var/lib/metalware/events
+touch /etc/named/underware.conf
+chmod a+rw /var/lib/underware/events
 
-# Link hosts files in to Metalware data dir; this will then be made available
-# on the Metalware deployment server.
-ln -s /etc/hosts /var/lib/metalware/rendered/system/
+# Link hosts files in to Underware data dir; this will then be made available
+# on the Underware deployment server.
+ln -s /etc/hosts /var/lib/underware/rendered/system/
 
 mkdir -p "${target}"
 cp -R "${source}/"{Gemfile,Gemfile.lock,bin,etc,libexec,src,data} "${target}"
@@ -146,14 +146,14 @@ cat <<EOF
 [0m[1m
 Global profile scripts have been installed in:
 
-/etc/profile.d/alces-metalware.sh
-/etc/profile.d/alces-metalware.csh
+/etc/profile.d/alces-underware.sh
+/etc/profile.d/alces-underware.csh
 
 Please login again, or manually run the following:
 
-source /etc/profile.d/alces-metalware.${rc_script_ext}
+source /etc/profile.d/alces-underware.${rc_script_ext}
 
-Afterwards, execute 'metal --help' for further information.
+Afterwards, execute 'underware --help' for further information.
 
 If the Libvirt integration is required, please copy the following certificates
 to the Libvirt host(s):

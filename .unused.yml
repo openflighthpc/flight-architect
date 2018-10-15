@@ -23,7 +23,7 @@
       termStartsWith: ask_
 
     # Methods may be defined in namespaces and never used elsewhere in
-    # Metalware, as we just want them to be available when the namespace is
+    # Underware, as we just want them to be available when the namespace is
     # used as a binding when rendering templates.
     - name: Namespace methods
       pathStartsWith: src/namespaces
@@ -35,7 +35,7 @@
     # committed code.
     - name: Miscellaneous other terms
       allowedTerms:
-      - MetalBench
+      - UnderwareBench
       - debug!
       # Not currently used, but will be again as soon as we add back genders
       # file validation.

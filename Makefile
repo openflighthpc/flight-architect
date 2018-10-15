@@ -1,5 +1,5 @@
 
-REMOTE_DIR='/tmp/metalware'
+REMOTE_DIR='/tmp/underware'
 
 .PHONY: unit-test
 unit-test:
@@ -32,13 +32,13 @@ rsync:
 .PHONY: watch-rsync
 watch-rsync:
 	rerun \
-		--name 'Metalware' \
+		--name 'Underware' \
 		--pattern '**/*' \
 		--exit \
 		--no-notify \
 		make rsync
 
-# Note: need to become root for Metalware; -t option allows coloured output.
+# Note: need to become root for Underware; -t option allows coloured output.
 .PHONY: remote-run
 remote-run: rsync
 	ssh -t dev@${IP} "sudo su - -c \"cd ${REMOTE_DIR} && ${COMMAND}\""

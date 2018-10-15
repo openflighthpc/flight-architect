@@ -3,7 +3,7 @@
 
 require 'namespaces/plugin'
 
-module Metalware
+module Underware
   module Namespaces
     class Node < HashMergerNamespace
       class << self
@@ -77,7 +77,7 @@ module Metalware
       end
 
       def plugins
-        @plugins ||= MetalArray.new(enabled_plugin_namespaces)
+        @plugins ||= UnderwareArray.new(enabled_plugin_namespaces)
       end
 
       def asset

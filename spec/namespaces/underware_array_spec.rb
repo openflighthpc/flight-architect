@@ -6,17 +6,17 @@ require 'constants'
 require 'nodeattr_interface'
 
 ##
-# NOTE: alces.nodes is a MetalArray
+# NOTE: alces.nodes is an UnderwareArray
 # However it is the behaviour of alces.nodes that needs to
 # be ensured.
 #
-RSpec.describe Metalware::Namespaces::MetalArray do
-  let(:alces) { Metalware::Namespaces::Alces.new }
+RSpec.describe Underware::Namespaces::UnderwareArray do
+  let(:alces) { Underware::Namespaces::Alces.new }
 
   let(:node_names) { ['node1', 'node2', 'node3'] }
 
   before do
-    allow(Metalware::NodeattrInterface).to \
+    allow(Underware::NodeattrInterface).to \
       receive(:all_nodes).and_return(node_names)
   end
 

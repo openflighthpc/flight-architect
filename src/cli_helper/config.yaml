@@ -32,90 +32,90 @@ global_options:
 
 subcommands:
   asset_add: &asset_add
-    syntax: metal asset add ASSET_TYPE ASSET_NAME [options]
+    syntax: underware asset add ASSET_TYPE ASSET_NAME [options]
     summary: Add a new asset record
     action: Commands::Asset::Add
     options:
       - *asset_node_option
 
   asset_edit: &asset_edit
-    syntax: metal asset edit ASSET_NAME [options]
+    syntax: underware asset edit ASSET_NAME [options]
     summary: Edit an existing asset record
     action: Commands::Asset::Edit
     options:
       - *asset_node_option
 
   asset_delete: &asset_delete
-    syntax: metal asset delete ASSET_NAME [options]
+    syntax: underware asset delete ASSET_NAME [options]
     summary: Delete an existing asset record
     action: Commands::Asset::Delete
 
   asset_link: &asset_link
-    syntax: metal asset link NODE_NAME ASSET_NAME [options]
+    syntax: underware asset link NODE_NAME ASSET_NAME [options]
     summary: Add a relationship between an asset and a node
     action: Commands::Asset::Link
 
   asset_unlink: &asset_unlink
-    syntax: metal asset unlink NODE_NAME [options]
+    syntax: underware asset unlink NODE_NAME [options]
     summary: Remove a relationship between an asset and a node
     action: Commands::Asset::Unlink
 
   configure_domain: &configure_domain
-    syntax: metal configure domain [options]
-    summary: Configure Metalware domain
+    syntax: underware configure domain [options]
+    summary: Configure Underware domain
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure the domain for this Metalware installation. The configuration
+      configure the domain for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
 
   configure_group: &configure_group
-    syntax: metal configure group GROUP_NAME [options]
-    summary: Configure a Metalware group
+    syntax: underware configure group GROUP_NAME [options]
+    summary: Configure a Underware group
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure a group for this Metalware installation. The configuration
+      configure a group for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
 
   configure_node: &configure_node
-    syntax: metal configure node NODE_NAME [options]
-    summary: Configure a Metalware node
+    syntax: underware configure node NODE_NAME [options]
+    summary: Configure a Underware node
     description: >
       Asks a sequence of questions defined in the current repository to
-      configure a node for this Metalware installation. The configuration
+      configure a node for this Underware installation. The configuration
       answers will then be used when rendering templates.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option
 
   configure_local: &configure_local
-    syntax: metal configure local [options]
-    summary: Configure the master Metalware node
+    syntax: underware configure local [options]
+    summary: Configure the master Underware node
     description: >
-      Configures the node that metalware is running on. This is treated as the
-      metalware master node. This must be ran to configure metalware to match
+      Configures the node that underware is running on. This is treated as the
+      underware master node. This must be ran to configure underware to match
       the system environment. This command is intended to only be ran once.
     action: Commands::Configure::Local
     options:
       - *configure_answers_option
 
   layout_add: &layout_add
-    syntax: metal layout add TYPE_OR_LAYOUT LAYOUT_NAME [options]
+    syntax: underware layout add TYPE_OR_LAYOUT LAYOUT_NAME [options]
     summary: Add a new layout record
     action: Commands::Layout::Add
 
   layout_edit: &layout_edit
-    syntax: metal layout edit LAYOUT_NAME [options]
+    syntax: underware layout edit LAYOUT_NAME [options]
     summary: Edit an existing layout record
     action: Commands::Layout::Edit
 
   remove_group: &remove_group
-    syntax: metal remove group GROUP_NAME [options]
+    syntax: underware remove group GROUP_NAME [options]
     summary: Removes a previously configured group
     description: >
       Removes the configuration answer file for the group and updates the
@@ -125,7 +125,7 @@ subcommands:
     action: Commands::Remove::Group
 
   repo_use: &repo_use
-    syntax: metal repo use REPO_URL [options]
+    syntax: underware repo use REPO_URL [options]
     summary: Clone a new template git repo
     description: >
       Clones a new git repo from a URL. The repo should contain the default
@@ -140,7 +140,7 @@ subcommands:
           current repo
 
   repo_update: &repo_update
-    syntax: metal repo update [options]
+    syntax: underware repo update [options]
     summary: Updates the git repository
     description: >
       Updates the local git repository to match the remote. The update command
@@ -154,53 +154,53 @@ subcommands:
           Force update even if local changes have been made to the repo
 
   plugin_list: &plugin_list
-    syntax: metal plugin list [options]
+    syntax: underware plugin list [options]
     summary: List available and activated plugins
     description: >
-      List all available Metalware plugins, along with which of these are
+      List all available Underware plugins, along with which of these are
       currently activated.
     action: Commands::Plugin::List
 
   plugin_activate: &plugin_activate
-    syntax: metal plugin activate PLUGIN_NAME [options]
+    syntax: underware plugin activate PLUGIN_NAME [options]
     summary: Activate given plugin for domain
     action: Commands::Plugin::Activate
 
   plugin_deactivate: &plugin_deactivate
-    syntax: metal plugin deactivate PLUGIN_NAME [options]
+    syntax: underware plugin deactivate PLUGIN_NAME [options]
     summary: Deactivate given plugin for domain
     action: Commands::Plugin::Deactivate
 
   view-answers_domain: &view-answers_domain
-    syntax: metal view-answers domain [options]
+    syntax: underware view-answers domain [options]
     summary: View configured answers for the overall domain
     description: >
       View configuration questions along with configured answers for the
-      overall Metalware domain
+      overall Underware domain
     action:
       Commands::ViewAnswers::Domain
 
   view-answers_group: &view-answers_group
-    syntax: metal view-answers group GROUP_NAME [options]
+    syntax: underware view-answers group GROUP_NAME [options]
     summary: View configured answers for a group
     description: >
       View configuration questions along with configured answers for given
-      group and the overall Metalware domain
+      group and the overall Underware domain
     action:
       Commands::ViewAnswers::Group
 
   view-answers_node: &view-answers_node
-    syntax: metal view-answers node NODE [options]
+    syntax: underware view-answers node NODE [options]
     summary: View configured answers for a node
     description: >
       View configuration questions along with configured answers for given
-      node, its primary group, and the overall Metalware domain
+      node, its primary group, and the overall Underware domain
     action:
       Commands::ViewAnswers::Node
 
 commands:
   asset:
-    syntax: metal asset [SUB_COMMAND] [options]
+    syntax: underware asset [SUB_COMMAND] [options]
     summary: Manage the asset record files
     subcommands:
       add: *asset_add
@@ -210,8 +210,8 @@ commands:
       unlink: *asset_unlink
 
   configure:
-    syntax: metal configure [SUB_COMMAND] [options]
-    summary: Configure different aspects of this Metalware installation
+    syntax: underware configure [SUB_COMMAND] [options]
+    summary: Configure different aspects of this Underware installation
     subcommands:
       domain: *configure_domain
       group: *configure_group
@@ -219,7 +219,7 @@ commands:
       local: *configure_local
 
   each:
-    syntax: metal each NODE_IDENTIFIER COMMAND [options]
+    syntax: underware each NODE_IDENTIFIER COMMAND [options]
     summary: Runs a command for a node(s)
     description: >
       Runs the COMMAND for the node/ group specified by NODE_IDENTIFIER.
@@ -230,19 +230,19 @@ commands:
       - *gender_option
 
   layout:
-    syntax: metal layout [SUB_COMMAND] [options]
+    syntax: underware layout [SUB_COMMAND] [options]
     summary: Manage the layout record files
     subcommands:
       add: *layout_add
       edit: *layout_edit
 
   overview:
-    syntax: metal overview [options]
+    syntax: underware overview [options]
     summary: Gives an overview of the configured groups
     action: Commands::Overview
 
   plugin:
-    syntax: metal plugin [SUB_COMMAND] [options]
+    syntax: underware plugin [SUB_COMMAND] [options]
     summary: View and manage activated plugins
     subcommands:
       list: *plugin_list
@@ -250,14 +250,14 @@ commands:
       deactivate: *plugin_deactivate
 
   remove:
-    syntax: metal remove [SUB_COMMAND] [options]
-    summary: Remove metalware controlled files/ objects
+    syntax: underware remove [SUB_COMMAND] [options]
+    summary: Remove underware controlled files/ objects
     # Description can be added for subcommand
     subcommands:
       group: *remove_group
 
   render:
-    syntax: metal render TEMPLATE [NODE] [options]
+    syntax: underware render TEMPLATE [NODE] [options]
     summary: Render a given template
     description: >
       Renders the file specified by TEMPLATE and sends the output to standard
@@ -266,7 +266,7 @@ commands:
     action: Commands::Render
 
   repo:
-    syntax: metal repo [SUB_COMMAND] [options]
+    syntax: underware repo [SUB_COMMAND] [options]
     summary: Manage template and config repository
     # description can also be used for subcommands
     subcommands:
@@ -274,7 +274,7 @@ commands:
       update: *repo_update
 
   view-answers:
-    syntax: metal view-answers [SUB_COMMAND] [options]
+    syntax: underware view-answers [SUB_COMMAND] [options]
     summary: View configured answers
     subcommands:
       domain: *view-answers_domain
@@ -282,7 +282,7 @@ commands:
       node: *view-answers_node
 
   view:
-    syntax: metal view ALCES_COMMAND [options]
+    syntax: underware view ALCES_COMMAND [options]
     summary: View domain templating config, optionally in context for given node
     description: >
       View the templating object that will be used for rendering templates. It
@@ -302,15 +302,15 @@ commands:
       - *color_output
 
   eval:
-    syntax: metal eval ALCES_COMMAND [options]
+    syntax: underware eval ALCES_COMMAND [options]
     summary: Evaluate argument in context of `alces` namespace
     description: >
-      Similar to 'metal view', but evaluates argument directly in 'alces'
+      Similar to 'underware view', but evaluates argument directly in 'alces'
       namespace without any preprocessing, and then returns result as JSON.
 
 
-      Intended to have more stable behaviour than 'metal view', and to provide
-      external programs with access to Metalware data, whereas 'metal view' is
+      Intended to have more stable behaviour than 'underware view', and to provide
+      external programs with access to Underware data, whereas 'underware view' is
       intended purely for human usage and its behaviour may change as needed to
       whatever is most useful for this.
     action: Commands::Eval

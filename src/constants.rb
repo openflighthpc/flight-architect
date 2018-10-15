@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,45 +18,45 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
-require 'hash_mergers/metal_recursive_open_struct'
+require 'hash_mergers/underware_recursive_open_struct'
 
-module Metalware
+module Underware
   module Constants
-    METALWARE_INSTALL_PATH =
+    UNDERWARE_INSTALL_PATH =
       File.absolute_path(File.join(File.dirname(__FILE__), '..'))
 
-    METALWARE_CONFIGS_PATH = File.join(METALWARE_INSTALL_PATH, 'etc')
-    DEFAULT_CONFIG_PATH = File.join(METALWARE_CONFIGS_PATH, 'config.yaml')
+    UNDERWARE_CONFIGS_PATH = File.join(UNDERWARE_INSTALL_PATH, 'etc')
+    DEFAULT_CONFIG_PATH = File.join(UNDERWARE_CONFIGS_PATH, 'config.yaml')
 
-    METALWARE_DATA_PATH = '/var/lib/metalware'
-    CACHE_PATH = File.join(METALWARE_DATA_PATH, 'cache')
-    NAMESPACE_DATA_PATH = File.join(METALWARE_DATA_PATH, 'data')
+    UNDERWARE_DATA_PATH = '/var/lib/underware'
+    CACHE_PATH = File.join(UNDERWARE_DATA_PATH, 'cache')
+    NAMESPACE_DATA_PATH = File.join(UNDERWARE_DATA_PATH, 'data')
     HUNTER_PATH = File.join(NAMESPACE_DATA_PATH, 'hunter.yaml')
     GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
-    RENDERED_DIR_PATH = File.join(METALWARE_DATA_PATH, 'rendered')
+    RENDERED_DIR_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered')
     PLUGINS_CACHE_PATH = File.join(CACHE_PATH, 'plugins.yaml')
 
-    EVENTS_DIR_PATH = File.join(METALWARE_DATA_PATH, 'events')
+    EVENTS_DIR_PATH = File.join(UNDERWARE_DATA_PATH, 'events')
 
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10
 
     NODEATTR_COMMAND = 'nodeattr'
 
-    GENDERS_PATH = File.join(METALWARE_DATA_PATH, 'rendered/system/genders')
+    GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
 
-    DRY_VALIDATION_ERRORS_PATH = File.join(METALWARE_INSTALL_PATH,
+    DRY_VALIDATION_ERRORS_PATH = File.join(UNDERWARE_INSTALL_PATH,
                                            'src/validation',
                                            'errors.yaml')
 
     CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze
-    CONFIGURE_INTERNAL_QUESTION_PREFIX = 'metalware_internal'
+    CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
 
     HASH_MERGER_DATA_STRUCTURE =
-      Metalware::HashMergers::MetalRecursiveOpenStruct
+      Underware::HashMergers::UnderwareRecursiveOpenStruct
 
     BUILD_POLL_SLEEP = 10
 

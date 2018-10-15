@@ -5,10 +5,10 @@ require 'active_support/core_ext/module/delegation'
 require 'highline'
 require 'patches/highline'
 
-HighLine::Question.prepend Metalware::Patches::HighLine::Question
-HighLine::Menu.prepend Metalware::Patches::HighLine::Menu
+HighLine::Question.prepend Underware::Patches::HighLine::Question
+HighLine::Menu.prepend Underware::Patches::HighLine::Menu
 
-module Metalware
+module Underware
   class Configurator
     class Question
       def initialize(question_node, progress_indicator)
@@ -55,7 +55,7 @@ module Metalware
         # input is entered, and they are not really necessary in this case.
         return false if type.boolean?
 
-        Metalware::Configurator.use_readline
+        Underware::Configurator.use_readline
       end
 
       def default_input

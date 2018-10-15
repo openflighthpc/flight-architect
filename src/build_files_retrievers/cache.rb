@@ -7,7 +7,7 @@ require 'build_files_retrievers/build_files_retriever'
 require 'build_files_retrievers/plugin'
 require 'build_files_retrievers/node'
 
-module Metalware
+module Underware
   module BuildFilesRetrievers
     class Cache
       def retrieve(namespace)

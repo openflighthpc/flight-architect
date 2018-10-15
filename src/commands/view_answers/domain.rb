@@ -3,7 +3,7 @@
 
 require 'answers_table_creator'
 
-module Metalware
+module Underware
   module Commands
     module ViewAnswers
       class Domain < CommandHelpers::BaseCommand

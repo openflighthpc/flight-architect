@@ -4,7 +4,7 @@
 require 'command_helpers/alces_command'
 require 'command_helpers/inspect_command'
 
-module Metalware
+module Underware
   module Commands
     class View < CommandHelpers::InspectCommand
       private
@@ -19,7 +19,7 @@ module Metalware
 
       def cli_input_object
         data = alces_command
-        if data.is_a?(Namespaces::MetalArray)
+        if data.is_a?(Namespaces::UnderwareArray)
           data
         elsif ARRAY_TYPES.include?(data.class)
           data.map(&:to_h)

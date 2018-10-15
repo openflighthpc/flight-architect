@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Templating
     class NilDetectionWrapper
       class << self
@@ -67,7 +67,7 @@ module Metalware
 
       def warn_if_nil(value, next_call_stack)
         return unless value.nil?
-        MetalLog.warn next_call_stack
+        UnderwareLog.warn next_call_stack
       end
     end
   end

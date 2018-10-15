@@ -3,7 +3,7 @@
 require 'records/layout'
 require 'records/asset'
 
-module Metalware
+module Underware
   class AssetBuilder
     attr_reader :stack
 
@@ -15,7 +15,7 @@ module Metalware
       if (details = Records::Layout.type_or_layout(layout_or_type))
         stack.push(Asset.new(self, name, details.path, details.type))
       else
-        MetalLog.warn <<-EOF.squish
+        UnderwareLog.warn <<-EOF.squish
           Failed to add asset: "#{name}". Could not find layout:
           "#{layout_or_type}"
         EOF
@@ -70,7 +70,7 @@ module Metalware
       def validate_and_generate_sub_assets(path)
         return false unless (data = Validation::Asset.valid_file?(path))
         new_data = convert_sub_assets(data)
-        Metalware::Data.dump(path, new_data)
+        Underware::Data.dump(path, new_data)
       end
 
       def convert_sub_assets(value)

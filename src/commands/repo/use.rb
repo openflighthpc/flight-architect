@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'command_helpers/base_command'
@@ -28,7 +28,7 @@ require 'fileutils'
 
 require 'constants'
 
-module Metalware
+module Underware
   module Commands
     module Repo
       class Use < CommandHelpers::BaseCommand
@@ -41,11 +41,11 @@ module Metalware
         def run
           if options.force
             FileUtils.rm_rf FilePath.repo
-            MetalLog.info 'Force deleted old repo'
+            UnderwareLog.info 'Force deleted old repo'
           end
 
           Rugged::Repository.clone_at(@repo_url, FilePath.repo)
-          MetalLog.info "Cloned repo from #{@repo_url}"
+          UnderwareLog.info "Cloned repo from #{@repo_url}"
         rescue Rugged::NetworkError
           raise RuggedCloneError, "Could not find repo: #{@repo_url}"
         rescue Rugged::InvalidError

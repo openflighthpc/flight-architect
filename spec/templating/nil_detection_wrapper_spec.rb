@@ -3,21 +3,21 @@
 
 require 'templating/nil_detection_wrapper'
 require 'recursive_open_struct'
-require 'metal_log'
+require 'underware_log'
 require 'alces_utils'
 
-RSpec.describe Metalware::Templating::NilDetectionWrapper do
+RSpec.describe Underware::Templating::NilDetectionWrapper do
   AlcesUtils.start self
 
   def build_wrapper_object(obj)
-    Metalware::Templating::NilDetectionWrapper.wrap(obj).receiver
+    Underware::Templating::NilDetectionWrapper.wrap(obj).receiver
   end
 
   def expect_warning(msg)
-    expect(metal_log).to receive(:warn).once.with(/.*#{msg}\Z/)
+    expect(underware_log).to receive(:warn).once.with(/.*#{msg}\Z/)
   end
 
-  let(:metal_log) { Metalware::MetalLog.metal_log }
+  let(:underware_log) { Underware::UnderwareLog.underware_log }
 
   it 'the wrap command returns a binding' do
     expect(described_class.wrap(nil)).to \

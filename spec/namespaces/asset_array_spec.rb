@@ -3,12 +3,12 @@
 require 'alces_utils'
 require 'namespaces/alces'
 
-RSpec.describe Metalware::Namespaces::AssetArray do
+RSpec.describe Underware::Namespaces::AssetArray do
   subject { described_class.new(alces) }
 
   # DO NOT use AlcesUtils in the section. It tests features required
   # by the namespace itself.
-  let(:alces) { Metalware::Namespaces::Alces.new }
+  let(:alces) { Underware::Namespaces::Alces.new }
   let(:pdu_assets) do
     [
       {
@@ -48,48 +48,48 @@ RSpec.describe Metalware::Namespaces::AssetArray do
     end
   end
 
-  let(:metal_ros) do
-    Metalware::HashMergers::MetalRecursiveOpenStruct
+  let(:underware_ros) do
+    Underware::HashMergers::UnderwareRecursiveOpenStruct
   end
 
   before do
     assets.each do |asset|
-      path = Metalware::FilePath.asset(asset[:types_dir],
+      path = Underware::FilePath.asset(asset[:types_dir],
                                        asset[:name])
       FileUtils.mkdir_p(File.dirname(path))
-      Metalware::Data.dump(path, asset[:data])
+      Underware::Data.dump(path, asset[:data])
     end
   end
 
   describe '#new' do
     context 'when there is an asset called "each"' do
       before do
-        each_path = Metalware::FilePath.asset('racks', 'each')
+        each_path = Underware::FilePath.asset('racks', 'each')
         FileUtils.mkdir_p(File.dirname(each_path))
-        Metalware::Data.dump(each_path, data: 'some-data')
+        Underware::Data.dump(each_path, data: 'some-data')
       end
 
       it 'errors due to the existing method' do
         expect do
           described_class.new(alces)
-        end.to raise_error(Metalware::DataError)
+        end.to raise_error(Underware::DataError)
       end
     end
 
     it 'does not load the files when initially called' do
-      expect(Metalware::Data).not_to receive(:load)
+      expect(Underware::Data).not_to receive(:load)
       described_class.new(alces)
     end
 
     context 'with a loaders input' do
       subject { described_class.new(alces, loaders_input: loaders) }
 
-      let(:type) { Metalware::Records::Asset::TYPES.first }
+      let(:type) { Underware::Records::Asset::TYPES.first }
       let(:asset_names) { ['asset1', 'asset2'] }
       let(:loaders) do
         asset_names.map do |name|
-          path = Metalware::FilePath.asset(type.pluralize, name)
-          Metalware::Namespaces::AssetArray::AssetLoader.new(alces, path)
+          path = Underware::FilePath.asset(type.pluralize, name)
+          Underware::Namespaces::AssetArray::AssetLoader.new(alces, path)
         end
       end
       let!(:dir) { class_spy(Dir).as_stubbed_const }
@@ -111,7 +111,7 @@ RSpec.describe Metalware::Namespaces::AssetArray do
       end
 
       it 'does not respond to the asset type methods' do
-        Metalware::Records::Asset::TYPES.map(&:pluralize).each do |type|
+        Underware::Records::Asset::TYPES.map(&:pluralize).each do |type|
           expect(subject).not_to respond_to(type)
         end
       end
@@ -124,7 +124,7 @@ RSpec.describe Metalware::Namespaces::AssetArray do
     let(:asset_data) { assets_data[index] }
 
     def expect_to_only_load_asset_data_once
-      expect(Metalware::Data).to receive(:load).once.and_call_original
+      expect(Underware::Data).to receive(:load).once.and_call_original
     end
 
     describe '#[]' do
@@ -138,8 +138,8 @@ RSpec.describe Metalware::Namespaces::AssetArray do
         subject[index]
       end
 
-      it 'returns a MetalRecursiveOpenStruct' do
-        expect(subject[index]).to be_a(metal_ros)
+      it 'returns a UnderwareRecursiveOpenStruct' do
+        expect(subject[index]).to be_a(underware_ros)
       end
     end
 
@@ -183,7 +183,7 @@ RSpec.describe Metalware::Namespaces::AssetArray do
 
   describe 'asset types methods' do
     it 'defines all the type methods as the plural' do
-      Metalware::Records::Asset::TYPES.map(&:pluralize).each do |type|
+      Underware::Records::Asset::TYPES.map(&:pluralize).each do |type|
         expect(subject).to respond_to(type)
         expect(subject.send(type)).to be_a(subject.class)
       end

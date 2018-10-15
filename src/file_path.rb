@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,14 +18,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 
 require 'constants'
 require 'file_path/config_path'
 
-module Metalware
+module Underware
   module FilePath
     class << self
       delegate :domain_config,
@@ -57,7 +57,7 @@ module Metalware
       end
 
       def answer_files
-        File.join(metalware_data, 'answers')
+        File.join(underware_data, 'answers')
       end
 
       def server_config
@@ -65,7 +65,7 @@ module Metalware
       end
 
       def repo
-        File.join(metalware_data, 'repo')
+        File.join(underware_data, 'repo')
       end
 
       def overview
@@ -73,7 +73,7 @@ module Metalware
       end
 
       def plugins_dir
-        File.join(metalware_data, 'plugins')
+        File.join(underware_data, 'plugins')
       end
 
       # TODO: Change input from node to namespace
@@ -123,11 +123,11 @@ module Metalware
       end
 
       def log
-        '/var/log/metalware'
+        '/var/log/underware'
       end
 
       def asset_type(type)
-        File.join(metalware_install, 'data/asset_types', type + '.yaml')
+        File.join(underware_install, 'data/asset_types', type + '.yaml')
       end
 
       def asset(*a)
@@ -135,7 +135,7 @@ module Metalware
       end
 
       def asset_dir
-        File.join(metalware_data, 'assets')
+        File.join(underware_data, 'assets')
       end
 
       def layout(*a)
@@ -143,7 +143,7 @@ module Metalware
       end
 
       def layout_dir
-        File.join(metalware_data, 'layouts')
+        File.join(underware_data, 'layouts')
       end
 
       def asset_cache
@@ -178,4 +178,4 @@ module Metalware
   end
 end
 
-Metalware::FilePath.define_constant_paths
+Underware::FilePath.define_constant_paths

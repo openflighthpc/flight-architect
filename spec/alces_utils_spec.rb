@@ -6,12 +6,12 @@ require 'alces_utils'
 RSpec.describe AlcesUtils do
   include described_class
 
-  let(:file_path) { Metalware::FilePath }
-  let(:group_cache) { Metalware::GroupCache.new }
+  let(:file_path) { Underware::FilePath }
+  let(:group_cache) { Underware::GroupCache.new }
 
   describe '#new' do
     it 'returns the mocked alces' do
-      new_alces = Metalware::Namespaces::Alces.new
+      new_alces = Underware::Namespaces::Alces.new
       expect(alces.equal?(new_alces)).to eq(true)
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe AlcesUtils do
 
     it 'only has the local node by default' do
       expect(alces.nodes.length).to eq(1)
-      expect(alces.nodes[0]).to be_a(Metalware::Namespaces::Local)
+      expect(alces.nodes[0]).to be_a(Underware::Namespaces::Local)
     end
 
     context 'with a block before each test' do
@@ -66,7 +66,7 @@ RSpec.describe AlcesUtils do
       end
 
       it 'turns the validation off' do
-        expect(Metalware::Constants::SKIP_VALIDATION).to be true
+        expect(Underware::Constants::SKIP_VALIDATION).to be true
       end
     end
 
@@ -160,7 +160,7 @@ RSpec.describe AlcesUtils do
       it 'errors if the node already exists' do
         expect do
           described_class.mock(self) { mock_node(name) }
-        end.to raise_error(Metalware::InternalError)
+        end.to raise_error(Underware::InternalError)
       end
 
       it 'uses the genders input' do
@@ -218,7 +218,7 @@ RSpec.describe AlcesUtils do
       end
 
       it 'sets the Alces.new method to return the new alces object' do
-        new_alces = Metalware::Namespaces::Alces.new
+        new_alces = Underware::Namespaces::Alces.new
         expect(new_alces).to eq(alces)
       end
 

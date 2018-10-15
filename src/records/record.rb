@@ -3,11 +3,11 @@
 require 'file_path'
 require 'namespaces/asset_array'
 
-module Metalware
+module Underware
   module Records
     class Record
       TYPES = begin
-        Dir.glob(Metalware::FilePath.asset_type('*')).map do |path|
+        Dir.glob(Underware::FilePath.asset_type('*')).map do |path|
           File.basename(path, '.yaml')
         end
       end.freeze
@@ -41,7 +41,7 @@ module Metalware
           msg = if path(name)
                   <<-EOF.squish
                     The "#{name}" #{class_name} already exists. Please use
-                    `metal #{class_name} edit` instead
+                    `underware #{class_name} edit` instead
                   EOF
                 else
                   "\"#{name}\" is not a valid #{class_name} name"

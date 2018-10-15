@@ -3,9 +3,9 @@
 
 require 'active_support/core_ext/module/delegation'
 
-module Metalware
+module Underware
   module HashMergers
-    class MetalRecursiveOpenStruct
+    class UnderwareRecursiveOpenStruct
       include Enumerable
 
       def initialize(table = {}, &input_block)

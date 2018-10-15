@@ -2,7 +2,7 @@
 
 require 'records/record'
 
-module Metalware
+module Underware
   module Records
     class Asset < Record
       class << self

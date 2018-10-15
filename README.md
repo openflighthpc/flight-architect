@@ -1,4 +1,4 @@
-# Alces Metalware
+# Alces Underware
 
 A set of tools and conventions for improving the management and configuration of bare metal machines with IPMI and configuration management platforms.
 
@@ -18,12 +18,12 @@ The install scripts handle the installation of all required packages from your d
 One-line installation - **note that you must verify you have the correct value for** `alces_OS`:
 
 ```bash
-curl -sL http://git.io/metalware-installer | sudo alces_OS=el7 /bin/bash
+curl -sL http://git.io/underware-installer | sudo alces_OS=el7 /bin/bash
 ```
 
 ### Basic installation
 
-Metalware is a system-level package and must be installed by the `root` user.
+Underware is a system-level package and must be installed by the `root` user.
 
 1. Become root.
 
@@ -40,13 +40,13 @@ Metalware is a system-level package and must be installed by the `root` user.
 3. Invoke installation by piping output from `curl` to `bash`:
 
    ```bash
-   curl -sL http://git.io/metalware-installer | /bin/bash
+   curl -sL http://git.io/underware-installer | /bin/bash
    ```
 
    If you want to you can download the script first.  You might want to do this if you want to inspect what it's going to do, or if you're nervous about it being truncated during download:
 
    ```bash
-   curl -sL http://git.io/metalware-installer > /tmp/bootstrap.sh
+   curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
    less /tmp/bootstrap.sh
    bash /tmp/bootstrap.sh
    ```
@@ -54,7 +54,7 @@ Metalware is a system-level package and must be installed by the `root` user.
 4. After installation, you can logout and login again in order to set up the appropriate shell configuration, or you can source the shell configuration manually:
 
    ```bash
-   source /etc/profile.d/alces-metalware.sh
+   source /etc/profile.d/alces-underware.sh
    ```
 
 ### Advanced installation
@@ -63,13 +63,13 @@ For further installation techniques, please refer to [INSTALL.md](INSTALL.md).
 
 ## Usage
 
-Once installed and your shell configuration is sourced, you can access the Metalware tools via the `metal` command, e.g.:
+Once installed and your shell configuration is sourced, you can access the Underware tools via the `underware` command, e.g.:
 
 ```
-[root@localhost ~]# metal
+[root@localhost ~]# underware
 NAME:
 
-    metal
+    underware
 
   DESCRIPTION:
 
@@ -94,7 +94,7 @@ NAME:
         
     -c FILE, --config FILE 
         Specify config file to use instead of default
-(/opt/metalware/etc/config.yaml)
+(/opt/underware/etc/config.yaml)
         
     --strict 
         Convert warnings to errors
@@ -126,6 +126,6 @@ AGPLv3+ License, see [LICENSE.txt](LICENSE.txt) for details.
 
 Copyright (C) 2007-2015 Alces Software Ltd.
 
-Alces Metalware is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Alces Underware is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-Alces Metalware is made available under a dual licensing model whereby use of the package in projects that are licensed so as to be compatible with AGPL Version 3 may use the package under the terms of that license. However, if AGPL Version 3.0 terms are incompatible with your planned use of this package, alternative license terms are available from Alces Software Ltd - please direct inquiries about licensing to [licensing@alces-software.com](mailto:licensing@alces-software.com).
+Alces Underware is made available under a dual licensing model whereby use of the package in projects that are licensed so as to be compatible with AGPL Version 3 may use the package under the terms of that license. However, if AGPL Version 3.0 terms are incompatible with your planned use of this package, alternative license terms are available from Alces Software Ltd - please direct inquiries about licensing to [licensing@alces-software.com](mailto:licensing@alces-software.com).

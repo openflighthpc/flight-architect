@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Namespaces
-    class MetalArray < Array
+    class UnderwareArray < Array
       def initialize(input_array = nil)
         super()
         push(*input_array)

@@ -3,14 +3,14 @@
 #==============================================================================
 # Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
 #
-# This file/package is part of Alces Metalware.
+# This file/package is part of Alces Underware.
 #
-# Alces Metalware is free software: you can redistribute it and/or
+# Alces Underware is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License
 # as published by the Free Software Foundation, either version 3 of
 # the License, or (at your option) any later version.
 #
-# Alces Metalware is distributed in the hope that it will be useful,
+# Alces Underware is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Affero General Public License for more details.
@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this package.  If not, see <http://www.gnu.org/licenses/>.
 #
-# For more information on the Alces Metalware, please visit:
-# https://github.com/alces-software/metalware
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
 #==============================================================================
 require 'exceptions'
 require 'dependency'
@@ -32,14 +32,14 @@ require 'fileutils'
 require 'filesystem'
 require 'alces_utils'
 
-RSpec.describe Metalware::Dependency do
+RSpec.describe Underware::Dependency do
   include AlcesUtils
 
   let(:filesystem) { FileSystem.setup }
 
   def enforce_dependencies(dependencies_hash = {})
     filesystem.test do |_fs|
-      Metalware::Dependency.new('test', dependencies_hash).enforce
+      Underware::Dependency.new('test', dependencies_hash).enforce
     end
   end
 
@@ -47,13 +47,13 @@ RSpec.describe Metalware::Dependency do
     it 'repo dependencies fail' do
       expect do
         enforce_dependencies(repo: [])
-      end.to raise_error(Metalware::DependencyFailure)
+      end.to raise_error(Underware::DependencyFailure)
     end
 
     it 'configure dependencies fail' do
       expect do
         enforce_dependencies(configure: ['domain.yaml'])
-      end.to raise_error(Metalware::DependencyFailure)
+      end.to raise_error(Underware::DependencyFailure)
     end
   end
 
@@ -81,13 +81,13 @@ RSpec.describe Metalware::Dependency do
     it "fail if repo template doesn't exist" do
       expect do
         enforce_dependencies(repo: ['dependency-test1/not-found'])
-      end.to raise_error(Metalware::DependencyFailure)
+      end.to raise_error(Underware::DependencyFailure)
     end
 
     it 'fail if validating a repo directory' do
       expect do
         enforce_dependencies(repo: ['dependency-test1'])
-      end.to raise_error(Metalware::DependencyFailure)
+      end.to raise_error(Underware::DependencyFailure)
     end
   end
 
@@ -102,7 +102,7 @@ RSpec.describe Metalware::Dependency do
           enforce_dependencies(
             configure: ['domain.yaml', 'groups/group1.yaml']
           )
-        end.to raise_error(Metalware::DependencyFailure)
+        end.to raise_error(Underware::DependencyFailure)
       end
     end
 

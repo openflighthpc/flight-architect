@@ -6,12 +6,12 @@ require 'commands'
 require 'utils'
 require 'alces_utils'
 
-RSpec.describe Metalware::Commands::Asset::Delete do
+RSpec.describe Underware::Commands::Asset::Delete do
   include AlcesUtils
   let(:asset) { 'saved-asset' }
 
   def run_command
-    Metalware::Utils.run_command(described_class,
+    Underware::Utils.run_command(described_class,
                                  asset,
                                  stderr: StringIO.new)
   end
@@ -19,7 +19,7 @@ RSpec.describe Metalware::Commands::Asset::Delete do
   it 'errors if the asset does not exist' do
     expect do
       run_command
-    end.to raise_error(Metalware::MissingRecordError)
+    end.to raise_error(Underware::MissingRecordError)
   end
 
   context 'when using a saved asset' do
@@ -30,7 +30,7 @@ RSpec.describe Metalware::Commands::Asset::Delete do
 
     it 'deletes the asset file' do
       run_command
-      expect(Metalware::Records::Asset.path(asset)).to be_nil
+      expect(Underware::Records::Asset.path(asset)).to be_nil
     end
   end
 end

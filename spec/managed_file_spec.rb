@@ -3,7 +3,7 @@
 
 require 'managed_file'
 
-RSpec.describe Metalware::ManagedFile do
+RSpec.describe Underware::ManagedFile do
   describe '#content' do
     let :managed_file { Tempfile.new }
     let :rendered_content { 'content' }
@@ -18,19 +18,19 @@ RSpec.describe Metalware::ManagedFile do
 
       it "includes start marker with `#{comment_char}` as comment character" do
         expect(subject).to match(
-          /#{marker_comment_regex} METALWARE_START #{marker_comment_regex}/
+          /#{marker_comment_regex} UNDERWARE_START #{marker_comment_regex}/
         )
       end
 
       it "includes end marker with `#{comment_char}` as comment character" do
         expect(subject).to match(
-          /#{marker_comment_regex} METALWARE_END #{marker_comment_regex}/
+          /#{marker_comment_regex} UNDERWARE_END #{marker_comment_regex}/
         )
       end
 
       it "includes managed file info with `#{comment_char}` as comment character" do
         expect(subject).to include(
-          "#{comment_char} This section of this file is managed by Alces Metalware"
+          "#{comment_char} This section of this file is managed by Alces Underware"
         )
       end
 

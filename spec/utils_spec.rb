@@ -3,7 +3,7 @@
 
 require 'utils'
 
-RSpec.describe Metalware::Utils do
+RSpec.describe Underware::Utils do
   describe '#commentify' do
     it 'wraps string and prepends comment character to each line' do
       my_string = 'this is my string, it should be wrapped and commented'

@@ -8,8 +8,8 @@ require 'cli'
 require 'namespaces/alces'
 require 'ostruct'
 
-module Metalware
-  class MetalBench
+module Underware
+  class UnderwareBench
     def self.run
       results = RubyProf.profile do
         begin

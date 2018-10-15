@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   module Utils
     class << self
       def commentify(string, comment_char: '#', line_length: 80)

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-module Metalware
+module Underware
   # Class to generate reused `dependency_hash`s, for use by `Dependency` object
   # to enforce command dependencies.
   # XXX Consider moving generating of more `dependency_hash`s here.

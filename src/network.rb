@@ -3,7 +3,7 @@
 
 require 'network_interface'
 
-module Metalware
+module Underware
   module Network
     class << self
       delegate :interfaces, to: NetworkInterface

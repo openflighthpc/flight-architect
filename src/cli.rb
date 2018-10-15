@@ -39,9 +39,10 @@ module Underware
 
     def run
       program :name, 'underware'
-      program :version, '2017.2.1'
+      program :version, 'alpha-01'
       program :description, <<-EOF.squish
-        Alces tools for the management and configuration of bare metal machines
+        Tool for managing standard config hierarchy and template rendering
+        under-lying Alces clusters and other Alces tools
       EOF
 
       suppress_trace_class UserUnderwareError

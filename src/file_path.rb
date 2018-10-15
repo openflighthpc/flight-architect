@@ -102,10 +102,6 @@ module Underware
         rendered_dir
       end
 
-      def staging(path)
-        File.join(staging_dir, path)
-      end
-
       def define_constant_paths
         Constants.constants
                  .map(& :to_s)

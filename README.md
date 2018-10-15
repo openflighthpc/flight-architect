@@ -1,7 +1,7 @@
 # Alces Underware
 
-A set of tools and conventions for improving the management and configuration
-of bare metal machines with IPMI and configuration management platforms.
+Tool/library for managing standard config hierarchy and template rendering
+under-lying Alces clusters and other Alces tools.
 
 ## Supported platforms
 
@@ -73,53 +73,54 @@ For further installation techniques, please refer to [INSTALL.md](INSTALL.md).
 
 ## Usage
 
+Underware is designed to be used both as a library by other Alces tools, and as
+an independent tool in its own right. Documentation has not yet been written on
+using it as a library; see below for documentation on using it as a tool.
+
 Once installed and your shell configuration is sourced, you can access the
 Underware tools via the `underware` command, e.g.:
 
 ```
 [root@localhost ~]# underware
-NAME:
+  NAME:
 
     underware
 
   DESCRIPTION:
 
-    Alces tools for the management and configuration of bare metal machines
+    Tool for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools
 
   COMMANDS:
-        
-    build   Renders the templates used to build the nodes               
-    console Volatile. Display a node's console in the terminal          
-    dhcp    Renders and reboots dhcp from the hunter cache              
-    each    Runs a command for a node(s)                
-    help    Display global or [command] help documentation              
-    hosts   Adds a node(s) to the hosts file            
-    hunter  Detects and caches DHCP discover messages           
-    ipmi    Volatile. Perform ipmi commands on single or multiple machines      
-    power   Volatile. Run power commands on a node.             
-    render  Render a given template             
-    repo    Manage template and config repository               
-    status  Display the current network status of the nodes     
+
+    asset        Manage the asset record files
+    configure    Configure different aspects of this Underware installation
+    each         Runs a command for a node(s)
+    eval         Evaluate argument in context of `alces` namespace
+    help         Display global or [command] help documentation
+    layout       Manage the layout record files
+    overview     Gives an overview of the configured groups
+    plugin       View and manage activated plugins
+    remove       Remove underware controlled files/ objects
+    render       Render a given template
+    repo         Manage template and config repository
+    view         View domain templating config, optionally in context for given node
+    view-answers View configured answers
 
   GLOBAL OPTIONS:
-        
-    -c FILE, --config FILE 
-        Specify config file to use instead of default
-(/opt/underware/etc/config.yaml)
-        
-    --strict 
+
+    --strict
         Convert warnings to errors
-        
-    --quiet 
+
+    --quiet
         Suppress any warnings from being displayed
-        
-    -h, --help 
+
+    -h, --help
         Display help documentation
-        
-    --version 
+
+    --version
         Display version information
-        
-    --trace 
+
+    --trace
         Display backtrace when an error occurs
 ```
 
@@ -136,7 +137,7 @@ Bonus points for topic branches.
 
 AGPLv3+ License, see [LICENSE.txt](LICENSE.txt) for details.
 
-Copyright (C) 2007-2015 Alces Software Ltd.
+Copyright (C) 2018 Alces Software Ltd.
 
 Alces Underware is free software: you can redistribute it and/or modify it
 under the terms of the GNU Affero General Public License as published by the

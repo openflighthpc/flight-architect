@@ -77,21 +77,18 @@ say_done $?
 title "Creating initial directory structure"
 doing 'Create'
 mkdir -p /var/log/underware
-mkdir -p /var/lib/underware/rendered/{basic,kickstart,system}
+mkdir -p /var/lib/underware/rendered/system
 mkdir -p /var/lib/underware/cache/templates
 mkdir -p /var/lib/underware/events
 mkdir -p /var/lib/underware/repo
 mkdir -p /var/lib/underware/plugins
 mkdir -p /var/lib/underware/answers/{groups,nodes}
 mkdir -p /var/lib/underware/assets
-mkdir -p /var/lib/underware/build_hooks
 mkdir -p /var/lib/underware/data
-mkdir -p /etc/named
-touch /etc/named/underware.conf
-chmod a+rw /var/lib/underware/events
 
-# Link hosts files in to Underware data dir; this will then be made available
-# on the Underware deployment server.
+# Link hosts files in to Underware data dir. This allows the Underware-rendered
+# hosts file to be used when using this machine, and this may also be served by
+# the Metalware deployment server if Metalware is also installed.
 ln -s /etc/hosts /var/lib/underware/rendered/system/
 
 mkdir -p "${target}"
@@ -133,10 +130,6 @@ case $user_shell in
         rc_script_ext=sh
         ;;
 esac
-
-# Certificate generation for Libvirt integration
-title "Configuring certificates"
-install_certs &> "${dep_logs}/install.log"
 
 cat <<EOF
 [33m

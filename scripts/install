@@ -61,7 +61,7 @@ fi
 
 cat <<EOF
 [33m===============================================================================
- STARTING INSTALLATION
+ STARTING UNDERWARE INSTALLATION
 ===============================================================================[0m
 EOF
 
@@ -148,7 +148,7 @@ esac
 cat <<EOF
 [33m
 ===============================================================================
- INSTALLATION COMPLETE
+ UNDERWARE INSTALLATION COMPLETE
 ===============================================================================
 [0m[1m
 Global profile scripts have been installed in:

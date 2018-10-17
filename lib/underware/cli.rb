@@ -24,7 +24,6 @@
 # See http://stackoverflow.com/questions/837123/adding-a-directory-to-load-path-ruby.
 $LOAD_PATH.unshift File.dirname(__FILE__)
 
-require 'rubygems'
 require 'bundler/setup'
 require 'commander'
 require 'config'

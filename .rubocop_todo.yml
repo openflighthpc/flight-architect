@@ -28,20 +28,13 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 14
 
-# Offense count: 1
-Naming/AccessorMethodName:
-  Exclude:
-    - 'src/commands/status.rb'
-
 # Offense count: 10
 RSpec/AnyInstance:
   Exclude:
     - 'spec/cli_helper/parser_spec.rb'
     - 'spec/command_helpers/configure_command_spec.rb'
-    - 'spec/commands/console_spec.rb'
     - 'spec/dependency_specifications_spec.rb'
     - 'spec/underware_log_spec.rb'
-    - 'spec/slow/status/monitor_spec.rb'
     - 'spec/spec_utils.rb'
     - 'spec/utils/editor_spec.rb'
 
@@ -50,7 +43,6 @@ RSpec/AnyInstance:
 # Prefixes: when, with, without
 RSpec/ContextWording:
   Exclude:
-    - 'spec/commands/status_spec.rb'
     - 'spec/fixtures/shared_context/overview.rb'
     - 'spec/nodeattr_interface_spec.rb'
     - 'spec/validation/configure_spec.rb'
@@ -84,7 +76,6 @@ RSpec/InstanceVariable:
     - 'spec/build_files_retriever_spec.rb'
     - 'spec/commander_extensions_spec.rb'
     - 'spec/commands/status_spec.rb'
-    - 'spec/slow/status/monitor_spec.rb'
 
 # Offense count: 1
 RSpec/IteratedExpectation:
@@ -117,7 +108,6 @@ RSpec/NestedGroups:
 # Offense count: 4
 RSpec/ScatteredLet:
   Exclude:
-    - 'spec/commands/build_spec.rb'
     - 'spec/group_cache_spec.rb'
     - 'spec/overview/table_spec.rb'
     - 'spec/question_tree_spec.rb'
@@ -129,7 +119,6 @@ RSpec/ScatteredSetup:
     - 'spec/commands/asset/edit_spec.rb'
     - 'spec/commands/asset/link_spec.rb'
     - 'spec/commands/asset/unlink_spec.rb'
-    - 'spec/commands/build_spec.rb'
     - 'spec/commands/each_spec.rb'
 
 # Offense count: 6
@@ -171,9 +160,7 @@ Style/IfUnlessModifier:
   Exclude:
     - 'bin/autocomplete'
     - 'src/command_helpers/configure_command.rb'
-    - 'src/commands/console.rb'
     - 'src/commands/repo/update.rb'
-    - 'src/commands/status.rb'
     - 'src/namespaces/mixins/alces_static.rb'
     - 'src/nodeattr_interface.rb'
     - 'src/templater.rb'
@@ -184,11 +171,6 @@ Style/MethodMissing:
     - 'spec/filesystem.rb'
     - 'src/hash_mergers/underware_recursive_open_struct.rb'
     - 'src/underware_log.rb'
-
-# Offense count: 1
-Style/MultilineBlockChain:
-  Exclude:
-    - 'src/commands/hunter.rb'
 
 # Offense count: 8
 # Cop supports --auto-correct.

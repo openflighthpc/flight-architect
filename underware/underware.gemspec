@@ -33,9 +33,32 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency 'colorize'
+  spec.add_runtime_dependency 'commander'
+  spec.add_runtime_dependency 'dry-validation'
+  spec.add_runtime_dependency 'hashie'
+  spec.add_runtime_dependency 'highline', '1.7.8'
+  spec.add_runtime_dependency 'net-dhcp'
+  spec.add_runtime_dependency 'network_interface', '~> 0.0.1'
+  spec.add_runtime_dependency 'pcap'
+  spec.add_runtime_dependency 'recursive-open-struct'
+  spec.add_runtime_dependency 'ruby-libvirt'
+  spec.add_runtime_dependency 'rugged'
+  spec.add_runtime_dependency 'terminal-table'
   spec.add_runtime_dependency 'activesupport'
+  spec.add_runtime_dependency 'rubytree'
 
-  spec.add_development_dependency "bundler", "~> 1.16"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  # Test dependencies.
+  spec.add_development_dependency 'fakefs'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'simplecov'
+
+  # Development dependencies.
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'rubocop', '~> 0.52.1'
+  spec.add_development_dependency 'rubocop-rspec'
+
+  # XXX Are these needed?
+  # spec.add_development_dependency "bundler", "~> 1.16"
+  # spec.add_development_dependency "rake", "~> 10.0"
 end

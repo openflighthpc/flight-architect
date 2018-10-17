@@ -22,9 +22,9 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 require 'logger'
-require 'exceptions'
+require 'underware/exceptions'
 require 'fileutils'
-require 'output'
+require 'underware/output'
 
 module Underware
   class UnderwareLog < Logger

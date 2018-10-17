@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'hash_mergers/underware_recursive_open_struct'
+require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
   module Constants

@@ -22,9 +22,9 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'exceptions'
+require 'underware/exceptions'
 require 'open3'
-require 'underware_log'
+require 'underware/underware_log'
 
 module Underware
   module SystemCommand

@@ -22,9 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'constants'
-require 'exceptions'
-require 'system_command'
+require 'underware/constants'
+require 'underware/exceptions'
+require 'underware/system_command'
+require 'underware/file_path'
 
 module Underware
   module NodeattrInterface

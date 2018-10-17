@@ -25,7 +25,7 @@
 require 'concurrent'
 require 'active_support/core_ext/module/delegation'
 
-require 'utils'
+require 'underware/utils'
 
 module Underware
   module Output

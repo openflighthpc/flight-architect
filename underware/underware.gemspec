@@ -3,15 +3,19 @@ lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "underware/version"
 
-Gem::Specification.new do |spec|
-  spec.name          = "underware"
-  spec.version       = Underware::VERSION
-  spec.authors       = ["Bob Whitelock"]
-  spec.email         = ["bob.whitelock1@gmail.com"]
+require 'active_support/core_ext/string/filters'
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+Gem::Specification.new do |spec|
+  spec.name          = 'underware'
+  spec.version       = Underware::VERSION
+  spec.authors       = ['Alces Software Ltd.']
+  spec.email         = ['dev@alces-software.com']
+  spec.summary       = <<~SUMMARY.squish
+                         Tool/library for managing standard config hierarchy
+                         and template rendering under-lying Alces clusters and
+                         other Alces tools
+                      SUMMARY
+  spec.homepage      = 'https://github.com/alces-software/underware'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -28,6 +32,8 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_runtime_dependency 'activesupport'
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"

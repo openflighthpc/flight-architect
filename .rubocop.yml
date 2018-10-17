@@ -34,7 +34,7 @@ Metrics/BlockLength:
 # collect all the file path methods.
 Metrics/ModuleLength:
   Exclude:
-    - src/file_path.rb
+    - lib/underware/file_path.rb
 
 # We trust the YAML we're loading, so don't warn if we don't use
 # `YAML.safe_load` instead of `YAML.load`.
@@ -88,5 +88,5 @@ Style/GlobalVars:
     - spec/commander_extensions_spec.rb
     - spec/spec_helper.rb
     - spec/spec_utils.rb
-    - src/output.rb
+    - lib/underware/output.rb
 

@@ -27,7 +27,7 @@ require 'hash_mergers/underware_recursive_open_struct'
 module Underware
   module Constants
     UNDERWARE_INSTALL_PATH =
-      File.absolute_path(File.join(File.dirname(__FILE__), '..'))
+      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
 
     UNDERWARE_CONFIGS_PATH = File.join(UNDERWARE_INSTALL_PATH, 'etc')
     DEFAULT_CONFIG_PATH = File.join(UNDERWARE_CONFIGS_PATH, 'config.yaml')
@@ -49,7 +49,7 @@ module Underware
     GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
 
     DRY_VALIDATION_ERRORS_PATH = File.join(UNDERWARE_INSTALL_PATH,
-                                           'src/validation',
+                                           'lib/underware/validation',
                                            'errors.yaml')
 
     CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze

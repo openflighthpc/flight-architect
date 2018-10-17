@@ -12,17 +12,17 @@
     # Ignore patches for Gems; will often monkey-patch methods to be called by
     # Gem code which would otherwise be flagged up.
     - name: Gem patch methods
-      pathStartsWith: src/patches
+      pathStartsWith: lib/underware/patches
 
     - name: Configurator::Question asker methods
-      pathStartsWith: src/configurator
+      pathStartsWith: lib/underware/configurator
       termStartsWith: ask_
 
     # Methods may be defined in namespaces and never used elsewhere in
     # Underware, as we just want them to be available when the namespace is
     # used as a binding when rendering templates.
     - name: Namespace methods
-      pathStartsWith: src/namespaces
+      pathStartsWith: lib/underware/namespaces
       allowedTerms:
       - local?
 

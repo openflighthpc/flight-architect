@@ -106,7 +106,7 @@ mkdir -p /var/lib/underware/data
 ln -s /etc/hosts /var/lib/underware/rendered/system/
 
 mkdir -p "${target}"
-cp -R "${source}/"{Gemfile,Gemfile.lock,bin,etc,libexec,src,data} "${target}"
+cp -R "${source}/"{Gemfile,Gemfile.lock,bin,etc,libexec,lib,data} "${target}"
 cp ${source}/etc/logrotate.d/* /etc/logrotate.d/
 say_done $?
 

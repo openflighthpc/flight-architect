@@ -32,7 +32,7 @@ class AutoComplete
     @complete = ARGV[2..-1] # skips the second input as this is always `underware`
     @complete.pop unless @cur.nil? # Remove the current element from completed
     @values = []
-    config = File.join(File.dirname(__FILE__), '../src/cli_helper/config.yaml')
+    config = File.join(File.dirname(__FILE__), '../lib/underware/cli_helper/config.yaml')
 
     # NOTE: Now that Underware has a `Data` module the majority of yaml
     # handling occurs through that.

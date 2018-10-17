@@ -22,7 +22,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'concurrent'
 require 'active_support/core_ext/module/delegation'
 
 require 'underware/utils'

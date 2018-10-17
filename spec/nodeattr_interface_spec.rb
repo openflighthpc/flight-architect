@@ -22,9 +22,9 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'nodeattr_interface'
+require 'underware/nodeattr_interface'
 require 'spec_utils'
-require 'exceptions'
+require 'underware/exceptions'
 require 'filesystem'
 
 RSpec.describe Underware::NodeattrInterface do

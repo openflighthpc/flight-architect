@@ -1,8 +1,8 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/alces'
-require 'hash_mergers'
+require 'underware/namespaces/alces'
+require 'underware/hash_mergers'
 require 'alces_utils'
 
 RSpec.describe Underware::Namespaces::Alces do

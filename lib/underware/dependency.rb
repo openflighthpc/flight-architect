@@ -21,9 +21,9 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'exceptions'
-require 'constants'
-require 'validation/loader'
+require 'underware/exceptions'
+require 'underware/constants'
+require 'underware/validation/loader'
 
 module Underware
   class Dependency

@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'constants'
-require 'file_path'
+require 'underware/constants'
+require 'underware/file_path'
 
 RSpec.describe Underware::FilePath do
   describe 'dynamic constant paths' do

@@ -23,8 +23,8 @@
 #==============================================================================
 
 require 'alces_utils'
-require 'constants'
-require 'dependency'
+require 'underware/constants'
+require 'underware/dependency'
 
 module SpecUtils
   # Mocks.

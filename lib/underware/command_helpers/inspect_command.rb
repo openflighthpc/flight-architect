@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'command_helpers/base_command'
+require 'underware/command_helpers/base_command'
 
 module Underware
   module CommandHelpers

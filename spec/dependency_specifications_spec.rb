@@ -24,8 +24,8 @@
 #==============================================================================
 
 require 'spec_utils'
-require 'dependency_specifications'
-require 'namespaces/alces'
+require 'underware/dependency_specifications'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::DependencySpecifications do
   subject do

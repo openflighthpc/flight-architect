@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'constants'
-require 'file_path/config_path'
+require 'underware/constants'
+require 'underware/file_path/config_path'
 
 module Underware
   module FilePath

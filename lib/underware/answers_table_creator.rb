@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'terminal-table'
-require 'validation/loader'
+require 'underware/validation/loader'
 
 module Underware
   class AnswersTableCreator

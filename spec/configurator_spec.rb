@@ -26,8 +26,8 @@ require 'tempfile'
 require 'yaml'
 require 'highline'
 
-require 'configurator'
-require 'validation/loader'
+require 'underware/configurator'
+require 'underware/validation/loader'
 require 'alces_utils'
 
 RSpec.describe Underware::Configurator do

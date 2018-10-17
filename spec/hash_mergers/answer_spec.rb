@@ -1,10 +1,10 @@
 
 # frozen_string_literal: true
 
-require 'hash_mergers'
+require 'underware/hash_mergers'
 require 'alces_utils'
-require 'data'
-require 'file_path'
+require 'underware/data'
+require 'underware/file_path'
 
 RSpec.describe Underware::HashMergers::Answer do
   include AlcesUtils

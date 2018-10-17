@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'asset_builder'
+require 'underware/asset_builder'
 
 module Underware
   module CommandHelpers

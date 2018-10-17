@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'cache/asset'
+require 'underware/cache/asset'
 require 'filesystem'
-require 'commands'
-require 'utils'
+require 'underware/commands'
+require 'underware/utils'
 require 'alces_utils'
 
 RSpec.describe Underware::Commands::Asset::Delete do

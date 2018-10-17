@@ -3,9 +3,9 @@
 
 require 'shared_examples/hash_merger_namespace'
 
-require 'namespaces/alces'
-require 'constants'
-require 'hash_mergers'
+require 'underware/namespaces/alces'
+require 'underware/constants'
+require 'underware/hash_mergers'
 require 'recursive_open_struct'
 require 'spec_utils'
 

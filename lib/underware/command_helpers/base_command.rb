@@ -22,13 +22,13 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware_log'
-require 'dependency'
-require 'exceptions'
-require 'dependency_specifications'
-require 'validation/loader'
-require 'file_path'
-require 'namespaces/alces'
+require 'underware/underware_log'
+require 'underware/dependency'
+require 'underware/exceptions'
+require 'underware/dependency_specifications'
+require 'underware/validation/loader'
+require 'underware/file_path'
+require 'underware/namespaces/alces'
 
 module Underware
   module CommandHelpers

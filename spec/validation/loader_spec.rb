@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'validation/loader'
+require 'underware/validation/loader'
 
 RSpec.describe Underware::Validation::Loader do
   describe '#question_tree' do

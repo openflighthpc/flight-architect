@@ -23,7 +23,7 @@
 #==============================================================================
 
 require 'terminal-table'
-require 'overview/table'
+require 'underware/overview/table'
 
 module Underware
   module Commands

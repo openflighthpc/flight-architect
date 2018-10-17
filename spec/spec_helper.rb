@@ -46,11 +46,9 @@ SimpleCov.start 'underware'
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '../lib/underware')
-
 # Require main entry point to Underware CLI so every file picked up by
 # simplecov, even entirely untested ones.
-require 'cli'
+require 'underware/cli'
 
 require 'filesystem'
 

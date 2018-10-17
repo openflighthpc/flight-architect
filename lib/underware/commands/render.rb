@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'command_helpers/base_command'
-require 'namespaces/alces'
+require 'underware/command_helpers/base_command'
+require 'underware/namespaces/alces'
 
 module Underware
   module Commands

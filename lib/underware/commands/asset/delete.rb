@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'cache/asset'
+require 'underware/cache/asset'
 require 'fileutils'
 
 module Underware

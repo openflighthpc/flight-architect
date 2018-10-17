@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/string/strip'
-require 'nodeattr_interface'
-require 'group_cache'
+require 'underware/nodeattr_interface'
+require 'underware/group_cache'
 require 'hashie'
-require 'validation/loader'
-require 'cache/asset'
-require 'build_files_retrievers/cache'
+require 'underware/validation/loader'
+require 'underware/cache/asset'
+require 'underware/build_files_retrievers/cache'
 
 module Underware
   module Namespaces

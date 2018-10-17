@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'file_path'
-require 'data'
+require 'underware/file_path'
+require 'underware/data'
 
 module Underware
   module Cache

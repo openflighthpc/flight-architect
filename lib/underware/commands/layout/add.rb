@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'utils/editor'
-require 'records/layout'
+require 'underware/utils/editor'
+require 'underware/records/layout'
 
 module Underware
   module Commands

@@ -1,8 +1,8 @@
 
 # frozen_string_literal: true
 
-require 'command_helpers/configure_command'
-require 'constants'
+require 'underware/command_helpers/configure_command'
+require 'underware/constants'
 
 module Underware
   module Commands

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/mixins/white_list_hasher'
+require 'underware/namespaces/mixins/white_list_hasher'
 require 'ostruct'
 
 RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do

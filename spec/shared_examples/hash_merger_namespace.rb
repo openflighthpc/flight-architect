@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/alces'
+require 'underware/namespaces/alces'
 require 'alces_utils'
 
 RSpec.shared_examples \

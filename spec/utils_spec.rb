@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'utils'
+require 'underware/utils'
 
 RSpec.describe Underware::Utils do
   describe '#commentify' do

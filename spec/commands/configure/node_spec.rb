@@ -3,7 +3,7 @@
 
 require 'spec_utils'
 require 'filesystem'
-require 'group_cache'
+require 'underware/group_cache'
 
 RSpec.describe Underware::Commands::Configure::Node do
   def run_configure_node(node)

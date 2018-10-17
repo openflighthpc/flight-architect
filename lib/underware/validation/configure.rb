@@ -22,15 +22,15 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'exceptions'
-require 'file_path'
-require 'data'
+require 'underware/exceptions'
+require 'underware/file_path'
+require 'underware/data'
 require 'dry-validation'
-require 'constants'
-require 'question_tree'
+require 'underware/constants'
+require 'underware/question_tree'
 require 'stringio'
 
-require 'validation/configure/schemas'
+require 'underware/validation/configure/schemas'
 
 module Underware
   module Validation

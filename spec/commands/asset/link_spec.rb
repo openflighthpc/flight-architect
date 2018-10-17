@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'alces_utils'
-require 'cache/asset'
+require 'underware/cache/asset'
 require 'filesystem'
 
 RSpec.describe Underware::Commands::Asset::Link do

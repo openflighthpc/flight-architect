@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/plugin'
+require 'underware/namespaces/plugin'
 
 module Underware
   module Namespaces

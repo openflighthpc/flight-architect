@@ -22,12 +22,12 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'command_helpers/base_command'
-require 'underware_log'
+require 'underware/command_helpers/base_command'
+require 'underware/underware_log'
 require 'rugged'
-require 'exceptions'
+require 'underware/exceptions'
 
-require 'constants'
+require 'underware/constants'
 
 module Underware
   module Commands

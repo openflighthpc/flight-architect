@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'input'
+require 'underware/input'
 require 'digest'
 
-require 'build_files_retrievers/build_files_retriever'
-require 'build_files_retrievers/plugin'
-require 'build_files_retrievers/node'
+require 'underware/build_files_retrievers/build_files_retriever'
+require 'underware/build_files_retrievers/plugin'
+require 'underware/build_files_retrievers/node'
 
 module Underware
   module BuildFilesRetrievers

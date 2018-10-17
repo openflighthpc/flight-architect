@@ -24,12 +24,12 @@
 
 require 'active_support/core_ext/hash'
 require 'active_support/string_inquirer'
-require 'validation/loader'
-require 'validation/saver'
-require 'file_path'
-require 'group_cache'
-require 'configurator/question'
-require 'configurator/class_methods'
+require 'underware/validation/loader'
+require 'underware/validation/saver'
+require 'underware/file_path'
+require 'underware/group_cache'
+require 'underware/configurator/question'
+require 'underware/configurator/class_methods'
 
 module Underware
   class Configurator

@@ -1,10 +1,10 @@
 
 # frozen_string_literal: true
 
-require 'hash_mergers'
+require 'underware/hash_mergers'
 require 'filesystem'
-require 'data'
-require 'constants'
+require 'underware/data'
+require 'underware/constants'
 require 'spec_utils'
 require 'alces_utils'
 

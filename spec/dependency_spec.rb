@@ -21,10 +21,10 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'exceptions'
-require 'dependency'
-require 'constants'
-require 'validation/configure'
+require 'underware/exceptions'
+require 'underware/dependency'
+require 'underware/constants'
+require 'underware/validation/configure'
 require 'ostruct'
 
 require 'spec_helper'

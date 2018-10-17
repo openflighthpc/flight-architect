@@ -22,11 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'commands/each'
+require 'underware/commands/each'
 require 'spec_utils'
 require 'ostruct'
-require 'hash_mergers'
-require 'namespaces/alces'
+require 'underware/hash_mergers'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Commands::Each do
   include AlcesUtils

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'commands'
+require 'underware/commands'
 require 'fixtures/shared_context/overview'
 
 RSpec.describe Underware::Commands::Overview do

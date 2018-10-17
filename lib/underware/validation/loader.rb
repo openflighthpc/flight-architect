@@ -22,11 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'file_path'
-require 'validation/answer'
-require 'validation/configure'
-require 'validation/load_save_base'
-require 'data'
+require 'underware/file_path'
+require 'underware/validation/answer'
+require 'underware/validation/configure'
+require 'underware/validation/load_save_base'
+require 'underware/data'
 
 module Underware
   module Validation

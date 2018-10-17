@@ -23,9 +23,9 @@
 #==============================================================================
 
 require 'fakefs/safe'
-require 'constants'
+require 'underware/constants'
 require 'minimal_repo'
-require 'validation/configure'
+require 'underware/validation/configure'
 
 # XXX Reduce the hardcoded paths once sorted out Config/Constants situation.
 

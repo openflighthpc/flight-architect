@@ -23,7 +23,7 @@
 #==============================================================================
 
 require 'open-uri'
-require 'underware_log'
+require 'underware/underware_log'
 
 module Underware
   module Input

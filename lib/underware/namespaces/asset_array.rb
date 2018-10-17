@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'records/asset'
+require 'underware/records/asset'
 
 module Underware
   module Namespaces

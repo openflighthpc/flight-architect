@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 require 'yaml'
-require 'underware_log'
+require 'underware/underware_log'
 
 module Underware
   module Data

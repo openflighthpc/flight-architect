@@ -21,8 +21,8 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'exceptions'
-require 'data'
+require 'underware/exceptions'
+require 'underware/data'
 require 'dry-validation'
 
 module Underware

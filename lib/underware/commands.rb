@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'utils/dynamic_require'
-require 'command_helpers/base_command'
+require 'underware/utils/dynamic_require'
+require 'underware/command_helpers/base_command'
 
 Underware::Utils::DynamicRequire.relative('command_helpers')
 Underware::Utils::DynamicRequire.relative('commands')

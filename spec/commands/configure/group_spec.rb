@@ -24,7 +24,7 @@
 
 require 'spec_utils'
 require 'filesystem'
-require 'group_cache'
+require 'underware/group_cache'
 require 'alces_utils'
 
 RSpec.describe Underware::Commands::Configure::Group do

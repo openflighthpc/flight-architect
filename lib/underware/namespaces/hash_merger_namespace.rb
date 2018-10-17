@@ -1,10 +1,10 @@
 
 # frozen_string_literal: true
 
-require 'exceptions'
-require 'templating/renderer'
-require 'nodeattr_interface'
-require 'hash_mergers'
+require 'underware/exceptions'
+require 'underware/templating/renderer'
+require 'underware/nodeattr_interface'
+require 'underware/hash_mergers'
 
 module Underware
   module Namespaces

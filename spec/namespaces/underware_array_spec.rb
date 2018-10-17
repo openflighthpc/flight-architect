@@ -1,9 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/alces'
-require 'constants'
-require 'nodeattr_interface'
+require 'underware/namespaces/alces'
+require 'underware/constants'
+require 'underware/nodeattr_interface'
 
 ##
 # NOTE: alces.nodes is an UnderwareArray

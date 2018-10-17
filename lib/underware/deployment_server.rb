@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'network'
+require 'underware/network'
 
 module Underware
   module DeploymentServer

@@ -1,10 +1,10 @@
 
 # frozen_string_literal: true
 
-require 'file_path'
-require 'validation/loader'
-require 'data'
-require 'constants'
+require 'underware/file_path'
+require 'underware/validation/loader'
+require 'underware/data'
+require 'underware/constants'
 require 'active_support/core_ext/object/deep_dup'
 
 module Underware

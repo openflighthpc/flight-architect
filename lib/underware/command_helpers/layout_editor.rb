@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'validation/asset'
+require 'underware/validation/asset'
 
 module Underware
   module CommandHelpers

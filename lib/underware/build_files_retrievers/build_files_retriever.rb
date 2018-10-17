@@ -25,7 +25,7 @@
 require 'uri'
 require 'open-uri'
 
-require 'constants'
+require 'underware/constants'
 
 module Underware
   module BuildFilesRetrievers

@@ -23,8 +23,8 @@
 #==============================================================================
 require 'yaml'
 
-require 'commands'
-require 'cli_helper/dynamic_defaults'
+require 'underware/commands'
+require 'underware/cli_helper/dynamic_defaults'
 
 module Underware
   module CliHelper

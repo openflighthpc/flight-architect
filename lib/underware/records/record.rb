@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'file_path'
-require 'namespaces/asset_array'
+require 'underware/file_path'
+require 'underware/namespaces/asset_array'
 
 module Underware
   module Records

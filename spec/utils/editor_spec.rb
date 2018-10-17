@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'utils/editor'
+require 'underware/utils/editor'
 
 RSpec.describe Underware::Utils::Editor do
   let(:default_editor) { described_class::DEFAULT_EDITOR }

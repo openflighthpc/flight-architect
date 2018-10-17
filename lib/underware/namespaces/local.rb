@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'deployment_server'
+require 'underware/deployment_server'
 
 module Underware
   module Namespaces

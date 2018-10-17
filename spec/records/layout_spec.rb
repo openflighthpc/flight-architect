@@ -2,7 +2,7 @@
 
 require 'spec_utils'
 require 'shared_examples/record'
-require 'records/layout'
+require 'underware/records/layout'
 
 RSpec.describe Underware::Records::Layout do
   include AlcesUtils

@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'system_command'
+require 'underware/system_command'
 
 RSpec.describe Underware::SystemCommand do
   it 'runs the command and returns stdout' do

@@ -22,10 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'exceptions'
-require 'file_path'
-require 'validation/answer'
-require 'data'
+require 'underware/exceptions'
+require 'underware/file_path'
+require 'underware/validation/answer'
+require 'underware/data'
 
 module Underware
   module Validation

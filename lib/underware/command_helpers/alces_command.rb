@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'exceptions'
+require 'underware/exceptions'
 
 module Underware
   module CommandHelpers

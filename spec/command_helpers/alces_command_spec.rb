@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'command_helpers/alces_command'
+require 'underware/command_helpers/alces_command'
 require 'alces_utils'
 
 RSpec.describe Underware::CommandHelpers::AlcesCommand do

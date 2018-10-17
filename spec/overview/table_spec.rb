@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'overview/table'
+require 'underware/overview/table'
 require 'fixtures/shared_context/overview'
 
 RSpec.describe Underware::Overview::Table do

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'validation/configure'
+require 'underware/validation/configure'
 
 RSpec.describe Underware::QuestionTree do
   context 'with a nexted question hash' do

@@ -22,10 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 require 'filesystem'
-require 'commands/remove/group'
-require 'nodeattr_interface'
+require 'underware/commands/remove/group'
+require 'underware/nodeattr_interface'
 require 'ostruct'
-require 'validation/loader'
+require 'underware/validation/loader'
 require 'spec_utils'
 
 RSpec.describe Underware::Commands::Remove::Group do

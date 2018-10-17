@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'utils'
+require 'underware/utils'
 require 'fileutils'
 require 'tempfile'
 require 'highline'

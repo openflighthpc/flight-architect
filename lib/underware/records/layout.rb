@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'records/record'
+require 'underware/records/record'
 
 module Underware
   module Records

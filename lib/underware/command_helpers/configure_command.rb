@@ -22,10 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'command_helpers/base_command'
-require 'configurator'
+require 'underware/command_helpers/base_command'
+require 'underware/configurator'
 require 'active_support/core_ext/string/strip'
-require 'managed_file'
+require 'underware/managed_file'
 
 module Underware
   module CommandHelpers

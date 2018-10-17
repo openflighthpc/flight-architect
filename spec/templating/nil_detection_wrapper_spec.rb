@@ -1,9 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'templating/nil_detection_wrapper'
+require 'underware/templating/nil_detection_wrapper'
 require 'recursive_open_struct'
-require 'underware_log'
+require 'underware/underware_log'
 require 'alces_utils'
 
 RSpec.describe Underware::Templating::NilDetectionWrapper do

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'answers_table_creator'
+require 'underware/answers_table_creator'
 
 module Underware
   module Commands

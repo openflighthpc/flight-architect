@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'hash_mergers/hash_merger'
+require 'underware/hash_mergers/hash_merger'
 
 module Underware
   module HashMergers

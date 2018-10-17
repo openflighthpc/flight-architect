@@ -22,9 +22,9 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'command_helpers/configure_command'
-require 'constants'
-require 'group_cache'
+require 'underware/command_helpers/configure_command'
+require 'underware/constants'
+require 'underware/group_cache'
 
 module Underware
   module Commands

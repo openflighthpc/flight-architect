@@ -22,9 +22,9 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'nodeattr_interface'
+require 'underware/nodeattr_interface'
 require 'active_support/core_ext/string/strip'
-require 'data'
+require 'underware/data'
 
 module Underware
   module Commands

@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'command_helpers/base_command'
+require 'underware/command_helpers/base_command'
 require 'alces_utils'
 
 RSpec.describe Underware::UnderwareLog do

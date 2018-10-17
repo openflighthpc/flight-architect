@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_utils'
-require 'asset_builder'
+require 'underware/asset_builder'
 require 'alces_utils'
 
 RSpec.shared_examples 'pushes the asset' do

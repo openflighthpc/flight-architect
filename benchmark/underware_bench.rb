@@ -4,8 +4,8 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '../lib/underware')
 
 require 'ruby-prof'
-require 'cli'
-require 'namespaces/alces'
+require 'underware/cli'
+require 'underware/namespaces/alces'
 require 'ostruct'
 
 module Underware

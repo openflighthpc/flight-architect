@@ -23,7 +23,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'data'
+require 'underware/data'
 require 'filesystem'
 
 RSpec.describe Underware::Data do

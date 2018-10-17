@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'validation/loader'
-require 'data'
+require 'underware/validation/loader'
+require 'underware/data'
 
 # Note: the GroupCache won't actually be updated unless methods are called
 # within an `update` block or if `save` is explicitly called (see

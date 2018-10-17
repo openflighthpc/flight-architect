@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'alces_utils'
-require 'namespaces/alces'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Namespaces::AssetArray do
   subject { described_class.new(alces) }

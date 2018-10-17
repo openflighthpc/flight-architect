@@ -26,8 +26,8 @@
 require 'spec_utils'
 
 require 'filesystem'
-require 'answers_table_creator'
-require 'validation/loader'
+require 'underware/answers_table_creator'
+require 'underware/validation/loader'
 
 RSpec.describe Underware::AnswersTableCreator do
   include AlcesUtils

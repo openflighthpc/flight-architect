@@ -22,11 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'validation/configure'
-require 'file_path'
-require 'data'
+require 'underware/validation/configure'
+require 'underware/file_path'
+require 'underware/data'
 require 'filesystem'
-require 'constants'
+require 'underware/constants'
 require 'alces_utils'
 
 RSpec.describe Underware::Validation::Configure do

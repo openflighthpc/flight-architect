@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'group_cache'
+require 'underware/group_cache'
 require 'filesystem'
 require 'alces_utils'
 

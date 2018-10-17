@@ -21,8 +21,8 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'validation/answer'
-require 'data'
+require 'underware/validation/answer'
+require 'underware/data'
 require 'filesystem'
 require 'alces_utils'
 

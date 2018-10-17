@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'plugins/configure_questions_builder'
-require 'plugins/plugin'
+require 'underware/plugins/configure_questions_builder'
+require 'underware/plugins/plugin'
 
 module Underware
   module Plugins

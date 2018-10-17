@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'shared_examples/hash_merger_namespace'
-require 'namespaces/alces'
+require 'underware/namespaces/alces'
 require 'spec_utils'
 
 RSpec.describe Underware::Namespaces::Domain do

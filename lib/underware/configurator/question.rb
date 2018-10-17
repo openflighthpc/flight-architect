@@ -3,7 +3,7 @@
 
 require 'active_support/core_ext/module/delegation'
 require 'highline'
-require 'patches/highline'
+require 'underware/patches/highline'
 
 HighLine::Question.prepend Underware::Patches::HighLine::Question
 HighLine::Menu.prepend Underware::Patches::HighLine::Menu

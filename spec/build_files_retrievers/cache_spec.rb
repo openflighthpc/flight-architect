@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'input'
+require 'underware/input'
 require 'spec_utils'
 
 RSpec.describe Underware::BuildFilesRetrievers::Cache do

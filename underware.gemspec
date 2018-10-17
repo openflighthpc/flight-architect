@@ -45,7 +45,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'ruby-libvirt'
   spec.add_runtime_dependency 'rugged'
   spec.add_runtime_dependency 'terminal-table'
-  spec.add_runtime_dependency 'activesupport'
+  spec.add_runtime_dependency 'activesupport', '~> 5.1.6'
   spec.add_runtime_dependency 'rubytree'
 
   # Test dependencies.

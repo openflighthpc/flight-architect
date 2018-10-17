@@ -22,7 +22,7 @@ PATH
   remote: .
   specs:
     underware (0.1.0)
-      activesupport
+      activesupport (~> 5.1.6)
       colorize
       commander
       dry-validation
@@ -40,7 +40,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.2.1)
+    activesupport (5.1.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)

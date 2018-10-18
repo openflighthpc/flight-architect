@@ -170,20 +170,14 @@ class FileSystem
   def create_initial_directory_hierarchy
     [
       '/tmp',
-      '/etc',
-      '/var/log/underware',
-      '/var/lib/underware/rendered/kickstart',
       '/var/lib/underware/rendered/system',
-      '/var/lib/underware/events',
       '/var/lib/underware/cache/templates',
       '/var/lib/underware/repo',
       '/var/lib/underware/answers/groups',
       '/var/lib/underware/answers/nodes',
       '/var/lib/underware/assets',
       '/var/lib/underware/data',
-      '/var/named',
       '/var/log/underware',
-      File.join(Underware::Constants::UNDERWARE_INSTALL_PATH, 'templates'),
     ].each do |path|
       FileUtils.mkdir_p(path)
     end

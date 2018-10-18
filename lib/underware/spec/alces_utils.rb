@@ -91,6 +91,15 @@ module AlcesUtils
       $stderr = hash[:stderr] if hash[:stderr]
     end
 
+    # XXX This is only used in Metalware, so maybe it should live there now
+    # instead?
+    def kill_other_threads
+      Thread.list
+            .reject { |t| t == Thread.current }
+            .tap { |t| t.each(&:kill) }
+            .tap { |t| t.each(&:join) }
+    end
+
     def mock(test, *a, &b)
       mock_block = lambda do |*_inputs|
         mock_alces = AlcesUtils::Mock.new(self)
@@ -137,6 +146,12 @@ module AlcesUtils
 
     def validation_off
       stub_const('Underware::Constants::SKIP_VALIDATION', true)
+    end
+
+    # XXX This exists here for compatibility with old API, but probably should
+    # live in Metalware since it specifically stubs a Metalware constant.
+    def build_poll_sleep(time)
+      stub_const('Metalware::Constants::BUILD_POLL_SLEEP', time)
     end
 
     def with_blank_config_and_answer(namespace)

@@ -23,6 +23,7 @@
 #==============================================================================
 require 'yaml'
 require 'underware/underware_log'
+require 'active_support/core_ext/hash/keys'
 
 module Underware
   module Data

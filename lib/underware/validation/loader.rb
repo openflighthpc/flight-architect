@@ -25,8 +25,10 @@
 require 'underware/file_path'
 require 'underware/validation/answer'
 require 'underware/validation/configure'
+require 'underware/validation/loader'
 require 'underware/validation/load_save_base'
 require 'underware/data'
+require 'underware/plugins'
 
 module Underware
   module Validation

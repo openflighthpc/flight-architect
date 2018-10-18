@@ -25,6 +25,7 @@ require 'logger'
 require 'underware/exceptions'
 require 'fileutils'
 require 'underware/output'
+require 'underware/file_path'
 
 module Underware
   class UnderwareLog < Logger

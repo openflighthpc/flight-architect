@@ -27,7 +27,7 @@ require 'underware/file_path'
 require 'underware/data'
 require 'filesystem'
 require 'underware/constants'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Validation::Configure do
   include AlcesUtils

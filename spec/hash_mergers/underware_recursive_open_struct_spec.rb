@@ -4,7 +4,7 @@
 require 'underware/hash_mergers'
 require 'filesystem'
 require 'underware/namespaces/alces'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 module Underware
   module Namespaces

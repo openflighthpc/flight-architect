@@ -28,7 +28,7 @@ require 'highline'
 
 require 'underware/configurator'
 require 'underware/validation/loader'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Configurator do
   include AlcesUtils

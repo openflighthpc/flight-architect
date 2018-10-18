@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'underware/command_helpers/base_command'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::UnderwareLog do
   describe '#warn' do

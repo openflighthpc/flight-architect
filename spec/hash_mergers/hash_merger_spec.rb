@@ -6,7 +6,7 @@ require 'filesystem'
 require 'underware/data'
 require 'underware/constants'
 require 'spec_utils'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::HashMergers::HashMerger do
   include AlcesUtils

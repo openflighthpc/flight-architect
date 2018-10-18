@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe AlcesUtils do
   include described_class

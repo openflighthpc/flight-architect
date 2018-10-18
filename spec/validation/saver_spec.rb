@@ -27,7 +27,7 @@ require 'underware/validation/answer'
 require 'filesystem'
 require 'underware/file_path'
 require 'underware/data'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 module SaverSpec
   module TestingMethods

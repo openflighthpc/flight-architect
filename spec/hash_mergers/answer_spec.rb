@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'underware/hash_mergers'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 require 'underware/data'
 require 'underware/file_path'
 

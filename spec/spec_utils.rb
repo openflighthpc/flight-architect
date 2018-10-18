@@ -22,7 +22,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 require 'underware/constants'
 require 'underware/dependency'
 

@@ -23,7 +23,7 @@
 #==============================================================================
 
 require 'filesystem'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Plugin::List do
   include AlcesUtils

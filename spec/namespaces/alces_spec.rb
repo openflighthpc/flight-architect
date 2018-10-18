@@ -3,7 +3,7 @@
 
 require 'underware/namespaces/alces'
 require 'underware/hash_mergers'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Namespaces::Alces do
   # TODO: The Alces class should not be tested with AlcesUtils

@@ -5,7 +5,7 @@ require 'underware/utils'
 require 'filesystem'
 require 'shared_examples/asset_command_that_assigns_a_node'
 require 'shared_examples/record_edit_command'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Asset::Edit do
   include AlcesUtils

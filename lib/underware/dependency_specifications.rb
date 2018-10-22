@@ -27,6 +27,10 @@ module Underware
 
     def find_node(name)
       node = alces.nodes.find_by_name(name)
+      # XXX Does it make sense to raise this exception here? We raise the same
+      # exception in `NodeattrInterface#genders_for_node`, and not sure if this
+      # means the same thing; even if it does it's not at the same level of
+      # abstraction.
       raise NodeNotInGendersError, "Could not find node: #{name}" unless node
       node
     end

@@ -33,10 +33,6 @@ require 'underware/plugins'
 module Underware
   module Validation
     class Loader < LoadSaveBase
-      def initialize
-        @path = FilePath
-      end
-
       def question_tree
         # XXX Extract object for loading configure data?
         @questions ||=
@@ -48,12 +44,10 @@ module Underware
       end
 
       def group_cache
-        Data.load(path.group_cache)
+        Data.load(FilePath.group_cache)
       end
 
       private
-
-      attr_reader :path
 
       def answer(absolute_path, section)
         yaml = Data.load(absolute_path)

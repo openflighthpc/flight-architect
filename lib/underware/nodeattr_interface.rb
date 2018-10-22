@@ -76,14 +76,6 @@ module Underware
         true
       end
 
-      def nodeattr(command, format_error: true, mock_nodeattr: nil)
-        mock_nodeattr ||= Constants::NODEATTR_COMMAND
-        SystemCommand.run(
-          "#{mock_nodeattr} #{command}",
-          format_error: format_error
-        )
-      end
-
       private
 
       def nodes_to_genders
@@ -92,6 +84,14 @@ module Underware
           .map(&:split)
           .to_h
           .transform_values { |groups| groups.split(',') }
+      end
+
+      def nodeattr(command, format_error: true, mock_nodeattr: nil)
+        mock_nodeattr ||= Constants::NODEATTR_COMMAND
+        SystemCommand.run(
+          "#{mock_nodeattr} #{command}",
+          format_error: format_error
+        )
       end
     end
   end

@@ -41,13 +41,6 @@ module Underware
       stub_const(nodeattr_command, "nodeattr -f #{genders_path}")
     end
 
-    def use_unit_test_config
-      stub_const(
-        'Underware::Constants::DEFAULT_CONFIG_PATH',
-        fixtures_config('unit-test.yaml')
-      )
-    end
-
     def use_mock_determine_hostip_script
       stub_const(
         'Underware::Constants::UNDERWARE_INSTALL_PATH',

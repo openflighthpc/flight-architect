@@ -41,7 +41,6 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
       FileSystem.root_setup do |fs|
         fs.with_clone_fixture('configs/unit-test.yaml')
       end
-      use_unit_test_config
       allow(Underware::Input).to receive(:download)
         .and_wrap_original do |_, _, to_path|
         FileUtils.touch(to_path)

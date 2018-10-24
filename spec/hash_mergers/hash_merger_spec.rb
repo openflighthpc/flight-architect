@@ -15,10 +15,8 @@ RSpec.describe Underware::HashMergers::HashMerger do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      default_config_path = Underware::FilePath.default_config
       fs.with_repo_fixtures('merged_hash')
       fs.with_answer_fixtures('merged_hash/answers')
-      fs.with_fixtures('configs/validation-off.yaml', at: default_config_path)
     end
   end
 

@@ -181,9 +181,6 @@ class FileSystem
     ].each do |path|
       FileUtils.mkdir_p(path)
     end
-
-    FileUtils.mkdir_p Underware::Constants::UNDERWARE_CONFIGS_PATH
-    FileUtils.touch Underware::Constants::DEFAULT_CONFIG_PATH
   end
 
   # Print every directory and file loaded in the FakeFS.

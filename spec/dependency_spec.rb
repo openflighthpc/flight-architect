@@ -37,11 +37,11 @@ RSpec.describe Underware::Dependency do
 
   let(:filesystem) { FileSystem.setup }
 
-  def enforce_dependencies(dependencies_hash)
+  def enforce_dependencies(dependency_hash)
     filesystem.test do |_fs|
       Underware::Dependency.new(
         command_input: 'test',
-        dependency_hash: dependencies_hash
+        dependency_hash: dependency_hash
       ).enforce
     end
   end

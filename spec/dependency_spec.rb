@@ -41,6 +41,7 @@ RSpec.describe Underware::Dependency do
     filesystem.test do |_fs|
       Underware::Dependency.new(
         command_input: 'test',
+        repo_path: Underware::FilePath.repo,
         dependency_hash: dependency_hash
       ).enforce
     end

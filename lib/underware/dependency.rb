@@ -27,11 +27,12 @@ require 'underware/validation/loader'
 
 module Underware
   class Dependency
-    def initialize(command_input:, dependency_hash: {})
+    def initialize(command_input:, repo_path:, dependency_hash: {})
       @dependency_hash = dependency_hash
       @optional_dependency_hash = @dependency_hash.delete(:optional)
       @optional_dependency_hash ||= {}
       @command = command_input
+      @repo_path = repo_path
     end
 
     def enforce
@@ -41,7 +42,7 @@ module Underware
 
     private
 
-    attr_reader :command
+    attr_reader :command, :repo_path
 
     def run_dependencies(dep_hash, optional = false)
       dep_hash.each do |dep, values|
@@ -111,8 +112,12 @@ module Underware
       path = begin
         case dep
         when :repo
-          File.join(FilePath.repo, value)
+          # When checking `repo` dependencies, use the repo at the `repo_path`
+          # passed in at initialization.
+          File.join(repo_path, value)
         when :configure
+          # Configuration happens in Underware, so always check Underware paths
+          # when checking `configure` dependencies.
           File.join(FilePath.answer_files, value)
         else
           msg = "Could not generate file path for dependency #{dep}"

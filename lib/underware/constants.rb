@@ -30,11 +30,12 @@ module Underware
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
 
     UNDERWARE_DATA_PATH = '/var/lib/underware'
-    CACHE_PATH = File.join(UNDERWARE_DATA_PATH, 'cache')
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_DATA_PATH, 'data')
-    HUNTER_PATH = File.join(NAMESPACE_DATA_PATH, 'hunter.yaml')
-    GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
     RENDERED_DIR_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered')
+    GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
+
+    CACHE_PATH = File.join(UNDERWARE_DATA_PATH, 'cache')
+    GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
     PLUGINS_CACHE_PATH = File.join(CACHE_PATH, 'plugins.yaml')
 
     # XXX For now Underware needs some knowledge of Metalware, so it can
@@ -50,8 +51,6 @@ module Underware
 
     NODEATTR_COMMAND = 'nodeattr'
 
-    GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
-
     DRY_VALIDATION_ERRORS_PATH = File.join(UNDERWARE_INSTALL_PATH,
                                            'lib/underware/validation',
                                            'errors.yaml')
@@ -61,8 +60,6 @@ module Underware
 
     HASH_MERGER_DATA_STRUCTURE =
       Underware::HashMergers::UnderwareRecursiveOpenStruct
-
-    BUILD_POLL_SLEEP = 10
 
     # This only exists for legacy purposes so we have a constant we can stub to
     # skip validations; ideally we would handle wanting to test things without

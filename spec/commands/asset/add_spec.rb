@@ -30,7 +30,7 @@ RSpec.describe Underware::Commands::Asset::Add do
   end
 
   context 'with sub asseting' do
-    include AlcesUtils
+    include Underware::AlcesUtils
 
     let(:mocked_highline) do
       instance_double(HighLine).tap do |highline|
@@ -45,7 +45,7 @@ RSpec.describe Underware::Commands::Asset::Add do
       "#{parent_asset_name}-#{sub_asset_name_fragment}"
     end
 
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       FileSystem.root_setup(&:with_asset_types)
       allow(Underware::Utils::Editor).to receive(:open)
       allow(HighLine).to receive(:new).and_return(mocked_highline)

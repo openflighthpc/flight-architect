@@ -16,7 +16,7 @@ RSpec.describe Underware::UnderwareLog do
     end
 
     def run_test_command(**options)
-      AlcesUtils.redirect_std(:stderr) do
+      Underware::AlcesUtils.redirect_std(:stderr) do
         Underware::Utils.run_command(
           Underware::Commands::TestCommand, **options
         )

@@ -10,11 +10,11 @@ require 'recursive_open_struct'
 
 RSpec.describe Underware::Namespaces::Node do
   context 'with AlcesUtils' do
-    include AlcesUtils
+    include Underware::AlcesUtils
 
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       hexadecimal_ip(mock_node('test_node'))
-      mock_group(AlcesUtils.default_group)
+      mock_group(Underware::AlcesUtils.default_group)
     end
 
     subject { alces.nodes.first }
@@ -147,7 +147,7 @@ RSpec.describe Underware::Namespaces::Node do
       let(:cache) { Underware::Cache::Asset.new }
 
       context 'with an assigned asset' do
-        AlcesUtils.mock(self, :each) do
+        Underware::AlcesUtils.mock(self, :each) do
           create_asset(asset_name, content)
           cache.assign_asset_to_node(asset_name, node)
           cache.save
@@ -206,7 +206,7 @@ RSpec.describe Underware::Namespaces::Node do
 
       # NOTE: Must be after fs setup otherwise the initially spoofed
       # genders file will be deleted
-      AlcesUtils.spoof_nodeattr(self)
+      Underware::AlcesUtils.spoof_nodeattr(self)
 
       # Enable/disable plugins for node as needed.
       enabled_identifier = \

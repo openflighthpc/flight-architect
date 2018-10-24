@@ -4,7 +4,7 @@ require 'shared_examples/record'
 require 'underware/records/layout'
 
 RSpec.describe Underware::Records::Layout do
-  include AlcesUtils
+  include Underware::AlcesUtils
   before { allow(Underware::Utils::Editor).to receive(:open) }
 
   file_path_proc = proc do |types_dir, name|

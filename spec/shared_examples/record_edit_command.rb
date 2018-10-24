@@ -3,7 +3,7 @@
 require 'underware/spec/alces_utils'
 
 RSpec.shared_examples 'record edit command' do
-  include AlcesUtils
+  include Underware::AlcesUtils
   # Stop the editor from running the bash command
   before { allow(Underware::Utils::Editor).to receive(:open) }
 

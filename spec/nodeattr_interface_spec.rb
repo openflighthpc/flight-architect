@@ -26,7 +26,7 @@ require 'underware/nodeattr_interface'
 require 'underware/exceptions'
 
 RSpec.describe Underware::NodeattrInterface do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   context 'with setup1 genders' do
     before do

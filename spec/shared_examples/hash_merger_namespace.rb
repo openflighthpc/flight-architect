@@ -19,7 +19,7 @@ RSpec.shared_examples \
   end
 
   describe '#to_h' do
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       config(subject, test_config)
       answer(subject, test_answer)
     end

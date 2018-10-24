@@ -29,7 +29,7 @@ require 'underware/constants'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Validation::Configure do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   before { FileSystem.root_setup(&:with_validation_error_file) }
 

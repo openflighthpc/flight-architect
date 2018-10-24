@@ -3,7 +3,7 @@
 require 'underware/spec/alces_utils'
 
 RSpec.shared_examples 'record add command' do
-  include AlcesUtils
+  include Underware::AlcesUtils
   # Stops the editor from running the bash command
   before { allow(Underware::Utils::Editor).to receive(:open) }
 
@@ -45,7 +45,7 @@ RSpec.shared_examples 'record add command' do
   end
 
   context 'with a layout' do
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       FileSystem.root_setup(&:with_minimal_repo)
       create_layout(layout, {})
     end

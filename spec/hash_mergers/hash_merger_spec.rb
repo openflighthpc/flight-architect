@@ -7,9 +7,9 @@ require 'underware/constants'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::HashMergers::HashMerger do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     validation_off
   end
 

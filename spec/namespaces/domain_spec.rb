@@ -5,7 +5,7 @@ require 'shared_examples/hash_merger_namespace'
 require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Namespaces::Domain do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { alces.domain }
 

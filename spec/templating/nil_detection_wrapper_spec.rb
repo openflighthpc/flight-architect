@@ -7,7 +7,7 @@ require 'underware/underware_log'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Templating::NilDetectionWrapper do
-  AlcesUtils.start self
+  Underware::AlcesUtils.start self
 
   def build_wrapper_object(obj)
     Underware::Templating::NilDetectionWrapper.wrap(obj).receiver

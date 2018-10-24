@@ -32,7 +32,7 @@ require 'fileutils'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Dependency do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:filesystem) { FileSystem.setup }
 

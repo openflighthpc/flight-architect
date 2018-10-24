@@ -3,14 +3,14 @@
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Asset::Unlink do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:node_name) { 'test_node' }
   let(:node) { alces.nodes.find_by_name(node_name) }
   let(:content) { { node: { node_name.to_sym => asset_name } } }
   let(:cache) { Underware::Cache::Asset.new }
 
-  AlcesUtils.mock(self, :each) do
+  Underware::AlcesUtils.mock(self, :each) do
     mock_node(node_name)
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Underware::Commands::Asset::Unlink do
       { node: { node_name.to_sym => asset_name } }
     end
 
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       create_asset(asset_name, asset_content)
       Underware::Data.dump(cache_path, cache_content)
     end

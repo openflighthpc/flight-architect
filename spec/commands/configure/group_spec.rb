@@ -26,7 +26,7 @@ require 'underware/group_cache'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Configure::Group do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   def run_configure_group(group)
     Underware::Utils.run_command(

@@ -7,11 +7,11 @@ require 'underware/data'
 require 'underware/file_path'
 
 RSpec.describe Underware::HashMergers::Answer do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  let(:group) { AlcesUtils.mock(self) { mock_group('new_group') } }
+  let(:group) { Underware::AlcesUtils.mock(self) { mock_group('new_group') } }
   let(:node) do
-    AlcesUtils.mock(self) { mock_node('new_node', group.name) }
+    Underware::AlcesUtils.mock(self) { mock_node('new_node', group.name) }
   end
 
   let(:identifier) { :question_identifier }

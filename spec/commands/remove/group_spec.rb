@@ -27,9 +27,9 @@ require 'ostruct'
 require 'underware/validation/loader'
 
 RSpec.describe Underware::Commands::Remove::Group do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     validation_off
   end
 

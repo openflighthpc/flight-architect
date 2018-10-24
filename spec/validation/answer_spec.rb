@@ -26,7 +26,7 @@ require 'underware/data'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Validation::Answer do
-  include AlcesUtils
+  include Underware::AlcesUtils
   let(:question_tree) do
     {
       domain: [

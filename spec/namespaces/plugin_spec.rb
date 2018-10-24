@@ -3,7 +3,7 @@
 
 
 RSpec.describe Underware::Namespaces::Plugin do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { described_class.new(plugin, node: node) }
 

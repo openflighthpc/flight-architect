@@ -28,7 +28,7 @@ require 'underware/hash_mergers'
 require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Commands::Each do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   before do
     FileSystem.root_setup do |fs|

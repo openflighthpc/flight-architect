@@ -3,7 +3,7 @@
 require 'underware/input'
 
 RSpec.describe Underware::BuildFilesRetrievers::Cache do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { described_class.new }
 
@@ -24,7 +24,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
     }
   end
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     config(mock_node(test_node_name), files: test_files_hash)
   end
 

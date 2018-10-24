@@ -157,5 +157,5 @@ RSpec.configure do |config|
   end
 
   # Make our test helper functions available in all tests.
-  config.include SpecUtils
+  config.include Underware::SpecUtils
 end

@@ -27,7 +27,7 @@ require 'underware/validation/loader'
 
 module Underware
   class Dependency
-    def initialize(command_input, dependency_hash = {})
+    def initialize(command_input:, dependency_hash: {})
       @dependency_hash = dependency_hash
       @optional_dependency_hash = @dependency_hash.delete(:optional)
       @optional_dependency_hash ||= {}

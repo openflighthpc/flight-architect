@@ -73,7 +73,10 @@ module Underware
       end
 
       def enforce_dependency
-        Dependency.new(command_name, dependency_hash).enforce
+        Dependency.new(
+          command_input: command_name,
+          dependency_hash: dependency_hash
+        ).enforce
       end
 
       def loader

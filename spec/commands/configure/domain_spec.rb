@@ -1,8 +1,6 @@
 
 # frozen_string_literal: true
 
-require 'spec_utils'
-require 'filesystem'
 
 RSpec.describe Underware::Commands::Configure::Domain do
   def run_configure_domain

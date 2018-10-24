@@ -7,7 +7,6 @@ require 'underware/namespaces/alces'
 require 'underware/constants'
 require 'underware/hash_mergers'
 require 'recursive_open_struct'
-require 'spec_utils'
 
 RSpec.describe Underware::Namespaces::Node do
   context 'with AlcesUtils' do

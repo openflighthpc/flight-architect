@@ -2,7 +2,6 @@
 
 require 'underware/commands'
 require 'underware/utils'
-require 'filesystem'
 require 'shared_examples/asset_command_that_assigns_a_node'
 require 'shared_examples/record_edit_command'
 require 'underware/spec/alces_utils'

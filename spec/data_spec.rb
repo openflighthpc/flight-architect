@@ -24,7 +24,6 @@
 #==============================================================================
 
 require 'underware/data'
-require 'filesystem'
 
 RSpec.describe Underware::Data do
   let(:data_file_path) { '/path/to/some_data.yaml' }

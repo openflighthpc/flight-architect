@@ -22,8 +22,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'spec_utils'
-require 'filesystem'
 require 'underware/group_cache'
 require 'underware/spec/alces_utils'
 

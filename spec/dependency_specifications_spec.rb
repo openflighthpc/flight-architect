@@ -23,7 +23,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'spec_utils'
 require 'underware/dependency_specifications'
 require 'underware/namespaces/alces'
 

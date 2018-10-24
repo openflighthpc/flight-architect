@@ -24,7 +24,6 @@
 
 require 'underware/validation/saver'
 require 'underware/validation/answer'
-require 'filesystem'
 require 'underware/file_path'
 require 'underware/data'
 require 'underware/spec/alces_utils'

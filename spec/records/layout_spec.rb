@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_utils'
 require 'shared_examples/record'
 require 'underware/records/layout'
 

@@ -23,7 +23,6 @@
 #==============================================================================
 
 require 'underware/group_cache'
-require 'filesystem'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::GroupCache do

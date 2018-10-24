@@ -4,8 +4,6 @@
 require 'underware/namespaces/alces'
 require 'active_support/core_ext/module/delegation'
 require 'recursive_open_struct'
-require 'spec_utils'
-require 'filesystem'
 
 module AlcesUtils
   GENDERS_FILE_REGEX = /-f [[:graph:]]+/

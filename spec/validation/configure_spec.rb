@@ -25,7 +25,6 @@
 require 'underware/validation/configure'
 require 'underware/file_path'
 require 'underware/data'
-require 'filesystem'
 require 'underware/constants'
 require 'underware/spec/alces_utils'
 

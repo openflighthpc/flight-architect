@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'filesystem'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Asset::Unlink do

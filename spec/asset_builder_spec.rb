@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_utils'
 require 'underware/asset_builder'
 require 'underware/spec/alces_utils'
 

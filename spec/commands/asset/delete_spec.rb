@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'underware/cache/asset'
-require 'filesystem'
 require 'underware/commands'
 require 'underware/utils'
 require 'underware/spec/alces_utils'

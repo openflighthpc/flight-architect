@@ -1,8 +1,6 @@
 
 # frozen_string_literal: true
 
-require 'filesystem'
-require 'spec_utils'
 
 RSpec.describe Underware::CommandHelpers::ConfigureCommand do
   TEST_COMMAND_NAME = :testcommand

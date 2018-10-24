@@ -1,8 +1,6 @@
 
 # frozen_string_literal: true
 
-require 'spec_utils'
-require 'filesystem'
 require 'underware/group_cache'
 
 RSpec.describe Underware::Commands::Configure::Node do

@@ -2,10 +2,8 @@
 # frozen_string_literal: true
 
 require 'underware/hash_mergers'
-require 'filesystem'
 require 'underware/data'
 require 'underware/constants'
-require 'spec_utils'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::HashMergers::HashMerger do

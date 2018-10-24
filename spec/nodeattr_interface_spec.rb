@@ -23,9 +23,7 @@
 #==============================================================================
 
 require 'underware/nodeattr_interface'
-require 'spec_utils'
 require 'underware/exceptions'
-require 'filesystem'
 
 RSpec.describe Underware::NodeattrInterface do
   include AlcesUtils

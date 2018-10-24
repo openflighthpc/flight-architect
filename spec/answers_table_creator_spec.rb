@@ -23,9 +23,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'spec_utils'
-
-require 'filesystem'
 require 'underware/answers_table_creator'
 require 'underware/validation/loader'
 

@@ -2,7 +2,6 @@
 
 require 'underware/spec/alces_utils'
 require 'underware/cache/asset'
-require 'filesystem'
 
 RSpec.describe Underware::Commands::Asset::Link do
   include AlcesUtils

@@ -23,7 +23,6 @@
 #==============================================================================
 
 require 'underware/commands/each'
-require 'spec_utils'
 require 'ostruct'
 require 'underware/hash_mergers'
 require 'underware/namespaces/alces'

@@ -23,7 +23,6 @@
 #==============================================================================
 require 'underware/validation/answer'
 require 'underware/data'
-require 'filesystem'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Validation::Answer do

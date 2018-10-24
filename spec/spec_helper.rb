@@ -50,11 +50,11 @@ SimpleCov.start 'underware'
 # simplecov, even entirely untested ones.
 require 'underware/cli'
 
+require 'spec_utils'
 require 'filesystem'
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
-require 'spec_utils'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

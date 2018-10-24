@@ -29,7 +29,6 @@ require 'ostruct'
 
 require 'spec_helper'
 require 'fileutils'
-require 'filesystem'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Dependency do

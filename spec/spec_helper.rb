@@ -50,7 +50,7 @@ SimpleCov.start 'underware'
 # simplecov, even entirely untested ones.
 require 'underware/cli'
 
-require 'spec_utils'
+require 'underware/spec/spec_utils'
 require 'filesystem'
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')

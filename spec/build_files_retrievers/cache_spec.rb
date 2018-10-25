@@ -65,7 +65,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           name: 'file_in_repo',
           template_path: some_path,
           rendered_path: data_path + file_path,
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/file_in_repo'
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/file_in_repo'
         )
 
         expect(retrieved_files[:namespace01][1]).to eq(
@@ -74,7 +74,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           template_path: other_path,
           rendered_path: data_path +
             '/rendered/testnode01/files/repo/namespace01/path',
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/path'
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/path'
         )
 
         expect(retrieved_files[:namespace01][2]).to eq(
@@ -84,7 +84,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
             hash_url(test_url),
           rendered_path: data_path +
             '/rendered/testnode01/files/repo/namespace01/url',
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/url'
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/url'
         )
       end
 
@@ -198,7 +198,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           name: plugin_file_name,
           template_path: absolute_plugin_file_path,
           rendered_path: data_path + "/rendered/#{relative_rendered_path}",
-          url: "http://1.2.3.4/underware/#{relative_rendered_path}",
+          url: "http://1.2.3.4/metalware/#{relative_rendered_path}",
         }]
       )
     end

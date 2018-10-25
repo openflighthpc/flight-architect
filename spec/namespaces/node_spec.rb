@@ -98,12 +98,12 @@ RSpec.describe Underware::Namespaces::Node do
     end
 
     it 'has a kickstart_url' do
-      expected = "http://1.2.3.4/underware/kickstart/#{node_name}"
+      expected = "http://1.2.3.4/metalware/kickstart/#{node_name}"
       expect(node.kickstart_url).to eq(expected)
     end
 
     it 'has a build complete url' do
-      exp = "http://1.2.3.4/underware/exec/kscomplete.php?name=#{node_name}"
+      exp = "http://1.2.3.4/metalware/exec/kscomplete.php?name=#{node_name}"
       expect(node.build_complete_url).to eq(exp)
     end
 

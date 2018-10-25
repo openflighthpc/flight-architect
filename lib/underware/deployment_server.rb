@@ -24,6 +24,13 @@
 
 require 'underware/network'
 
+# XXX All the URLs here have paths under `/metalware`, and only make sense/have
+# any chance of resolving when Metalware (and the web server set up by its
+# repo) is also installed; they must live here though as they need to be
+# accessed via the Underware namespaces. Long term there might be a better way
+# for this to be setup; maybe Underware should detect Metalware is installed
+# and warn/error if these values are accessed when it is not?
+
 module Underware
   module DeploymentServer
     class << self
@@ -64,7 +71,7 @@ module Underware
       private
 
       def url(url_path)
-        full_path = File.join('underware', url_path)
+        full_path = File.join('metalware', url_path)
         URI.join("http://#{ip}", full_path).to_s
       end
 

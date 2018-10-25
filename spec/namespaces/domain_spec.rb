@@ -18,12 +18,12 @@ RSpec.describe Underware::Namespaces::Domain do
   end
 
   it 'has a hosts url' do
-    url = 'http://1.2.3.4/underware/system/hosts'
+    url = 'http://1.2.3.4/metalware/system/hosts'
     expect(alces.domain.hosts_url).to eq(url)
   end
 
   it 'has a genders url' do
-    url = 'http://1.2.3.4/underware/system/genders'
+    url = 'http://1.2.3.4/metalware/system/genders'
     expect(alces.domain.genders_url).to eq(url)
   end
 end

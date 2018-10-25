@@ -61,13 +61,19 @@ module Underware
         template = template_path(identifier)
 
         if File.exist?(template)
+          rendered_path = FilePath.rendered_build_file_path(
+            relative_namespace_files_dir, section, name
+          )
+          url = DeploymentServer.build_file_url(
+            relative_namespace_files_dir,
+            section,
+            name
+          )
           success_file_hash(
             identifier,
             template_path: template,
-            rendered_path: FilePath.rendered_build_file_path(
-              relative_namespace_files_dir, section, name
-            ),
-            url: DeploymentServer.build_file_url(relative_namespace_files_dir, section, name)
+            rendered_path: rendered_path,
+            url: url
           )
         else
           error_file_hash(

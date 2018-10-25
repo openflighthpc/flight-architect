@@ -100,11 +100,6 @@ mkdir -p /var/lib/underware/answers/{groups,nodes}
 mkdir -p /var/lib/underware/assets
 mkdir -p /var/lib/underware/data
 
-# Link hosts files in to Underware data dir. This allows the Underware-rendered
-# hosts file to be used when using this machine, and this may also be served by
-# the Metalware deployment server if Metalware is also installed.
-ln -s /etc/hosts /var/lib/underware/rendered/system/
-
 mkdir -p "${target}"
 cp -R "${source}/"{Gemfile,Gemfile.lock,bin,etc,libexec,lib,data} "${target}"
 cp ${source}/etc/logrotate.d/* /etc/logrotate.d/

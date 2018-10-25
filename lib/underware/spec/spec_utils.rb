@@ -58,10 +58,6 @@ module Underware
 
     # Other shared utils.
 
-    def fixtures_config(config_file)
-      File.join(FIXTURES_PATH, 'configs', config_file)
-    end
-
     def enable_output_to_stderr
       $rspec_suppress_output_to_stderr = false
     end

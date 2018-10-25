@@ -77,7 +77,7 @@ module Underware
       end
 
       # TODO: Change input from node to namespace
-      def template_path(template_type, node:)
+      def repo_template_path(template_type, node:)
         File.join(
           repo,
           template_type.to_s,

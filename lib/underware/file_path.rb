@@ -88,17 +88,13 @@ module Underware
         event(node_namespace, 'complete')
       end
 
-      def rendered_build_file_path(rendered_dir, section, file_name)
+      def rendered_build_file_path(relative_namespace_files_dir, section, file_name)
         File.join(
-          rendered_files,
           rendered_dir,
+          relative_namespace_files_dir,
           section.to_s,
           file_name
         )
-      end
-
-      def rendered_files
-        rendered_dir
       end
 
       def define_constant_paths

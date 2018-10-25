@@ -65,9 +65,9 @@ module Underware
             identifier,
             template_path: template,
             rendered_path: FilePath.rendered_build_file_path(
-              rendered_dir, section, name
+              relative_namespace_files_dir, section, name
             ),
-            url: DeploymentServer.build_file_url(rendered_dir, section, name)
+            url: DeploymentServer.build_file_url(relative_namespace_files_dir, section, name)
           )
         else
           error_file_hash(
@@ -117,7 +117,7 @@ module Underware
         end
       end
 
-      def rendered_dir
+      def relative_namespace_files_dir
         File.join(node.name, 'files', rendered_sub_dir)
       end
 

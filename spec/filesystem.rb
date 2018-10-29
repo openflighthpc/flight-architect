@@ -165,8 +165,8 @@ class FileSystem
     FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)
   end
 
-  # Create same directory hierarchy that would be created by a Underware
-  # install.
+  # Create same directory hierarchy that would be created by an Underware
+  # install (without directories unneeded for any tests to pass).
   def create_initial_directory_hierarchy
     [
       '/tmp',

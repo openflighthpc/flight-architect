@@ -31,7 +31,9 @@ module Underware
 
     UNDERWARE_DATA_PATH = '/var/lib/underware'
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_DATA_PATH, 'data')
-    RENDERED_DIR_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered')
+    # Genders is now (at least as of right now) the only file rendered
+    # internally by Underware itself, and so will now be the only file within
+    # `/var/lib/underware/rendered`.
     GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
 
     CACHE_PATH = File.join(UNDERWARE_DATA_PATH, 'cache')

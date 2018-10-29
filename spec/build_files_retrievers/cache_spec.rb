@@ -65,8 +65,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           raw: 'some/file_in_repo',
           name: 'file_in_repo',
           template_path: repo_file_path,
-          rendered_path: data_path +
-            '/rendered/testnode01/files/repo/namespace01/file_in_repo',
+          relative_rendered_path: 'testnode01/files/repo/namespace01/file_in_repo',
           url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/file_in_repo'
         )
         # Test gives correct hash for file specified by absolute path.
@@ -74,8 +73,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           raw: '/some/other/path',
           name: 'path',
           template_path: absolute_file_path,
-          rendered_path: data_path +
-            '/rendered/testnode01/files/repo/namespace01/path',
+          relative_rendered_path: 'testnode01/files/repo/namespace01/path',
           url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/path'
         )
         # Test gives correct hash for file specified by URL.
@@ -84,8 +82,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           name: 'url',
           template_path: '/var/lib/underware/cache/templates/' +
             hash_url(test_url),
-          rendered_path: data_path +
-            '/rendered/testnode01/files/repo/namespace01/url',
+          relative_rendered_path: 'testnode01/files/repo/namespace01/url',
           url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/url'
         )
       end
@@ -199,7 +196,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           raw: plugin_file_path,
           name: plugin_file_name,
           template_path: absolute_plugin_file_path,
-          rendered_path: data_path + "/rendered/#{relative_rendered_path}",
+          relative_rendered_path: relative_rendered_path,
           url: "http://1.2.3.4/metalware/#{relative_rendered_path}",
         }]
       )

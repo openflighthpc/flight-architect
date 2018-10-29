@@ -15,9 +15,9 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 # https://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile)
 gemspec
 
-gem 'commander', git: 'https://github.com/alces-software/commander'
-gem 'pcap', git: 'https://github.com/alces-software/ruby-pcap.git'
+gem 'commander', github: 'alces-software/commander'
+gem 'pcap', github: 'alces-software/ruby-pcap'
 
 # Forked of a fork containing a logger fix. The main gem can be used
 # again once StructuredWarnings is removed
-gem 'rubytree', git: 'https://github.com/alces-software/RubyTree'
+gem 'rubytree', github: 'alces-software/RubyTree'

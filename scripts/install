@@ -101,7 +101,7 @@ mkdir -p /var/lib/underware/assets
 mkdir -p /var/lib/underware/data
 
 mkdir -p "${target}"
-cp -R "${source}/"{Gemfile,Gemfile.lock,bin,etc,libexec,lib,data} "${target}"
+cp -R "${source}/"{Gemfile,Gemfile.lock,underware.gemspec,bin,etc,libexec,lib,data} "${target}"
 cp ${source}/etc/logrotate.d/* /etc/logrotate.d/
 say_done $?
 

@@ -36,7 +36,7 @@ module Underware
 
     def run
       program :name, 'underware'
-      program :version, 'alpha-01'
+      program :version, VERSION
       program :description, <<-EOF.squish
         Tool for managing standard config hierarchy and template rendering
         under-lying Alces clusters and other Alces tools

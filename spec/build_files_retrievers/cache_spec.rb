@@ -49,34 +49,36 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
 
     context 'when everything works' do
       it 'returns the correct files object' do
-        file_path = '/rendered/testnode01/files/repo/namespace01/file_in_repo'
-        some_path = File
-                    .join(Underware::FilePath.repo, 'files/some/file_in_repo')
-        FileUtils.mkdir_p File.dirname(some_path)
-        FileUtils.touch(some_path)
-        other_path = '/some/other/path'
-        FileUtils.mkdir_p File.dirname(other_path)
-        FileUtils.touch(other_path)
+        repo_file_path = File.join(
+          Underware::FilePath.repo, 'files/some/file_in_repo'
+        )
+        FileUtils.mkdir_p File.dirname(repo_file_path)
+        FileUtils.touch(repo_file_path)
+        absolute_file_path = '/some/other/path'
+        FileUtils.mkdir_p File.dirname(absolute_file_path)
+        FileUtils.touch(absolute_file_path)
 
         retrieved_files = subject.retrieve(test_node)
 
+        # Test gives correct hash for file specified relative to repo.
         expect(retrieved_files[:namespace01][0]).to eq(
           raw: 'some/file_in_repo',
           name: 'file_in_repo',
-          template_path: some_path,
-          rendered_path: data_path + file_path,
+          template_path: repo_file_path,
+          rendered_path: data_path +
+            '/rendered/testnode01/files/repo/namespace01/file_in_repo',
           url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/file_in_repo'
         )
-
+        # Test gives correct hash for file specified by absolute path.
         expect(retrieved_files[:namespace01][1]).to eq(
           raw: '/some/other/path',
           name: 'path',
-          template_path: other_path,
+          template_path: absolute_file_path,
           rendered_path: data_path +
             '/rendered/testnode01/files/repo/namespace01/path',
           url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/path'
         )
-
+        # Test gives correct hash for file specified by URL.
         expect(retrieved_files[:namespace01][2]).to eq(
           raw: test_url,
           name: 'url',

@@ -147,12 +147,6 @@ module Underware
         stub_const('Underware::Constants::SKIP_VALIDATION', true)
       end
 
-      # XXX This exists here for compatibility with old API, but probably should
-      # live in Metalware since it specifically stubs a Metalware constant.
-      def build_poll_sleep(time)
-        stub_const('Metalware::Constants::BUILD_POLL_SLEEP', time)
-      end
-
       def with_blank_config_and_answer(namespace)
         allow(namespace).to receive(:config).and_return(OpenStruct.new)
         allow(namespace).to receive(:answer).and_return(OpenStruct.new)

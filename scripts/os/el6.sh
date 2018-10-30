@@ -21,11 +21,7 @@
 #==============================================================================
 install_runtime_prerequisites() {
     # ruby: openssl readline zlib libffi
-    # hunter: libpcap
-    # console/ipmi/power: ipmitool
     yum -e0 -y install openssl readline zlib libffi && \
-        yum -e0 -y install libpcap && \
-        yum -e0 -y install ipmitool && \
         yum -e0 -y install git
 }
 
@@ -35,10 +31,6 @@ install_base_prerequisites() {
 
 install_build_prerequisites() {
     # ruby: openssl readline zlib libffi
-    # hunter: libpcap
-    # ruby-libvirt: libvirt-devel gnutls-utils libvirt-client
     yum -e0 -y groupinstall "Development Tools" && \
-        yum -e0 -y install openssl-devel readline-devel zlib-devel libffi-devel && \
-        yum -e0 -y install libpcap-devel && \
-        yum -e0 -y install libvirt-devel gnutls-utils libvirt-client
+        yum -e0 -y install openssl-devel readline-devel zlib-devel libffi-devel
 }

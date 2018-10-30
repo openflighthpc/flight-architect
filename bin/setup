@@ -40,14 +40,8 @@ rvm rvmrc warning ignore allGemfiles
 # Required for rugged gem.
 yum install cmake -y
 
-# Required for pcap gem.
-yum install libpcap libpcap-devel -y
-
 # Required for `nodeattr`.
 yum install genders -y
-
-# Required for ruby-libvirt gem.
-yum install libvirt-devel -y
 
 # Install Ruby and gems.
 rvm install ruby-2.4.1

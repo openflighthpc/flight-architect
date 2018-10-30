@@ -16,7 +16,6 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem 'commander', github: 'alces-software/commander'
-gem 'pcap', github: 'alces-software/ruby-pcap'
 
 # Forked of a fork containing a logger fix. The main gem can be used
 # again once StructuredWarnings is removed

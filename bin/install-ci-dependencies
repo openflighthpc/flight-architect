@@ -14,11 +14,5 @@ sudo apt-get update -y
 # Required for rugged gem.
 sudo apt-get install cmake -y
 
-# Required for pcap gem.
-sudo apt-get install libpcap-dev -y
-
 # Required for `nodeattr`.
 sudo apt-get install genders -y
-
-# Required for ruby-libvirt gem.
-sudo apt-get install libvirt-dev -y

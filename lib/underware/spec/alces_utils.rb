@@ -90,15 +90,6 @@ module Underware
         $stderr = hash[:stderr] if hash[:stderr]
       end
 
-      # XXX This is only used in Metalware, so maybe it should live there now
-      # instead?
-      def kill_other_threads
-        Thread.list
-              .reject { |t| t == Thread.current }
-              .tap { |t| t.each(&:kill) }
-              .tap { |t| t.each(&:join) }
-      end
-
       def mock(test, *a, &b)
         mock_block = lambda do |*_inputs|
           mock_alces = AlcesUtils::Mock.new(self)

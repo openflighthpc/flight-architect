@@ -3,18 +3,12 @@ lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "underware/version"
 
-require 'active_support/core_ext/string/filters'
-
 Gem::Specification.new do |spec|
   spec.name          = 'underware'
   spec.version       = Underware::VERSION
   spec.authors       = ['Alces Software Ltd.']
   spec.email         = ['dev@alces-software.com']
-  spec.summary       = <<~SUMMARY.squish
-                         Tool/library for managing standard config hierarchy
-                         and template rendering under-lying Alces clusters and
-                         other Alces tools
-                      SUMMARY
+  spec.summary       = "Tool/library for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools"
   spec.homepage      = 'https://github.com/alces-software/underware'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

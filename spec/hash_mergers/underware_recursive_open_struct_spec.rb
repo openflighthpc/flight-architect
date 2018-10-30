@@ -1,10 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'hash_mergers'
-require 'filesystem'
-require 'namespaces/alces'
-require 'alces_utils'
+require 'underware/hash_mergers'
+require 'underware/namespaces/alces'
+require 'underware/spec/alces_utils'
 
 module Underware
   module Namespaces

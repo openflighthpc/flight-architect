@@ -1,9 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
-RSpec.describe AlcesUtils do
+RSpec.describe Underware::AlcesUtils do
   include described_class
 
   let(:file_path) { Underware::FilePath }
@@ -18,7 +18,7 @@ RSpec.describe AlcesUtils do
 
   describe '#define_method_testing' do
     it 'runs the method block' do
-      AlcesUtils::Mock.new(self).define_method_testing do
+      Underware::AlcesUtils::Mock.new(self).define_method_testing do
         'value'
       end
       expect(alces.testing).to eq('value')
@@ -27,7 +27,7 @@ RSpec.describe AlcesUtils do
 
   context 'with the AlceUtils.mock method' do
     before do
-      AlcesUtils::Mock.new(self)
+      Underware::AlcesUtils::Mock.new(self)
                       .define_method_testing {} # Intentionally blank
     end
 

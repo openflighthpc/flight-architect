@@ -1,18 +1,18 @@
 
 # frozen_string_literal: true
 
-require 'command_helpers/alces_command'
-require 'alces_utils'
+require 'underware/command_helpers/alces_command'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::CommandHelpers::AlcesCommand do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:domain_config) { Hash.new(key: 'I am the domain config') }
 
   let(:node) { 'node01' }
   let(:group) { 'group1' }
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     config(alces.domain, domain_config)
     mock_group(group)
     mock_node(node)

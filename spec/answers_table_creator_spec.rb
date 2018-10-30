@@ -23,14 +23,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'spec_utils'
-
-require 'filesystem'
-require 'answers_table_creator'
-require 'validation/loader'
+require 'underware/answers_table_creator'
+require 'underware/validation/loader'
 
 RSpec.describe Underware::AnswersTableCreator do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject do
     described_class.new(alces)
@@ -102,7 +99,7 @@ RSpec.describe Underware::AnswersTableCreator do
   let(:group_name) { 'testnodes' }
   let(:node_name) { 'testnode01' }
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     answer(alces.domain, domain_answers)
     answer(mock_node(node_name, group_name), node_answers)
     answer(mock_group(group_name), group_answers)

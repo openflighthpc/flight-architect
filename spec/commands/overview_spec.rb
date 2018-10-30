@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'commands'
+require 'underware/commands'
 require 'fixtures/shared_context/overview'
 
 RSpec.describe Underware::Commands::Overview do
@@ -9,7 +9,7 @@ RSpec.describe Underware::Commands::Overview do
   let(:name_hash) { { header: 'Group Name', value: '<%= group.name %>' } }
 
   def run_command
-    AlcesUtils.redirect_std(:stdout) do
+    Underware::AlcesUtils.redirect_std(:stdout) do
       Underware::Utils.run_command(Underware::Commands::Overview)
     end
   end

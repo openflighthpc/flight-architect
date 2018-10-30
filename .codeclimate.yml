@@ -12,7 +12,7 @@ engines:
       - javascript:
 ratings:
   paths:
-  - src/**/*
+  - lib/**/*
   - spec/**/*
 exclude_paths:
 - "**/vendor/**/*"

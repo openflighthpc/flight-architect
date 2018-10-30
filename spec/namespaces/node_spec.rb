@@ -3,19 +3,18 @@
 
 require 'shared_examples/hash_merger_namespace'
 
-require 'namespaces/alces'
-require 'constants'
-require 'hash_mergers'
+require 'underware/namespaces/alces'
+require 'underware/constants'
+require 'underware/hash_mergers'
 require 'recursive_open_struct'
-require 'spec_utils'
 
 RSpec.describe Underware::Namespaces::Node do
   context 'with AlcesUtils' do
-    include AlcesUtils
+    include Underware::AlcesUtils
 
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       hexadecimal_ip(mock_node('test_node'))
-      mock_group(AlcesUtils.default_group)
+      mock_group(Underware::AlcesUtils.default_group)
     end
 
     subject { alces.nodes.first }
@@ -99,12 +98,12 @@ RSpec.describe Underware::Namespaces::Node do
     end
 
     it 'has a kickstart_url' do
-      expected = "http://1.2.3.4/underware/kickstart/#{node_name}"
+      expected = "http://1.2.3.4/metalware/kickstart/#{node_name}"
       expect(node.kickstart_url).to eq(expected)
     end
 
     it 'has a build complete url' do
-      exp = "http://1.2.3.4/underware/exec/kscomplete.php?name=#{node_name}"
+      exp = "http://1.2.3.4/metalware/exec/kscomplete.php?name=#{node_name}"
       expect(node.build_complete_url).to eq(exp)
     end
 
@@ -148,7 +147,7 @@ RSpec.describe Underware::Namespaces::Node do
       let(:cache) { Underware::Cache::Asset.new }
 
       context 'with an assigned asset' do
-        AlcesUtils.mock(self, :each) do
+        Underware::AlcesUtils.mock(self, :each) do
           create_asset(asset_name, content)
           cache.assign_asset_to_node(asset_name, node)
           cache.save
@@ -207,7 +206,7 @@ RSpec.describe Underware::Namespaces::Node do
 
       # NOTE: Must be after fs setup otherwise the initially spoofed
       # genders file will be deleted
-      AlcesUtils.spoof_nodeattr(self)
+      Underware::AlcesUtils.spoof_nodeattr(self)
 
       # Enable/disable plugins for node as needed.
       enabled_identifier = \

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'input'
-require 'spec_utils'
+require 'underware/input'
 
 RSpec.describe Underware::BuildFilesRetrievers::Cache do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { described_class.new }
 
@@ -25,7 +24,7 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
     }
   end
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     config(mock_node(test_node_name), files: test_files_hash)
   end
 
@@ -42,7 +41,6 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
       FileSystem.root_setup do |fs|
         fs.with_clone_fixture('configs/unit-test.yaml')
       end
-      use_unit_test_config
       allow(Underware::Input).to receive(:download)
         .and_wrap_original do |_, _, to_path|
         FileUtils.touch(to_path)
@@ -51,42 +49,41 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
 
     context 'when everything works' do
       it 'returns the correct files object' do
-        file_path = '/rendered/testnode01/files/repo/namespace01/file_in_repo'
-        some_path = File
-                    .join(Underware::FilePath.repo, 'files/some/file_in_repo')
-        FileUtils.mkdir_p File.dirname(some_path)
-        FileUtils.touch(some_path)
-        other_path = '/some/other/path'
-        FileUtils.mkdir_p File.dirname(other_path)
-        FileUtils.touch(other_path)
+        repo_file_path = File.join(
+          Underware::FilePath.repo, 'files/some/file_in_repo'
+        )
+        FileUtils.mkdir_p File.dirname(repo_file_path)
+        FileUtils.touch(repo_file_path)
+        absolute_file_path = '/some/other/path'
+        FileUtils.mkdir_p File.dirname(absolute_file_path)
+        FileUtils.touch(absolute_file_path)
 
         retrieved_files = subject.retrieve(test_node)
 
+        # Test gives correct hash for file specified relative to repo.
         expect(retrieved_files[:namespace01][0]).to eq(
           raw: 'some/file_in_repo',
           name: 'file_in_repo',
-          template_path: some_path,
-          rendered_path: data_path + file_path,
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/file_in_repo'
+          template_path: repo_file_path,
+          relative_rendered_path: 'testnode01/files/repo/namespace01/file_in_repo',
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/file_in_repo'
         )
-
+        # Test gives correct hash for file specified by absolute path.
         expect(retrieved_files[:namespace01][1]).to eq(
           raw: '/some/other/path',
           name: 'path',
-          template_path: other_path,
-          rendered_path: data_path +
-            '/rendered/testnode01/files/repo/namespace01/path',
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/path'
+          template_path: absolute_file_path,
+          relative_rendered_path: 'testnode01/files/repo/namespace01/path',
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/path'
         )
-
+        # Test gives correct hash for file specified by URL.
         expect(retrieved_files[:namespace01][2]).to eq(
           raw: test_url,
           name: 'url',
           template_path: '/var/lib/underware/cache/templates/' +
             hash_url(test_url),
-          rendered_path: data_path +
-            '/rendered/testnode01/files/repo/namespace01/url',
-          url: 'http://1.2.3.4/underware/testnode01/files/repo/namespace01/url'
+          relative_rendered_path: 'testnode01/files/repo/namespace01/url',
+          url: 'http://1.2.3.4/metalware/testnode01/files/repo/namespace01/url'
         )
       end
 
@@ -199,8 +196,8 @@ RSpec.describe Underware::BuildFilesRetrievers::Cache do
           raw: plugin_file_path,
           name: plugin_file_name,
           template_path: absolute_plugin_file_path,
-          rendered_path: data_path + "/rendered/#{relative_rendered_path}",
-          url: "http://1.2.3.4/underware/#{relative_rendered_path}",
+          relative_rendered_path: relative_rendered_path,
+          url: "http://1.2.3.4/metalware/#{relative_rendered_path}",
         }]
       )
     end

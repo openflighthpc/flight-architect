@@ -26,12 +26,12 @@ require 'tempfile'
 require 'yaml'
 require 'highline'
 
-require 'configurator'
-require 'validation/loader'
-require 'alces_utils'
+require 'underware/configurator'
+require 'underware/validation/loader'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Configurator do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:input) do
     Tempfile.new
@@ -487,7 +487,7 @@ RSpec.describe Underware::Configurator do
       }
     end
 
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       mock_group(group_name)
       define_questions(
         domain: [question.merge(default: original_default)],
@@ -568,7 +568,7 @@ RSpec.describe Underware::Configurator do
         Underware::Data.load(path)[identifier]
       end
 
-      AlcesUtils.mock self, :each do
+      Underware::AlcesUtils.mock self, :each do
         configure_group(answer_input: group_answer)
         mock_node(node_name, group_name)
       end

@@ -22,11 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'filesystem'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Plugin::List do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   def run_plugin_list
     Underware::Utils.run_command(
@@ -55,7 +54,7 @@ RSpec.describe Underware::Commands::Plugin::List do
 
   it 'outputs line for each plugin subdirectory' do
     filesystem.test do
-      stdout = AlcesUtils.redirect_std(:stdout) do
+      stdout = Underware::AlcesUtils.redirect_std(:stdout) do
         run_plugin_list
       end[:stdout].read
 
@@ -68,7 +67,7 @@ RSpec.describe Underware::Commands::Plugin::List do
       Underware::Plugins.activate!('example01')
       Underware::Plugins.deactivate!('example02')
 
-      stdout = AlcesUtils.redirect_std(:stdout) do
+      stdout = Underware::AlcesUtils.redirect_std(:stdout) do
         run_plugin_list
       end[:stdout].read
 

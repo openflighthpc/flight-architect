@@ -1,7 +1,7 @@
 
 # frozen_string_literal: true
 
-require 'managed_file'
+require 'underware/managed_file'
 
 RSpec.describe Underware::ManagedFile do
   describe '#content' do

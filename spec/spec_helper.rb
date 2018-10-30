@@ -46,17 +46,15 @@ SimpleCov.start 'underware'
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '../src')
-
 # Require main entry point to Underware CLI so every file picked up by
 # simplecov, even entirely untested ones.
-require 'cli'
+require 'underware/cli'
 
+require 'underware/spec/spec_utils'
 require 'filesystem'
 
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
-require 'spec_utils'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -159,5 +157,5 @@ RSpec.configure do |config|
   end
 
   # Make our test helper functions available in all tests.
-  config.include SpecUtils
+  config.include Underware::SpecUtils
 end

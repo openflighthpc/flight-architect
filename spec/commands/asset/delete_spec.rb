@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require 'cache/asset'
-require 'filesystem'
-require 'commands'
-require 'utils'
-require 'alces_utils'
+require 'underware/cache/asset'
+require 'underware/commands'
+require 'underware/utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Asset::Delete do
-  include AlcesUtils
+  include Underware::AlcesUtils
   let(:asset) { 'saved-asset' }
 
   def run_command
@@ -23,7 +22,7 @@ RSpec.describe Underware::Commands::Asset::Delete do
   end
 
   context 'when using a saved asset' do
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       FileSystem.root_setup(&:with_minimal_repo)
       create_asset(asset, {})
     end

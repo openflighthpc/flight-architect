@@ -23,9 +23,9 @@
 #==============================================================================
 
 require 'fakefs/safe'
-require 'constants'
+require 'underware/constants'
 require 'minimal_repo'
-require 'validation/configure'
+require 'underware/validation/configure'
 
 # XXX Reduce the hardcoded paths once sorted out Config/Constants situation.
 
@@ -165,35 +165,27 @@ class FileSystem
     FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)
   end
 
-  # Create same directory hierarchy that would be created by a Underware
-  # install.
+  # Create same directory hierarchy that would be created by an Underware
+  # install (without directories unneeded for any tests to pass).
   def create_initial_directory_hierarchy
     [
       '/tmp',
-      '/etc',
-      '/var/log/underware',
-      '/var/lib/underware/rendered/kickstart',
       '/var/lib/underware/rendered/system',
-      '/var/lib/underware/events',
       '/var/lib/underware/cache/templates',
       '/var/lib/underware/repo',
       '/var/lib/underware/answers/groups',
       '/var/lib/underware/answers/nodes',
       '/var/lib/underware/assets',
       '/var/lib/underware/data',
-      '/var/named',
       '/var/log/underware',
-      File.join(Underware::Constants::UNDERWARE_INSTALL_PATH, 'templates'),
     ].each do |path|
       FileUtils.mkdir_p(path)
     end
-
-    FileUtils.mkdir_p Underware::Constants::UNDERWARE_CONFIGS_PATH
-    FileUtils.touch Underware::Constants::DEFAULT_CONFIG_PATH
   end
 
   # Print every directory and file loaded in the FakeFS.
-  def debug!
+  delegate :debug, to: FileSystem
+  def self.debug!
     begin
       # This can fail oddly if nothing matches (see
       # https://github.com/fakefs/fakefs/issues/371), hence the `rescue` with a

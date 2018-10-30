@@ -1,10 +1,9 @@
 
 # frozen_string_literal: true
 
-require 'spec_utils'
 
 RSpec.describe Underware::Namespaces::Plugin do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { described_class.new(plugin, node: node) }
 

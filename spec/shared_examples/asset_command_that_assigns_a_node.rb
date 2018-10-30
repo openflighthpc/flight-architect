@@ -1,13 +1,13 @@
 
 # frozen_string_literal: true
 
-require 'alces_utils'
-require 'cache/asset'
+require 'underware/spec/alces_utils'
+require 'underware/cache/asset'
 
 # Requires `asset_name` and `command_arguments` to be set by the
 # calling spec
 RSpec.shared_examples 'asset command that assigns a node' do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   # Stops the editor from running the bash command
   before { allow(Underware::Utils::Editor).to receive(:open) }
@@ -29,7 +29,7 @@ RSpec.shared_examples 'asset command that assigns a node' do
   end
 
   context 'when the node exists' do
-    let!(:node) { AlcesUtils.mock(self) { mock_node(node_name) } }
+    let!(:node) { Underware::AlcesUtils.mock(self) { mock_node(node_name) } }
 
     it 'assigns the asset to the node' do
       run_command

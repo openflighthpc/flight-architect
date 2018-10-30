@@ -23,8 +23,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'data'
-require 'filesystem'
+require 'underware/data'
 
 RSpec.describe Underware::Data do
   let(:data_file_path) { '/path/to/some_data.yaml' }

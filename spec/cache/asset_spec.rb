@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'alces_utils'
-require 'cache/asset'
+require 'underware/spec/alces_utils'
+require 'underware/cache/asset'
 
 RSpec.describe Underware::Cache::Asset do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   def update(&b)
     described_class.update(&b)
@@ -18,7 +18,7 @@ RSpec.describe Underware::Cache::Asset do
   let(:node_name) { 'test_node' }
   let(:node) { alces.nodes.find_by_name(node_name) }
 
-  AlcesUtils.mock(self, :each) do
+  Underware::AlcesUtils.mock(self, :each) do
     mock_node(node_name)
   end
 

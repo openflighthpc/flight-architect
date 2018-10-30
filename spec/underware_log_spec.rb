@@ -1,8 +1,8 @@
 
 # frozen_string_literal: true
 
-require 'command_helpers/base_command'
-require 'alces_utils'
+require 'underware/command_helpers/base_command'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::UnderwareLog do
   describe '#warn' do
@@ -16,7 +16,7 @@ RSpec.describe Underware::UnderwareLog do
     end
 
     def run_test_command(**options)
-      AlcesUtils.redirect_std(:stderr) do
+      Underware::AlcesUtils.redirect_std(:stderr) do
         Underware::Utils.run_command(
           Underware::Commands::TestCommand, **options
         )

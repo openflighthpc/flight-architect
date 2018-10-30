@@ -22,11 +22,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'filesystem'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Plugin::Deactivate do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   def run_plugin_deactivate(plugin_name)
     Underware::Utils.run_command(
@@ -79,7 +78,7 @@ RSpec.describe Underware::Commands::Plugin::Deactivate do
       unknown_plugin_name = 'unknown_plugin'
 
       expect do
-        AlcesUtils.redirect_std(:stderr) do
+        Underware::AlcesUtils.redirect_std(:stderr) do
           run_plugin_deactivate(unknown_plugin_name)
         end
       end.to raise_error Underware::UnderwareError,

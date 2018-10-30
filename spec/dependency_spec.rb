@@ -21,25 +21,28 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'exceptions'
-require 'dependency'
-require 'constants'
-require 'validation/configure'
+require 'underware/exceptions'
+require 'underware/dependency'
+require 'underware/constants'
+require 'underware/validation/configure'
 require 'ostruct'
 
 require 'spec_helper'
 require 'fileutils'
-require 'filesystem'
-require 'alces_utils'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Dependency do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:filesystem) { FileSystem.setup }
 
-  def enforce_dependencies(dependencies_hash = {})
+  def enforce_dependencies(dependency_hash)
     filesystem.test do |_fs|
-      Underware::Dependency.new('test', dependencies_hash).enforce
+      Underware::Dependency.new(
+        command_input: 'test',
+        repo_path: Underware::FilePath.repo,
+        dependency_hash: dependency_hash
+      ).enforce
     end
   end
 

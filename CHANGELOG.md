@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-## [alpha-01] - 2018-10-15
+## [0.2.0] - 2018-10-30
+
+- Converted Underware into a Gem capable of being used from Metalware, while
+  still being able to be used as an independent tool in its own right.
+- Further significantly cut down, adapted, or reorganised the things to be
+  included in Underware, as part of the process of adapting Metalware to use
+  the Underware Gem.
+
+## [alpha-01 / 0.1.0] - 2018-10-15
 
 - Initial Underware alpha release, adapted from Metalware as of
   https://github.com/alces-software/metalware/commit/5aa35770

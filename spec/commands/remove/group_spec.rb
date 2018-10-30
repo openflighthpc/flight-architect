@@ -21,17 +21,15 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'filesystem'
-require 'commands/remove/group'
-require 'nodeattr_interface'
+require 'underware/commands/remove/group'
+require 'underware/nodeattr_interface'
 require 'ostruct'
-require 'validation/loader'
-require 'spec_utils'
+require 'underware/validation/loader'
 
 RSpec.describe Underware::Commands::Remove::Group do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     validation_off
   end
 

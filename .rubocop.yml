@@ -3,8 +3,6 @@ require: rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 2.4
-  Exclude:
-    - src/gui/**/*
 
 # Do not prefer various `%` ways of specifying things in Ruby - I
 # think these are less clear and unnecessary
@@ -36,7 +34,7 @@ Metrics/BlockLength:
 # collect all the file path methods.
 Metrics/ModuleLength:
   Exclude:
-    - src/file_path.rb
+    - lib/underware/file_path.rb
 
 # We trust the YAML we're loading, so don't warn if we don't use
 # `YAML.safe_load` instead of `YAML.load`.
@@ -58,12 +56,6 @@ Style/DoubleNegation:
 Naming/HeredocDelimiterNaming:
   Enabled: false
 
-# The status has a race condition when killing bash commands. Thus
-# it should ignore no process errors
-Lint/HandleExceptions:
-  Exclude:
-    - src/status/job.rb
-
 # Quite a few specs are nested 4 deep, however the default is 3
 RSpec/NestedGroups:
   Max: 4
@@ -73,8 +65,6 @@ RSpec/NestedGroups:
 RSpec/ExampleLength:
   Exclude:
     - spec/configurator_spec.rb
-    - spec/slow/**/*
-    - spec/integration/**/*
 
 # It isn't feasible to set up spies in the following specs as they
 # are coupled to the original implementation
@@ -98,5 +88,5 @@ Style/GlobalVars:
     - spec/commander_extensions_spec.rb
     - spec/spec_helper.rb
     - spec/spec_utils.rb
-    - src/output.rb
+    - lib/underware/output.rb
 

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'spec_utils'
-require 'asset_builder'
-require 'alces_utils'
+require 'underware/asset_builder'
+require 'underware/spec/alces_utils'
 
 RSpec.shared_examples 'pushes the asset' do
   it 'pushes the asset onto the stack' do
@@ -13,7 +12,7 @@ RSpec.shared_examples 'pushes the asset' do
 end
 
 RSpec.describe Underware::AssetBuilder do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   subject { described_class.new }
 
@@ -103,7 +102,7 @@ RSpec.describe Underware::AssetBuilder do
 
     it 'does not return assets that already exist' do
       push_test_asset
-      AlcesUtils.mock(self) { create_asset(test_asset, {}, type: type) }
+      Underware::AlcesUtils.mock(self) { create_asset(test_asset, {}, type: type) }
       expect(subject.pop_asset).to be_nil
     end
   end
@@ -163,7 +162,7 @@ RSpec.describe Underware::AssetBuilder do
         }
       end
 
-      AlcesUtils.mock(self, :each) do
+      Underware::AlcesUtils.mock(self, :each) do
         create_layout(layout_name, layout_content, type: parent_type)
         subject.push_asset(asset_name, layout_name)
         run_save.call
@@ -206,7 +205,7 @@ RSpec.describe Underware::AssetBuilder do
     let(:path) { Underware::Records::Asset.path(test_asset) }
     let(:expected_content) { { key: 'content' } }
 
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       FileSystem.root_setup(&:with_minimal_repo)
       create_asset(test_asset, {}, type: type)
     end

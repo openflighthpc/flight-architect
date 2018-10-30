@@ -1,13 +1,13 @@
 
 # frozen_string_literal: true
 
-require 'templating/nil_detection_wrapper'
+require 'underware/templating/nil_detection_wrapper'
 require 'recursive_open_struct'
-require 'underware_log'
-require 'alces_utils'
+require 'underware/underware_log'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Templating::NilDetectionWrapper do
-  AlcesUtils.start self
+  Underware::AlcesUtils.start self
 
   def build_wrapper_object(obj)
     Underware::Templating::NilDetectionWrapper.wrap(obj).receiver

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_utils'
 
 RSpec.shared_examples 'record' do |file_path_proc|
   let(:record_hash) do

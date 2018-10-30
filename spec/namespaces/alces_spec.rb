@@ -1,21 +1,21 @@
 
 # frozen_string_literal: true
 
-require 'namespaces/alces'
-require 'hash_mergers'
-require 'alces_utils'
+require 'underware/namespaces/alces'
+require 'underware/hash_mergers'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Namespaces::Alces do
   # TODO: The Alces class should not be tested with AlcesUtils
   # Remove AlcesUtils and mock the configs blank manually
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     with_blank_config_and_answer(alces.domain)
   end
 
   describe '#render_string' do
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       define_method_testing do
         Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
           key: 'value',
@@ -140,7 +140,7 @@ RSpec.describe Underware::Namespaces::Alces do
   describe 'default template namespace' do
     let(:domain_config) { { key: 'domain' } }
 
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       config(alces.domain, domain_config)
     end
 
@@ -182,7 +182,7 @@ RSpec.describe Underware::Namespaces::Alces do
   context 'when a template returns nil' do
     let(:underware_log) { instance_spy(Underware::UnderwareLog) }
 
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       allow(Underware::UnderwareLog).to \
         receive(:underware_log).and_return(underware_log)
       config(alces.domain, nil: nil)
@@ -330,7 +330,7 @@ RSpec.describe Underware::Namespaces::Alces do
   # conflicts/interactions with the above, and since we may just end up
   # deleting/refactoring these away at some point.
   describe 'old Templater tests' do
-    include AlcesUtils
+    include Underware::AlcesUtils
 
     let(:filesystem) do
       FileSystem.setup do |fs|

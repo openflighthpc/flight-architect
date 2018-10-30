@@ -22,13 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'nodeattr_interface'
-require 'spec_utils'
-require 'exceptions'
-require 'filesystem'
+require 'underware/nodeattr_interface'
+require 'underware/exceptions'
 
 RSpec.describe Underware::NodeattrInterface do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   context 'with setup1 genders' do
     before do

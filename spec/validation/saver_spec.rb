@@ -22,12 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'validation/saver'
-require 'validation/answer'
-require 'filesystem'
-require 'file_path'
-require 'data'
-require 'alces_utils'
+require 'underware/validation/saver'
+require 'underware/validation/answer'
+require 'underware/file_path'
+require 'underware/data'
+require 'underware/spec/alces_utils'
 
 module SaverSpec
   module TestingMethods
@@ -43,7 +42,7 @@ end
 Underware::Validation::Saver::Methods.prepend(SaverSpec::TestingMethods)
 
 RSpec.describe Underware::Validation::Saver do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:path) { Underware::FilePath }
   let(:saver) { described_class.new }

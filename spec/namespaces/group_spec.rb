@@ -2,18 +2,17 @@
 # frozen_string_literal: true
 
 require 'shared_examples/hash_merger_namespace'
-require 'namespaces/alces'
-require 'spec_utils'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Namespaces::Group do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   context 'with mocked group' do
     subject { alces.groups.first }
 
     let(:test_group) { 'some_test_group' }
 
-    AlcesUtils.mock self, :each do
+    Underware::AlcesUtils.mock self, :each do
       mock_group(test_group)
       mock_node('random_node', test_group)
     end
@@ -23,7 +22,7 @@ RSpec.describe Underware::Namespaces::Group do
 
   context 'with a mocked genders file' do
     before do
-      AlcesUtils.mock self do
+      Underware::AlcesUtils.mock self do
         mock_group('group1')
         mock_group('group2')
       end

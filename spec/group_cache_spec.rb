@@ -22,12 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'group_cache'
-require 'filesystem'
-require 'alces_utils'
+require 'underware/group_cache'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::GroupCache do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   let(:cache) { new_cache }
 

@@ -22,21 +22,19 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'commands/each'
-require 'spec_utils'
+require 'underware/commands/each'
 require 'ostruct'
-require 'hash_mergers'
-require 'namespaces/alces'
+require 'underware/hash_mergers'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Commands::Each do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
   before do
     FileSystem.root_setup do |fs|
       fs.with_genders_fixtures
       fs.with_clone_fixture('configs/unit-test.yaml')
     end
-    use_unit_test_config
   end
 
   let(:groups) do

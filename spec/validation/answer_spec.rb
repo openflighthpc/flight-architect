@@ -21,13 +21,12 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-require 'validation/answer'
-require 'data'
-require 'filesystem'
-require 'alces_utils'
+require 'underware/validation/answer'
+require 'underware/data'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Validation::Answer do
-  include AlcesUtils
+  include Underware::AlcesUtils
   let(:question_tree) do
     {
       domain: [

@@ -1,26 +1,22 @@
 
 # frozen_string_literal: true
 
-require 'hash_mergers'
-require 'filesystem'
-require 'data'
-require 'constants'
-require 'spec_utils'
-require 'alces_utils'
+require 'underware/hash_mergers'
+require 'underware/data'
+require 'underware/constants'
+require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::HashMergers::HashMerger do
-  include AlcesUtils
+  include Underware::AlcesUtils
 
-  AlcesUtils.mock self, :each do
+  Underware::AlcesUtils.mock self, :each do
     validation_off
   end
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      default_config_path = Underware::FilePath.default_config
       fs.with_repo_fixtures('merged_hash')
       fs.with_answer_fixtures('merged_hash/answers')
-      fs.with_fixtures('configs/validation-off.yaml', at: default_config_path)
     end
   end
 

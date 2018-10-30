@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'alces_utils'
-require 'namespaces/alces'
+require 'underware/spec/alces_utils'
+require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Namespaces::AssetArray do
   subject { described_class.new(alces) }
@@ -199,7 +199,7 @@ RSpec.describe Underware::Namespaces::AssetArray do
   end
 
   context 'when referencing other asset ("^<asset_name>")' do
-    include AlcesUtils
+    include Underware::AlcesUtils
 
     let(:asset1) { alces.assets.find_by_name(asset1_name) }
     let(:asset2) { alces.assets.find_by_name(asset2_name) }
@@ -218,7 +218,7 @@ RSpec.describe Underware::Namespaces::AssetArray do
       }
     end
 
-    AlcesUtils.mock(self, :each) do
+    Underware::AlcesUtils.mock(self, :each) do
       create_asset(asset1_name, asset1_raw_data)
       create_asset(asset2_name, asset2_raw_data)
     end

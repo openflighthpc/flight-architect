@@ -138,6 +138,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.16)
   commander!
   fakefs
   pcap!

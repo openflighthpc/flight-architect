@@ -90,7 +90,7 @@ module Underware
 
     def validate_repo
       @validated_repo ||= begin
-        msg = "'#{command}' requires a repo. Please run 'underware repo use'"
+        msg = "'#{command}' requires a repo. Please run 'repo use'"
         raise DependencyFailure, msg unless valid_file?(:repo, '.git', true)
         true # Sets the @validate_repo value so it only runs once
       end

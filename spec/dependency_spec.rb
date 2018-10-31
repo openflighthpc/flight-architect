@@ -36,10 +36,12 @@ RSpec.describe Underware::Dependency do
 
   let(:filesystem) { FileSystem.setup }
 
+  let(:command_input) { 'test' }
+
   def enforce_dependencies(dependency_hash)
     filesystem.test do |_fs|
       Underware::Dependency.new(
-        command_input: 'test',
+        command_input: command_input,
         repo_path: Underware::FilePath.repo,
         dependency_hash: dependency_hash
       ).enforce
@@ -47,16 +49,26 @@ RSpec.describe Underware::Dependency do
   end
 
   context 'with a fresh filesystem' do
-    it 'fails when enforcing repo dependencies' do
-      expect do
-        enforce_dependencies(repo: [])
-      end.to raise_error(Underware::DependencyFailure)
+    # Note: the missing repo error message does not include a prefix in the
+    # command to run (i.e. is not `underware repo use`), as whichever tool the
+    # Dependency class is being used from, the repo it will use and enforce
+    # dependencies from will be specific to that tool (e.g.
+    # `/var/lib/metalware/repo` if it is used from Metalware), and so `repo
+    # use` should be run under the namespace of whatever the current tool is.
+    let :missing_repo_error do
+      "'#{command_input}' requires a repo. Please run 'repo use'"
     end
 
-    it 'fails when enforcing configure dependencies' do
+    it 'fails when enforcing repo dependencies, with error message telling you command to run' do
+      expect do
+        enforce_dependencies(repo: [])
+      end.to raise_error(Underware::DependencyFailure, missing_repo_error)
+    end
+
+    it 'fails when enforcing configure dependencies, also due to missing repo' do
       expect do
         enforce_dependencies(configure: ['domain.yaml'])
-      end.to raise_error(Underware::DependencyFailure)
+      end.to raise_error(Underware::DependencyFailure, missing_repo_error)
     end
   end
 
@@ -93,13 +105,39 @@ RSpec.describe Underware::Dependency do
       end.to raise_error(Underware::DependencyFailure)
     end
 
-    it 'fails when enforcing non-existent regular answer file presence' do
+    it 'fails when enforcing non-existent domain answer file presence, with error message telling you command to run' do
+      # Note: here and in missing group answers error message, the command to
+      # run includes `underware`, as no matter what tool the Dependency class
+      # is being used from, namespace configuration still always occurs via
+      # Underware.
+      missing_domain_answers_error =
+        /required answer file: domain\.yaml\. Please run 'underware configure domain'/
+
       filesystem.test do
         expect do
           enforce_dependencies(
-            configure: ['domain.yaml', 'groups/group1.yaml']
+            configure: ['domain.yaml']
           )
-        end.to raise_error(Underware::DependencyFailure)
+        end.to raise_error(
+          Underware::DependencyFailure,
+          missing_domain_answers_error
+        )
+      end
+    end
+
+    it 'fails when enforcing non-existent, non-orphan group answer file presence, with error message telling you command to run' do
+      missing_group_answers_error =
+        /required answer file: groups\/group1\.yaml\. Please run 'underware configure group group1'/
+
+      filesystem.test do
+        expect do
+          enforce_dependencies(
+            configure: ['groups/group1.yaml']
+          )
+        end.to raise_error(
+          Underware::DependencyFailure,
+          missing_group_answers_error
+        )
       end
     end
 

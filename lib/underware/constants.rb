@@ -46,7 +46,7 @@ module Underware
     # details; long term we should implement some generic way for Metalware and
     # other clients to provide Underware with access to their own data for
     # nodes.
-    METALWARE_DATA_PATH = 'var/lib/metalware'
+    METALWARE_DATA_PATH = '/var/lib/metalware'
     EVENTS_DIR_PATH = File.join(METALWARE_DATA_PATH, 'events')
 
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10

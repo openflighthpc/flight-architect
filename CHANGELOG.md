@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [0.3.0] - 2018-10-31
+
+- Made a few minor tweaks to correct some incorrect things in the latest
+  Underware Gem when used by Metalware.
+
 ## [0.2.0] - 2018-10-30
 
 - Converted Underware into a Gem capable of being used from Metalware, while

@@ -47,31 +47,31 @@ RSpec.describe Underware::Dependency do
   end
 
   context 'with a fresh filesystem' do
-    it 'repo dependencies fail' do
+    it 'fails when enforcing repo dependencies' do
       expect do
         enforce_dependencies(repo: [])
       end.to raise_error(Underware::DependencyFailure)
     end
 
-    it 'configure dependencies fail' do
+    it 'fails when enforcing configure dependencies' do
       expect do
         enforce_dependencies(configure: ['domain.yaml'])
       end.to raise_error(Underware::DependencyFailure)
     end
   end
 
-  context 'with repo dependencies' do
+  context 'with repo present' do
     before do
       filesystem.with_repo_fixtures('repo')
     end
 
-    it 'check if the base repo exists' do
+    it 'succeeds when enforcing base repo presence' do
       expect do
         enforce_dependencies(repo: [])
       end.not_to raise_error
     end
 
-    it 'check if repo template exists' do
+    it 'succeeds when enforcing existent repo template presence' do
       expect do
         enforce_dependencies(repo: ['dependency-test1/default'])
       end.not_to raise_error
@@ -81,25 +81,19 @@ RSpec.describe Underware::Dependency do
       end.not_to raise_error
     end
 
-    it "fail if repo template doesn't exist" do
+    it 'fails when enforcing non-existent repo template presence' do
       expect do
         enforce_dependencies(repo: ['dependency-test1/not-found'])
       end.to raise_error(Underware::DependencyFailure)
     end
 
-    it 'fail if validating a repo directory' do
+    it 'fails when enforcing repo directory presence' do
       expect do
         enforce_dependencies(repo: ['dependency-test1'])
       end.to raise_error(Underware::DependencyFailure)
     end
-  end
 
-  context 'with blank configure.yaml dependencies' do
-    before do
-      filesystem.with_repo_fixtures('repo')
-    end
-
-    it 'validates missing answer files' do
+    it 'fails when enforcing non-existent regular answer file presence' do
       filesystem.test do
         expect do
           enforce_dependencies(
@@ -110,7 +104,7 @@ RSpec.describe Underware::Dependency do
     end
 
     # The orphan group does not require an answer file
-    it 'does not validate groups/orphan.yaml' do
+    it 'never fails when enforcing orphan group answer file presence' do
       filesystem.test do
         expect do
           enforce_dependencies(
@@ -126,39 +120,34 @@ RSpec.describe Underware::Dependency do
         filesystem.with_answer_fixtures('answers/basic_structure')
       end
 
-      it 'validates that the answer files exists' do
+      it 'succeeds when enforcing existent answer file presence' do
         expect do
           enforce_dependencies(
             configure: ['domain.yaml', 'groups/group1.yaml']
           )
         end.not_to raise_error
       end
-    end
 
-    context 'with optional dependencies' do
-      before do
-        filesystem.with_minimal_repo
-        filesystem.with_answer_fixtures('answers/basic_structure')
-      end
+      describe 'enforcing optional dependencies' do
+        it 'succeeds when enforcing optional, non-existent answer file presence' do
+          expect do
+            enforce_dependencies(
+              optional: {
+                configure: ['not_found.yaml'],
+              }
+            )
+          end.not_to raise_error
+        end
 
-      it 'skips a single missing file' do
-        expect do
-          enforce_dependencies(
-            optional: {
-              configure: ['not_found.yaml'],
-            }
-          )
-        end.not_to raise_error
-      end
-
-      it 'validates a correct answer file' do
-        expect do
-          enforce_dependencies(
-            optional: {
-              configure: ['domain.yaml', 'not_found.yaml'],
-            }
-          )
-        end.not_to raise_error
+        it 'succeeds when enforcing optional, existent answer file presence' do
+          expect do
+            enforce_dependencies(
+              optional: {
+                configure: ['domain.yaml', 'not_found.yaml'],
+              }
+            )
+          end.not_to raise_error
+        end
       end
     end
   end

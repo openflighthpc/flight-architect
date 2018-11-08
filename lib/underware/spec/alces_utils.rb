@@ -143,11 +143,6 @@ module Underware
         allow(namespace).to receive(:answer).and_return(OpenStruct.new)
       end
 
-      def hexadecimal_ip(node)
-        hex = "#{node.name}_HEX_IP"
-        allow(node).to receive(:hexadecimal_ip).and_return(hex)
-      end
-
       # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error

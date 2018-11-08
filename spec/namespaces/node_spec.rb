@@ -13,7 +13,7 @@ RSpec.describe Underware::Namespaces::Node do
     include Underware::AlcesUtils
 
     Underware::AlcesUtils.mock self, :each do
-      hexadecimal_ip(mock_node('test_node'))
+      mock_node('test_node')
       mock_group(Underware::AlcesUtils.default_group)
     end
 

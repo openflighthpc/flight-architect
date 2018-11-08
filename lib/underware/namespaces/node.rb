@@ -53,10 +53,6 @@ module Underware
         @genders_url ||= DeploymentServer.system_file_url('genders')
       end
 
-      def hexadecimal_ip
-        @hexadecimal_ip ||= SystemCommand.run("gethostip -x #{name}").chomp
-      end
-
       def files
         @files ||= begin
           data = alces.build_files_retriever.retrieve(self)
@@ -102,7 +98,6 @@ module Underware
                        :kickstart_url,
                        :build_complete_url,
                        :build_complete_path,
-                       :hexadecimal_ip,
                      ])
       end
 

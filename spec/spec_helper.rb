@@ -137,8 +137,9 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
-  # Do not print stderr Output in rspec by default
+
   config.before do
+    # Do not print stderr Output in rspec by default
     $rspec_suppress_output_to_stderr = true
     Underware::UnderwareLog.instance_variable_set(:@underware_log, nil)
   end

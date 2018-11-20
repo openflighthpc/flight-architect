@@ -22,6 +22,7 @@ echo "pathmunge /opt/underware/opt/ruby/bin" > /etc/profile.d/underware-ruby.sh
 cd #{$dev_path}
 bundle install
 
+yum install -y vim tree
 SCRIPT
 
 
@@ -31,4 +32,8 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder '.', $dev_path
   config.vm.provision 'shell', inline: $script
+
+  # config.vm.provider :virtualbox do |vb|
+  #   vb.gui = true
+  # end
 end

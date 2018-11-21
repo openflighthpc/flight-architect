@@ -43,6 +43,4 @@
       - body
       - run_command
       - each_value
-      - storage
-      - Certificate
-      - kill_other_threads
+      - Update

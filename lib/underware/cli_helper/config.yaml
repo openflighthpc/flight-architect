@@ -124,35 +124,6 @@ subcommands:
       files associated with the nodes.
     action: Commands::Remove::Group
 
-  repo_use: &repo_use
-    syntax: underware repo use REPO_URL [options]
-    summary: Clone a new template git repo
-    description: >
-      Clones a new git repo from a URL. The repo should contain the default
-      templates used by the other commands. It may also include a config
-      directory containing template parameter YAML files.
-    action:
-      Commands::Repo::Use
-    options:
-      - tags: [-f, --force]
-        description: >
-          Force use of a new repo even if local changes have been made to the
-          current repo
-
-  repo_update: &repo_update
-    syntax: underware repo update [options]
-    summary: Updates the git repository
-    description: >
-      Updates the local git repository to match the remote. The update command
-      does not support local changes. The force will trigger a hard reset and
-      will delete local changes. All other git commands can be preformed
-      manually on the repo.
-    action: Commands::Repo::Update
-    options:
-      - tags: [-f, --force]
-        description: >
-          Force update even if local changes have been made to the repo
-
   plugin_list: &plugin_list
     syntax: underware plugin list [options]
     summary: List available and activated plugins
@@ -264,14 +235,6 @@ commands:
       out. The template can be rendered for a specific node using the optional
       NODE input.
     action: Commands::Render
-
-  repo:
-    syntax: underware repo [SUB_COMMAND] [options]
-    summary: Manage template and config repository
-    # description can also be used for subcommands
-    subcommands:
-      use: *repo_use
-      update: *repo_update
 
   view-answers:
     syntax: underware view-answers [SUB_COMMAND] [options]

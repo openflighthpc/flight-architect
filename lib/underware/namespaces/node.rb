@@ -53,21 +53,6 @@ module Underware
         @genders_url ||= DeploymentServer.system_file_url('genders')
       end
 
-      def files
-        @files ||= begin
-          data = alces.build_files_retriever.retrieve(self)
-          finalize_build_files(data)
-        end
-      end
-
-      def finalize_build_files(build_file_hashes)
-        Constants::HASH_MERGER_DATA_STRUCTURE.new(
-          build_file_hashes
-        ) do |template|
-          render_string(template)
-        end
-      end
-
       def events_dir
         FilePath.event self
       end
@@ -99,10 +84,6 @@ module Underware
                        :build_complete_url,
                        :build_complete_path,
                      ])
-      end
-
-      def recursive_white_list_for_hasher
-        super.push(:files)
       end
 
       def recursive_array_white_list_for_hasher

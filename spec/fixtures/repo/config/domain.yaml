@@ -14,11 +14,3 @@ recursive_false_repo_value: <%= config.false_repo_value %>
 
 nested:
   repo_value: nested_repo_value
-
-files:
-  namespace01:
-    - some_file_in_repo
-    - /some/other/path
-    - http://example.com/some/url
-  namespace02:
-    - another_file_in_repo

@@ -29,7 +29,6 @@ module MinimalRepo
   class << self
     FILES = {
       '.git/': nil,
-      'files/': nil,
       'pxelinux/default':
         "<%= alces.firstboot ? 'FIRSTBOOT' : 'NOT_FIRSTBOOT' %>\n",
       'kickstart/default': '',

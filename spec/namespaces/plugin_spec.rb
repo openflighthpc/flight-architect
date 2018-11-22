@@ -69,20 +69,4 @@ RSpec.describe Underware::Namespaces::Plugin do
       expect(subject.config.node_name).to eq(node.name)
     end
   end
-
-  describe '#files' do
-    it 'provides access to build file hashes for plugin' do
-      Underware::Data.dump(plugin.domain_config,
-                           files: {
-                             some_files_section: [
-                               '/path/to/some/file',
-                             ],
-                           })
-
-      expect(subject.files)
-        .to be_a(Underware::HashMergers::UnderwareRecursiveOpenStruct)
-      expected_files_hash = subject.files.some_files_section.first
-      expect(expected_files_hash.raw).to eq('/path/to/some/file')
-    end
-  end
 end

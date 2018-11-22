@@ -53,10 +53,6 @@ module Underware
         url "exec/kscomplete.php?name=#{node_name}" if node_name
       end
 
-      def build_file_url(*args)
-        url FilePath.relative_rendered_build_file_path(*args)
-      end
-
       def build_interface
         # Default to first network interface if `build_interface` is not
         # defined in server config.

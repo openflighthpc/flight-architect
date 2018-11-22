@@ -73,7 +73,6 @@ RSpec/FilePath:
 # Configuration parameters: AssignmentOnly.
 RSpec/InstanceVariable:
   Exclude:
-    - 'spec/build_files_retriever_spec.rb'
     - 'spec/commander_extensions_spec.rb'
     - 'spec/commands/status_spec.rb'
 

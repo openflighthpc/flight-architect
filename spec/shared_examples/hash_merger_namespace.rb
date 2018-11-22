@@ -10,7 +10,6 @@ RSpec.shared_examples \
   let(:test_config) do
     {
       test_config: 'I am the config',
-      files: [],
     }
   end
 

@@ -6,7 +6,6 @@ require 'underware/group_cache'
 require 'hashie'
 require 'underware/validation/loader'
 require 'underware/cache/asset'
-require 'underware/build_files_retrievers/cache'
 
 module Underware
   module Namespaces
@@ -55,10 +54,6 @@ module Underware
             end
             nodes.local
           end
-        end
-
-        def build_files_retriever
-          @build_files_retriever ||= BuildFilesRetrievers::Cache.new
         end
 
         def orphan_list

@@ -88,17 +88,6 @@ module Underware
         event(node_namespace, 'complete')
       end
 
-      # Gives path for a rendered build file, relative to some root directory
-      # that all build files will be rendered within (e.g.
-      # `/var/lib/metalware/rendered/`).
-      def relative_rendered_build_file_path(relative_namespace_files_dir, section, file_name)
-        File.join(
-          relative_namespace_files_dir,
-          section.to_s,
-          file_name
-        )
-      end
-
       def define_constant_paths
         Constants.constants
                  .map(& :to_s)

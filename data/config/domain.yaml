@@ -44,9 +44,9 @@ renderedurl: https://s3-eu-west-1.amazonaws.com/stevenorledge/rendered/<%=config
 nodescripturl: <%= config.renderedurl %>deployment/main.sh
 
 
-# 
+#
 # NETWORKS
-# 
+#
 domain: '<%= answer.domain %>'
 
 domainnetwork: '10.10.0.0'
@@ -61,29 +61,29 @@ networks:
     domain:  'pri'
     interface: 'em1'
     short_hostname: '<%= node.name %>.<%= config.networks.network1.domain %>'
-    hostname: '<%= config.networks.network1.short_hostname %>.<%= config.domain %>' 
+    hostname: '<%= config.networks.network1.short_hostname %>.<%= config.domain %>'
     ip: "10.10.<%= node.group.index %>.<%= node.index.to_i + 100 %>"
     netmask: 255.255.224.0
-    network: 10.10.0.0 
+    network: 10.10.0.0
     gateway: 10.10.0.1
     cloudID: subnet-12345678987654321   #this needs to be internal to something and set each time the domain is created
     primary: true
   network2:
     defined: <%= answer.network2_defined %>
-    domain: 'mgt' 
+    domain: 'mgt'
     interface: 'em2'
     short_hostname: '<%= node.name %>.<%= config.networks.network2.domain %>'
-    hostname: '<%= config.networks.network2.short_hostname %>.<%= config.domain %>' 
+    hostname: '<%= config.networks.network2.short_hostname %>.<%= config.domain %>'
     ip: "10.10.<%= node.group.index.to_i + 32 %>.<%= node.index.to_i + 100 %>"
     netmask: 255.255.224.0
     network: 10.10.32.0
     cloudID: subnet-12345678987654321   #this needs to be internal to something and set each time the domain is created
   network3:
     defined: <%= answer.network3_defined %>
-    domain: 'ib' 
+    domain: 'ib'
     interface: 'ib0'
     short_hostname: '<%= node.name %>.<%= config.networks.network3.domain %>'
-    hostname: '<%= config.networks.network3.short_hostname %>.<%= config.domain %>' 
+    hostname: '<%= config.networks.network3.short_hostname %>.<%= config.domain %>'
     ip: "10.10.<%= node.group.index.to_i + 64 %>.<%= node.index.to_i + 100 %>"
     netmask: 255.255.224.0
     network: 10.10.64.0

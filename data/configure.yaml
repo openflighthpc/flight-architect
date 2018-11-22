@@ -1,7 +1,7 @@
 questions:
   #
   # BASE
-  # 
+  #
   - &cluster_name
     identifier: cluster_name
     question: 'Name of the cluster'
@@ -20,7 +20,7 @@ questions:
   - &hostname_range
     identifier: hostname_range
     question: 'List of hosts for the group (in genders format, e.g. "node01,node[05-08]")'
-    
+
   - &secondary_groups
     identifier: secondary_groups
     question: 'Additional genders groups for this node/group to appear in (e.g. "compute,rack1")'
@@ -39,7 +39,7 @@ questions:
 
   #
   # NETWORKS
-  # 
+  #
   - &domain
     identifier: domain
     question: 'Fully-qualified domain name for cluster nodes'
@@ -67,7 +67,7 @@ domain:
   - *network2_defined
   - *network3_defined
 
-group: 
+group:
   # BASE
   - *hostname_range
   - *role
@@ -76,7 +76,7 @@ group:
   # NETWORKS
   - *network2_defined
   - *network3_defined
-  
+
 node:
   # BASE
   - *hostname_range

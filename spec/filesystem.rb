@@ -46,6 +46,7 @@ class FileSystem
     delegate :mkdir_p, :touch, :rm_rf, to: FileUtils
     delegate :write, to: File
     delegate :dump, to: Underware::Data
+    delegate :clone, to: FakeFS::FileSystem
 
     def activate_plugin(plugin_name)
       Underware::Plugins.activate!(plugin_name)
@@ -126,11 +127,11 @@ class FileSystem
 
   def with_fixtures(fixtures_dir, at:)
     path = fixtures_path(fixtures_dir)
-    FakeFS::FileSystem.clone(path, at)
+    clone(path, at)
   end
 
   def with_validation_error_file
-    FakeFS::FileSystem.clone(Underware::FilePath.dry_validation_errors)
+    clone(Underware::FilePath.dry_validation_errors)
   end
 
   def with_repo_fixtures(repo_fixtures_dir)
@@ -162,7 +163,7 @@ class FileSystem
 
   def with_asset_types
     asset_types_dir_path = File.dirname(Underware::FilePath.asset_type(''))
-    FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)
+    clone(asset_types_dir_path, asset_types_dir_path)
   end
 
   # Create same directory hierarchy that would be created by an Underware

@@ -28,20 +28,22 @@ require 'underware/exceptions'
 RSpec.describe Underware::NodeattrInterface do
   include Underware::AlcesUtils
 
-  context 'with setup1 genders' do
-    before do
-      FileSystem.root_setup do |fs|
-        fs.with_genders_fixtures('setup1/genders')
-      end
-    end
+  describe '#nodes_in_group' do
+    it 'returns only the nodes in the primary group' do
+      genders = <<~GENDERS.strip_heredoc
+        node[01-02] nodes
+        node03 special_nodes,nodes
+      GENDERS
+      File.write(Underware::FilePath.genders, genders)
 
-    describe '#nodes_in_group' do
-      it 'returns only the nodes in the primary group' do
-        nodes = described_class.nodes_in_group('group1')
-        expect(nodes).to contain_exactly('nodeA01', 'nodeA02')
-      end
+      nodes = described_class.nodes_in_group('nodes')
+      expect(nodes).to contain_exactly('node01', 'node02')
     end
   end
+
+  # XXX Rewrite below tests to explicitly setup genders file (like above),
+  # rather than using generic mystery guest fixture which makes it hard to tell
+  # what's going on.
 
   context 'using mock genders' do
     before do

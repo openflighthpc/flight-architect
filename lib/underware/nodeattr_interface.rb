@@ -81,9 +81,8 @@ module Underware
       def nodes_to_genders
         nodeattr('--expand')
           .split("\n")
-          .map(&:split)
+          .map { |line| expanded_genders_line_to_node_and_genders(line) }
           .to_h
-          .transform_values { |groups| groups.split(',') }
       end
 
       def nodeattr(command, format_error: true, mock_nodeattr: nil)
@@ -92,6 +91,16 @@ module Underware
           "#{mock_nodeattr} #{command}",
           format_error: format_error
         )
+      end
+
+      def expanded_genders_line_to_node_and_genders(line)
+        # For a valid genders file, `rest` will be either an array containing a
+        # single comma-separated string of attributes, or an empty array (since
+        # white-space is disallowed in a genders file attribute list).
+        node, *rest = line.split
+        genders_list = rest.first || ''
+        genders = genders_list.split(',')
+        [node, genders]
       end
     end
   end

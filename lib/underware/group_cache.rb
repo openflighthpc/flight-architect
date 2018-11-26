@@ -101,7 +101,7 @@ module Underware
         primary_groups: groups_hash,
         orphans: orphans,
       }
-      Data.dump(file_path.group_cache, payload)
+      Data.dump(FilePath.group_cache, payload)
       @data = nil # Reloads the cached file
       data
     end
@@ -110,10 +110,6 @@ module Underware
 
     def loader
       @loader ||= Validation::Loader.new
-    end
-
-    def file_path
-      @file_path ||= FilePath
     end
 
     def load

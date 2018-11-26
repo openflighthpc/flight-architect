@@ -114,16 +114,34 @@ RSpec.describe Underware::GroupCache do
     it 'gives list with just orphan group by default' do
       expect(cache.primary_groups).to eq(['orphan'])
     end
+
+    it 'gives list with just orphan group if cache already exists without next_available_index' do
+      File.write(Underware::FilePath.group_cache, "some_junk: doesn't matter")
+
+      expect(cache.primary_groups).to eq(['orphan'])
+    end
   end
 
   describe '#next_available_index' do
     it 'gives 1 by default' do
       expect(cache.next_available_index).to eq(1)
     end
+
+    it 'gives 1 if cache already exists without next_available_index' do
+      File.write(Underware::FilePath.group_cache, "some_junk: doesn't matter")
+
+      expect(cache.next_available_index).to eq(1)
+    end
   end
 
   describe '#orphans' do
     it 'gives empty list by default' do
+      expect(cache.orphans).to eq([])
+    end
+
+    it 'gives empty list if cache already exists without orphans' do
+      File.write(Underware::FilePath.group_cache, "some_junk: doesn't matter")
+
       expect(cache.orphans).to eq([])
     end
   end

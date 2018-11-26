@@ -82,11 +82,11 @@ module Underware
     end
 
     def next_available_index
-      data[:next_index]
+      data.fetch(:next_index, 1)
     end
 
     def orphans
-      data[:orphans]
+      data.fetch(:orphans, [])
     end
 
     def push_orphan(name)
@@ -127,10 +127,8 @@ module Underware
     end
 
     def primary_groups_hash
-      @primary_groups_hash ||= begin
-        data[:primary_groups][:orphan] = 0
-        data[:primary_groups]
-      end
+      @primary_groups_hash ||=
+        data.fetch(:primary_groups, {}).merge(orphan: 0)
     end
 
     def bump_next_index

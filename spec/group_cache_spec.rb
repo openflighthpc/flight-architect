@@ -110,8 +110,20 @@ RSpec.describe Underware::GroupCache do
     end
   end
 
+  describe '#primary_groups' do
+    it 'gives list with just orphan group by default' do
+      expect(cache.primary_groups).to eq(['orphan'])
+    end
+  end
+
+  describe '#next_available_index' do
+    it 'gives 1 by default' do
+      expect(cache.next_available_index).to eq(1)
+    end
+  end
+
   describe '#orphans' do
-    it 'is a blank list by default' do
+    it 'gives empty list by default' do
       expect(cache.orphans).to eq([])
     end
   end

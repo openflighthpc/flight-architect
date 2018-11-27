@@ -11,6 +11,11 @@ module Underware
   module Namespaces
     module Mixins
       module AlcesStatic
+        LOCAL_ERROR = <<-EOF.strip_heredoc
+          The local node has not been configured Please run: `underware
+          configure local`
+        EOF
+
         def alces
           self
         end
@@ -41,11 +46,6 @@ module Underware
         def data
           DataFileNamespace.new
         end
-
-        LOCAL_ERROR = <<-EOF.strip_heredoc
-          The local node has not been configured
-          Please run: `underware configure local`
-        EOF
 
         def local
           @local ||= begin

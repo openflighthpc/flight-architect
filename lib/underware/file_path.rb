@@ -34,6 +34,14 @@ module Underware
                :local_config,
                to: :config_path
 
+      def genders_template
+        File.join(templates_dir, 'genders')
+      end
+
+      def templates_dir
+        File.join(internal_data_dir, 'templates')
+      end
+
       def configure_file
         File.join(repo, 'configure.yaml')
       end
@@ -144,6 +152,10 @@ module Underware
       end
 
       private
+
+      def internal_data_dir
+        File.join(underware_install, 'data')
+      end
 
       def record(record_dir, types_dir, name)
         File.join(record_dir, types_dir, name + '.yaml')

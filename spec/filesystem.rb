@@ -112,6 +112,7 @@ class FileSystem
     FakeFS do
       filesystem = new
       filesystem.create_initial_directory_hierarchy
+      filesystem.clone_in_templates_dir
 
       configurator.configure_filesystem(filesystem)
 
@@ -182,6 +183,11 @@ class FileSystem
     ].each do |path|
       FileUtils.mkdir_p(path)
     end
+  end
+
+  def clone_in_templates_dir
+    templates_dir = Underware::FilePath.templates_dir
+    clone(templates_dir, templates_dir)
   end
 
   # Print every directory and file loaded in the FakeFS.

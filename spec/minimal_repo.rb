@@ -28,7 +28,6 @@ require 'network_interface'
 module MinimalRepo
   class << self
     FILES = {
-      '.git/': nil,
       'pxelinux/default':
         "<%= alces.firstboot ? 'FIRSTBOOT' : 'NOT_FIRSTBOOT' %>\n",
       'kickstart/default': '',
@@ -39,11 +38,6 @@ module MinimalRepo
       'named/forward/default': '',
       'named/reverse/default': '',
       'dhcp/default': '',
-      'configure.yaml': YAML.dump(questions: [],
-                                  domain: [],
-                                  group: [],
-                                  node: [],
-                                  local: []),
       # Define the build interface to be whatever the first interface is; this
       # should always be sufficient for testing purposes.
       'server.yaml': YAML

@@ -82,7 +82,6 @@ module Underware
 
       def dependency_hash
         {
-          repo: ['configure.yaml'],
           optional: {
             configure: [relative_answer_file],
           },

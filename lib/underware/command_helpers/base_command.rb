@@ -75,7 +75,6 @@ module Underware
       def enforce_dependency
         Dependency.new(
           command_input: command_name,
-          repo_path: FilePath.repo,
           dependency_hash: dependency_hash
         ).enforce
       end

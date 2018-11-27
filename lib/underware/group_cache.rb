@@ -108,11 +108,11 @@ module Underware
 
     private
 
-    def loader
-      @loader ||= Validation::Loader.new
+    def data
+      @data ||= load_data
     end
 
-    def load
+    def load_data
       defaults.merge(loader.group_cache)
     end
 
@@ -124,8 +124,8 @@ module Underware
       }
     end
 
-    def data
-      @data ||= load
+    def loader
+      @loader ||= Validation::Loader.new
     end
 
     def primary_groups_hash

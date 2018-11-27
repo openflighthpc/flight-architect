@@ -43,7 +43,7 @@ module Underware
       end
 
       def configure_file
-        File.join(repo, 'configure.yaml')
+        File.join(internal_data_dir, 'configure.yaml')
       end
 
       def domain_answers
@@ -151,11 +151,15 @@ module Underware
         )
       end
 
-      private
+      def config_dir
+        File.join(internal_data_dir, 'config')
+      end
 
       def internal_data_dir
         File.join(underware_install, 'data')
       end
+
+      private
 
       def record(record_dir, types_dir, name)
         File.join(record_dir, types_dir, name + '.yaml')
@@ -166,7 +170,7 @@ module Underware
       end
 
       def config_path
-        @config_path ||= ConfigPath.new(base: repo)
+        @config_path ||= ConfigPath.new(base: internal_data_dir)
       end
     end
   end

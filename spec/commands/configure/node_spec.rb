@@ -19,6 +19,7 @@ RSpec.describe Underware::Commands::Configure::Node do
   let(:filesystem) do
     FileSystem.setup do |fs|
       fs.with_minimal_repo
+      fs.with_minimal_configure_file
       fs.dump(Underware::FilePath.domain_answers, {})
       fs.dump(Underware::FilePath.group_answers('testnodes'), {})
     end

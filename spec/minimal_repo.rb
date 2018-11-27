@@ -39,7 +39,6 @@ module MinimalRepo
       'named/forward/default': '',
       'named/reverse/default': '',
       'dhcp/default': '',
-      'config/domain.yaml': '',
       'configure.yaml': YAML.dump(questions: [],
                                   domain: [],
                                   group: [],

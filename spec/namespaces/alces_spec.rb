@@ -367,7 +367,7 @@ RSpec.describe Underware::Namespaces::Alces do
     end
 
     describe '#render_file' do
-      context 'without a repo' do
+      context 'without config specifying parameters' do
         it 'renders template with no extra parameters' do
           expected = <<-EOF
           This is a test template
@@ -382,9 +382,9 @@ RSpec.describe Underware::Namespaces::Alces do
         end
       end
 
-      context 'with repo' do
+      context 'with config specifying parameters' do
         before do
-          filesystem.with_repo_fixtures('repo')
+          filesystem.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
         end
 
         it 'renders template with repo parameters' do

@@ -15,7 +15,8 @@ RSpec.describe Underware::HashMergers::HashMerger do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_repo_fixtures('merged_hash')
+      fs.with_minimal_configure_file
+      fs.with_fixtures('merged_hash/config', at: Underware::FilePath.config_dir)
       fs.with_answer_fixtures('merged_hash/answers')
     end
   end

@@ -112,7 +112,7 @@ class FileSystem
     FakeFS do
       filesystem = new
       filesystem.create_initial_directory_hierarchy
-      filesystem.clone_in_templates_dir
+      filesystem.clone_in_data_dir
 
       configurator.configure_filesystem(filesystem)
 
@@ -167,6 +167,15 @@ class FileSystem
     clone(asset_types_dir_path, asset_types_dir_path)
   end
 
+  # Useful when a `configure.yaml` file is required, but don't want to use real
+  # file to avoid actual questions being asked in tests.
+  def with_minimal_configure_file
+    File.write(
+      Underware::FilePath.configure_file,
+      minimal_configure_file_data
+    )
+  end
+
   # Create same directory hierarchy that would be created by an Underware
   # install (without directories unneeded for any tests to pass).
   def create_initial_directory_hierarchy
@@ -185,9 +194,9 @@ class FileSystem
     end
   end
 
-  def clone_in_templates_dir
-    templates_dir = Underware::FilePath.templates_dir
-    clone(templates_dir, templates_dir)
+  def clone_in_data_dir
+    data_dir = Underware::FilePath.internal_data_dir
+    clone(data_dir, data_dir)
   end
 
   # Print every directory and file loaded in the FakeFS.
@@ -212,6 +221,16 @@ class FileSystem
 
   def fixtures_path(relative_fixtures_path)
     File.join(FIXTURES_PATH, relative_fixtures_path)
+  end
+
+  def minimal_configure_file_data
+    YAML.dump(
+      questions: [],
+      domain: [],
+      group: [],
+      node: [],
+      local: []
+    )
   end
 
   class FileSystemConfigurator

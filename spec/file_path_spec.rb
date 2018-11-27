@@ -27,10 +27,10 @@ require 'underware/file_path'
 
 RSpec.describe Underware::FilePath do
   describe 'dynamic constant paths' do
-    let(:data_path) { Underware::Constants::UNDERWARE_DATA_PATH }
+    let(:storage_path) { Underware::Constants::UNDERWARE_STORAGE_PATH }
 
     it 'defines a constant file path' do
-      expect(described_class.underware_data).to eq(data_path)
+      expect(described_class.underware_storage).to eq(storage_path)
     end
 
     it 'does not define non-paths' do

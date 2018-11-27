@@ -57,7 +57,7 @@ module Underware
       end
 
       def answer_files
-        File.join(underware_data, 'answers')
+        File.join(underware_storage, 'answers')
       end
 
       def server_config
@@ -65,7 +65,7 @@ module Underware
       end
 
       def repo
-        File.join(underware_data, 'repo')
+        File.join(underware_storage, 'repo')
       end
 
       def overview
@@ -73,7 +73,7 @@ module Underware
       end
 
       def plugins_dir
-        File.join(underware_data, 'plugins')
+        File.join(underware_storage, 'plugins')
       end
 
       def repo_template_path(template_type, namespace:)
@@ -117,7 +117,7 @@ module Underware
       end
 
       def asset_dir
-        File.join(underware_data, 'assets')
+        File.join(underware_storage, 'assets')
       end
 
       def layout(*a)
@@ -125,7 +125,7 @@ module Underware
       end
 
       def layout_dir
-        File.join(underware_data, 'layouts')
+        File.join(underware_storage, 'layouts')
       end
 
       def asset_cache

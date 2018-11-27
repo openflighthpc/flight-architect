@@ -130,6 +130,9 @@ module Underware
 
     def primary_groups_hash
       @primary_groups_hash ||=
+        # Orphan group (which isn't a 'real'/user-configured primary group and
+        # so won't be saved in the `primary_groups` list) should always be
+        # considered as having index `0`.
         data[:primary_groups].merge(orphan: 0)
     end
 

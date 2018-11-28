@@ -24,9 +24,9 @@
 
 require 'bundler/setup'
 require 'commander'
-require 'underware/config'
 require 'colorize'
 
+require 'underware/config'
 require 'underware/cli_helper/parser'
 require 'underware/data'
 

@@ -380,12 +380,12 @@ RSpec.describe Underware::Namespaces::Alces do
       context 'without config specifying parameters' do
         it 'renders template with no extra parameters' do
           expected = <<-EOF
-          This is a test template
-          some_passed_value:
-          some_repo_value:
-          erb_repo_value:
-          very_recursive_erb_repo_value:
-          nested.repo_value:
+            This is a test template
+            some_passed_value:
+            some_repo_value:
+            erb_repo_value:
+            very_recursive_erb_repo_value:
+            nested.repo_value:
           EOF
 
           expect_renders({}, expected)
@@ -399,12 +399,12 @@ RSpec.describe Underware::Namespaces::Alces do
 
         it 'renders template with repo parameters' do
           expected = <<-EOF
-          This is a test template
-          some_passed_value:
-          some_repo_value: repo_value
-          erb_repo_value: repo_value
-          very_recursive_erb_repo_value: repo_value
-          nested.repo_value: nested_repo_value
+            This is a test template
+            some_passed_value:
+            some_repo_value: repo_value
+            erb_repo_value: repo_value
+            very_recursive_erb_repo_value: repo_value
+            nested.repo_value: nested_repo_value
           EOF
 
           expect_renders({}, expected)

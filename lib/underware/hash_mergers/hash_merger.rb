@@ -5,7 +5,6 @@ require 'underware/file_path'
 require 'underware/validation/loader'
 require 'underware/data'
 require 'underware/constants'
-require 'active_support/core_ext/object/deep_dup'
 
 module Underware
   module HashMergers

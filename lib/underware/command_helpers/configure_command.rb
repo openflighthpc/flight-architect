@@ -24,7 +24,6 @@
 
 require 'underware/command_helpers/base_command'
 require 'underware/configurator'
-require 'active_support/core_ext/string/strip'
 require 'underware/managed_file'
 
 module Underware

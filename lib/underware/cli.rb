@@ -23,6 +23,7 @@
 #==============================================================================
 
 require 'bundler/setup'
+require 'active_support/all'
 require 'commander'
 require 'colorize'
 

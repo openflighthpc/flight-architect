@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'active_support/core_ext/string/strip'
 require 'underware/nodeattr_interface'
 require 'underware/group_cache'
 require 'hashie'

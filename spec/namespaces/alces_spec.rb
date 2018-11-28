@@ -6,12 +6,13 @@ require 'underware/hash_mergers'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Namespaces::Alces do
-  # TODO: The Alces class should not be tested with AlcesUtils
-  # Remove AlcesUtils and mock the configs blank manually
-  include Underware::AlcesUtils
+  # TODO: The Alces class should not be tested with the rampant, convoluted
+  # mocking of itself provided by AlcesUtils; we should remove all usage of
+  # this and try to test it with as little mocking as possible, and only mock
+  # individual functions (and never mock the Alces class itself) as needed.
 
-  Underware::AlcesUtils.mock self, :each do
-    with_blank_config_and_answer(alces.domain)
+  let :alces do
+    described_class.new
   end
 
   describe '#render_string' do
@@ -108,6 +109,8 @@ RSpec.describe Underware::Namespaces::Alces do
 
   describe '#local' do
     it 'errors if not initialized' do
+      # XXX We shouldn't stub the System Under Test here (see
+      # https://robots.thoughtbot.com/don-t-stub-the-system-under-test).
       allow(alces).to receive(:nodes)
         .and_return(Underware::Namespaces::UnderwareArray.new([]))
 
@@ -245,6 +248,8 @@ RSpec.describe Underware::Namespaces::Alces do
     end
 
     before do
+      # XXX We shouldn't stub the System Under Test here (see
+      # https://robots.thoughtbot.com/don-t-stub-the-system-under-test).
       allow(alces).to receive(:scope).and_return(scope)
     end
 
@@ -257,6 +262,11 @@ RSpec.describe Underware::Namespaces::Alces do
 
     describe '#local' do
       it 'returns the local node' do
+        # Mock that the local node has been configured.
+        allow(
+          Underware::NodeattrInterface
+        ).to receive(:all_nodes).and_return(['local'])
+
         local_class = Underware::Namespaces::Local.to_s
         expect(alces.render_string('<%= alces.local.class %>')).to eq(local_class)
       end

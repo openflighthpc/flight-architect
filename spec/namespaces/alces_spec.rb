@@ -365,7 +365,7 @@ RSpec.describe Underware::Namespaces::Alces do
     let(:template_path) { '/template' }
 
     def expect_renders(template_parameters, expected)
-      filesystem.test do |_fs|
+      filesystem.test do
         # Strip trailing spaces from rendered output to make comparisons less
         # brittle.
         rendered = alces.render_file(

@@ -170,7 +170,7 @@ module Underware
       end
 
       def config_path
-        @config_path ||= ConfigPath.new(base: internal_data_dir)
+        ConfigPath.new(base: internal_data_dir)
       end
     end
   end

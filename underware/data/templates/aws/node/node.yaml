@@ -23,16 +23,16 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - !Ref <%=node.config.cluster%>SecurityGroup
+        - !Ref <%=name%>SecurityGroup
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: !Ref <%=node.config.cluster%><%=netname%>Subnet
+      SubnetId: !Ref <%=name%><%=netname%>Subnet
       Tags:
         -
           Key: 'Name'
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=node.config.cluster%>
+          Value: <%=name%>
 <% end -%>
 <% end -%>
 
@@ -62,7 +62,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=node.config.cluster%>
+          Value: <%=name%>
       UserData:
         Fn::Base64:
           Fn::Join:

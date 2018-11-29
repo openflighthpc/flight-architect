@@ -22,7 +22,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=config.cluster%>
+          Value: <%=name%>
 
   <%=name%>InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -34,7 +34,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=config.cluster%>
+          Value: <%=name%>
   
   <%=name%>InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -53,7 +53,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=config.cluster%>
+          Value: <%=name%>
   
 <% config.networks.each do |networkname,network|-%>
 <% if network.defined && !(network.dhcp) -%>
@@ -72,7 +72,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=config.cluster%>
+          Value: <%=name%>
 <% if network.primary -%>
 
   <%=networkname%>SubnetRouteTableAssocation:
@@ -130,16 +130,16 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=config.cluster%>
+          Value: <%=name%>
 
 Outputs:
   domaincloudID:
     Description: domaincloudID
-    Value: !Ref <%=config.cluster%>Network
+    Value: !Ref <%=name%>Network
 <% config.networks.each do |networkname,network|-%>
 <% if network.defined -%>
   <%=networkname%>cloudID:
     Description: <%=networkname%>cloudID
-    Value: !Ref <%=config.cluster%><%=networkname%>Subnet
+    Value: !Ref <%=name%><%=networkname%>Subnet
 <% end -%>
 <% end -%>

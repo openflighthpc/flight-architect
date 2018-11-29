@@ -13,7 +13,6 @@ module Underware
       # and then call `super`, though this class does not need arguments
       # itself.
       def initialize(*_args)
-        @file_path = FilePath
         @loader = Validation::Loader.new
         @cache = {}
       end
@@ -26,7 +25,7 @@ module Underware
 
       private
 
-      attr_reader :file_path, :loader, :cache
+      attr_reader :loader, :cache
 
       # Method to be overridden with the hash defaults
       def defaults

@@ -3,7 +3,7 @@ require 'ipaddr'
 def to_cidr(network,netmask)
   "#{network.to_s}/#{IPAddr.new(netmask.to_s).to_i.to_s(2).count('1')}"
 end
-name="#{config.cluster}"
+clustername="#{config.cluster}"
 
 -%>
 ---
@@ -25,16 +25,16 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - !Ref <%=name%>SecurityGroup
+        - !Ref <%=clustername%>SecurityGroup
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: !Ref <%=name%><%=netname%>Subnet
+      SubnetId: !Ref <%=clustername%><%=netname%>Subnet
       Tags:
         -
           Key: 'Name'
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=name%>
+          Value: <%=clustername%>
 <% end -%>
 <% end -%>
 
@@ -64,7 +64,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'alcescluster'
-          Value: <%=name%>
+          Value: <%=clustername%>
       UserData:
         Fn::Base64:
           Fn::Join:

@@ -32,6 +32,7 @@ module Underware
                :group_config,
                :node_config,
                :local_config,
+               :config_dir,
                to: :config_path
 
       def genders_template
@@ -66,10 +67,6 @@ module Underware
 
       def answer_files
         File.join(underware_storage, 'answers')
-      end
-
-      def server_config
-        File.join(repo, 'server.yaml')
       end
 
       def repo
@@ -149,10 +146,6 @@ module Underware
           Constants::NAMESPACE_DATA_PATH,
           "#{name}.yaml"
         )
-      end
-
-      def config_dir
-        File.join(internal_data_dir, 'config')
       end
 
       def internal_data_dir

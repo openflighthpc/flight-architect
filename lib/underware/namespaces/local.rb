@@ -10,10 +10,6 @@ module Underware
         def create(*args)
           new(*args)
         end
-
-        def new(*args)
-          super
-        end
       end
     end
   end

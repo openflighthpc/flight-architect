@@ -152,6 +152,27 @@ RSpec.describe Underware::Namespaces::Alces do
     end
   end
 
+  describe '#build_interface' do
+    it 'gives answer to configured_build_interface question if present' do
+      Underware::Data.dump(
+        Underware::FilePath.domain_answers,
+        configured_build_interface: 'eth3'
+      )
+
+      expect(alces.build_interface).to eq('eth3')
+    end
+
+    it 'gives first available network interface if answer not present' do
+      allow(Underware::Network)
+        .to receive(:interfaces)
+        .and_return(['eth2', 'eth4'])
+      # Guarantee no answers present.
+      Underware::Data.dump(Underware::FilePath.domain_answers, {})
+
+      expect(alces.build_interface).to eq('eth2')
+    end
+  end
+
   describe '#data' do
     it 'provides access to data in corresponding data directory file' do
       data_file_path = Underware::FilePath.namespace_data_file('mydata')

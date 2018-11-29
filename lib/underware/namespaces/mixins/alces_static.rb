@@ -55,6 +55,10 @@ module Underware
           end
         end
 
+        def build_interface
+          @build_interface ||= determine_build_interface
+        end
+
         def orphan_list
           @orphan_list ||= group_cache.orphans
         end
@@ -79,6 +83,16 @@ module Underware
 
         def loader
           @loader ||= Validation::Loader.new
+        end
+
+        def determine_build_interface
+          if config.configured_build_interface&.present?
+            config.configured_build_interface
+          else
+            # Default to first network interface if `build_interface` has not
+            # been configured by user.
+            Network.interfaces.first
+          end
         end
 
         class DataFileNamespace

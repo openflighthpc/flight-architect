@@ -5,6 +5,7 @@ debug: true
 #
 cluster: '<%= answer.cluster_name %>'
 root_password: '<%= answer.root_password %>'
+configured_build_interface: '<%= answer.configured_build_interface %>'
 publickey: '<%= answer.publickey %>'
 privatekey: |
   ----BEGIN RSA PRIVATE KEY-----

@@ -34,6 +34,8 @@ require 'underware/network'
 module Underware
   module DeploymentServer
     class << self
+      delegate :build_interface, to: :alces
+
       def ip
         ip_on_interface(build_interface)
       end
@@ -53,21 +55,11 @@ module Underware
         url "exec/kscomplete.php?name=#{node_name}" if node_name
       end
 
-      def build_interface
-        # Default to first network interface if `build_interface` is not
-        # defined in server config.
-        server_config[:build_interface] || Underware::Network.interfaces.first
-      end
-
       private
 
       def url(url_path)
         full_path = File.join('metalware', url_path)
         URI.join("http://#{ip}", full_path).to_s
-      end
-
-      def server_config
-        Data.load(FilePath.server_config)
       end
 
       def ip_on_interface(interface)
@@ -80,6 +72,10 @@ module Underware
           Constants::UNDERWARE_INSTALL_PATH,
           'libexec/determine-hostip'
         )
+      end
+
+      def alces
+        Namespaces::Alces.new
       end
     end
   end

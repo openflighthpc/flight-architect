@@ -69,7 +69,7 @@ Resources:
             - ''
             - - "#cloud-config\n"
               - "hostname: <%=name%>\n"
-              - "fqdn: <%=node.config.networks.pri.hostname%>\n"
+              - "fqdn: <%=node.config.networks.network1.hostname%>\n"
               - "runcmd:\n"
               - "  - curl <%= node.config.nodescripturl %> | /bin/bash -x | tee /tmp/mainscript-default-output\n"
 

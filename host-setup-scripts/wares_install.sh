@@ -20,9 +20,9 @@ done
 # Underware
 curl -sL https://raw.githubusercontent.com/alces-software/underware/master/scripts/bootstrap?installer/ | alces_OS=el7 alces_SOURCE_BRANCH=$UNDERWARE_VERSION /bin/bash
 mkdir -p /var/lib/underware/repo/{.git,config,genders}
-curl https://raw.githubusercontent.com/ste78/wip/stustuff/underware/repo/config/domain.yaml > /var/lib/underware/repo/config/domain.yaml
-curl https://raw.githubusercontent.com/ste78/wip/stustuff/underware/repo/configure.yaml > /var/lib/underware/repo/configure.yaml
-curl https://raw.githubusercontent.com/ste78/wip/stustuff/underware/repo/genders/default > /var/lib/underware/repo/genders/default
+curl https://raw.githubusercontent.com/ColonelPanicks/mountain-climber-wip/master/underware/repo-to-be-included/config/domain.yaml > /var/lib/underware/repo/config/domain.yaml
+curl https://raw.githubusercontent.com/ColonelPanicks/mountain-climber-wip/master/underware/repo-to-be-included/configure.yaml > /var/lib/underware/repo/configure.yaml
+curl https://raw.githubusercontent.com/ColonelPanicks/mountain-climber-wip/master/underware/data/templates/genders > /var/lib/underware/repo/genders/default
 
 # Metalware
 curl -sL https://raw.githubusercontent.com/alces-software/metalware/master/scripts/bootstrap?installer | alces_OS=el7 alces_SOURCE_BRANCH=$METALWARE_VERSION /bin/bash

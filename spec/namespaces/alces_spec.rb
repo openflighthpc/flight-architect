@@ -374,12 +374,12 @@ RSpec.describe Underware::Namespaces::Alces do
     # other.
     let(:template) do
       <<-EOF
-      This is a test template
-      some_passed_value: <%= domain.config.some_passed_value %>
-      some_config_value: <%= domain.config.some_config_value %>
-      erb_config_value: <%= domain.config.erb_config_value %>
-      very_recursive_erb_config_value: <%= domain.config.very_recursive_erb_config_value %>
-      nested.config_value: <%= domain.config.nested ? domain.config.nested.config_value : nil %>
+        This is a test template
+        some_passed_value: <%= domain.config.some_passed_value %>
+        some_config_value: <%= domain.config.some_config_value %>
+        erb_config_value: <%= domain.config.erb_config_value %>
+        very_recursive_erb_config_value: <%= domain.config.very_recursive_erb_config_value %>
+        nested.config_value: <%= domain.config.nested ? domain.config.nested.config_value : nil %>
       EOF
     end
 

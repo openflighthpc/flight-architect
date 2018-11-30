@@ -129,6 +129,11 @@ subcommands:
     summary: Render specified template against domain namespace, and output result
     action: Commands::Render::Domain
 
+  render_node: &render_node
+    syntax: underware render node NODE TEMPLATE [options]
+    summary: Render specified template against given node namespace, and output result
+    action: Commands::Render::Node
+
   plugin_list: &plugin_list
     syntax: underware plugin list [options]
     summary: List available and activated plugins
@@ -237,6 +242,7 @@ commands:
     summary: Render a template against specified namespace, and output result
     subcommands:
       domain: *render_domain
+      node: *render_node
 
   view-answers:
     syntax: underware view-answers [SUB_COMMAND] [options]

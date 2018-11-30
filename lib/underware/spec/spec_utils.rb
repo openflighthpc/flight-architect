@@ -48,14 +48,6 @@ module Underware
       )
     end
 
-    def fake_download_error
-      http_error = "418 I'm a teapot"
-      allow(Underware::Input).to receive(:download).and_raise(
-        OpenURI::HTTPError.new(http_error, nil)
-      )
-      http_error
-    end
-
     # Other shared utils.
 
     def enable_output_to_stderr

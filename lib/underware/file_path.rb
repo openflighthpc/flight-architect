@@ -125,10 +125,6 @@ module Underware
         File.join(cache, 'assets.yaml')
       end
 
-      def cached_template(name)
-        File.join(cache, 'templates', name)
-      end
-
       def namespace_data_file(name)
         File.join(
           Constants::NAMESPACE_DATA_PATH,
@@ -144,10 +140,6 @@ module Underware
 
       def record(record_dir, types_dir, name)
         File.join(record_dir, types_dir, name + '.yaml')
-      end
-
-      def template_file_name(template_type, namespace:)
-        namespace.config.templates&.send(template_type) || 'default'
       end
 
       def config_path

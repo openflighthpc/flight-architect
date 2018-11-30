@@ -44,3 +44,6 @@
       - run_command
       - each_value
       - Update
+      - debug
+      - retrieve
+      - cached

@@ -74,7 +74,7 @@ module Underware
       end
 
       def overview
-        File.join(repo, 'overview.yaml')
+        File.join(internal_data_dir, 'overview.yaml')
       end
 
       def plugins_dir

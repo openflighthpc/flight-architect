@@ -11,7 +11,7 @@ module Underware
         private
 
         def answer_file
-          file_path.domain_answers
+          FilePath.domain_answers
         end
 
         def configurator

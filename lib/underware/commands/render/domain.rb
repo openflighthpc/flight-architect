@@ -2,12 +2,11 @@
 module Underware
   module Commands
     module Render
-      class Domain < CommandHelpers::BaseCommand
+      class Domain < CommandHelpers::RenderCommand
         private
 
-        def run
-          template_path = args.first
-          puts alces.render_file(template_path)
+        def find_namespace(_namespace_name)
+          alces.domain
         end
       end
     end

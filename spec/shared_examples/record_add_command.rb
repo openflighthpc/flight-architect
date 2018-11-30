@@ -46,7 +46,6 @@ RSpec.shared_examples 'record add command' do
 
   context 'with a layout' do
     Underware::AlcesUtils.mock(self, :each) do
-      FileSystem.root_setup(&:with_minimal_repo)
       create_layout(layout, {})
     end
 

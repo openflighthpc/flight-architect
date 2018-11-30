@@ -35,7 +35,6 @@ RSpec.describe Underware::Commands::Plugin::List do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_minimal_repo
       fs.mkdir_p example_plugin_dir_1
       fs.mkdir_p example_plugin_dir_2
       fs.touch junk_other_plugins_dir_file

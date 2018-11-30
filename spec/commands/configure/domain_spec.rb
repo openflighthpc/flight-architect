@@ -10,10 +10,7 @@ RSpec.describe Underware::Commands::Configure::Domain do
   end
 
   let(:filesystem) do
-    FileSystem.setup do |fs|
-      fs.with_minimal_repo
-      fs.with_minimal_configure_file
-    end
+    FileSystem.setup(&:with_minimal_configure_file)
   end
 
   before do

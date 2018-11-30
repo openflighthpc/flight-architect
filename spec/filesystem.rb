@@ -24,7 +24,6 @@
 
 require 'fakefs/safe'
 require 'underware/constants'
-require 'minimal_repo'
 require 'underware/validation/configure'
 
 # XXX Reduce the hardcoded paths once sorted out Config/Constants situation.
@@ -120,12 +119,6 @@ class FileSystem
     end
   end
 
-  # This should construct the most minimal possible valid Underware repo, at
-  # the default repo path.
-  def with_minimal_repo
-    MinimalRepo.create_at('/var/lib/underware/repo')
-  end
-
   def with_fixtures(fixtures_dir, at:)
     path = fixtures_path(fixtures_dir)
     clone(path, at)
@@ -133,14 +126,6 @@ class FileSystem
 
   def with_validation_error_file
     clone(Underware::FilePath.dry_validation_errors)
-  end
-
-  def with_repo_fixtures(repo_fixtures_dir)
-    # Create the minimal parts of a Underware repo, these can then be
-    # overridden by the specified fixtures.
-    with_minimal_repo
-
-    with_fixtures(repo_fixtures_dir, at: '/var/lib/underware/repo')
   end
 
   def with_answer_fixtures(answer_fixtures_dir)

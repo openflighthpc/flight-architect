@@ -129,6 +129,11 @@ subcommands:
     summary: Render specified template against domain namespace, and output result
     action: Commands::Render::Domain
 
+  render_group: &render_group
+    syntax: underware render group GROUP TEMPLATE [options]
+    summary: Render specified template against given group namespace, and output result
+    action: Commands::Render::Group
+
   render_node: &render_node
     syntax: underware render node NODE TEMPLATE [options]
     summary: Render specified template against given node namespace, and output result
@@ -242,6 +247,7 @@ commands:
     summary: Render a template against specified namespace, and output result
     subcommands:
       domain: *render_domain
+      group: *render_group
       node: *render_node
 
   view-answers:

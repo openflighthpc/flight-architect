@@ -180,8 +180,6 @@ RSpec.describe Underware::Namespaces::Node do
 
     before do
       FileSystem.root_setup do |fs|
-        fs.with_minimal_repo
-
         # Create all test plugins.
         [
           enabled_plugin,

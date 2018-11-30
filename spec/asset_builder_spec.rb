@@ -206,7 +206,6 @@ RSpec.describe Underware::AssetBuilder do
     let(:expected_content) { { key: 'content' } }
 
     Underware::AlcesUtils.mock(self, :each) do
-      FileSystem.root_setup(&:with_minimal_repo)
       create_asset(test_asset, {}, type: type)
     end
 

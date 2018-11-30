@@ -24,7 +24,6 @@
 
 require 'underware/command_helpers/base_command'
 require 'underware/configurator'
-require 'active_support/core_ext/string/strip'
 require 'underware/managed_file'
 
 module Underware
@@ -37,7 +36,7 @@ module Underware
         # The genders file must be templated with a new namespace object as the
         # answers may have changed since they where loaded
         new_alces = Namespaces::Alces.new
-        template = FilePath.repo_template_path('genders', namespace: new_alces)
+        template = FilePath.genders_template
         rendered_genders_content = new_alces.render_file(template)
         full_new_genders_content = ManagedFile.content(
           FilePath.genders, rendered_genders_content
@@ -82,7 +81,6 @@ module Underware
 
       def dependency_hash
         {
-          repo: ['configure.yaml'],
           optional: {
             configure: [relative_answer_file],
           },

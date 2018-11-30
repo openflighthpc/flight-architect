@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
-require 'active_support/core_ext/string/strip'
 require 'underware/nodeattr_interface'
 require 'underware/group_cache'
 require 'hashie'
 require 'underware/validation/loader'
 require 'underware/cache/asset'
-require 'underware/build_files_retrievers/cache'
 
 module Underware
   module Namespaces
     module Mixins
       module AlcesStatic
+        LOCAL_ERROR = <<-EOF.strip_heredoc
+          The local node has not been configured Please run: `underware
+          configure local`
+        EOF
+
         def alces
           self
         end
@@ -43,11 +46,6 @@ module Underware
           DataFileNamespace.new
         end
 
-        LOCAL_ERROR = <<-EOF.strip_heredoc
-          The local node has not been configured
-          Please run: `underware configure local`
-        EOF
-
         def local
           @local ||= begin
             unless nodes.respond_to?(:local)
@@ -57,8 +55,8 @@ module Underware
           end
         end
 
-        def build_files_retriever
-          @build_files_retriever ||= BuildFilesRetrievers::Cache.new
+        def build_interface
+          @build_interface ||= determine_build_interface
         end
 
         def orphan_list
@@ -85,6 +83,16 @@ module Underware
 
         def loader
           @loader ||= Validation::Loader.new
+        end
+
+        def determine_build_interface
+          if config.configured_build_interface&.present?
+            config.configured_build_interface
+          else
+            # Default to first network interface if `build_interface` has not
+            # been configured by user.
+            Network.interfaces.first
+          end
         end
 
         class DataFileNamespace

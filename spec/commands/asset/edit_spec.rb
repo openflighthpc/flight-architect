@@ -14,7 +14,6 @@ RSpec.describe Underware::Commands::Asset::Edit do
   let(:record_path) { Underware::Records::Asset.path(record_name) }
 
   Underware::AlcesUtils.mock(self, :each) do
-    FileSystem.root_setup(&:with_minimal_repo)
     create_asset(record_name, {})
   end
 

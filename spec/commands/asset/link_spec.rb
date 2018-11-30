@@ -30,7 +30,6 @@ RSpec.describe Underware::Commands::Asset::Link do
 
   context 'when using a saved asset' do
     Underware::AlcesUtils.mock(self, :each) do
-      FileSystem.root_setup(&:with_minimal_repo)
       create_asset(asset_name, {})
     end
 

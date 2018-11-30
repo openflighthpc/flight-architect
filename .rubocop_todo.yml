@@ -73,7 +73,6 @@ RSpec/FilePath:
 # Configuration parameters: AssignmentOnly.
 RSpec/InstanceVariable:
   Exclude:
-    - 'spec/build_files_retriever_spec.rb'
     - 'spec/commander_extensions_spec.rb'
     - 'spec/commands/status_spec.rb'
 
@@ -160,7 +159,6 @@ Style/IfUnlessModifier:
   Exclude:
     - 'bin/autocomplete'
     - 'lib/underware/command_helpers/configure_command.rb'
-    - 'lib/underware/commands/repo/update.rb'
     - 'lib/underware/namespaces/mixins/alces_static.rb'
     - 'lib/underware/nodeattr_interface.rb'
     - 'lib/underware/templater.rb'
@@ -180,7 +178,6 @@ Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
     - 'bin/autocomplete'
-    - 'lib/underware/commands/repo/update.rb'
 
 # Offense count: 1
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.

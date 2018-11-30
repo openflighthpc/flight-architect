@@ -24,7 +24,6 @@
 
 require 'fakefs/safe'
 require 'underware/constants'
-require 'minimal_repo'
 require 'underware/validation/configure'
 
 # XXX Reduce the hardcoded paths once sorted out Config/Constants situation.
@@ -46,6 +45,7 @@ class FileSystem
     delegate :mkdir_p, :touch, :rm_rf, to: FileUtils
     delegate :write, to: File
     delegate :dump, to: Underware::Data
+    delegate :clone, to: FakeFS::FileSystem
 
     def activate_plugin(plugin_name)
       Underware::Plugins.activate!(plugin_name)
@@ -111,6 +111,7 @@ class FileSystem
     FakeFS do
       filesystem = new
       filesystem.create_initial_directory_hierarchy
+      filesystem.clone_in_data_dir
 
       configurator.configure_filesystem(filesystem)
 
@@ -118,27 +119,13 @@ class FileSystem
     end
   end
 
-  # This should construct the most minimal possible valid Underware repo, at
-  # the default repo path.
-  def with_minimal_repo
-    MinimalRepo.create_at('/var/lib/underware/repo')
-  end
-
   def with_fixtures(fixtures_dir, at:)
     path = fixtures_path(fixtures_dir)
-    FakeFS::FileSystem.clone(path, at)
+    clone(path, at)
   end
 
   def with_validation_error_file
-    FakeFS::FileSystem.clone(Underware::FilePath.dry_validation_errors)
-  end
-
-  def with_repo_fixtures(repo_fixtures_dir)
-    # Create the minimal parts of a Underware repo, these can then be
-    # overridden by the specified fixtures.
-    with_minimal_repo
-
-    with_fixtures(repo_fixtures_dir, at: '/var/lib/underware/repo')
+    clone(Underware::FilePath.dry_validation_errors)
   end
 
   def with_answer_fixtures(answer_fixtures_dir)
@@ -162,7 +149,16 @@ class FileSystem
 
   def with_asset_types
     asset_types_dir_path = File.dirname(Underware::FilePath.asset_type(''))
-    FakeFS::FileSystem.clone(asset_types_dir_path, asset_types_dir_path)
+    clone(asset_types_dir_path, asset_types_dir_path)
+  end
+
+  # Useful when a `configure.yaml` file is required, but don't want to use real
+  # file to avoid actual questions being asked in tests.
+  def with_minimal_configure_file
+    File.write(
+      Underware::FilePath.configure_file,
+      minimal_configure_file_data
+    )
   end
 
   # Create same directory hierarchy that would be created by an Underware
@@ -172,7 +168,6 @@ class FileSystem
       '/tmp',
       '/var/lib/underware/rendered/system',
       '/var/lib/underware/cache/templates',
-      '/var/lib/underware/repo',
       '/var/lib/underware/answers/groups',
       '/var/lib/underware/answers/nodes',
       '/var/lib/underware/assets',
@@ -181,6 +176,11 @@ class FileSystem
     ].each do |path|
       FileUtils.mkdir_p(path)
     end
+  end
+
+  def clone_in_data_dir
+    data_dir = Underware::FilePath.internal_data_dir
+    clone(data_dir, data_dir)
   end
 
   # Print every directory and file loaded in the FakeFS.
@@ -205,6 +205,16 @@ class FileSystem
 
   def fixtures_path(relative_fixtures_path)
     File.join(FIXTURES_PATH, relative_fixtures_path)
+  end
+
+  def minimal_configure_file_data
+    YAML.dump(
+      questions: [],
+      domain: [],
+      group: [],
+      node: [],
+      local: []
+    )
   end
 
   class FileSystemConfigurator

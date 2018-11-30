@@ -25,15 +25,17 @@
 require 'underware/network'
 
 # XXX All the URLs here have paths under `/metalware`, and only make sense/have
-# any chance of resolving when Metalware (and the web server set up by its
-# repo) is also installed; they must live here though as they need to be
-# accessed via the Underware namespaces. Long term there might be a better way
-# for this to be setup; maybe Underware should detect Metalware is installed
-# and warn/error if these values are accessed when it is not?
+# any chance of resolving when Metalware (and the web server set up by this) is
+# also installed; they must live here though as they need to be accessed via
+# the Underware namespaces. Long term there might be a better way for this to
+# be setup; maybe Underware should detect Metalware is installed and warn/error
+# if these values are accessed when it is not?
 
 module Underware
   module DeploymentServer
     class << self
+      delegate :build_interface, to: :alces
+
       def ip
         ip_on_interface(build_interface)
       end
@@ -53,25 +55,11 @@ module Underware
         url "exec/kscomplete.php?name=#{node_name}" if node_name
       end
 
-      def build_file_url(*args)
-        url FilePath.relative_rendered_build_file_path(*args)
-      end
-
-      def build_interface
-        # Default to first network interface if `build_interface` is not
-        # defined in server config.
-        server_config[:build_interface] || Underware::Network.interfaces.first
-      end
-
       private
 
       def url(url_path)
         full_path = File.join('metalware', url_path)
         URI.join("http://#{ip}", full_path).to_s
-      end
-
-      def server_config
-        Data.load(FilePath.server_config)
       end
 
       def ip_on_interface(interface)
@@ -84,6 +72,10 @@ module Underware
           Constants::UNDERWARE_INSTALL_PATH,
           'libexec/determine-hostip'
         )
+      end
+
+      def alces
+        Namespaces::Alces.new
       end
     end
   end

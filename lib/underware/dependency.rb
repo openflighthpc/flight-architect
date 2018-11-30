@@ -27,12 +27,11 @@ require 'underware/validation/loader'
 
 module Underware
   class Dependency
-    def initialize(command_input:, repo_path:, dependency_hash: {})
+    def initialize(command_input:, dependency_hash: {})
       @dependency_hash = dependency_hash
       @optional_dependency_hash = @dependency_hash.delete(:optional)
       @optional_dependency_hash ||= {}
       @command = command_input
-      @repo_path = repo_path
     end
 
     def enforce
@@ -42,7 +41,7 @@ module Underware
 
     private
 
-    attr_reader :command, :repo_path
+    attr_reader :command
 
     def run_dependencies(dep_hash, optional = false)
       dep_hash.each do |dep, values|
@@ -88,17 +87,8 @@ module Underware
       end
     end
 
-    def validate_repo
-      @validated_repo ||= begin
-        msg = "'#{command}' requires a repo. Please run 'repo use'"
-        raise DependencyFailure, msg unless valid_file?(:repo, '.git', true)
-        true # Sets the @validate_repo value so it only runs once
-      end
-    end
-
     def validate_configure
       @validate_configure ||= begin
-        validate_repo
         loader.question_tree
         unless valid_file?(:configure, '', true)
           msg = "Could not locate answer files: #{FilePath.answer_files}"
@@ -111,10 +101,6 @@ module Underware
     def valid_file?(dep, value, validate_directory = false, &block)
       path = begin
         case dep
-        when :repo
-          # When checking `repo` dependencies, use the repo at the `repo_path`
-          # passed in at initialization.
-          File.join(repo_path, value)
         when :configure
           # Configuration happens in Underware, so always check Underware paths
           # when checking `configure` dependencies.
@@ -140,8 +126,6 @@ module Underware
     def get_value_failure_message(dep, value)
       msg = "The '#{dep}' dependency (value: #{value}) has failed"
       case dep
-      when :repo
-        msg = "Could not find repo file: #{value}"
       when :configure
         cmd = File.basename(value, '.yaml')
         cmd = "group #{cmd}" unless cmd == 'domain'

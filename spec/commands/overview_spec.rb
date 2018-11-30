@@ -24,19 +24,18 @@ RSpec.describe Underware::Commands::Overview do
       receive(:new).once.with(*inputs).and_call_original
   end
 
-  context 'without overview.yaml' do
-    it 'includes the name in the group table' do
-      expect_table_with alces.groups, [name_hash]
+  it 'does not error when using the real overview.yaml' do
+    expect do
       run_command
-    end
-
-    it 'makes an empty domain table' do
-      expect_table_with [alces.domain], []
-      run_command
-    end
+    end.not_to raise_error
   end
 
-  context 'with a overview.yaml' do
+  # We create an `overview.yaml` file just for testing:
+  # a. for legacy reasons, as this file uses to live in the repo and so be
+  # unavailable in tests;
+  # b. so engineers can edit the real file as needed without breaking these
+  # tests.
+  context 'with a test-specific overview.yaml' do
     let(:overview_hash) do
       {
         domain: [{ header: 'h1', value: 'v1' }, { header: 'h2', value: 'v2' }],

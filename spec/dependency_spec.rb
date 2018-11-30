@@ -42,150 +42,90 @@ RSpec.describe Underware::Dependency do
     filesystem.test do |_fs|
       Underware::Dependency.new(
         command_input: command_input,
-        repo_path: Underware::FilePath.repo,
         dependency_hash: dependency_hash
       ).enforce
     end
   end
 
-  context 'with a fresh filesystem' do
-    # Note: the missing repo error message does not include a prefix in the
-    # command to run (i.e. is not `underware repo use`), as whichever tool the
-    # Dependency class is being used from, the repo it will use and enforce
-    # dependencies from will be specific to that tool (e.g.
-    # `/var/lib/metalware/repo` if it is used from Metalware), and so `repo
-    # use` should be run under the namespace of whatever the current tool is.
-    let :missing_repo_error do
-      "'#{command_input}' requires a repo. Please run 'repo use'"
-    end
+  it 'fails when enforcing non-existent domain answer file presence, with error message telling you command to run' do
+    # Note: here and in missing group answers error message, the command to
+    # run includes `underware`, as no matter what tool the Dependency class
+    # is being used from, namespace configuration still always occurs via
+    # Underware.
+    missing_domain_answers_error =
+      /required answer file: domain\.yaml\. Please run 'underware configure domain'/
 
-    it 'fails when enforcing repo dependencies, with error message telling you command to run' do
+    filesystem.test do
       expect do
-        enforce_dependencies(repo: [])
-      end.to raise_error(Underware::DependencyFailure, missing_repo_error)
-    end
-
-    it 'fails when enforcing configure dependencies, also due to missing repo' do
-      expect do
-        enforce_dependencies(configure: ['domain.yaml'])
-      end.to raise_error(Underware::DependencyFailure, missing_repo_error)
+        enforce_dependencies(
+          configure: ['domain.yaml']
+        )
+      end.to raise_error(
+        Underware::DependencyFailure,
+        missing_domain_answers_error
+      )
     end
   end
 
-  context 'with repo present' do
+  it 'fails when enforcing non-existent, non-orphan group answer file presence, with error message telling you command to run' do
+    missing_group_answers_error =
+      /required answer file: groups\/group1\.yaml\. Please run 'underware configure group group1'/
+
+    filesystem.test do
+      expect do
+        enforce_dependencies(
+          configure: ['groups/group1.yaml']
+        )
+      end.to raise_error(
+        Underware::DependencyFailure,
+        missing_group_answers_error
+      )
+    end
+  end
+
+  # The orphan group does not require an answer file
+  it 'never fails when enforcing orphan group answer file presence' do
+    filesystem.test do
+      expect do
+        enforce_dependencies(
+          configure: ['groups/orphan.yaml']
+        )
+      end.not_to raise_error
+    end
+  end
+
+  context 'when answer files exist' do
     before do
-      filesystem.with_repo_fixtures('repo')
+      filesystem.with_answer_fixtures('answers/basic_structure')
     end
 
-    it 'succeeds when enforcing base repo presence' do
+    it 'succeeds when enforcing existent answer file presence' do
       expect do
-        enforce_dependencies(repo: [])
-      end.not_to raise_error
-    end
-
-    it 'succeeds when enforcing existent repo template presence' do
-      expect do
-        enforce_dependencies(repo: ['dependency-test1/default'])
-      end.not_to raise_error
-      expect do
-        template = ['dependency-test1/default', 'dependency-test2/default']
-        enforce_dependencies(repo: template)
-      end.not_to raise_error
-    end
-
-    it 'fails when enforcing non-existent repo template presence' do
-      expect do
-        enforce_dependencies(repo: ['dependency-test1/not-found'])
-      end.to raise_error(Underware::DependencyFailure)
-    end
-
-    it 'fails when enforcing repo directory presence' do
-      expect do
-        enforce_dependencies(repo: ['dependency-test1'])
-      end.to raise_error(Underware::DependencyFailure)
-    end
-
-    it 'fails when enforcing non-existent domain answer file presence, with error message telling you command to run' do
-      # Note: here and in missing group answers error message, the command to
-      # run includes `underware`, as no matter what tool the Dependency class
-      # is being used from, namespace configuration still always occurs via
-      # Underware.
-      missing_domain_answers_error =
-        /required answer file: domain\.yaml\. Please run 'underware configure domain'/
-
-      filesystem.test do
-        expect do
-          enforce_dependencies(
-            configure: ['domain.yaml']
-          )
-        end.to raise_error(
-          Underware::DependencyFailure,
-          missing_domain_answers_error
+        enforce_dependencies(
+          configure: ['domain.yaml', 'groups/group1.yaml']
         )
-      end
+      end.not_to raise_error
     end
 
-    it 'fails when enforcing non-existent, non-orphan group answer file presence, with error message telling you command to run' do
-      missing_group_answers_error =
-        /required answer file: groups\/group1\.yaml\. Please run 'underware configure group group1'/
-
-      filesystem.test do
+    describe 'enforcing optional dependencies' do
+      it 'succeeds when enforcing optional, non-existent answer file presence' do
         expect do
           enforce_dependencies(
-            configure: ['groups/group1.yaml']
-          )
-        end.to raise_error(
-          Underware::DependencyFailure,
-          missing_group_answers_error
-        )
-      end
-    end
-
-    # The orphan group does not require an answer file
-    it 'never fails when enforcing orphan group answer file presence' do
-      filesystem.test do
-        expect do
-          enforce_dependencies(
-            configure: ['groups/orphan.yaml']
-          )
-        end.not_to raise_error
-      end
-    end
-
-    context 'when answer files exist' do
-      before do
-        filesystem.with_minimal_repo
-        filesystem.with_answer_fixtures('answers/basic_structure')
-      end
-
-      it 'succeeds when enforcing existent answer file presence' do
-        expect do
-          enforce_dependencies(
-            configure: ['domain.yaml', 'groups/group1.yaml']
+            optional: {
+              configure: ['not_found.yaml'],
+            }
           )
         end.not_to raise_error
       end
 
-      describe 'enforcing optional dependencies' do
-        it 'succeeds when enforcing optional, non-existent answer file presence' do
-          expect do
-            enforce_dependencies(
-              optional: {
-                configure: ['not_found.yaml'],
-              }
-            )
-          end.not_to raise_error
-        end
-
-        it 'succeeds when enforcing optional, existent answer file presence' do
-          expect do
-            enforce_dependencies(
-              optional: {
-                configure: ['domain.yaml', 'not_found.yaml'],
-              }
-            )
-          end.not_to raise_error
-        end
+      it 'succeeds when enforcing optional, existent answer file presence' do
+        expect do
+          enforce_dependencies(
+            optional: {
+              configure: ['domain.yaml', 'not_found.yaml'],
+            }
+          )
+        end.not_to raise_error
       end
     end
   end

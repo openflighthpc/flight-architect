@@ -33,9 +33,6 @@ module Underware
       attr_reader :overview_data
 
       def setup
-        unless File.exist? FilePath.overview
-          UnderwareLog.warn 'overview.yaml is missing from the repo'
-        end
         @overview_data = Data.load FilePath.overview
       end
 
@@ -45,12 +42,12 @@ module Underware
       end
 
       def print_domain_table
-        fields = overview_data[:domain] || []
+        fields = overview_data[:domain]
         puts Underware::Overview::Table.new([alces.domain], fields).render
       end
 
       def print_groups_table
-        fields_from_yaml = overview_data[:group] || []
+        fields_from_yaml = overview_data[:group]
         name_field = { header: 'Group Name', value: '<%= group.name %>' }
         fields = [name_field].concat fields_from_yaml
         puts Underware::Overview::Table.new(alces.groups, fields).render

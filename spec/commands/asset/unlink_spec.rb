@@ -21,10 +21,6 @@ RSpec.describe Underware::Commands::Asset::Unlink do
   end
 
   context 'when using a saved asset' do
-    before do
-      FileSystem.root_setup(&:with_minimal_repo)
-    end
-
     let(:asset_name) { 'asset_test' }
     let(:asset_content) { { key: 'value' } }
     let(:cache_path) { Underware::FilePath.asset_cache }

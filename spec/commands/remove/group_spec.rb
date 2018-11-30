@@ -35,7 +35,6 @@ RSpec.describe Underware::Commands::Remove::Group do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_minimal_repo
       fs.with_answer_fixtures('setup1/answers')
       fs.with_group_cache_fixture('setup1/cache/groups.yaml')
       fs.with_genders_fixtures('setup1/genders')

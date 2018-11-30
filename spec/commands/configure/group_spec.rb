@@ -43,7 +43,7 @@ RSpec.describe Underware::Commands::Configure::Group do
   end
 
   let(:filesystem) do
-    FileSystem.setup(&:with_minimal_repo)
+    FileSystem.setup(&:with_minimal_configure_file)
   end
 
   before do

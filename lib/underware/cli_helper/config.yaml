@@ -64,9 +64,9 @@ subcommands:
     syntax: underware configure domain [options]
     summary: Configure Underware domain
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure the domain for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure the domain for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
@@ -75,9 +75,9 @@ subcommands:
     syntax: underware configure group GROUP_NAME [options]
     summary: Configure a Underware group
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a group for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a group for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
@@ -86,9 +86,9 @@ subcommands:
     syntax: underware configure node NODE_NAME [options]
     summary: Configure a Underware node
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a node for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a node for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option
@@ -123,35 +123,6 @@ subcommands:
       to prevent them becoming orphans. This is done by deleting the answer
       files associated with the nodes.
     action: Commands::Remove::Group
-
-  repo_use: &repo_use
-    syntax: underware repo use REPO_URL [options]
-    summary: Clone a new template git repo
-    description: >
-      Clones a new git repo from a URL. The repo should contain the default
-      templates used by the other commands. It may also include a config
-      directory containing template parameter YAML files.
-    action:
-      Commands::Repo::Use
-    options:
-      - tags: [-f, --force]
-        description: >
-          Force use of a new repo even if local changes have been made to the
-          current repo
-
-  repo_update: &repo_update
-    syntax: underware repo update [options]
-    summary: Updates the git repository
-    description: >
-      Updates the local git repository to match the remote. The update command
-      does not support local changes. The force will trigger a hard reset and
-      will delete local changes. All other git commands can be preformed
-      manually on the repo.
-    action: Commands::Repo::Update
-    options:
-      - tags: [-f, --force]
-        description: >
-          Force update even if local changes have been made to the repo
 
   plugin_list: &plugin_list
     syntax: underware plugin list [options]
@@ -264,14 +235,6 @@ commands:
       out. The template can be rendered for a specific node using the optional
       NODE input.
     action: Commands::Render
-
-  repo:
-    syntax: underware repo [SUB_COMMAND] [options]
-    summary: Manage template and config repository
-    # description can also be used for subcommands
-    subcommands:
-      use: *repo_use
-      update: *repo_update
 
   view-answers:
     syntax: underware view-answers [SUB_COMMAND] [options]

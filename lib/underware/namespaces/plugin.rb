@@ -29,14 +29,6 @@ module Underware
         @config ||= run_hash_merger(plugin_config_hash_merger)
       end
 
-      def files
-        @files ||= begin
-                     data = alces
-                            .build_files_retriever.retrieve(self)
-                     node_namespace.finalize_build_files(data)
-                   end
-      end
-
       private
 
       def plugin_config_hash_merger
@@ -54,7 +46,7 @@ module Underware
       end
 
       def recursive_white_list_for_hasher
-        [:config, :files]
+        [:config]
       end
     end
   end

@@ -41,7 +41,11 @@ module Underware
 
       def path(name)
         file_name = "#{name}.yaml"
-        File.join(base, 'config', file_name)
+        File.join(config_dir, file_name)
+      end
+
+      def config_dir
+        File.join(base, 'config')
       end
 
       # These are the names we currently expect to use to access the different

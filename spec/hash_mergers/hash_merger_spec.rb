@@ -15,7 +15,8 @@ RSpec.describe Underware::HashMergers::HashMerger do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_repo_fixtures('merged_hash')
+      fs.with_minimal_configure_file
+      fs.with_fixtures('merged_hash/config', at: Underware::FilePath.config_dir)
       fs.with_answer_fixtures('merged_hash/answers')
     end
   end
@@ -31,7 +32,6 @@ RSpec.describe Underware::HashMergers::HashMerger do
   def expect_config_value(my_hash)
     expect(my_hash.config.to_h).not_to be_empty
     my_hash.config.to_h.each do |key, value|
-      next if key == :files
       expect(value).to eq(yield key)
     end
   end
@@ -97,7 +97,6 @@ RSpec.describe Underware::HashMergers::HashMerger do
     def check_node_hash(my_hash = {})
       expect(my_hash).not_to be_empty
       my_hash.each do |key, value|
-        next if key == :files
         expected_value = case key
                          when :value0
                            'domain'
@@ -121,17 +120,6 @@ RSpec.describe Underware::HashMergers::HashMerger do
     it 'returns the correct answers' do
       filesystem.test do
         check_node_hash(merged_hash.answer.to_h)
-      end
-    end
-  end
-
-  describe '#build_files' do
-    it 'replaces the files lists (within the namespace)' do
-      filesystem.test do
-        merged_hash = build_merged_hash(node: 'node3')
-        files = merged_hash.config.files.namespace
-        expect(files.length).to eq(2)
-        expect(files).to include('node3', 'duplicate')
       end
     end
   end

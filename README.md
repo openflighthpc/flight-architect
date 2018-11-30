@@ -102,7 +102,6 @@ Underware tools via the `underware` command, e.g.:
     plugin       View and manage activated plugins
     remove       Remove underware controlled files/ objects
     render       Render a given template
-    repo         Manage template and config repository
     view         View domain templating config, optionally in context for given node
     view-answers View configured answers
 

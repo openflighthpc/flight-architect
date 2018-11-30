@@ -49,10 +49,6 @@ RSpec.describe Underware::Validation::Saver do
   let(:stubbed_answer_load) { OpenStruct.new(data: data) }
   let(:data) { { key: 'data' } }
 
-  let(:filesystem) do
-    FileSystem.setup(&:with_minimal_repo)
-  end
-
   it 'errors if method is not defined' do
     expect do
       saver.not_found_methods('data')
@@ -76,12 +72,10 @@ RSpec.describe Underware::Validation::Saver do
   end
 
   it 'calls the answer validator with the domain and data' do
-    filesystem.test do
-      expect(Underware::Validation::Answer).to \
-        receive(:new).with(data, answer_section: :domain)
-                     .and_return(stubbed_answer_load)
-      saver.domain_answers(data)
-      expect(Underware::Data.load(path.domain_answers)).to eq(data)
-    end
+    expect(Underware::Validation::Answer).to \
+      receive(:new).with(data, answer_section: :domain)
+                   .and_return(stubbed_answer_load)
+    saver.domain_answers(data)
+    expect(Underware::Data.load(path.domain_answers)).to eq(data)
   end
 end

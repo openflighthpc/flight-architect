@@ -68,8 +68,8 @@ RSpec.describe Underware::Validation::Loader do
       end.to_h
     end
 
-    RSpec.shared_examples 'loads_repo_configure_questions' do |section|
-      it 'loads repo configure.yaml questions' do
+    RSpec.shared_examples 'loads_core_configure_questions' do |section|
+      it 'loads configure.yaml questions' do
         questions = sections_to_loaded_questions[section]
         question_identifiers = questions.map { |q| q.content.identifier }
         expect(question_identifiers).to include "#{section}_identifier"
@@ -103,7 +103,7 @@ RSpec.describe Underware::Validation::Loader do
     Underware::Constants::CONFIGURE_SECTIONS.each do |section|
       context "for #{section}" do
         context 'when no plugins activated' do
-          include_examples 'loads_repo_configure_questions', section
+          include_examples 'loads_core_configure_questions', section
         end
 
         context 'when plugin activated' do
@@ -121,7 +121,7 @@ RSpec.describe Underware::Validation::Loader do
             end
           end
 
-          include_examples 'loads_repo_configure_questions', section
+          include_examples 'loads_core_configure_questions', section
           include_examples 'includes_generated_plugin_enabled_question', section
 
           it "question has plugin questions for #{section} as dependents" do

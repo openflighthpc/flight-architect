@@ -6,12 +6,13 @@ require 'underware/hash_mergers'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Namespaces::Alces do
-  # TODO: The Alces class should not be tested with AlcesUtils
-  # Remove AlcesUtils and mock the configs blank manually
-  include Underware::AlcesUtils
+  # TODO: The Alces class should not be tested with the rampant, convoluted
+  # mocking of itself provided by AlcesUtils; we should remove all usage of
+  # this and try to test it with as little mocking as possible, and only mock
+  # individual functions (and never mock the Alces class itself) as needed.
 
-  Underware::AlcesUtils.mock self, :each do
-    with_blank_config_and_answer(alces.domain)
+  let :alces do
+    described_class.new
   end
 
   describe '#render_string' do
@@ -108,6 +109,8 @@ RSpec.describe Underware::Namespaces::Alces do
 
   describe '#local' do
     it 'errors if not initialized' do
+      # XXX We shouldn't stub the System Under Test here (see
+      # https://robots.thoughtbot.com/don-t-stub-the-system-under-test).
       allow(alces).to receive(:nodes)
         .and_return(Underware::Namespaces::UnderwareArray.new([]))
 
@@ -146,6 +149,27 @@ RSpec.describe Underware::Namespaces::Alces do
 
     it 'templates against domain if no config is specified' do
       expect(alces.render_string('<%= config.key %>')).to eq('domain')
+    end
+  end
+
+  describe '#build_interface' do
+    it 'gives answer to configured_build_interface question if present' do
+      Underware::Data.dump(
+        Underware::FilePath.domain_answers,
+        configured_build_interface: 'eth3'
+      )
+
+      expect(alces.build_interface).to eq('eth3')
+    end
+
+    it 'gives first available network interface if answer not present' do
+      allow(Underware::Network)
+        .to receive(:interfaces)
+        .and_return(['eth2', 'eth4'])
+      # Guarantee no answers present.
+      Underware::Data.dump(Underware::FilePath.domain_answers, {})
+
+      expect(alces.build_interface).to eq('eth2')
     end
   end
 
@@ -245,6 +269,8 @@ RSpec.describe Underware::Namespaces::Alces do
     end
 
     before do
+      # XXX We shouldn't stub the System Under Test here (see
+      # https://robots.thoughtbot.com/don-t-stub-the-system-under-test).
       allow(alces).to receive(:scope).and_return(scope)
     end
 
@@ -257,6 +283,11 @@ RSpec.describe Underware::Namespaces::Alces do
 
     describe '#local' do
       it 'returns the local node' do
+        # Mock that the local node has been configured.
+        allow(
+          Underware::NodeattrInterface
+        ).to receive(:all_nodes).and_return(['local'])
+
         local_class = Underware::Namespaces::Local.to_s
         expect(alces.render_string('<%= alces.local.class %>')).to eq(local_class)
       end
@@ -325,7 +356,7 @@ RSpec.describe Underware::Namespaces::Alces do
   # are no longer applicable to that now rendering has been moved to the
   # namespaces. They have been moved here (and slightly tweaked to still work),
   # since I think they may still have some value as they test additional things
-  # to the above like the availability of repo config values when templating.
+  # to the above like the availability of config values when templating.
   # Keeping these in a separate `describe` for now to avoid
   # conflicts/interactions with the above, and since we may just end up
   # deleting/refactoring these away at some point.
@@ -343,19 +374,19 @@ RSpec.describe Underware::Namespaces::Alces do
     # other.
     let(:template) do
       <<-EOF
-      This is a test template
-      some_passed_value: <%= domain.config.some_passed_value %>
-      some_repo_value: <%= domain.config.some_repo_value %>
-      erb_repo_value: <%= domain.config.erb_repo_value %>
-      very_recursive_erb_repo_value: <%= domain.config.very_recursive_erb_repo_value %>
-      nested.repo_value: <%= domain.config.nested ? domain.config.nested.repo_value : nil %>
+        This is a test template
+        some_passed_value: <%= domain.config.some_passed_value %>
+        some_config_value: <%= domain.config.some_config_value %>
+        erb_config_value: <%= domain.config.erb_config_value %>
+        very_recursive_erb_config_value: <%= domain.config.very_recursive_erb_config_value %>
+        nested.config_value: <%= domain.config.nested ? domain.config.nested.config_value : nil %>
       EOF
     end
 
     let(:template_path) { '/template' }
 
     def expect_renders(template_parameters, expected)
-      filesystem.test do |_fs|
+      filesystem.test do
         # Strip trailing spaces from rendered output to make comparisons less
         # brittle.
         rendered = alces.render_file(
@@ -367,34 +398,34 @@ RSpec.describe Underware::Namespaces::Alces do
     end
 
     describe '#render_file' do
-      context 'without a repo' do
+      context 'without config specifying parameters' do
         it 'renders template with no extra parameters' do
           expected = <<-EOF
-          This is a test template
-          some_passed_value:
-          some_repo_value:
-          erb_repo_value:
-          very_recursive_erb_repo_value:
-          nested.repo_value:
+            This is a test template
+            some_passed_value:
+            some_config_value:
+            erb_config_value:
+            very_recursive_erb_config_value:
+            nested.config_value:
           EOF
 
           expect_renders({}, expected)
         end
       end
 
-      context 'with repo' do
+      context 'with config specifying parameters' do
         before do
-          filesystem.with_repo_fixtures('repo')
+          filesystem.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
         end
 
-        it 'renders template with repo parameters' do
+        it 'renders template with config parameters' do
           expected = <<-EOF
-          This is a test template
-          some_passed_value:
-          some_repo_value: repo_value
-          erb_repo_value: repo_value
-          very_recursive_erb_repo_value: repo_value
-          nested.repo_value: nested_repo_value
+            This is a test template
+            some_passed_value:
+            some_config_value: config_value
+            erb_config_value: config_value
+            very_recursive_erb_config_value: config_value
+            nested.config_value: nested_config_value
           EOF
 
           expect_renders({}, expected)

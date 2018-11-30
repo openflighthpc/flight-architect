@@ -55,12 +55,6 @@ module Underware
     end
   end
 
-  class UnexpectedError < UnderwareError
-    def initialize(msg = 'An unexpected error has occurred')
-      super
-    end
-  end
-
   class InternalError < UnderwareError; end
   class AnswerJSONSyntax < UnderwareError; end
   class ScopeError < UnderwareError; end
@@ -80,25 +74,6 @@ module Underware
   # Use this error when the dependency is checked but isn't met
   # NOTE: This is the only dependency error we see in production
   class DependencyFailure < UserUnderwareError
-  end
-
-  class RuggedError < UserUnderwareError; end
-  class RuggedCloneError < RuggedError; end
-
-  class LocalAheadOfRemote < RuggedError
-    def initialize(num)
-      msg = "The local repo is #{num} commits ahead of remote. -f will " \
-        'override local commits'
-      super msg
-    end
-  end
-
-  class UncommittedChanges < RuggedError
-    def initialize(num)
-      msg = "The local repo has #{num} uncommitted changes. -f will " \
-        'delete these changes. (untracked unaffected)'
-      super msg
-    end
   end
 
   class SaverNoData < UnderwareError

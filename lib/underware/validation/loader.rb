@@ -65,15 +65,15 @@ module Underware
 
       def all_questions_for_section(section)
         [
-          repo_configure_questions,
+          core_configure_questions,
           *plugin_configure_questions,
         ].flat_map do |question_group|
           question_group[section]
         end
       end
 
-      def repo_configure_questions
-        @repo_configure_questions ||= Data.load(FilePath.configure_file)
+      def core_configure_questions
+        @core_configure_questions ||= Data.load(FilePath.configure_file)
       end
 
       def plugin_configure_questions

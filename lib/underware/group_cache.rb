@@ -101,40 +101,39 @@ module Underware
         primary_groups: groups_hash,
         orphans: orphans,
       }
-      Data.dump(file_path.group_cache, payload)
+      Data.dump(FilePath.group_cache, payload)
       @data = nil # Reloads the cached file
       data
     end
 
     private
 
+    def data
+      @data ||= load_data
+    end
+
+    def load_data
+      defaults.merge(loader.group_cache)
+    end
+
+    def defaults
+      {
+        next_index: 1,
+        primary_groups: {},
+        orphans: [],
+      }
+    end
+
     def loader
       @loader ||= Validation::Loader.new
     end
 
-    def file_path
-      @file_path ||= FilePath
-    end
-
-    def load
-      loader.group_cache.tap do |d|
-        if d.empty?
-          d.merge!(next_index: 1,
-                   primary_groups: {},
-                   orphans: [])
-        end
-      end
-    end
-
-    def data
-      @data ||= load
-    end
-
     def primary_groups_hash
-      @primary_groups_hash ||= begin
-        data[:primary_groups][:orphan] = 0
-        data[:primary_groups]
-      end
+      @primary_groups_hash ||=
+        # Orphan group (which isn't a 'real'/user-configured primary group and
+        # so won't be saved in the `primary_groups` list) should always be
+        # considered as having index `0`.
+        data[:primary_groups].merge(orphan: 0)
     end
 
     def bump_next_index

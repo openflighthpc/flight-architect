@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'underware/namespaces/alces'
-require 'active_support/core_ext/module/delegation'
 require 'recursive_open_struct'
 
 module Underware

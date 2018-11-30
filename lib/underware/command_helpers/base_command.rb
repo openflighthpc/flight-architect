@@ -83,10 +83,6 @@ module Underware
         @loader ||= Validation::Loader.new
       end
 
-      def file_path
-        @file_path ||= FilePath
-      end
-
       def command_name
         parts_without_namespace = \
           class_name_parts.slice(2, class_name_parts.length)

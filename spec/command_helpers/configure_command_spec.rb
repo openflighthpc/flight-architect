@@ -18,7 +18,7 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
     end
 
     def answer_file
-      file_path.domain_answers
+      Underware::FilePath.domain_answers
     end
 
     def configurator

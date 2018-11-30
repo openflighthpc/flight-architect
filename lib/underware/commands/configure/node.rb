@@ -22,7 +22,7 @@ module Underware
         end
 
         def answer_file
-          file_path.node_answers(node_name)
+          FilePath.node_answers(node_name)
         end
       end
     end

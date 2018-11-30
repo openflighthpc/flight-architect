@@ -1,16 +1,16 @@
 
-some_repo_value: repo_value
-erb_repo_value: <%= alces.domain.config.some_repo_value %>
+some_config_value: config_value
+erb_config_value: <%= alces.domain.config.some_config_value %>
 
-first_level_erb_repo_value: <%= config.some_repo_value %>
-second_level_erb_repo_value: <%= config.first_level_erb_repo_value %>
-third_level_erb_repo_value: <%= config.second_level_erb_repo_value %>
-very_recursive_erb_repo_value: <%= config.third_level_erb_repo_value %>
+first_level_erb_config_value: <%= config.some_config_value %>
+second_level_erb_config_value: <%= config.first_level_erb_config_value %>
+third_level_erb_config_value: <%= config.second_level_erb_config_value %>
+very_recursive_erb_config_value: <%= config.third_level_erb_config_value %>
 
-true_repo_value: true
-false_repo_value: false
-recursive_true_repo_value: <%= config.true_repo_value %>
-recursive_false_repo_value: <%= config.false_repo_value %>
+true_config_value: true
+false_config_value: false
+recursive_true_config_value: <%= config.true_config_value %>
+recursive_false_config_value: <%= config.false_config_value %>
 
 nested:
-  repo_value: nested_repo_value
+  config_value: nested_config_value

@@ -356,7 +356,7 @@ RSpec.describe Underware::Namespaces::Alces do
   # are no longer applicable to that now rendering has been moved to the
   # namespaces. They have been moved here (and slightly tweaked to still work),
   # since I think they may still have some value as they test additional things
-  # to the above like the availability of repo config values when templating.
+  # to the above like the availability of config values when templating.
   # Keeping these in a separate `describe` for now to avoid
   # conflicts/interactions with the above, and since we may just end up
   # deleting/refactoring these away at some point.
@@ -376,10 +376,10 @@ RSpec.describe Underware::Namespaces::Alces do
       <<-EOF
       This is a test template
       some_passed_value: <%= domain.config.some_passed_value %>
-      some_repo_value: <%= domain.config.some_repo_value %>
-      erb_repo_value: <%= domain.config.erb_repo_value %>
-      very_recursive_erb_repo_value: <%= domain.config.very_recursive_erb_repo_value %>
-      nested.repo_value: <%= domain.config.nested ? domain.config.nested.repo_value : nil %>
+      some_config_value: <%= domain.config.some_config_value %>
+      erb_config_value: <%= domain.config.erb_config_value %>
+      very_recursive_erb_config_value: <%= domain.config.very_recursive_erb_config_value %>
+      nested.config_value: <%= domain.config.nested ? domain.config.nested.config_value : nil %>
       EOF
     end
 
@@ -403,10 +403,10 @@ RSpec.describe Underware::Namespaces::Alces do
           expected = <<-EOF
             This is a test template
             some_passed_value:
-            some_repo_value:
-            erb_repo_value:
-            very_recursive_erb_repo_value:
-            nested.repo_value:
+            some_config_value:
+            erb_config_value:
+            very_recursive_erb_config_value:
+            nested.config_value:
           EOF
 
           expect_renders({}, expected)
@@ -418,14 +418,14 @@ RSpec.describe Underware::Namespaces::Alces do
           filesystem.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
         end
 
-        it 'renders template with repo parameters' do
+        it 'renders template with config parameters' do
           expected = <<-EOF
             This is a test template
             some_passed_value:
-            some_repo_value: repo_value
-            erb_repo_value: repo_value
-            very_recursive_erb_repo_value: repo_value
-            nested.repo_value: nested_repo_value
+            some_config_value: config_value
+            erb_config_value: config_value
+            very_recursive_erb_config_value: config_value
+            nested.config_value: nested_config_value
           EOF
 
           expect_renders({}, expected)

@@ -69,24 +69,12 @@ module Underware
         File.join(underware_storage, 'answers')
       end
 
-      def repo
-        File.join(underware_storage, 'repo')
-      end
-
       def overview
         File.join(internal_data_dir, 'overview.yaml')
       end
 
       def plugins_dir
         File.join(underware_storage, 'plugins')
-      end
-
-      def repo_template_path(template_type, namespace:)
-        File.join(
-          repo,
-          template_type.to_s,
-          template_file_name(template_type, namespace: namespace)
-        )
       end
 
       def build_complete(node_namespace)

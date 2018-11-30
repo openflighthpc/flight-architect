@@ -168,7 +168,6 @@ class FileSystem
       '/tmp',
       '/var/lib/underware/rendered/system',
       '/var/lib/underware/cache/templates',
-      '/var/lib/underware/repo',
       '/var/lib/underware/answers/groups',
       '/var/lib/underware/answers/nodes',
       '/var/lib/underware/assets',

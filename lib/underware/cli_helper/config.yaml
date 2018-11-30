@@ -64,9 +64,9 @@ subcommands:
     syntax: underware configure domain [options]
     summary: Configure Underware domain
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure the domain for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure the domain for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
@@ -75,9 +75,9 @@ subcommands:
     syntax: underware configure group GROUP_NAME [options]
     summary: Configure a Underware group
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a group for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a group for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
@@ -86,9 +86,9 @@ subcommands:
     syntax: underware configure node NODE_NAME [options]
     summary: Configure a Underware node
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a node for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a node for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option

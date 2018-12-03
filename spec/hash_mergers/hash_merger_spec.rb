@@ -32,6 +32,10 @@ RSpec.describe Underware::HashMergers::HashMerger do
       dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
       dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
       dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
+
+      # Platforms only have configs, and no answers, so we only dump a single
+      # data file for the test platform config.
+      fs.dump(fp.platform_config('test_platform'), test_platform_config)
     end
   end
 
@@ -41,6 +45,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
       value1: 'domain',
       value2: 'domain',
       value3: 'domain',
+      value4: 'domain',
     }
   end
 
@@ -48,6 +53,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     {
       value2: 'group1',
       value3: 'group1',
+      value4: 'group1',
     }
   end
 
@@ -56,12 +62,20 @@ RSpec.describe Underware::HashMergers::HashMerger do
       value1: 'group2',
       value2: 'group2',
       value3: 'group2',
+      value4: 'group2',
     }
   end
 
   let :node3_data do
     {
       value3: 'node3',
+      value4: 'node3',
+    }
+  end
+
+  let :test_platform_config do
+    {
+      value4: 'test_platform'
     }
   end
 
@@ -73,12 +87,32 @@ RSpec.describe Underware::HashMergers::HashMerger do
     )
   end
 
+  RSpec.shared_examples 'it handles merging platform config' do
+    context 'when platform included in hash' do
+      let :hash_input do
+        super().merge(platform: 'test_platform')
+      end
+
+      it 'correctly merges config, with platform config taking precedence' do
+        expect(
+          merged_namespace.config.to_h
+        ).to eq(
+          expected_merged_config.merge(value4: 'test_platform')
+        )
+      end
+    end
+  end
+
   context 'with domain scope' do
     let :hash_input { {} }
 
+    let :expected_merged_config { domain_data }
+
     it 'correctly merges config (which is identical to domain config)' do
-      expect(merged_namespace.config.to_h).to eq(domain_data)
+      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
     end
+
+    it_behaves_like 'it handles merging platform config'
   end
 
   context 'with single group' do
@@ -86,14 +120,21 @@ RSpec.describe Underware::HashMergers::HashMerger do
       {groups: ['group2']}
     end
 
-    it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(
+    let :expected_merged_config do
+      {
         value0: 'domain',
         value1: 'group2',
         value2: 'group2',
         value3: 'group2',
-      )
+        value4: 'group2',
+      }
     end
+
+    it 'correctly merges config' do
+      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
+    end
+
+    it_behaves_like 'it handles merging platform config'
   end
 
   context 'with multiple groups' do
@@ -101,14 +142,21 @@ RSpec.describe Underware::HashMergers::HashMerger do
       {groups: ['group1', 'group2']}
     end
 
-    it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(
+    let :expected_merged_config do
+      {
         value0: 'domain',
         value1: 'group2', # Not set for group1 so group2's value used.
         value2: 'group1',
         value3: 'group1',
-      )
+        value4: 'group1',
+      }
     end
+
+    it 'correctly merges config' do
+      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
+    end
+
+    it_behaves_like 'it handles merging platform config'
   end
 
   context 'with multiple groups and a node' do
@@ -119,21 +167,26 @@ RSpec.describe Underware::HashMergers::HashMerger do
       }
     end
 
-    let :expected_merged_data do
+    let :expected_merged_config do
       {
         value0: 'domain',
         value1: 'group2',
         value2: 'group1',
         value3: 'node3',
+        value4: 'node3',
       }
     end
 
+    let :expected_merged_answers { expected_merged_config }
+
     it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(expected_merged_data)
+      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
     end
 
     it 'correctly merges answers' do
-      expect(merged_namespace.answer.to_h).to eq(expected_merged_data)
+      expect(merged_namespace.answer.to_h).to eq(expected_merged_answers)
     end
+
+    it_behaves_like 'it handles merging platform config'
   end
 end

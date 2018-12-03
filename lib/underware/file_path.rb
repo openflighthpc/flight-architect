@@ -136,6 +136,10 @@ module Underware
         File.join(underware_install, 'data')
       end
 
+      def platform_config(platform)
+        File.join(config_dir, 'platforms', "#{platform}.yaml")
+      end
+
       private
 
       def record(record_dir, types_dir, name)

@@ -87,7 +87,11 @@ RSpec.describe Underware::HashMergers::HashMerger do
     )
   end
 
-  RSpec.shared_examples 'it handles merging platform config' do
+  RSpec.shared_examples 'it handles merging config, with and without platform specified' do
+    it 'correctly merges config without platform specified' do
+      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
+    end
+
     context 'when platform included in hash' do
       let :hash_input do
         super().merge(platform: 'test_platform')
@@ -108,11 +112,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
 
     let :expected_merged_config { domain_data }
 
-    it 'correctly merges config (which is identical to domain config)' do
-      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
-    end
-
-    it_behaves_like 'it handles merging platform config'
+    it_behaves_like 'it handles merging config, with and without platform specified'
   end
 
   context 'with single group' do
@@ -130,11 +130,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
       }
     end
 
-    it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
-    end
-
-    it_behaves_like 'it handles merging platform config'
+    it_behaves_like 'it handles merging config, with and without platform specified'
   end
 
   context 'with multiple groups' do
@@ -152,11 +148,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
       }
     end
 
-    it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
-    end
-
-    it_behaves_like 'it handles merging platform config'
+    it_behaves_like 'it handles merging config, with and without platform specified'
   end
 
   context 'with multiple groups and a node' do
@@ -179,14 +171,10 @@ RSpec.describe Underware::HashMergers::HashMerger do
 
     let :expected_merged_answers { expected_merged_config }
 
-    it 'correctly merges config' do
-      expect(merged_namespace.config.to_h).to eq(expected_merged_config)
-    end
+    it_behaves_like 'it handles merging config, with and without platform specified'
 
     it 'correctly merges answers' do
       expect(merged_namespace.answer.to_h).to eq(expected_merged_answers)
     end
-
-    it_behaves_like 'it handles merging platform config'
   end
 end

@@ -31,7 +31,7 @@ module Underware
       def index
         @index ||= begin
           group.nodes.each_with_index do |other_node, index|
-            return(index + 1) if other_node == self
+            return index + 1 if other_node == self
           end
           raise InternalError, 'Node does not appear in its primary group'
         end

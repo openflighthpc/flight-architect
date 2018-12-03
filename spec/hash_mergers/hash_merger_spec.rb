@@ -65,7 +65,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  def build_merged_namespace(**hash_input)
+  let :merged_namespace do
     hm = Underware::HashMergers
     OpenStruct.new(
       config: hm::Config.new.merge(**hash_input, &:itself),
@@ -74,7 +74,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with domain scope' do
-    let(:merged_namespace) { build_merged_namespace }
+    let :hash_input { {} }
 
     it 'correctly merges config (which is identical to domain config)' do
       expect(merged_namespace.config.to_h).to eq(domain_data)
@@ -82,8 +82,8 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with single group' do
-    let(:merged_namespace) do
-      build_merged_namespace(groups: ['group2'])
+    let :hash_input do
+      {groups: ['group2']}
     end
 
     it 'correctly merges config' do
@@ -97,8 +97,8 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups' do
-    let(:merged_namespace) do
-      build_merged_namespace(groups: ['group1', 'group2'])
+    let :hash_input do
+      {groups: ['group1', 'group2']}
     end
 
     it 'correctly merges config' do
@@ -112,11 +112,11 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups and a node' do
-    let(:merged_namespace) do
-      build_merged_namespace(
+    let :hash_input do
+      {
         groups: ['group1', 'group2'],
         node: 'node3'
-      )
+      }
     end
 
     let :expected_merged_data do

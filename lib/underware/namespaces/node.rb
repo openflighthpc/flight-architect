@@ -10,12 +10,6 @@ module Underware
         def create(alces, name)
           name == 'local' ? Local.create(alces, name) : new(alces, name)
         end
-
-        private
-
-        def new(*args)
-          super(*args)
-        end
       end
 
       include Namespaces::Mixins::Name

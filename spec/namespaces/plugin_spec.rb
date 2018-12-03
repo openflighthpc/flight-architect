@@ -8,7 +8,7 @@ RSpec.describe Underware::Namespaces::Plugin do
   subject { described_class.new(plugin, node: node) }
 
   let(:node) do
-    Underware::Namespaces::Node.create(alces, node_name)
+    Underware::Namespaces::Node.new(alces, node_name)
   end
   let(:node_name) { 'some_node' }
   let(:node_group_name) { 'some_group' }

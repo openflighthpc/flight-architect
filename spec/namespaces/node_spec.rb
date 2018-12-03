@@ -48,7 +48,7 @@ RSpec.describe Underware::Namespaces::Node do
       ) { |template_string| node.render_string(template_string) }
     end
 
-    let(:node) { described_class.create(alces, node_name) }
+    let(:node) { described_class.new(alces, node_name) }
 
     ##
     # Mocks the HashMergers
@@ -108,8 +108,8 @@ RSpec.describe Underware::Namespaces::Node do
     end
 
     describe '#==' do
-      let(:foonode) { described_class.create(alces, 'foonode') }
-      let(:barnode) { described_class.create(alces, 'barnode') }
+      let(:foonode) { described_class.new(alces, 'foonode') }
+      let(:barnode) { described_class.new(alces, 'barnode') }
 
       it 'returns false if other object is not a Node' do
         other_object = Struct.new(:name).new('foonode')
@@ -127,13 +127,13 @@ RSpec.describe Underware::Namespaces::Node do
 
     describe '#local?' do
       context 'with a regular node' do
-        subject { described_class.create(alces, 'node01') }
+        subject { described_class.new(alces, 'node01') }
 
         it { is_expected.not_to be_local }
       end
 
       context "with the 'local' node" do
-        subject { described_class.create(alces, 'local') }
+        subject { described_class.new(alces, 'local') }
 
         it { is_expected.to be_local }
       end
@@ -168,7 +168,7 @@ RSpec.describe Underware::Namespaces::Node do
 
   # Test `#plugins` without the rampant mocking above.
   describe '#plugins' do
-    let(:node) { described_class.create(alces, 'node01') }
+    let(:node) { described_class.new(alces, 'node01') }
     let(:alces) { Underware::Namespaces::Alces.new }
 
     # XXX Need to handle situation of plugin being enabled for node but not

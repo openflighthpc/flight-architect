@@ -6,12 +6,6 @@ require 'underware/namespaces/plugin'
 module Underware
   module Namespaces
     class Node < HashMergerNamespace
-      class << self
-        def create(alces, name)
-          name == 'local' ? Local.create(alces, name) : new(alces, name)
-        end
-      end
-
       include Namespaces::Mixins::Name
 
       def group

@@ -26,7 +26,7 @@ module Underware
         def nodes
           @nodes ||= begin
             arr = NodeattrInterface.all_nodes.map do |node_name|
-              Namespaces::Node.create(alces, node_name)
+              Namespaces::Node.new(alces, node_name)
             end
             Namespaces::UnderwareArray.new(arr)
           end

@@ -13,10 +13,10 @@ RSpec.describe Underware::HashMergers::HashMerger do
     validation_off
   end
 
-  let(:filesystem) do
+  before :each do
     fp = Underware::FilePath
 
-    FileSystem.setup do |fs|
+    FileSystem.root_setup do |fs|
       fs.with_minimal_configure_file
 
       dump_data = lambda do |data, config_path, answers_path|
@@ -84,9 +84,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     let(:merged_hash) { build_merged_hash }
 
     it 'returns the domain config' do
-      filesystem.test do
-        expect_config_value(merged_hash) { 'domain' }
-      end
+      expect_config_value(merged_hash) { 'domain' }
     end
   end
 
@@ -96,14 +94,12 @@ RSpec.describe Underware::HashMergers::HashMerger do
     end
 
     it 'returns the merged configs' do
-      filesystem.test do
-        expect_config_value(merged_hash) do |key|
-          case key
-          when :value0
-            'domain'
-          else
-            'group2'
-          end
+      expect_config_value(merged_hash) do |key|
+        case key
+        when :value0
+          'domain'
+        else
+          'group2'
         end
       end
     end
@@ -115,16 +111,14 @@ RSpec.describe Underware::HashMergers::HashMerger do
     end
 
     it 'returns the merged configs' do
-      filesystem.test do
-        expect_config_value(merged_hash) do |key|
-          case key
-          when :value0
-            'domain'
-          when :value1
-            'group2'
-          else
-            'group1'
-          end
+      expect_config_value(merged_hash) do |key|
+        case key
+        when :value0
+          'domain'
+        when :value1
+          'group2'
+        else
+          'group1'
         end
       end
     end
@@ -156,15 +150,11 @@ RSpec.describe Underware::HashMergers::HashMerger do
     end
 
     it 'returns the merged configs' do
-      filesystem.test do
-        check_node_hash(merged_hash.config.to_h)
-      end
+      check_node_hash(merged_hash.config.to_h)
     end
 
     it 'returns the correct answers' do
-      filesystem.test do
-        check_node_hash(merged_hash.answer.to_h)
-      end
+      check_node_hash(merged_hash.answer.to_h)
     end
   end
 end

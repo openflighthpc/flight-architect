@@ -65,7 +65,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  def build_merged_hash(**hash_input)
+  def build_merged_namespace(**hash_input)
     hm = Underware::HashMergers
     OpenStruct.new(
       config: hm::Config.new.merge(**hash_input, &:itself),
@@ -73,88 +73,67 @@ RSpec.describe Underware::HashMergers::HashMerger do
     )
   end
 
-  def expect_config_value(my_hash)
-    expect(my_hash.config.to_h).not_to be_empty
-    my_hash.config.to_h.each do |key, value|
-      expect(value).to eq(yield key)
-    end
-  end
-
   context 'with domain scope' do
-    let(:merged_hash) { build_merged_hash }
+    let(:merged_namespace) { build_merged_namespace }
 
-    it 'returns the domain config' do
-      expect_config_value(merged_hash) { 'domain' }
+    it 'correctly merges config (which is identical to domain config)' do
+      expect(merged_namespace.config.to_h).to eq(domain_data)
     end
   end
 
   context 'with single group' do
-    let(:merged_hash) do
-      build_merged_hash(groups: ['group2'])
+    let(:merged_namespace) do
+      build_merged_namespace(groups: ['group2'])
     end
 
-    it 'returns the merged configs' do
-      expect_config_value(merged_hash) do |key|
-        case key
-        when :value0
-          'domain'
-        else
-          'group2'
-        end
-      end
+    it 'correctly merges config' do
+      expect(merged_namespace.config.to_h).to eq(
+        value0: 'domain',
+        value1: 'group2',
+        value2: 'group2',
+        value3: 'group2',
+      )
     end
   end
 
   context 'with multiple groups' do
-    let(:merged_hash) do
-      build_merged_hash(groups: ['group1', 'group2'])
+    let(:merged_namespace) do
+      build_merged_namespace(groups: ['group1', 'group2'])
     end
 
-    it 'returns the merged configs' do
-      expect_config_value(merged_hash) do |key|
-        case key
-        when :value0
-          'domain'
-        when :value1
-          'group2'
-        else
-          'group1'
-        end
-      end
+    it 'correctly merges config' do
+      expect(merged_namespace.config.to_h).to eq(
+        value0: 'domain',
+        value1: 'group2', # Not set for group1 so group2's value used.
+        value2: 'group1',
+        value3: 'group1',
+      )
     end
   end
 
   context 'with multiple groups and a node' do
-    let(:merged_hash) do
-      build_merged_hash(
+    let(:merged_namespace) do
+      build_merged_namespace(
         groups: ['group1', 'group2'],
         node: 'node3'
       )
     end
 
-    def check_node_hash(my_hash = {})
-      expect(my_hash).not_to be_empty
-      my_hash.each do |key, value|
-        expected_value = case key
-                         when :value0
-                           'domain'
-                         when :value1
-                           'group2'
-                         when :value2
-                           'group1'
-                         else
-                           'node3'
-                         end
-        expect(value).to eq(expected_value)
-      end
+    let :expected_merged_data do
+      {
+        value0: 'domain',
+        value1: 'group2',
+        value2: 'group1',
+        value3: 'node3',
+      }
     end
 
-    it 'returns the merged configs' do
-      check_node_hash(merged_hash.config.to_h)
+    it 'correctly merges config' do
+      expect(merged_namespace.config.to_h).to eq(expected_merged_data)
     end
 
-    it 'returns the correct answers' do
-      check_node_hash(merged_hash.answer.to_h)
+    it 'correctly merges answers' do
+      expect(merged_namespace.answer.to_h).to eq(expected_merged_data)
     end
   end
 end

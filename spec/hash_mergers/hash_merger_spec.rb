@@ -14,11 +14,55 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   let(:filesystem) do
+    fp = Underware::FilePath
+
     FileSystem.setup do |fs|
       fs.with_minimal_configure_file
-      fs.with_fixtures('merged_hash/config', at: Underware::FilePath.config_dir)
-      fs.with_answer_fixtures('merged_hash/answers')
+
+      dump_data = lambda do |data, config_path, answers_path|
+        [config_path, answers_path].each do |path|
+          fs.dump(path, data)
+        end
+      end
+
+      # We set up various simple, identical data files for both configs and
+      # answers at different levels, so we can test that merging works
+      # correctly for both config and answer HashMergers.
+      dump_data.call(domain_data, fp.domain_config, fp.domain_answers)
+      dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
+      dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
+      dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
     end
+  end
+
+  let :domain_data do
+    {
+      value0: 'domain',
+      value1: 'domain',
+      value2: 'domain',
+      value3: 'domain',
+    }
+  end
+
+  let :group1_data do
+    {
+      value2: 'group1',
+      value3: 'group1',
+    }
+  end
+
+  let :group2_data do
+    {
+      value1: 'group2',
+      value2: 'group2',
+      value3: 'group2',
+    }
+  end
+
+  let :node3_data do
+    {
+      value3: 'node3',
+    }
   end
 
   def build_merged_hash(**hash_input)

@@ -14,7 +14,7 @@ OUTPUTBASE=/var/lib/underware/rendered/$PLATFORM
 
 # Functions
 strip_input_path() {
-    echo $1 |sed "s,$2,,g"
+    echo $1 |sed "s,$2/,,g"
 }
 
 run_in_scope() {
@@ -26,13 +26,13 @@ run_in_scope() {
     fi
 
     # Platform Scripts
-    for file in $(find $SCOPEIN/*) ; do
+    for file in $(find $SCOPEIN/* -type f ) ; do
         mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$SCOPEIN"))
         underware render $file $2 > $SCOPEOUT/$(strip_input_path "$file" "$SCOPEIN")
     done
 
     # Content Scripts
-    for file in $(find $CONTENTBASE/$1/*) ; do
+    for file in $(find $CONTENTBASE/$1/* -type f ) ; do
         mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$CONTENTBASE/$1"))
         underware render $file $2 > $SCOPEOUT/$(strip_input_path "$file" "$CONTENTBASE/$1")
     done

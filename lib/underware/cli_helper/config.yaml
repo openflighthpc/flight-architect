@@ -21,6 +21,11 @@ anchor_options:
     description: >
       Force the output to be coloured even if not outputting to a terminal;
       useful e.g. for piping to `less -R`.
+  platform_option: &platform_option
+    tags: [-p PLATFORM, --platform PLATFORM]
+    type: String
+    description: >
+      Include config for specified platform in namespace for rendering.
 
 global_options:
   - tags: [--strict]
@@ -128,16 +133,22 @@ subcommands:
     syntax: underware render domain TEMPLATE [options]
     summary: Render specified template against domain namespace, and output result
     action: Commands::Render::Domain
+    options:
+      - *platform_option
 
   render_group: &render_group
     syntax: underware render group GROUP TEMPLATE [options]
     summary: Render specified template against given group namespace, and output result
     action: Commands::Render::Group
+    options:
+      - *platform_option
 
   render_node: &render_node
     syntax: underware render node NODE TEMPLATE [options]
     summary: Render specified template against given node namespace, and output result
     action: Commands::Render::Node
+    options:
+      - *platform_option
 
   plugin_list: &plugin_list
     syntax: underware plugin list [options]

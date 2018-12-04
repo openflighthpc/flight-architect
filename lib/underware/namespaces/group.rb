@@ -6,12 +6,12 @@ module Underware
     class Group < HashMergerNamespace
       include Mixins::Name
 
+      attr_reader :index
+
       def initialize(*args, index:, **kwargs)
         @index = index
         super(*args, **kwargs)
       end
-
-      attr_reader :index
 
       def nodes
         @nodes ||= begin

@@ -1,21 +1,19 @@
 
 # frozen_string_literal: true
 
+require 'ostruct'
+
 require 'underware/exceptions'
 require 'underware/templating/renderer'
 require 'underware/templating/nil_detection_wrapper'
 require 'underware/utils/dynamic_require'
 require 'underware/deployment_server'
-
 Underware::Utils::DynamicRequire.relative('mixins')
-
 require 'underware/namespaces/underware_array'
 require 'underware/namespaces/hash_merger_namespace'
 require 'underware/namespaces/node'
 require 'underware/hash_mergers.rb'
-require 'ostruct'
 require 'underware/underware_log'
-
 Underware::Utils::DynamicRequire.relative('.')
 
 module Underware

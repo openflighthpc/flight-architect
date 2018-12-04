@@ -28,6 +28,7 @@ module Underware
       DOUBLE_SCOPE_ERROR = 'A node and group can not both be in scope'
 
       delegate :config, :answer, to: :scope
+      attr_reader :platform
 
       class << self
         LOG_MESSAGE = <<-EOF.strip_heredoc
@@ -47,7 +48,8 @@ module Underware
         end
       end
 
-      def initialize
+      def initialize(platform: nil)
+        @platform = platform&.to_sym
         @stacks_hash = {}
       end
 

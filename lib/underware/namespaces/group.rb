@@ -8,9 +8,9 @@ module Underware
 
       attr_reader :index
 
-      def initialize(*args, index:, **kwargs)
+      def initialize(*args, index:)
         @index = index
-        super(*args, **kwargs)
+        super(*args)
       end
 
       def nodes

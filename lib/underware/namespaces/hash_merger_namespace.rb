@@ -11,10 +11,9 @@ module Underware
     class HashMergerNamespace
       include Mixins::WhiteListHasher
 
-      def initialize(alces, name = nil, platform: nil)
+      def initialize(alces, name = nil)
         @alces = alces
         @name = name
-        @platform = platform&.to_sym
       end
 
       def config
@@ -43,7 +42,8 @@ module Underware
 
       private
 
-      attr_reader :alces, :platform
+      attr_reader :alces
+      delegate :platform, to: :alces
 
       def white_list_for_hasher
         respond_to?(:name) ? [:name] : []

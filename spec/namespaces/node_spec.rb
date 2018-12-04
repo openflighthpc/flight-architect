@@ -244,12 +244,14 @@ RSpec.describe Underware::Namespaces::Node do
   end
 
   describe 'hash merging' do
-    include Underware::AlcesUtils
-
     test_node_name = 'testnode01'
 
     subject do
-      described_class.new(alces, 'testnode01', platform: platform)
+      described_class.new(alces, 'testnode01')
+    end
+
+    let :alces do
+      Underware::Namespaces::Alces.new(platform: platform)
     end
 
     context 'when node in genders file' do

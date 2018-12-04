@@ -50,6 +50,7 @@ domain: '<%= answer.domain %>'
 domainnetwork: '10.10.0.0'
 domainnetmask: '255.255.0.0'
 
+controllernetworking: false
 internaldns: 10.10.0.1
 searchdomains: "<%= config.networks.network1.domain %> <%= config.domain %>"
 

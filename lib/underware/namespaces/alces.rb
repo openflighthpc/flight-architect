@@ -29,6 +29,7 @@ module Underware
 
       delegate :config, :answer, to: :scope
       attr_reader :platform
+      alias_method :alces, :itself
 
       class << self
         LOG_MESSAGE = <<-EOF.strip_heredoc
@@ -51,10 +52,6 @@ module Underware
       def initialize(platform: nil)
         @platform = platform&.to_sym
         @stacks_hash = {}
-      end
-
-      def alces
-        self
       end
 
       def domain

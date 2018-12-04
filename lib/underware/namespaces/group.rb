@@ -6,9 +6,9 @@ module Underware
     class Group < HashMergerNamespace
       include Mixins::Name
 
-      def initialize(alces, name, index:, **kwargs)
+      def initialize(*args, index:, **kwargs)
         @index = index
-        super(alces, name, **kwargs)
+        super(*args, **kwargs)
       end
 
       attr_reader :index

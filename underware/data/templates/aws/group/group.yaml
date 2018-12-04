@@ -25,9 +25,9 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - !Ref <%=clustername%>SecurityGroup
+        - %securitygroup%
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: !Ref <%=clustername%><%=netname%>Subnet
+      SubnetId: %<%=netname%>SubnetID%
       Tags:
         -
           Key: 'Name'
@@ -91,7 +91,7 @@ Resources:
 
 Outputs:
 <% nodes.each do |node| -%>
-  <%=node.name%>ID:
-    Description: <%=node.name%>ID
+  cloudwareNODE<%=node.name%>TAGID:
+    Description: cloudwareNODE<%=node.name%>TAGID
     Value: !Ref <%=node.name%>
 <% end -%>

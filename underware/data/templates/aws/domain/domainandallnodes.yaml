@@ -211,16 +211,16 @@ Resources:
 <% end -%>
 
 Outputs:
-  <%=clustername%>NetworkID:
-    Description: <%=clustername%>NetworkID
+  networkID:
+    Description: networkID
     Value: !Ref <%=clustername%>Network
-  <%=clustername%>SecurityGroup:
-    Description: <%=clustername%>SecurityGroup
+  securitygroup:
+    Description: securitygroup
     Value: !Ref <%=clustername%>SecurityGroup
 <% config.networks.each do |networkname,network|-%>
 <% if network.defined -%>
-  <%=clustername%><%=networkname%>SubnetID:
-    Description: <%=clustername%><%=networkname%>SubnetID
+  <%=networkname%>SubnetID:
+    Description: <%=networkname%>SubnetID
     Value: !Ref <%=clustername%><%=networkname%>Subnet
 <% end -%>
 <% end -%>

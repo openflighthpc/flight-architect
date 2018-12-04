@@ -203,7 +203,26 @@ networks.each_with_index do |(networkname,network),idx| -%>
 <%end -%>
   ],
   "outputs": {
+    "networkID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', '<%=config.cluster%>network')]"
+    },
+    "securitygroup": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/networkSecurityGroups', '<%=config.cluster%>securitygroup')]"
+    },
+<% networks = config.networks.select{|_,n| n.defined }
+networks.each_with_index do |(networkname,network),idx| -%>
+    "<%= networkname %>SubnetID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', '<%=config.cluster%>network', '<%=config.cluster%><%=networkname%>')]"
+    },
+<% end -%>
 <% nodes.each_with_index do |node,idx| -%>
+    "cloudwareNODE<%= node.name %>TAGID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"
+    },
     "<%=config.cluster%><%=node.name%>pubIP": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"

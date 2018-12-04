@@ -24,9 +24,9 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - %<%=clustername%>SecurityGroup%
+        - %securitygroup%
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: %<%=clustername%><%=netname%>SubnetID% 
+      SubnetId: %<%=netname%>SubnetID% 
       Tags:
         -
           Key: 'Name'

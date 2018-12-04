@@ -27,14 +27,14 @@ run_in_scope() {
 
     # Platform Scripts
     for file in $(find $SCOPEIN/*) ; do
-        echo mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$SCOPEIN"))
-        echo underware render $file $2 \> $SCOPEOUT/$(strip_input_path "$file" "$SCOPEIN")
+        mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$SCOPEIN"))
+        underware render $file $2 > $SCOPEOUT/$(strip_input_path "$file" "$SCOPEIN")
     done
 
     # Content Scripts
     for file in $(find $CONTENTBASE/$1/*) ; do
-        echo mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$CONTENTBASE/$1"))
-        echo underware render $file $2 \> $SCOPEOUT/$(strip_input_path "$file" "$CONTENTBASE/$1")
+        mkdir -p $SCOPEOUT/$(dirname $(strip_input_path "$file" "$CONTENTBASE/$1"))
+        underware render $file $2 > $SCOPEOUT/$(strip_input_path "$file" "$CONTENTBASE/$1")
     done
 
 }

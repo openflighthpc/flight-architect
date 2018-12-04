@@ -26,4 +26,18 @@ RSpec.describe Underware::Namespaces::Domain do
     url = 'http://1.2.3.4/metalware/system/genders'
     expect(alces.domain.genders_url).to eq(url)
   end
+
+  describe 'hash merging' do
+    it 'passes no parameters to Config HashMerger' do
+      expect(alces.hash_mergers.config).to receive(:merge).with({})
+
+      subject.config
+    end
+
+    it 'passes no parameters to Answer HashMerger' do
+      expect(alces.hash_mergers.answer).to receive(:merge).with({})
+
+      subject.answer
+    end
+  end
 end

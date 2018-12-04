@@ -41,4 +41,22 @@ RSpec.describe Underware::Namespaces::Group do
       end
     end
   end
+
+  describe 'hash merging' do
+    subject do
+      described_class.new(alces, 'test', index: 1)
+    end
+
+    it 'passes just `groups` containing own name to Config HashMerger' do
+      expect(alces.hash_mergers.config).to receive(:merge).with({groups: [subject.name]})
+
+      subject.config
+    end
+
+    it 'passes just `groups` containing own name to Answer HashMerger' do
+      expect(alces.hash_mergers.answer).to receive(:merge).with({groups: [subject.name]})
+
+      subject.answer
+    end
+  end
 end

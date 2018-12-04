@@ -241,4 +241,68 @@ RSpec.describe Underware::Namespaces::Node do
       expect(plugin.name).to eq enabled_plugin
     end
   end
+
+  describe 'hash merging' do
+    include Underware::AlcesUtils
+
+    subject do
+      described_class.new(alces, 'testnode01')
+    end
+
+    let :test_node_name { 'testnode01' }
+
+    context 'when node in genders file' do
+      before :each do
+        allow(Underware::NodeattrInterface)
+          .to receive(:genders_for_node)
+          .with(test_node_name)
+          .and_return(['primary_group', 'additional_group'])
+      end
+
+      it 'passes own name as `node`, genders as `groups`, to Config HashMerger' do
+        expect(alces.hash_mergers.config).to receive(:merge).with(
+          node: test_node_name,
+          groups: subject.genders
+        )
+
+        subject.config
+      end
+
+      it 'passes own name as `node`, genders as `groups`, to Answer HashMerger' do
+        expect(alces.hash_mergers.answer).to receive(:merge).with(
+          node: test_node_name,
+          groups: subject.genders
+        )
+
+        subject.answer
+      end
+    end
+
+    context 'when node not in genders file' do
+      before :each do
+        allow(Underware::NodeattrInterface)
+          .to receive(:genders_for_node)
+          .with(test_node_name)
+          .and_raise(Underware::NodeNotInGendersError)
+      end
+
+      it 'passes own name as `node`, just `orphan` as `groups`, to Config HashMerger' do
+        expect(alces.hash_mergers.config).to receive(:merge).with(
+          node: test_node_name,
+          groups: ['orphan']
+        )
+
+        subject.config
+      end
+
+      it 'passes own name as `node`, just `orphan` as `groups`, to Answer HashMerger' do
+        expect(alces.hash_mergers.answer).to receive(:merge).with(
+          node: test_node_name,
+          groups: ['orphan']
+        )
+
+        subject.answer
+      end
+    end
+  end
 end

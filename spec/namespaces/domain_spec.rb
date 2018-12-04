@@ -29,8 +29,10 @@ RSpec.describe Underware::Namespaces::Domain do
   end
 
   describe 'hash merging' do
+    subject { described_class.new(alces, platform: platform) }
+
     include_examples 'namespace_hash_merging',
-      description: 'passes no parameters',
+      description: 'passes no extra parameters',
       expected_hash_merger_input: {}
   end
 end

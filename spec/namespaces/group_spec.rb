@@ -45,7 +45,7 @@ RSpec.describe Underware::Namespaces::Group do
 
   describe 'hash merging' do
     subject do
-      described_class.new(alces, 'testgroup', index: 1)
+      described_class.new(alces, 'testgroup', index: 1, platform: platform)
     end
 
     include_examples 'namespace_hash_merging',

@@ -6,9 +6,9 @@ module Underware
     class Group < HashMergerNamespace
       include Mixins::Name
 
-      def initialize(alces, name, index:)
+      def initialize(alces, name, index:, **kwargs)
         @index = index
-        super(alces, name)
+        super(alces, name, **kwargs)
       end
 
       attr_reader :index
@@ -35,7 +35,7 @@ module Underware
       end
 
       def hash_merger_input
-        { groups: [name] }
+        super.merge(groups: [name])
       end
 
       def additional_dynamic_namespace

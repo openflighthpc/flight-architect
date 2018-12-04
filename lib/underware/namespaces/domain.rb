@@ -22,10 +22,6 @@ module Underware
         super.concat [:hostip, :hosts_url, :genders_url]
       end
 
-      def hash_merger_input
-        {}
-      end
-
       def additional_dynamic_namespace
         {}
       end

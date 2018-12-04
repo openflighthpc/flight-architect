@@ -249,7 +249,7 @@ RSpec.describe Underware::Namespaces::Node do
     test_node_name = 'testnode01'
 
     subject do
-      described_class.new(alces, 'testnode01')
+      described_class.new(alces, 'testnode01', platform: platform)
     end
 
     context 'when node in genders file' do

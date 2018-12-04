@@ -79,6 +79,10 @@ module Underware
       end
 
       def hash_merger_input
+        super.merge(node_hash_merger_input)
+      end
+
+      def node_hash_merger_input
         { groups: genders, node: name }
       rescue NodeNotInGendersError
         # The answer hash needs to be accessible by the Configurator. Nodes in

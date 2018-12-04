@@ -11,9 +11,10 @@ module Underware
     class HashMergerNamespace
       include Mixins::WhiteListHasher
 
-      def initialize(alces, name = nil)
+      def initialize(alces, name = nil, platform: nil)
         @alces = alces
         @name = name
+        @platform = platform&.to_sym
       end
 
       def config
@@ -42,7 +43,7 @@ module Underware
 
       private
 
-      attr_reader :alces
+      attr_reader :alces, :platform
 
       def white_list_for_hasher
         respond_to?(:name) ? [:name] : []
@@ -63,7 +64,11 @@ module Underware
       end
 
       def hash_merger_input
-        raise NotImplementedError
+        if platform
+          {platform: platform}
+        else
+          {}
+        end
       end
 
       def additional_dynamic_namespace

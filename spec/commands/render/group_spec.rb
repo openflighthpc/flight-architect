@@ -1,31 +1,24 @@
 
+require 'shared_examples/render_command'
 require 'underware/commands/render/group'
 
 RSpec.describe Underware::Commands::Render::Group do
-  include Underware::AlcesUtils
+  include_context 'render command'
 
-  def run_command(*args)
-    Underware::AlcesUtils.redirect_std(:stdout) do
-      Underware::Utils.run_command(
-        Underware::Commands::Render::Group, *args
-      )
-    end[:stdout].read
-  end
-
-  Underware::AlcesUtils.mock self, :each do
-    mock_group(test_group_name)
-  end
-
-  let :test_group_name { 'testgroup01' }
-
-  let :template do
-    Tempfile.create.tap do |t|
-      t.write("Rendered with scope: <%= scope.class %>\nScope name: <%= scope.name %>")
+  before :each do
+    Underware::GroupCache.update do |cache|
+      cache.add(test_group_name)
     end
   end
 
+  let :test_group_name { 'testgroup' }
+
+  let :command_args do
+    [test_group_name, template.path]
+  end
+
   it 'renders template against the given group and outputs result' do
-    output = run_command(test_group_name, template.path)
+    output = run_command(*command_args)
 
     expect(output).to include "Rendered with scope: Underware::Namespaces::Group\n"
     expect(output).to include "Scope name: #{test_group_name}\n"

@@ -94,7 +94,22 @@ module Underware
       end
 
       def alces
-        @alces ||= Namespaces::Alces.new
+        @alces ||= Namespaces::Alces.new(platform: platform_option)
+      end
+
+      def platform_option
+        platform = options.platform
+        return unless platform
+        raise_if_unknown_platform(platform)
+        platform
+      end
+
+      def raise_if_unknown_platform(platform)
+        platform_config_path = FilePath.platform_config(platform)
+        unless File.exist?(platform_config_path)
+          message = "Unknown platform: #{platform} (#{platform_config_path} does not exist)"
+          raise InvalidInput, message
+        end
       end
 
       def log_command

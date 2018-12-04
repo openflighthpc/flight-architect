@@ -43,6 +43,7 @@ module Underware
       private
 
       attr_reader :alces
+      delegate :platform, to: :alces
 
       def white_list_for_hasher
         respond_to?(:name) ? [:name] : []
@@ -63,7 +64,11 @@ module Underware
       end
 
       def hash_merger_input
-        raise NotImplementedError
+        if platform
+          {platform: platform}
+        else
+          {}
+        end
       end
 
       def additional_dynamic_namespace

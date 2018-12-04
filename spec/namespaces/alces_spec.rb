@@ -288,8 +288,7 @@ RSpec.describe Underware::Namespaces::Alces do
           Underware::NodeattrInterface
         ).to receive(:all_nodes).and_return(['local'])
 
-        local_class = Underware::Namespaces::Local.to_s
-        expect(alces.render_string('<%= alces.local.class %>')).to eq(local_class)
+        expect(alces.render_string('<%= alces.local.local? %>')).to be true
       end
     end
 

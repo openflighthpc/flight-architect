@@ -17,8 +17,8 @@ module Underware
         @cache = {}
       end
 
-      def merge(groups: [], node: nil, &templater_block)
-        arr = hash_array(groups: groups, node: node)
+      def merge(groups: [], node: nil, platform: nil, &templater_block)
+        arr = hash_array(groups: groups, node: node, platform: platform)
         Constants::HASH_MERGER_DATA_STRUCTURE
           .new(combine_hashes(arr), &templater_block)
       end
@@ -37,16 +37,19 @@ module Underware
       # not responsible for how the file is loaded as that is delegated to
       # load_yaml
       #
-      def hash_array(groups:, node:)
+      def hash_array(groups:, node:, platform:)
         [defaults, cached_yaml(:domain)].tap do |arr|
           groups.reverse.each do |group|
             arr.push(cached_yaml(:group, group))
           end
+
           if node == 'local'
             arr.push(cached_yaml(:local))
           elsif node
             arr.push(cached_yaml(:node, node))
           end
+
+          arr.push(cached_yaml(:platform, platform)) if platform
         end
       end
 

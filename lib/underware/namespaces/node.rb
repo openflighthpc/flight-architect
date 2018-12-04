@@ -6,18 +6,6 @@ require 'underware/namespaces/plugin'
 module Underware
   module Namespaces
     class Node < HashMergerNamespace
-      class << self
-        def create(alces, name)
-          name == 'local' ? Local.create(alces, name) : new(alces, name)
-        end
-
-        private
-
-        def new(*args)
-          super(*args)
-        end
-      end
-
       include Namespaces::Mixins::Name
 
       def group
@@ -31,7 +19,7 @@ module Underware
       def index
         @index ||= begin
           group.nodes.each_with_index do |other_node, index|
-            return(index + 1) if other_node == self
+            return index + 1 if other_node == self
           end
           raise InternalError, 'Node does not appear in its primary group'
         end
@@ -91,6 +79,10 @@ module Underware
       end
 
       def hash_merger_input
+        super.merge(node_hash_merger_input)
+      end
+
+      def node_hash_merger_input
         { groups: genders, node: name }
       rescue NodeNotInGendersError
         # The answer hash needs to be accessible by the Configurator. Nodes in

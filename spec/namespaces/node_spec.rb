@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'shared_examples/hash_merger_namespace'
+require 'shared_examples/namespace_hash_merging'
 
 require 'underware/namespaces/alces'
 require 'underware/constants'
@@ -245,37 +246,28 @@ RSpec.describe Underware::Namespaces::Node do
   describe 'hash merging' do
     include Underware::AlcesUtils
 
+    test_node_name = 'testnode01'
+
     subject do
       described_class.new(alces, 'testnode01')
     end
 
-    let :test_node_name { 'testnode01' }
-
     context 'when node in genders file' do
+      stubbed_groups = ['primary_group', 'additional_group']
+
       before :each do
         allow(Underware::NodeattrInterface)
           .to receive(:genders_for_node)
           .with(test_node_name)
-          .and_return(['primary_group', 'additional_group'])
+          .and_return(stubbed_groups)
       end
 
-      it 'passes own name as `node`, genders as `groups`, to Config HashMerger' do
-        expect(alces.hash_mergers.config).to receive(:merge).with(
+      include_examples 'namespace_hash_merging',
+        description: 'passes own name as `node`, genders as `groups`',
+        expected_hash_merger_input: {
           node: test_node_name,
-          groups: subject.genders
-        )
-
-        subject.config
-      end
-
-      it 'passes own name as `node`, genders as `groups`, to Answer HashMerger' do
-        expect(alces.hash_mergers.answer).to receive(:merge).with(
-          node: test_node_name,
-          groups: subject.genders
-        )
-
-        subject.answer
-      end
+          groups: stubbed_groups
+        }
     end
 
     context 'when node not in genders file' do
@@ -286,23 +278,12 @@ RSpec.describe Underware::Namespaces::Node do
           .and_raise(Underware::NodeNotInGendersError)
       end
 
-      it 'passes own name as `node`, just `orphan` as `groups`, to Config HashMerger' do
-        expect(alces.hash_mergers.config).to receive(:merge).with(
+      include_examples 'namespace_hash_merging',
+        description: 'passes own name as `node`, just `orphan` as `groups`',
+        expected_hash_merger_input: {
           node: test_node_name,
-          groups: ['orphan']
-        )
-
-        subject.config
-      end
-
-      it 'passes own name as `node`, just `orphan` as `groups`, to Answer HashMerger' do
-        expect(alces.hash_mergers.answer).to receive(:merge).with(
-          node: test_node_name,
-          groups: ['orphan']
-        )
-
-        subject.answer
-      end
+          groups: ['orphan'],
+        }
     end
   end
 end

@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'shared_examples/hash_merger_namespace'
+require 'shared_examples/namespace_hash_merging'
 require 'underware/namespaces/alces'
 
 RSpec.describe Underware::Namespaces::Domain do
@@ -28,16 +29,8 @@ RSpec.describe Underware::Namespaces::Domain do
   end
 
   describe 'hash merging' do
-    it 'passes no parameters to Config HashMerger' do
-      expect(alces.hash_mergers.config).to receive(:merge).with({})
-
-      subject.config
-    end
-
-    it 'passes no parameters to Answer HashMerger' do
-      expect(alces.hash_mergers.answer).to receive(:merge).with({})
-
-      subject.answer
-    end
+    include_examples 'namespace_hash_merging',
+      description: 'passes no parameters',
+      expected_hash_merger_input: {}
   end
 end

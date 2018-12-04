@@ -133,13 +133,16 @@ Resources:
           Value: <%=clustername%>
 
 Outputs:
-  cloudwareDOMAIN<%=clustername%>TAGnetworkID:
-    Description: cloudwareDOMAIN<%=clustername%>TAGnetworkID
+  <%=clustername%>NetworkID:
+    Description: <%=clustername%>networkID
     Value: !Ref <%=clustername%>Network
+  <%=clustername%>SecurityGroup:
+    Description: <%=clustername%>SecurityGroup
+    Value: !Ref <%=clustername%>SecurityGroup
 <% config.networks.each do |networkname,network|-%>
 <% if network.defined -%>
-  cloudwareDOMAIN<%=clustername%>TAG<%=networkname%>cloudID:
-    Description: cloudwareDOMAIN<%=clustername%>TAG<<%=networkname%>cloudID
+  <%=clustername%><%=networkname%>SubnetID:
+    Description: <%=clustername%><<%=networkname%>subnetID
     Value: !Ref <%=clustername%><%=networkname%>Subnet
 <% end -%>
 <% end -%>

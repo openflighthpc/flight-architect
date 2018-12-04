@@ -3,6 +3,7 @@ require 'ipaddr'
 def to_cidr(network,netmask)
   "#{network.to_s}/#{IPAddr.new(netmask.to_s).to_i.to_s(2).count('1')}"
 end
+clustername="#{config.cluster}"
 
 -%>
 ---
@@ -23,9 +24,9 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - !Ref <%=name%>SecurityGroup
+        - %<%=clustername%>SecurityGroup%
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: !Ref <%=name%><%=netname%>Subnet
+      SubnetId: %<%=clustername%><%=netname%>SubnetID% 
       Tags:
         -
           Key: 'Name'
@@ -87,16 +88,6 @@ Resources:
 <% end -%>
 
 Outputs:
-  domaincloudID:
-    Description: domaincloudID
-    Value: !Ref <%=config.cluster%>Network
-<% config.networks.each do |networkname,network|-%>
-<% if network.defined -%>
-  <%=networkname%>cloudID:
-    Description: <%=networkname%>cloudID
-    Value: !Ref <%=config.cluster%><%=networkname%>Subnet
-<% end -%>
-<% end -%>
-  <%=node.name%>ID:
-    Description: <%=node.name%>ID
+  cloudwareNODE<%=node.name%>TAGID:
+    Description: cloudwareNODE<%=node.name%>TAGID
     Value: !Ref <%=node.name%>

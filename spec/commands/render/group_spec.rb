@@ -19,9 +19,12 @@ RSpec.describe Underware::Commands::Render::Group do
   let :test_group_name { 'testgroup01' }
 
   let :template do
-    Tempfile.create.tap do |t|
-      t.write("Rendered with scope: <%= scope.class %>\nScope name: <%= scope.name %>")
-    end
+    template_contents = <<~TEMPLATE.strip_heredoc
+      Rendered with scope: <%= scope.class %>
+      Scope name: <%= scope.name %>
+    TEMPLATE
+
+    Tempfile.create.tap { |t| t.write(template_contents) }
   end
 
   it 'renders template against the given group and outputs result' do

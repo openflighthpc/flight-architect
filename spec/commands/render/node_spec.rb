@@ -19,9 +19,12 @@ RSpec.describe Underware::Commands::Render::Node do
   let :test_node_name { 'testnode01' }
 
   let :template do
-    Tempfile.create.tap do |t|
-      t.write("Rendered with scope: <%= scope.class %>\nScope name: <%= scope.name %>")
-    end
+    template_contents = <<~TEMPLATE.strip_heredoc
+      Rendered with scope: <%= scope.class %>
+      Scope name: <%= scope.name %>
+    TEMPLATE
+
+    Tempfile.create.tap { |t| t.write(template_contents) }
   end
 
   it 'renders template against the given node and outputs result' do

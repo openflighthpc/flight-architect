@@ -13,9 +13,11 @@ RSpec.describe Underware::Commands::Render::Domain do
   end
 
   let :template do
-    Tempfile.create.tap do |t|
-      t.write('Rendered with scope: <%= scope.class %>')
-    end
+    template_contents = <<~TEMPLATE.strip_heredoc
+      Rendered with scope: <%= scope.class %>
+    TEMPLATE
+
+    Tempfile.create.tap { |t| t.write(template_contents) }
   end
 
   it 'renders template against the domain and outputs result' do

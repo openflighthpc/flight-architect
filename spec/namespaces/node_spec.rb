@@ -250,10 +250,6 @@ RSpec.describe Underware::Namespaces::Node do
       described_class.new(alces, 'testnode01')
     end
 
-    let :alces do
-      Underware::Namespaces::Alces.new(platform: platform)
-    end
-
     context 'when node in genders file' do
       stubbed_groups = ['primary_group', 'additional_group']
 

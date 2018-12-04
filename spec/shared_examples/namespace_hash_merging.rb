@@ -3,6 +3,10 @@ RSpec.shared_examples 'namespace_hash_merging' do |args|
   base_description = args.fetch(:description)
   base_expected_hash_merger_input = args.fetch(:expected_hash_merger_input)
 
+  let :alces do
+    Underware::Namespaces::Alces.new(platform: platform)
+  end
+
   shared_examples 'calls hash mergers correctly' do |local_args|
     description = local_args.fetch(:description)
 

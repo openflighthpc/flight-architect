@@ -50,10 +50,6 @@ RSpec.describe Underware::Namespaces::Group do
       described_class.new(alces, 'testgroup', index: 1)
     end
 
-    let :alces do
-      Underware::Namespaces::Alces.new(platform: platform)
-    end
-
     include_examples 'namespace_hash_merging',
       description: 'passes just `groups` containing own name',
       expected_hash_merger_input: {

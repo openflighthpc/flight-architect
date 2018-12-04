@@ -2,8 +2,6 @@
 require 'underware/commands/render/domain'
 
 RSpec.describe Underware::Commands::Render::Domain do
-  include Underware::AlcesUtils
-
   def run_command(template_path)
     Underware::AlcesUtils.redirect_std(:stdout) do
       Underware::Utils.run_command(

@@ -2,8 +2,6 @@
 require 'underware/commands/render/group'
 
 RSpec.describe Underware::Commands::Render::Group do
-  include Underware::AlcesUtils
-
   def run_command(*args)
     Underware::AlcesUtils.redirect_std(:stdout) do
       Underware::Utils.run_command(
@@ -12,11 +10,13 @@ RSpec.describe Underware::Commands::Render::Group do
     end[:stdout].read
   end
 
-  Underware::AlcesUtils.mock self, :each do
-    mock_group(test_group_name)
+  before :each do
+    Underware::GroupCache.update do |cache|
+      cache.add(test_group_name)
+    end
   end
 
-  let :test_group_name { 'testgroup01' }
+  let :test_group_name { 'testgroup' }
 
   let :template do
     template_contents = <<~TEMPLATE.strip_heredoc

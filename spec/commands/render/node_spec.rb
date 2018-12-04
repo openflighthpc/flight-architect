@@ -2,8 +2,6 @@
 require 'underware/commands/render/node'
 
 RSpec.describe Underware::Commands::Render::Node do
-  include Underware::AlcesUtils
-
   def run_command(*args)
     Underware::AlcesUtils.redirect_std(:stdout) do
       Underware::Utils.run_command(
@@ -12,8 +10,10 @@ RSpec.describe Underware::Commands::Render::Node do
     end[:stdout].read
   end
 
-  Underware::AlcesUtils.mock self, :each do
-    mock_node(test_node_name)
+  before :each do
+    allow(Underware::NodeattrInterface)
+      .to receive(:all_nodes)
+      .and_return([test_node_name])
   end
 
   let :test_node_name { 'testnode01' }

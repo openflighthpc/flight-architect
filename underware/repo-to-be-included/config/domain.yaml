@@ -38,10 +38,8 @@ role: '<%=answer.role%>'
 
 
 # PLATFORM: CLOUD
-domaincloudID: vpc-0123456789 #this needs to be internal to something and set each time the domain is created
-platform: aws  #this needs to be internal so that each platform type for a node can be rendered against
-renderedurl: https://s3-eu-west-1.amazonaws.com/stevenorledge/rendered/<%=config.platform%>/<%=node.name%>/
-nodescripturl: <%= config.renderedurl %>deployment/main.sh
+renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/rendered/<%=config.platform%>/node/<%=node.name%>/
+nodescripturl: <%= config.renderedurl %>/main.sh
 
 
 # 
@@ -66,7 +64,6 @@ networks:
     netmask: 255.255.224.0
     network: 10.10.0.0 
     gateway: 10.10.0.1
-    cloudID: subnet-12345678987654321   #this needs to be internal to something and set each time the domain is created
     primary: true
   network2:
     defined: <%= answer.network2_defined %>
@@ -77,7 +74,6 @@ networks:
     ip: "10.10.<%= node.group.index.to_i + 32 %>.<%= node.index.to_i + 100 %>"
     netmask: 255.255.224.0
     network: 10.10.32.0
-    cloudID: subnet-12345678987654321   #this needs to be internal to something and set each time the domain is created
   network3:
     defined: <%= answer.network3_defined %>
     domain: 'ib' 
@@ -87,7 +83,6 @@ networks:
     ip: "10.10.<%= node.group.index.to_i + 64 %>.<%= node.index.to_i + 100 %>"
     netmask: 255.255.224.0
     network: 10.10.64.0
-    cloudID: subnet-12345678987654321   #this needs to be internal to something and set each time the domain is created
 
 external:
   defined: <%= if config.role == 'login' then true else false end %>

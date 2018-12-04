@@ -39,6 +39,9 @@ run_in_scope() {
 
 }
 
+# Configure platform
+sed -i "s/^platform:.*$/platform: $PLATFORM/g" /var/lib/underware/repo/config/domain.yaml
+
 # Domain
 run_in_scope domain
 

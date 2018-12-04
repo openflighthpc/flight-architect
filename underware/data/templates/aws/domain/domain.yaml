@@ -8,7 +8,6 @@ clustername="#{config.cluster}"
 -%>
 ---
 Description: 'Flight Domain Template'
-Mappings:
 Resources:
   <%=clustername%>Network:
     Type: AWS::EC2::VPC

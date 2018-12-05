@@ -77,7 +77,7 @@ up in order to get full functionality:
 
 - IPAPASSWORD=MyIPApassHere into /opt/directory/etc/config
 - Creation of clusteradmin user for adminware sandbox
-- Creation of ipaadmin user for userware sandbox
+- Creation of useradmin user for userware sandbox
 
 ===============================================================
 EOF

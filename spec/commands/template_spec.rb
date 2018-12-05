@@ -41,6 +41,11 @@ RSpec.describe Underware::Commands::Template do
 
     FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
     FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
+
+    # To render templates for nodes we need to be able to call this and have an
+    # array of nodes returned; stub this out so don't need to care about this
+    # when not explicitly testing rendering for nodes.
+    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return([])
   end
 
   it 'correctly renders all platform files for domain' do
@@ -148,6 +153,47 @@ RSpec.describe Underware::Commands::Template do
       for_platform: :platform_y,
       for_scope_type: :group,
       for_scope_name: 'orphan'
+    )
+  end
+
+  it 'correctly renders all platform files for each node' do
+    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    create_template 'platform_x/node/x_template'
+    create_template 'platform_y/node/y_template'
+
+    run_command
+
+    expect_rendered(
+      path: 'platform_x/node/some_node/x_template',
+      for_platform: :platform_x,
+      for_scope_type: :node,
+      for_scope_name: 'some_node'
+    )
+    expect_rendered(
+      path: 'platform_y/node/some_node/y_template',
+      for_platform: :platform_y,
+      for_scope_type: :node,
+      for_scope_name: 'some_node'
+    )
+  end
+
+  it 'correctly renders all content files for each node, for each platform' do
+    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    create_template 'content/node/shared_template'
+
+    run_command
+
+    expect_rendered(
+      path: 'platform_x/node/some_node/shared_template',
+      for_platform: :platform_x,
+      for_scope_type: :node,
+      for_scope_name: 'some_node'
+    )
+    expect_rendered(
+      path: 'platform_y/node/some_node/shared_template',
+      for_platform: :platform_y,
+      for_scope_type: :node,
+      for_scope_name: 'some_node'
     )
   end
 

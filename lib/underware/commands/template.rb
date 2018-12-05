@@ -40,6 +40,7 @@ module Underware
 
           group_templates = content_group_templates + platform_group_templates
           GroupCache.new.each do |group|
+            group_namespace = platform_alces.groups.find_by_name(group)
             group_templates.each do |template|
               relative_path = template.relative_path_from(Pathname.new(FilePath.templates_dir))
 
@@ -49,7 +50,7 @@ module Underware
               rendered_path = Pathname.new(FilePath.rendered).join(relative_rendered_path)
               FileUtils.mkdir_p rendered_path.dirname
 
-              rendered_template = platform_alces.render_file(template)
+              rendered_template = group_namespace.render_file(template)
               File.write(rendered_path, rendered_template)
             end
           end

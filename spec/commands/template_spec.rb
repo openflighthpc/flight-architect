@@ -8,15 +8,24 @@ RSpec.describe Underware::Commands::Template do
     path = File.join(Underware::FilePath.templates_dir, relative_path)
     FileUtils.mkdir_p(File.dirname(path))
 
-    # Create minimal template which just includes the platform it was rendered
-    # for.
-    File.write(path, "platform: <%= alces.platform %>")
+    # Create minimal template which just includes things we want to assert
+    # presence of in `expect_rendered`.
+    template = <<~TEMPLATE
+      platform: <%= alces.platform %>
+      scope_type: <%= alces.scope.class.to_s.downcase.split('::').last %>
+      scope_name: <%= alces.scope.name if alces.scope.respond_to?(:name) %>
+    TEMPLATE
+    File.write(path, template)
   end
 
-  def expect_rendered(path:, for_platform:)
-    expect(
-      File.read("#{Underware::Constants::RENDERED_PATH}/#{path}")
-    ).to include("platform: #{for_platform}")
+  def expect_rendered(path:, for_platform:, for_scope_type:, for_scope_name: nil)
+    rendered_template = File.read("#{Underware::Constants::RENDERED_PATH}/#{path}")
+
+    expect(rendered_template).to include("platform: #{for_platform}")
+    expect(rendered_template).to include("scope_type: #{for_scope_type}")
+    if for_scope_name
+      expect(rendered_template).to include("scope_name: #{for_scope_name}")
+    end
   end
 
   def expect_not_rendered(path:)
@@ -43,9 +52,21 @@ RSpec.describe Underware::Commands::Template do
 
     run_command
 
-    expect_rendered(path: 'platform_x/domain/template_1', for_platform: :platform_x)
-    expect_rendered(path: 'platform_x/domain/template_2', for_platform: :platform_x)
-    expect_rendered(path: 'platform_y/domain/template_1', for_platform: :platform_y)
+    expect_rendered(
+      path: 'platform_x/domain/template_1',
+      for_platform: :platform_x,
+      for_scope_type: :domain
+    )
+    expect_rendered(
+      path: 'platform_x/domain/template_2',
+      for_platform: :platform_x,
+      for_scope_type: :domain
+    )
+    expect_rendered(
+      path: 'platform_y/domain/template_1',
+      for_platform: :platform_y,
+      for_scope_type: :domain
+    )
   end
 
   it 'correctly renders all content files for domain, for each platform' do
@@ -53,8 +74,16 @@ RSpec.describe Underware::Commands::Template do
 
     run_command
 
-    expect_rendered(path: 'platform_x/domain/shared_template', for_platform: :platform_x)
-    expect_rendered(path: 'platform_y/domain/shared_template', for_platform: :platform_y)
+    expect_rendered(
+      path: 'platform_x/domain/shared_template',
+      for_platform: :platform_x,
+      for_scope_type: :domain
+    )
+    expect_rendered(
+      path: 'platform_y/domain/shared_template',
+      for_platform: :platform_y,
+      for_scope_type: :domain
+    )
   end
 
   it 'correctly renders all platform files for each group (including orphan group)' do
@@ -64,10 +93,30 @@ RSpec.describe Underware::Commands::Template do
 
     run_command
 
-    expect_rendered(path: 'platform_x/group/user_configured_group/x_template', for_platform: :platform_x)
-    expect_rendered(path: 'platform_x/group/orphan/x_template', for_platform: :platform_x)
-    expect_rendered(path: 'platform_y/group/user_configured_group/y_template', for_platform: :platform_y)
-    expect_rendered(path: 'platform_y/group/orphan/y_template', for_platform: :platform_y)
+    expect_rendered(
+      path: 'platform_x/group/user_configured_group/x_template',
+      for_platform: :platform_x,
+      for_scope_type: :group,
+      for_scope_name: 'user_configured_group'
+    )
+    expect_rendered(
+      path: 'platform_x/group/orphan/x_template',
+      for_platform: :platform_x,
+      for_scope_type: :group,
+      for_scope_name: 'orphan'
+    )
+    expect_rendered(
+      path: 'platform_y/group/user_configured_group/y_template',
+      for_platform: :platform_y,
+      for_scope_type: :group,
+      for_scope_name: 'user_configured_group'
+    )
+    expect_rendered(
+      path: 'platform_y/group/orphan/y_template',
+      for_platform: :platform_y,
+      for_scope_type: :group,
+      for_scope_name: 'orphan'
+    )
   end
 
   it 'correctly renders all content files for each group, for each platform' do
@@ -76,10 +125,30 @@ RSpec.describe Underware::Commands::Template do
 
     run_command
 
-    expect_rendered(path: 'platform_x/group/user_configured_group/shared_template', for_platform: :platform_x)
-    expect_rendered(path: 'platform_x/group/orphan/shared_template', for_platform: :platform_x)
-    expect_rendered(path: 'platform_y/group/user_configured_group/shared_template', for_platform: :platform_y)
-    expect_rendered(path: 'platform_y/group/orphan/shared_template', for_platform: :platform_y)
+    expect_rendered(
+      path: 'platform_x/group/user_configured_group/shared_template',
+      for_platform: :platform_x,
+      for_scope_type: :group,
+      for_scope_name: 'user_configured_group'
+    )
+    expect_rendered(
+      path: 'platform_x/group/orphan/shared_template',
+      for_platform: :platform_x,
+      for_scope_type: :group,
+      for_scope_name: 'orphan'
+    )
+    expect_rendered(
+      path: 'platform_y/group/user_configured_group/shared_template',
+      for_platform: :platform_y,
+      for_scope_type: :group,
+      for_scope_name: 'user_configured_group'
+    )
+    expect_rendered(
+      path: 'platform_y/group/orphan/shared_template',
+      for_platform: :platform_y,
+      for_scope_type: :group,
+      for_scope_name: 'orphan'
+    )
   end
 
   it 'does not render any files for platform without a config file' do

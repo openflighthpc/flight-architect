@@ -14,6 +14,7 @@ module Underware
         end
 
         content_domain_templates = templates_in_dir(CONTENT_NAME, scope_type: :domain)
+        content_group_templates = templates_in_dir(CONTENT_NAME, scope_type: :group)
 
         platforms.each do |platform|
           platform_alces = Namespaces::Alces.new(platform: platform)
@@ -36,8 +37,10 @@ module Underware
           end
 
           platform_group_templates = templates_in_dir(platform, scope_type: :group)
+
+          group_templates = content_group_templates + platform_group_templates
           GroupCache.new.each do |group|
-            platform_group_templates.each do |template|
+            group_templates.each do |template|
               relative_path = template.relative_path_from(Pathname.new(FilePath.templates_dir))
 
               relative_rendered_path = relative_path

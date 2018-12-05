@@ -57,6 +57,19 @@ RSpec.describe Underware::Commands::Template do
     expect_rendered(path: 'platform_y/domain/shared_template', for_platform: :platform_y)
   end
 
+  it 'correctly renders all platform files for each group (including orphan group)' do
+    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    create_template 'platform_x/group/x_template'
+    create_template 'platform_y/group/y_template'
+
+    run_command
+
+    expect_rendered(path: 'platform_x/group/user_configured_group/x_template', for_platform: :platform_x)
+    expect_rendered(path: 'platform_x/group/orphan/x_template', for_platform: :platform_x)
+    expect_rendered(path: 'platform_y/group/user_configured_group/y_template', for_platform: :platform_y)
+    expect_rendered(path: 'platform_y/group/orphan/y_template', for_platform: :platform_y)
+  end
+
   it 'does not render any files for platform without a config file' do
     create_template('unknown_platform/domain/some_template')
 

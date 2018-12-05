@@ -4,9 +4,9 @@ DATE=$(date +%Y%m%d)
 
 UNDERWARE_VERSION=0.3.0
 METALWARE_VERSION=develop
-CLOUDWARE_VERSION=develop
+CLOUDWARE_VERSION=0.1.0.pre3
 ADMINWARE_VERSION=2018.2.0
-USERWARE_VERSION=feature/advanced-mode
+USERWARE_VERSION=feature/simple-group-commands
 
 
 # Tidy up

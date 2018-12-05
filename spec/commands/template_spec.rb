@@ -19,10 +19,19 @@ RSpec.describe Underware::Commands::Template do
     ).to include("platform: #{for_platform}")
   end
 
+  def expect_not_rendered(path:)
+    expect(
+      File.exists?("#{Underware::Constants::RENDERED_PATH}/#{path}")
+    ).to be false
+  end
+
   before :each do
     # Ensure templates directory is initially empty, so only testing with files
     # setup in individual tests.
     FileUtils.rm_rf(Underware::FilePath.templates_dir)
+
+    FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
+    FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
   end
 
   it 'correctly renders all platform files for domain' do
@@ -37,5 +46,13 @@ RSpec.describe Underware::Commands::Template do
     expect_rendered(path: 'platform_x/domain/template_1', for_platform: :platform_x)
     expect_rendered(path: 'platform_x/domain/template_2', for_platform: :platform_x)
     expect_rendered(path: 'platform_y/domain/template_1', for_platform: :platform_y)
+  end
+
+  it 'does not render any files for platform without a config file' do
+    create_template('unknown_platform/domain/some_template')
+
+    run_command
+
+    expect_not_rendered(path: 'unknown_platform/domain/some_template')
   end
 end

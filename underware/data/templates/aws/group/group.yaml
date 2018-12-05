@@ -84,7 +84,7 @@ Resources:
   <%=node.name%>publicIpAssociation:
     Type: AWS::EC2::EIPAssociation
     Properties:
-      NetworkInterfaceId: !Ref <%=node.name%>priInterface
+      NetworkInterfaceId: !Ref <%=node.name%>network1Interface
       AllocationId: !GetAtt <%=node.name%>publicIp.AllocationId
 <% end -%>
 <% end -%>

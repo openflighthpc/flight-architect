@@ -39,18 +39,17 @@ module Underware
           platform_group_templates = templates_in_dir(platform, scope_type: :group)
 
           group_templates = content_group_templates + platform_group_templates
-          GroupCache.new.each do |group|
-            group_namespace = platform_alces.groups.find_by_name(group)
+          platform_alces.groups.each do |group|
             group_templates.each do |template|
               relative_path = template.relative_path_from(Pathname.new(FilePath.templates_dir))
 
               relative_rendered_path = relative_path
                 .sub(/^#{CONTENT_NAME}/, platform)
-                .sub('group', "group/#{group}")
+                .sub('group', "group/#{group.name}")
               rendered_path = Pathname.new(FilePath.rendered).join(relative_rendered_path)
               FileUtils.mkdir_p rendered_path.dirname
 
-              rendered_template = group_namespace.render_file(template)
+              rendered_template = group.render_file(template)
               File.write(rendered_path, rendered_template)
             end
           end

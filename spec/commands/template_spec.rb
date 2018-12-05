@@ -48,6 +48,15 @@ RSpec.describe Underware::Commands::Template do
     expect_rendered(path: 'platform_y/domain/template_1', for_platform: :platform_y)
   end
 
+  it 'correctly renders all content files for domain, for each platform' do
+    create_template 'content/domain/shared_template'
+
+    run_command
+
+    expect_rendered(path: 'platform_x/domain/shared_template', for_platform: :platform_x)
+    expect_rendered(path: 'platform_y/domain/shared_template', for_platform: :platform_y)
+  end
+
   it 'does not render any files for platform without a config file' do
     create_template('unknown_platform/domain/some_template')
 

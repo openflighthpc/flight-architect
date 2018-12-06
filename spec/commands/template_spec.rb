@@ -50,42 +50,42 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all platform files for domain' do
     [
-      'platform_x/domain/template_1',
-      'platform_x/domain/template_2',
-      'platform_y/domain/template_1',
+      'platform_x/domain/some/path/template_1',
+      'platform_x/domain/some/path/template_2',
+      'platform_y/domain/some/path/template_1',
     ].each { |template| create_template(template) }
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/domain/template_1',
+      path: 'platform_x/domain/some/path/template_1',
       for_platform: :platform_x,
       for_scope_type: :domain
     )
     expect_rendered(
-      path: 'platform_x/domain/template_2',
+      path: 'platform_x/domain/some/path/template_2',
       for_platform: :platform_x,
       for_scope_type: :domain
     )
     expect_rendered(
-      path: 'platform_y/domain/template_1',
+      path: 'platform_y/domain/some/path/template_1',
       for_platform: :platform_y,
       for_scope_type: :domain
     )
   end
 
   it 'correctly renders all content files for domain, for each platform' do
-    create_template 'content/domain/shared_template'
+    create_template 'content/domain/some/path/shared_template'
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/domain/shared_template',
+      path: 'platform_x/domain/some/path/shared_template',
       for_platform: :platform_x,
       for_scope_type: :domain
     )
     expect_rendered(
-      path: 'platform_y/domain/shared_template',
+      path: 'platform_y/domain/some/path/shared_template',
       for_platform: :platform_y,
       for_scope_type: :domain
     )
@@ -93,31 +93,31 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all platform files for each group (including orphan group)' do
     Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
-    create_template 'platform_x/group/x_template'
-    create_template 'platform_y/group/y_template'
+    create_template 'platform_x/group/some/path/x_template'
+    create_template 'platform_y/group/some/path/y_template'
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/group/user_configured_group/x_template',
+      path: 'platform_x/group/user_configured_group/some/path/x_template',
       for_platform: :platform_x,
       for_scope_type: :group,
       for_scope_name: 'user_configured_group'
     )
     expect_rendered(
-      path: 'platform_x/group/orphan/x_template',
+      path: 'platform_x/group/orphan/some/path/x_template',
       for_platform: :platform_x,
       for_scope_type: :group,
       for_scope_name: 'orphan'
     )
     expect_rendered(
-      path: 'platform_y/group/user_configured_group/y_template',
+      path: 'platform_y/group/user_configured_group/some/path/y_template',
       for_platform: :platform_y,
       for_scope_type: :group,
       for_scope_name: 'user_configured_group'
     )
     expect_rendered(
-      path: 'platform_y/group/orphan/y_template',
+      path: 'platform_y/group/orphan/some/path/y_template',
       for_platform: :platform_y,
       for_scope_type: :group,
       for_scope_name: 'orphan'
@@ -126,30 +126,30 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all content files for each group, for each platform' do
     Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
-    create_template 'content/group/shared_template'
+    create_template 'content/group/some/path/shared_template'
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/group/user_configured_group/shared_template',
+      path: 'platform_x/group/user_configured_group/some/path/shared_template',
       for_platform: :platform_x,
       for_scope_type: :group,
       for_scope_name: 'user_configured_group'
     )
     expect_rendered(
-      path: 'platform_x/group/orphan/shared_template',
+      path: 'platform_x/group/orphan/some/path/shared_template',
       for_platform: :platform_x,
       for_scope_type: :group,
       for_scope_name: 'orphan'
     )
     expect_rendered(
-      path: 'platform_y/group/user_configured_group/shared_template',
+      path: 'platform_y/group/user_configured_group/some/path/shared_template',
       for_platform: :platform_y,
       for_scope_type: :group,
       for_scope_name: 'user_configured_group'
     )
     expect_rendered(
-      path: 'platform_y/group/orphan/shared_template',
+      path: 'platform_y/group/orphan/some/path/shared_template',
       for_platform: :platform_y,
       for_scope_type: :group,
       for_scope_name: 'orphan'
@@ -158,19 +158,19 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all platform files for each node' do
     allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
-    create_template 'platform_x/node/x_template'
-    create_template 'platform_y/node/y_template'
+    create_template 'platform_x/node/some/path/x_template'
+    create_template 'platform_y/node/some/path/y_template'
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/node/some_node/x_template',
+      path: 'platform_x/node/some_node/some/path/x_template',
       for_platform: :platform_x,
       for_scope_type: :node,
       for_scope_name: 'some_node'
     )
     expect_rendered(
-      path: 'platform_y/node/some_node/y_template',
+      path: 'platform_y/node/some_node/some/path/y_template',
       for_platform: :platform_y,
       for_scope_type: :node,
       for_scope_name: 'some_node'
@@ -179,18 +179,18 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all content files for each node, for each platform' do
     allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
-    create_template 'content/node/shared_template'
+    create_template 'content/node/some/path/shared_template'
 
     run_command
 
     expect_rendered(
-      path: 'platform_x/node/some_node/shared_template',
+      path: 'platform_x/node/some_node/some/path/shared_template',
       for_platform: :platform_x,
       for_scope_type: :node,
       for_scope_name: 'some_node'
     )
     expect_rendered(
-      path: 'platform_y/node/some_node/shared_template',
+      path: 'platform_y/node/some_node/some/path/shared_template',
       for_platform: :platform_y,
       for_scope_type: :node,
       for_scope_name: 'some_node'

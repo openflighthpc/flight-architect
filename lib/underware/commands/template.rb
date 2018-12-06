@@ -87,8 +87,8 @@ module Underware
       end
 
       def templates_in_dir(templates_dir_name, scope_type:)
-        glob = "#{FilePath.templates_dir}/#{templates_dir_name}/#{scope_type}/*"
-        Pathname.glob(glob)
+        glob = "#{FilePath.templates_dir}/#{templates_dir_name}/#{scope_type}/**/*"
+        Pathname.glob(glob).select(&:file?)
       end
     end
   end

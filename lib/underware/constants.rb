@@ -35,6 +35,9 @@ module Underware
     RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
     GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')
 
+    # Directory name where shared 'content' templates live.
+    CONTENT_DIR_NAME = 'content'
+
     CACHE_PATH = File.join(UNDERWARE_STORAGE_PATH, 'cache')
     GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
     PLUGINS_CACHE_PATH = File.join(CACHE_PATH, 'plugins.yaml')

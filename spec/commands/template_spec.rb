@@ -12,7 +12,7 @@ RSpec.describe Underware::Commands::Template do
     # presence of in `expect_rendered`.
     template = <<~TEMPLATE
       platform: <%= alces.platform %>
-      scope_type: <%= alces.scope.class.to_s.downcase.split('::').last %>
+      scope_type: <%= alces.scope.scope_type %>
       scope_name: <%= alces.scope.name if alces.scope.respond_to?(:name) %>
     TEMPLATE
     File.write(path, template)

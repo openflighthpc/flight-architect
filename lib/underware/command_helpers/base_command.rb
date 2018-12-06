@@ -90,7 +90,7 @@ module Underware
       end
 
       def class_name_parts
-        self.class.name.split('::').map(&:downcase).map(&:to_sym)
+        Utils.class_name_parts(self)
       end
 
       def alces

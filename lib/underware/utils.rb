@@ -32,6 +32,10 @@ module Underware
         end
       end
 
+      def class_name_parts(object)
+        object.class.to_s.downcase.split('::').map(&:to_sym)
+      end
+
       private
 
       # From

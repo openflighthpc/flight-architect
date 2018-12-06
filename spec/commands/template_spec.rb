@@ -204,4 +204,32 @@ RSpec.describe Underware::Commands::Template do
 
     expect_not_rendered(path: 'unknown_platform/domain/some_template')
   end
+
+  it 'clears out pre-existing files from rendered files directory' do
+    previously_rendered_file_path = File.join(
+      Underware::Constants::RENDERED_PATH,
+      'some_platform/node/some_node/some_template'
+    )
+    FileUtils.mkdir_p(File.dirname(previously_rendered_file_path))
+    FileUtils.touch(previously_rendered_file_path)
+
+    run_command
+
+    expect(File.exists?(previously_rendered_file_path)).not_to be true
+  end
+
+  # Do not clear previously rendered system files to preserve rendered genders
+  # file, as well as any possible other future rendered system filess.
+  it 'does not clear out pre-existing files in rendered system files directory' do
+    previously_rendered_file_path = File.join(
+      Underware::Constants::RENDERED_PATH,
+      'system/some_file'
+    )
+    FileUtils.mkdir_p(File.dirname(previously_rendered_file_path))
+    FileUtils.touch(previously_rendered_file_path)
+
+    run_command
+
+    expect(File.exists?(previously_rendered_file_path)).to be true
+  end
 end

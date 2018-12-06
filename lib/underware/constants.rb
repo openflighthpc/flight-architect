@@ -32,7 +32,8 @@ module Underware
     UNDERWARE_STORAGE_PATH = '/var/lib/underware'
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
     RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
-    GENDERS_PATH = File.join(RENDERED_PATH, 'system/genders')
+    RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
+    GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')
 
     CACHE_PATH = File.join(UNDERWARE_STORAGE_PATH, 'cache')
     GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')

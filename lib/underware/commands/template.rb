@@ -7,7 +7,18 @@ module Underware
       # Directory name where shared 'content' templates live.
       CONTENT_NAME = 'content'
 
+      # Rendered file directories to preserve when `template` is run (all other
+      # directories will be cleared out on each `template` run, so that only
+      # latest rendered files are present).
+      PRESERVE_RENDERED_DIRS = [Constants::RENDERED_SYSTEM_FILES_PATH]
+
       def run
+        Pathname.new(FilePath.rendered).children.map(&:to_s).each do |rendered_dir|
+          unless PRESERVE_RENDERED_DIRS.include?(rendered_dir)
+            FileUtils.rm_rf(rendered_dir)
+          end
+        end
+
         platforms_glob = "#{FilePath.platform_configs_dir}/*.yaml"
         platforms = Pathname.glob(platforms_glob).map do |config_path|
           config_path.basename.sub_ext('').to_s

@@ -91,3 +91,6 @@ Outputs:
   cloudwareNODE<%=node.name%>TAGID:
     Description: cloudwareNODE<%=node.name%>TAGID
     Value: !Ref <%=node.name%>
+  <%=node.name%>TAGgroups:
+    Description: <%=node.name%>TAGgroups
+    Value: <%=NodeattrInterface.genders_for_node(node).join(',') %>

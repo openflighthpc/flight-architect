@@ -219,11 +219,15 @@ networks.each_with_index do |(networkname,network),idx| -%>
     },
 <% end -%>
 <% nodes.each_with_index do |node,idx| -%>
-    "cloudwareNODE<%= node.name %>TAGID": {
+    "<%= node.name %>TAGID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"
     },
-    "<%=config.cluster%><%=node.name%>pubIP": {
+    "<%=node.name%>TAGgroups": {
+      "type": "string",
+      "value": "<%= NodeattrInterface.genders_for_node(node).join(',') %>"
+    },
+    "<%=node.name%>TAGpubIP": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
     }<%= (idx + 1 == nodes.length) ? '' : ',' %>

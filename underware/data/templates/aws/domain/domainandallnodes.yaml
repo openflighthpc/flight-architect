@@ -225,13 +225,16 @@ Outputs:
 <% end -%>
 <% end -%>
 <% nodes.each do |node| -%>
-  cloudwareNODE<%=node.name%>TAGID:
+  <%=node.name%>TAGID:
     Description: cloudwareNODE<%=node.name%>TAGID
     Value: !Ref <%=node.name%>
 <% #if node.config.role == 'login' -%>
-  cloudwareNODE<%=node.name%>TAGIP:
+  <%=node.name%>TAGIP:
     Description: cloudwareNODE<%=node.name%>TAGIP
     Value: !Ref <%=node.name%>publicIp
+  <%=node.name%>TAGgroups:
+    Description: <%=node.name%>TAGgroups
+    Value: <%=NodeattrInterface.genders_for_node(node).join(',') %>
 <% #end -%>
 <% end -%>
 

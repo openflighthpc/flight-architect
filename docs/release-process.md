@@ -13,11 +13,14 @@
    When updating the CHANGELOG include a reference to the pull request which
    fixed each issue or completed each change.
 
-3. Merge everything which should be released into `master`, and push this.
+3. Run `bundle install` and commit any changes, just to ensure `Gemfile.lock`
+   is in consistent state.
 
-4. Create a release with the same new version number as determined above, at
+4. Merge everything which should be released into `master`, and push this.
+
+5. Create a release with the same new version number as determined above, at
    https://github.com/alces-software/underware/releases.
 
-5. Announce the release at https://alces.slack.com/messages/C5FL99R89/,
+6. Announce the release at https://alces.slack.com/messages/C5FL99R89/,
    mentioning what's new in this release (the entries added to the CHANGELOG
    above), or at least where to find this if many things have been added.

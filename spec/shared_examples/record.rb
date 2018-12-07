@@ -29,8 +29,7 @@ RSpec.shared_examples 'record' do |file_path_proc|
       paths << File.expand_path(file_path_proc.call('.', legacy))
     end
     paths.each do |path|
-      FileUtils.mkdir_p(File.dirname(path))
-      FileUtils.touch(path)
+      Underware::Utils.create_file(path)
     end
   end
 

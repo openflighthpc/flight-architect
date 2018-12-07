@@ -26,9 +26,7 @@ module Underware
     def render_for(namespace)
       rendered_path = rendered_path_for_namespace(namespace)
       rendered_template = namespace.render_file(template_path)
-
-      FileUtils.mkdir_p rendered_path.dirname
-      File.write(rendered_path, rendered_template)
+      Utils.create_file(rendered_path, content: rendered_template)
     end
 
     private

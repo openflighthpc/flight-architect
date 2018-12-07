@@ -6,7 +6,6 @@ RSpec.describe Underware::Commands::Template do
 
   def create_template(relative_path)
     path = File.join(Underware::FilePath.templates_dir, relative_path)
-    FileUtils.mkdir_p(File.dirname(path))
 
     # Create minimal template which just includes things we want to assert
     # presence of in `expect_rendered`.
@@ -15,7 +14,8 @@ RSpec.describe Underware::Commands::Template do
       scope_type: <%= alces.scope.scope_type %>
       scope_name: <%= alces.scope.name if alces.scope.respond_to?(:name) %>
     TEMPLATE
-    File.write(path, template)
+
+    Underware::Utils.create_file(path, content: template)
   end
 
   def expect_rendered(path:, for_platform:, for_scope_type:, for_scope_name: nil)
@@ -210,8 +210,7 @@ RSpec.describe Underware::Commands::Template do
       Underware::Constants::RENDERED_PATH,
       'some_platform/node/some_node/some_template'
     )
-    FileUtils.mkdir_p(File.dirname(previously_rendered_file_path))
-    FileUtils.touch(previously_rendered_file_path)
+    Underware::Utils.create_file(previously_rendered_file_path)
 
     run_command
 
@@ -225,8 +224,7 @@ RSpec.describe Underware::Commands::Template do
       Underware::Constants::RENDERED_PATH,
       'system/some_file'
     )
-    FileUtils.mkdir_p(File.dirname(previously_rendered_file_path))
-    FileUtils.touch(previously_rendered_file_path)
+    Underware::Utils.create_file(previously_rendered_file_path)
 
     run_command
 

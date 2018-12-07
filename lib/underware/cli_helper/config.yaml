@@ -261,6 +261,26 @@ commands:
       group: *render_group
       node: *render_node
 
+  template:
+    syntax: underware template [options]
+    summary: Render all Underware templates for all platforms
+    description: >
+      This command renders all the templates provided by Underware for every
+      combination of platform and scope that this installation of Underware is
+      configured with.
+
+
+      Specifically this consists of rendering, for every platform, the
+      available domain, group, and node templates (both platform-specific and
+      platform-independent content), for the domain, every group, and every
+      node respectively.
+
+
+      The rendered templates can then be used, on their own or in combination
+      with other Alces tools, to deploy, configure, or otherwise manage, a
+      cluster at different scales and across different platforms.
+    action: Commands::Template
+
   view-answers:
     syntax: underware view-answers [SUB_COMMAND] [options]
     summary: View configured answers

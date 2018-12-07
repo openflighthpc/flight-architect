@@ -82,8 +82,6 @@ group:
   - *network2_defined
   - *network3_defined
 
-node:
-  # BASE
-  - *hostname_range
+node: []
 
 local: []

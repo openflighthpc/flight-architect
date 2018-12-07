@@ -32,6 +32,18 @@ module Underware
         end
       end
 
+      def class_name_parts(object)
+        object.class.to_s.downcase.split('::').map(&:to_sym)
+      end
+
+      # Create file at any path, optionally with some content, by first
+      # creating every needed parent directory.
+      def create_file(path, content: '')
+        dir_path = File.dirname(path)
+        FileUtils.mkdir_p(dir_path)
+        File.write(path, content)
+      end
+
       private
 
       # From

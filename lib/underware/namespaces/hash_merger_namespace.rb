@@ -40,6 +40,10 @@ module Underware
         )
       end
 
+      def scope_type
+        Utils.class_name_parts(self).last
+      end
+
       private
 
       attr_reader :alces

@@ -137,7 +137,11 @@ module Underware
       end
 
       def platform_config(platform)
-        File.join(config_dir, 'platforms', "#{platform}.yaml")
+        File.join(platform_configs_dir, "#{platform}.yaml")
+      end
+
+      def platform_configs_dir
+        File.join(config_dir, 'platforms')
       end
 
       private

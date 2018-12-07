@@ -5,7 +5,6 @@ require 'underware/file_path'
 require 'underware/validation/loader'
 require 'underware/data'
 require 'underware/constants'
-require 'active_support/core_ext/object/deep_dup'
 
 module Underware
   module HashMergers
@@ -14,20 +13,19 @@ module Underware
       # and then call `super`, though this class does not need arguments
       # itself.
       def initialize(*_args)
-        @file_path = FilePath
         @loader = Validation::Loader.new
         @cache = {}
       end
 
-      def merge(groups: [], node: nil, &templater_block)
-        arr = hash_array(groups: groups, node: node)
+      def merge(groups: [], node: nil, platform: nil, &templater_block)
+        arr = hash_array(groups: groups, node: node, platform: platform)
         Constants::HASH_MERGER_DATA_STRUCTURE
           .new(combine_hashes(arr), &templater_block)
       end
 
       private
 
-      attr_reader :file_path, :loader, :cache
+      attr_reader :loader, :cache
 
       # Method to be overridden with the hash defaults
       def defaults
@@ -39,16 +37,19 @@ module Underware
       # not responsible for how the file is loaded as that is delegated to
       # load_yaml
       #
-      def hash_array(groups:, node:)
+      def hash_array(groups:, node:, platform:)
         [defaults, cached_yaml(:domain)].tap do |arr|
           groups.reverse.each do |group|
             arr.push(cached_yaml(:group, group))
           end
+
           if node == 'local'
             arr.push(cached_yaml(:local))
           elsif node
             arr.push(cached_yaml(:node, node))
           end
+
+          arr.push(cached_yaml(:platform, platform)) if platform
         end
       end
 

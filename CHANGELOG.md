@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## [0.4.0] - 2018-12-07
+
+- Made various initial changes as part of getting Underware ready to be used as
+  a product rather than an internal tool only.
+- Removed concept of Underware 'repo', all Underware content now lives in
+  Underware itself within `data` directory
+  (https://github.com/alces-software/underware/pull/26).
+- Changed single `render` command to `render` group of commands (`render
+  domain`/`render group`/`render node`), to allow easily rendering against any
+  namespace (https://github.com/alces-software/underware/pull/27).
+- Added concept of 'specializing' namespaces for a platform, where the platform
+  config will also be included and merged in with the regular namespace config
+  hierarchy; also added `--platform` option to `render` commands to render
+  against these specialized namespaces
+  (https://github.com/alces-software/underware/pull/29 and
+  https://github.com/alces-software/underware/pull/30).
+- Added `template` command, to render all Underware templates for all platforms
+  and namespaces (https://github.com/alces-software/underware/pull/30).
+
 ## [0.3.0] - 2018-10-31
 
 - Made a few minor tweaks to correct some incorrect things in the latest

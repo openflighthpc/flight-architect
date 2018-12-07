@@ -94,7 +94,6 @@ mkdir -p /var/log/underware
 mkdir -p /var/lib/underware/rendered/system
 mkdir -p /var/lib/underware/cache/templates
 mkdir -p /var/lib/underware/events
-mkdir -p /var/lib/underware/repo
 mkdir -p /var/lib/underware/plugins
 mkdir -p /var/lib/underware/answers/{groups,nodes}
 mkdir -p /var/lib/underware/assets

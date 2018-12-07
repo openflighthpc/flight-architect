@@ -6,18 +6,6 @@ require 'underware/namespaces/plugin'
 module Underware
   module Namespaces
     class Node < HashMergerNamespace
-      class << self
-        def create(alces, name)
-          name == 'local' ? Local.create(alces, name) : new(alces, name)
-        end
-
-        private
-
-        def new(*args)
-          super(*args)
-        end
-      end
-
       include Namespaces::Mixins::Name
 
       def group
@@ -31,7 +19,7 @@ module Underware
       def index
         @index ||= begin
           group.nodes.each_with_index do |other_node, index|
-            return(index + 1) if other_node == self
+            return index + 1 if other_node == self
           end
           raise InternalError, 'Node does not appear in its primary group'
         end
@@ -51,25 +39,6 @@ module Underware
 
       def genders_url
         @genders_url ||= DeploymentServer.system_file_url('genders')
-      end
-
-      def hexadecimal_ip
-        @hexadecimal_ip ||= SystemCommand.run("gethostip -x #{name}").chomp
-      end
-
-      def files
-        @files ||= begin
-          data = alces.build_files_retriever.retrieve(self)
-          finalize_build_files(data)
-        end
-      end
-
-      def finalize_build_files(build_file_hashes)
-        Constants::HASH_MERGER_DATA_STRUCTURE.new(
-          build_file_hashes
-        ) do |template|
-          render_string(template)
-        end
       end
 
       def events_dir
@@ -102,12 +71,7 @@ module Underware
                        :kickstart_url,
                        :build_complete_url,
                        :build_complete_path,
-                       :hexadecimal_ip,
                      ])
-      end
-
-      def recursive_white_list_for_hasher
-        super.push(:files)
       end
 
       def recursive_array_white_list_for_hasher
@@ -115,6 +79,10 @@ module Underware
       end
 
       def hash_merger_input
+        super.merge(node_hash_merger_input)
+      end
+
+      def node_hash_merger_input
         { groups: genders, node: name }
       rescue NodeNotInGendersError
         # The answer hash needs to be accessible by the Configurator. Nodes in

@@ -15,7 +15,6 @@ module Underware
 
         def dependency_hash
           {
-            repo: ['configure.yaml'],
             configure: ['domain.yaml'],
           }
         end

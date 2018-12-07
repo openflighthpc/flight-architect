@@ -13,10 +13,7 @@ module Underware
           .join("\n")
       end
 
-      def run_command(command_class, *args, stderr: $stderr, **options_hash)
-        old_stderr = $stderr
-        $stderr = stderr
-
+      def run_command(command_class, *args, **options_hash)
         options = Commander::Command::Options.new
         options_hash.map do |option, value|
           option_setter = (option.to_s + '=').to_sym
@@ -24,12 +21,6 @@ module Underware
         end
 
         command_class.new(args, options)
-      rescue StandardError => e
-        warn e.message
-        warn e.backtrace
-        raise e
-      ensure
-        $stderr = old_stderr
       end
 
       def copy_via_temp_file(source, destination)
@@ -39,6 +30,18 @@ module Underware
           yield path
           FileUtils.cp(path, destination)
         end
+      end
+
+      def class_name_parts(object)
+        object.class.to_s.downcase.split('::').map(&:to_sym)
+      end
+
+      # Create file at any path, optionally with some content, by first
+      # creating every needed parent directory.
+      def create_file(path, content: '')
+        dir_path = File.dirname(path)
+        FileUtils.mkdir_p(dir_path)
+        File.write(path, content)
       end
 
       private

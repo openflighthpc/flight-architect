@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'underware/namespaces/alces'
-require 'active_support/core_ext/module/delegation'
 require 'recursive_open_struct'
 
 module Underware
@@ -143,17 +142,12 @@ module Underware
         allow(namespace).to receive(:answer).and_return(OpenStruct.new)
       end
 
-      def hexadecimal_ip(node)
-        hex = "#{node.name}_HEX_IP"
-        allow(node).to receive(:hexadecimal_ip).and_return(hex)
-      end
-
       # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
         raise_if_node_exists(name)
         add_node_to_genders_file(name, *genders)
-        Underware::Namespaces::Node.create(alces, name).tap do |node|
+        Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)
           underware_nodes = Underware::Namespaces::UnderwareArray.new(new_nodes)
           allow(alces).to receive(:nodes).and_return(underware_nodes)

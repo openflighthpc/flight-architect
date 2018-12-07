@@ -10,7 +10,6 @@ RSpec.shared_examples \
   let(:test_config) do
     {
       test_config: 'I am the config',
-      files: [],
     }
   end
 
@@ -30,6 +29,23 @@ RSpec.shared_examples \
 
     it 'converts the answer into a hash' do
       expect(subject.to_h[:answer]).to eq(test_answer)
+    end
+  end
+
+  describe '#scope_type' do
+    it 'gives correct scope type' do
+      expected_scope_type = case subject
+                            when Underware::Namespaces::Domain
+                              :domain
+                            when Underware::Namespaces::Group
+                              :group
+                            when Underware::Namespaces::Node
+                              :node
+                            else
+                              raise "Unhandled class: #{subject.class}"
+                            end
+
+      expect(subject.scope_type).to eq(expected_scope_type)
     end
   end
 end

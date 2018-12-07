@@ -16,7 +16,7 @@ module Underware
         end
 
         def answer_file
-          file_path.local_answers
+          FilePath.local_answers
         end
       end
     end

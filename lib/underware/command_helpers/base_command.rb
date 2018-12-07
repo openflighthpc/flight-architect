@@ -75,17 +75,12 @@ module Underware
       def enforce_dependency
         Dependency.new(
           command_input: command_name,
-          repo_path: FilePath.repo,
           dependency_hash: dependency_hash
         ).enforce
       end
 
       def loader
         @loader ||= Validation::Loader.new
-      end
-
-      def file_path
-        @file_path ||= FilePath
       end
 
       def command_name
@@ -95,11 +90,26 @@ module Underware
       end
 
       def class_name_parts
-        self.class.name.split('::').map(&:downcase).map(&:to_sym)
+        Utils.class_name_parts(self)
       end
 
       def alces
-        @alces ||= Namespaces::Alces.new
+        @alces ||= Namespaces::Alces.new(platform: platform_option)
+      end
+
+      def platform_option
+        platform = options.platform
+        return unless platform
+        raise_if_unknown_platform(platform)
+        platform
+      end
+
+      def raise_if_unknown_platform(platform)
+        platform_config_path = FilePath.platform_config(platform)
+        unless File.exist?(platform_config_path)
+          message = "Unknown platform: #{platform} (#{platform_config_path} does not exist)"
+          raise InvalidInput, message
+        end
       end
 
       def log_command

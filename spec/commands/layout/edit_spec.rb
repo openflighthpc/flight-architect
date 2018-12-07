@@ -11,7 +11,6 @@ RSpec.describe Underware::Commands::Layout::Edit do
   let(:record_path) { Underware::Records::Layout.path(record_name) }
 
   Underware::AlcesUtils.mock(self, :each) do
-    FileSystem.root_setup(&:with_minimal_repo)
     create_layout(record_name, {})
   end
 

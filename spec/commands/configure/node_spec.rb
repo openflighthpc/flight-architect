@@ -10,13 +10,7 @@ RSpec.describe Underware::Commands::Configure::Node do
     )
   end
 
-  let(:initial_alces) { Underware::Namespaces::Alces.new }
-  let(:alces) do
-    allow(initial_alces).to receive(:groups).and_return(
-      double('groups', testnodes: test_group)
-    )
-    initial_alces
-  end
+  let(:alces) { Underware::Namespaces::Alces.new }
 
   let(:test_group) do
     Underware::Namespaces::Group.new(initial_alces, 'testnodes', index: 1)
@@ -24,7 +18,7 @@ RSpec.describe Underware::Commands::Configure::Node do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_minimal_repo
+      fs.with_minimal_configure_file
       fs.dump(Underware::FilePath.domain_answers, {})
       fs.dump(Underware::FilePath.group_answers('testnodes'), {})
     end

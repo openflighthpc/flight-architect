@@ -44,7 +44,7 @@ module Underware
         end
 
         def answer_file
-          file_path.group_answers(group_name)
+          FilePath.group_answers(group_name)
         end
 
         def custom_configuration

@@ -22,8 +22,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'active_support/core_ext/hash'
-require 'active_support/string_inquirer'
 require 'underware/validation/loader'
 require 'underware/validation/saver'
 require 'underware/file_path'
@@ -160,7 +158,7 @@ module Underware
     def create_orphan_node
       UnderwareLog.warn orphan_warning unless questions_section == :local
       group_cache.push_orphan(name)
-      Namespaces::Node.create(alces, name)
+      Namespaces::Node.new(alces, name)
     end
   end
 end

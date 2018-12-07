@@ -13,7 +13,6 @@ module Underware
     def for_node_in_configured_group(name)
       group = find_node(name).group
       {
-        repo: ['configure.yaml'],
         configure: ['domain.yaml', "groups/#{group.name}.yaml"],
         optional: {
           configure: ["nodes/#{name}.yaml"],

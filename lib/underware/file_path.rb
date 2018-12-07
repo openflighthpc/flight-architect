@@ -32,10 +32,19 @@ module Underware
                :group_config,
                :node_config,
                :local_config,
+               :config_dir,
                to: :config_path
 
+      def genders_template
+        File.join(templates_dir, 'genders')
+      end
+
+      def templates_dir
+        File.join(internal_data_dir, 'templates')
+      end
+
       def configure_file
-        File.join(repo, 'configure.yaml')
+        File.join(internal_data_dir, 'configure.yaml')
       end
 
       def domain_answers
@@ -57,46 +66,19 @@ module Underware
       end
 
       def answer_files
-        File.join(underware_data, 'answers')
-      end
-
-      def server_config
-        File.join(repo, 'server.yaml')
-      end
-
-      def repo
-        File.join(underware_data, 'repo')
+        File.join(underware_storage, 'answers')
       end
 
       def overview
-        File.join(repo, 'overview.yaml')
+        File.join(internal_data_dir, 'overview.yaml')
       end
 
       def plugins_dir
-        File.join(underware_data, 'plugins')
-      end
-
-      def repo_template_path(template_type, namespace:)
-        File.join(
-          repo,
-          template_type.to_s,
-          template_file_name(template_type, namespace: namespace)
-        )
+        File.join(underware_storage, 'plugins')
       end
 
       def build_complete(node_namespace)
         event(node_namespace, 'complete')
-      end
-
-      # Gives path for a rendered build file, relative to some root directory
-      # that all build files will be rendered within (e.g.
-      # `/var/lib/metalware/rendered/`).
-      def relative_rendered_build_file_path(relative_namespace_files_dir, section, file_name)
-        File.join(
-          relative_namespace_files_dir,
-          section.to_s,
-          file_name
-        )
       end
 
       def define_constant_paths
@@ -128,7 +110,7 @@ module Underware
       end
 
       def asset_dir
-        File.join(underware_data, 'assets')
+        File.join(underware_storage, 'assets')
       end
 
       def layout(*a)
@@ -136,15 +118,11 @@ module Underware
       end
 
       def layout_dir
-        File.join(underware_data, 'layouts')
+        File.join(underware_storage, 'layouts')
       end
 
       def asset_cache
         File.join(cache, 'assets.yaml')
-      end
-
-      def cached_template(name)
-        File.join(cache, 'templates', name)
       end
 
       def namespace_data_file(name)
@@ -154,18 +132,26 @@ module Underware
         )
       end
 
+      def internal_data_dir
+        File.join(underware_install, 'data')
+      end
+
+      def platform_config(platform)
+        File.join(platform_configs_dir, "#{platform}.yaml")
+      end
+
+      def platform_configs_dir
+        File.join(config_dir, 'platforms')
+      end
+
       private
 
       def record(record_dir, types_dir, name)
         File.join(record_dir, types_dir, name + '.yaml')
       end
 
-      def template_file_name(template_type, namespace:)
-        namespace.config.templates&.send(template_type) || 'default'
-      end
-
       def config_path
-        @config_path ||= ConfigPath.new(base: repo)
+        ConfigPath.new(base: internal_data_dir)
       end
     end
   end

@@ -10,7 +10,7 @@ module Underware
 
       def load_yaml(section, section_name)
         args = [section_name].compact
-        config_file = file_path.send("#{section}_config", *args)
+        config_file = FilePath.send("#{section}_config", *args)
         Data.load(config_file)
       end
     end

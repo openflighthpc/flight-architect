@@ -23,7 +23,6 @@
 #==============================================================================
 
 require 'underware/nodeattr_interface'
-require 'active_support/core_ext/string/strip'
 require 'underware/data'
 
 module Underware

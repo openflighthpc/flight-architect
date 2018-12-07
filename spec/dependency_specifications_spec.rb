@@ -42,7 +42,6 @@ RSpec.describe Underware::DependencySpecifications do
   describe '#for_node_in_configured_group' do
     it 'returns correct hash, including node primary group' do
       expect(subject.for_node_in_configured_group('testnode01')).to eq(
-        repo: ['configure.yaml'],
         configure: ['domain.yaml', 'groups/testnodes.yaml'],
         optional: {
           configure: ['nodes/testnode01.yaml'],

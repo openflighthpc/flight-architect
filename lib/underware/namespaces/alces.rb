@@ -1,33 +1,35 @@
 
 # frozen_string_literal: true
 
+require 'ostruct'
+
 require 'underware/exceptions'
 require 'underware/templating/renderer'
 require 'underware/templating/nil_detection_wrapper'
 require 'underware/utils/dynamic_require'
 require 'underware/deployment_server'
-
 Underware::Utils::DynamicRequire.relative('mixins')
-
 require 'underware/namespaces/underware_array'
 require 'underware/namespaces/hash_merger_namespace'
 require 'underware/namespaces/node'
 require 'underware/hash_mergers.rb'
-require 'ostruct'
 require 'underware/underware_log'
-
 Underware::Utils::DynamicRequire.relative('.')
 
 module Underware
   module Namespaces
     class Alces
-      include Mixins::AlcesStatic
-
       NODE_ERROR = 'Error, a Node is not in scope'
       GROUP_ERROR = 'Error, a Group is not in scope'
       DOUBLE_SCOPE_ERROR = 'A node and group can not both be in scope'
+      LOCAL_ERROR = <<-EOF.strip_heredoc
+        The local node has not been configured Please run: `underware
+        configure local`
+      EOF
 
       delegate :config, :answer, to: :scope
+      attr_reader :platform
+      alias_method :alces, :itself
 
       class << self
         LOG_MESSAGE = <<-EOF.strip_heredoc
@@ -47,8 +49,65 @@ module Underware
         end
       end
 
-      def initialize
+      def initialize(platform: nil)
+        @platform = platform&.to_sym
         @stacks_hash = {}
+      end
+
+      def domain
+        @domain ||= Namespaces::Domain.new(alces)
+      end
+
+      def nodes
+        @nodes ||= begin
+          arr = NodeattrInterface.all_nodes.map do |node_name|
+            Namespaces::Node.new(alces, node_name)
+          end
+          Namespaces::UnderwareArray.new(arr)
+        end
+      end
+
+      def groups
+        @groups ||= begin
+          arr = group_cache.map do |group_name|
+            index = group_cache.index(group_name)
+            Namespaces::Group.new(alces, group_name, index: index)
+          end
+          Namespaces::UnderwareArray.new(arr)
+        end
+      end
+
+      def data
+        DataFileNamespace.new
+      end
+
+      def local
+        @local ||= begin
+          unless nodes.respond_to?(:local)
+            raise UninitializedLocalNode, LOCAL_ERROR
+          end
+          nodes.local
+        end
+      end
+
+      def build_interface
+        @build_interface ||= determine_build_interface
+      end
+
+      def orphan_list
+        @orphan_list ||= group_cache.orphans
+      end
+
+      def questions
+        @questions ||= loader.question_tree
+      end
+
+      def assets
+        @assets ||= AssetArray.new(self)
+      end
+
+      def asset_cache
+        @asset_cache ||= Underware::Cache::Asset.new
       end
 
       def node
@@ -149,6 +208,24 @@ module Underware
 
       def wrapped_binding
         Templating::NilDetectionWrapper.wrap(self)
+      end
+
+      def group_cache
+        @group_cache ||= GroupCache.new
+      end
+
+      def loader
+        @loader ||= Validation::Loader.new
+      end
+
+      def determine_build_interface
+        if config.configured_build_interface&.present?
+          config.configured_build_interface
+        else
+          # Default to first network interface if `build_interface` has not
+          # been configured by user.
+          Network.interfaces.first
+        end
       end
     end
   end

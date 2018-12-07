@@ -62,6 +62,11 @@ module Underware
         when :node
           raise InternalError, 'No node name given' if name.nil?
           node_answers(name)
+        when :platform
+          # Platforms do not have answers, so always just return empty hash
+          # (this means nothing different will happen when merging answers,
+          # whether `platform` key is passed to `HashMerger#merge` or not).
+          {}
         else
           raise InternalError, "Unrecognised question section: #{section}"
         end

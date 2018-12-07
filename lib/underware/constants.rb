@@ -29,14 +29,16 @@ module Underware
     UNDERWARE_INSTALL_PATH =
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
 
-    UNDERWARE_DATA_PATH = '/var/lib/underware'
-    NAMESPACE_DATA_PATH = File.join(UNDERWARE_DATA_PATH, 'data')
-    # Genders is now (at least as of right now) the only file rendered
-    # internally by Underware itself, and so will now be the only file within
-    # `/var/lib/underware/rendered`.
-    GENDERS_PATH = File.join(UNDERWARE_DATA_PATH, 'rendered/system/genders')
+    UNDERWARE_STORAGE_PATH = '/var/lib/underware'
+    NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
+    RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
+    RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
+    GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')
 
-    CACHE_PATH = File.join(UNDERWARE_DATA_PATH, 'cache')
+    # Directory name where shared 'content' templates live.
+    CONTENT_DIR_NAME = 'content'
+
+    CACHE_PATH = File.join(UNDERWARE_STORAGE_PATH, 'cache')
     GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
     PLUGINS_CACHE_PATH = File.join(CACHE_PATH, 'plugins.yaml')
 

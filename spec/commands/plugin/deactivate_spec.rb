@@ -35,7 +35,6 @@ RSpec.describe Underware::Commands::Plugin::Deactivate do
 
   let(:filesystem) do
     FileSystem.setup do |fs|
-      fs.with_minimal_repo
       fs.mkdir_p example_plugin_dir
     end
   end

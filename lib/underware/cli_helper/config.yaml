@@ -21,6 +21,11 @@ anchor_options:
     description: >
       Force the output to be coloured even if not outputting to a terminal;
       useful e.g. for piping to `less -R`.
+  platform_option: &platform_option
+    tags: [-p PLATFORM, --platform PLATFORM]
+    type: String
+    description: >
+      Include config for specified platform in namespace for rendering.
 
 global_options:
   - tags: [--strict]
@@ -64,9 +69,9 @@ subcommands:
     syntax: underware configure domain [options]
     summary: Configure Underware domain
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure the domain for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure the domain for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
@@ -75,9 +80,9 @@ subcommands:
     syntax: underware configure group GROUP_NAME [options]
     summary: Configure a Underware group
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a group for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a group for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
@@ -86,9 +91,9 @@ subcommands:
     syntax: underware configure node NODE_NAME [options]
     summary: Configure a Underware node
     description: >
-      Asks a sequence of questions defined in the current repository to
-      configure a node for this Underware installation. The configuration
-      answers will then be used when rendering templates.
+      Asks a sequence of questions to configure a node for this Underware
+      installation. The configuration answers will then be used when rendering
+      templates.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option
@@ -124,34 +129,26 @@ subcommands:
       files associated with the nodes.
     action: Commands::Remove::Group
 
-  repo_use: &repo_use
-    syntax: underware repo use REPO_URL [options]
-    summary: Clone a new template git repo
-    description: >
-      Clones a new git repo from a URL. The repo should contain the default
-      templates used by the other commands. It may also include a config
-      directory containing template parameter YAML files.
-    action:
-      Commands::Repo::Use
+  render_domain: &render_domain
+    syntax: underware render domain TEMPLATE [options]
+    summary: Render specified template against domain namespace, and output result
+    action: Commands::Render::Domain
     options:
-      - tags: [-f, --force]
-        description: >
-          Force use of a new repo even if local changes have been made to the
-          current repo
+      - *platform_option
 
-  repo_update: &repo_update
-    syntax: underware repo update [options]
-    summary: Updates the git repository
-    description: >
-      Updates the local git repository to match the remote. The update command
-      does not support local changes. The force will trigger a hard reset and
-      will delete local changes. All other git commands can be preformed
-      manually on the repo.
-    action: Commands::Repo::Update
+  render_group: &render_group
+    syntax: underware render group GROUP TEMPLATE [options]
+    summary: Render specified template against given group namespace, and output result
+    action: Commands::Render::Group
     options:
-      - tags: [-f, --force]
-        description: >
-          Force update even if local changes have been made to the repo
+      - *platform_option
+
+  render_node: &render_node
+    syntax: underware render node NODE TEMPLATE [options]
+    summary: Render specified template against given node namespace, and output result
+    action: Commands::Render::Node
+    options:
+      - *platform_option
 
   plugin_list: &plugin_list
     syntax: underware plugin list [options]
@@ -257,21 +254,32 @@ commands:
       group: *remove_group
 
   render:
-    syntax: underware render TEMPLATE [NODE] [options]
-    summary: Render a given template
-    description: >
-      Renders the file specified by TEMPLATE and sends the output to standard
-      out. The template can be rendered for a specific node using the optional
-      NODE input.
-    action: Commands::Render
-
-  repo:
-    syntax: underware repo [SUB_COMMAND] [options]
-    summary: Manage template and config repository
-    # description can also be used for subcommands
+    syntax: underware render [SUB_COMMAND] [options]
+    summary: Render a template against specified namespace, and output result
     subcommands:
-      use: *repo_use
-      update: *repo_update
+      domain: *render_domain
+      group: *render_group
+      node: *render_node
+
+  template:
+    syntax: underware template [options]
+    summary: Render all Underware templates for all platforms
+    description: >
+      This command renders all the templates provided by Underware for every
+      combination of platform and scope that this installation of Underware is
+      configured with.
+
+
+      Specifically this consists of rendering, for every platform, the
+      available domain, group, and node templates (both platform-specific and
+      platform-independent content), for the domain, every group, and every
+      node respectively.
+
+
+      The rendered templates can then be used, on their own or in combination
+      with other Alces tools, to deploy, configure, or otherwise manage, a
+      cluster at different scales and across different platforms.
+    action: Commands::Template
 
   view-answers:
     syntax: underware view-answers [SUB_COMMAND] [options]

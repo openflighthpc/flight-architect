@@ -18,7 +18,7 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
     end
 
     def answer_file
-      file_path.domain_answers
+      Underware::FilePath.domain_answers
     end
 
     def configurator
@@ -34,8 +34,6 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
 
     it 'passes answers through to configurator as hash' do
       FileSystem.test do |fs|
-        fs.with_minimal_repo
-
         answers = { question_1: 'answer_1' }
         expect_any_instance_of(Underware::Configurator)
           .to receive(:configure).with(answers)

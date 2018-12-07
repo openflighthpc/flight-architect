@@ -24,6 +24,7 @@ PATH
       highline (= 1.7.8)
       network_interface (~> 0.0.1)
       recursive-open-struct
+      ruby-progressbar
       rubytree
       terminal-table
 

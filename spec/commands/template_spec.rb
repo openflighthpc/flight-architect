@@ -1,7 +1,9 @@
 
 RSpec.describe Underware::Commands::Template do
   def run_command
-    Underware::Utils.run_command(described_class)
+    Underware::AlcesUtils.redirect_std(:stderr) do
+      Underware::Utils.run_command(described_class)
+    end
   end
 
   def create_template(relative_path)

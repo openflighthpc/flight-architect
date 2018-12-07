@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'highline', '1.7.8'
   spec.add_runtime_dependency 'network_interface', '~> 0.0.1'
   spec.add_runtime_dependency 'recursive-open-struct'
+  spec.add_runtime_dependency 'ruby-progressbar'
   spec.add_runtime_dependency 'rubytree'
   spec.add_runtime_dependency 'terminal-table'
 

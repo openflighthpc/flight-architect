@@ -276,9 +276,10 @@ commands:
       node respectively.
 
 
-      The rendered templates can then be used, on their own or in combination
-      with other Alces tools, to deploy, configure, or otherwise manage, a
-      cluster at different scales and across different platforms.
+      The rendered templates will be output to a standard hierarchy under
+      `/var/lib/underware/rendered/` and can then be used, on their own or in
+      combination with other Alces tools, to deploy, configure, or otherwise
+      manage a cluster at different scales and across different platforms.
     action: Commands::Template
 
   view-answers:

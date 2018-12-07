@@ -230,4 +230,19 @@ RSpec.describe Underware::Commands::Template do
 
     expect(File.exists?(previously_rendered_file_path)).to be true
   end
+
+  it 'is not over-eager when replacing in rendered paths' do
+    FileUtils.touch(Underware::FilePath.platform_config(:node_platform))
+    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    create_template 'node_platform/node/my_favourite_node_templates/node/template'
+
+    run_command
+
+    expect_rendered(
+      path: 'node_platform/node/some_node/my_favourite_node_templates/node/template',
+      for_platform: :node_platform,
+      for_scope_type: :node,
+      for_scope_name: 'some_node'
+    )
+  end
 end

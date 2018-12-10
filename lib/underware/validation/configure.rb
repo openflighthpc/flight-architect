@@ -35,7 +35,6 @@ require 'underware/validation/configure/schemas'
 module Underware
   module Validation
     class Configure
-      # NOTE: Supported types in error.yaml message must be updated manually
       SUPPORTED_TYPES = ['string', 'integer', 'boolean', 'interface'].freeze
 
       def self.type_check(type, value)

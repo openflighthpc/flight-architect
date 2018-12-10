@@ -169,7 +169,7 @@ RSpec.describe Underware::Configurator do
       expect(answers).to eq(boolean_q: true)
     end
 
-    it "offers choices for question with type 'choice'" do
+    it "offers choices for question with 'choices' key set" do
       define_questions(domain: [
                          {
                            identifier: 'choice_q',

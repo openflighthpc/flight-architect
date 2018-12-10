@@ -42,6 +42,7 @@ module Underware
   class DataError < UserUnderwareError; end
   class UninitializedLocalNode < UserUnderwareError; end
   class MissingRecordError < UserUnderwareError; end
+  class NoNetworkInterfacesAvailable < UserUnderwareError; end
 
   class RecursiveConfigDepthExceededError < UserUnderwareError
     def initialize(msg = 'Input hash may contain infinitely recursive ERB')

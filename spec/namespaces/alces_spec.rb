@@ -153,19 +153,22 @@ RSpec.describe Underware::Namespaces::Alces do
   end
 
   describe '#build_interface' do
+    before :each do
+      allow(Underware::Network)
+        .to receive(:available_interfaces)
+        .and_return(['eth2', 'eth4'])
+    end
+
     it 'gives answer to configured_build_interface question if present' do
       Underware::Data.dump(
         Underware::FilePath.domain_answers,
-        configured_build_interface: 'eth3'
+        configured_build_interface: 'eth4'
       )
 
-      expect(alces.build_interface).to eq('eth3')
+      expect(alces.build_interface).to eq('eth4')
     end
 
     it 'gives first available network interface if answer not present' do
-      allow(Underware::Network)
-        .to receive(:interfaces)
-        .and_return(['eth2', 'eth4'])
       # Guarantee no answers present.
       Underware::Data.dump(Underware::FilePath.domain_answers, {})
 

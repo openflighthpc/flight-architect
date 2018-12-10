@@ -224,7 +224,7 @@ module Underware
         else
           # Default to first network interface if `build_interface` has not
           # been configured by user.
-          Network.interfaces.first
+          Network.available_interfaces.first
         end
       end
     end

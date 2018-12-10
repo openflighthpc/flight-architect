@@ -74,7 +74,11 @@ module Underware
       end
 
       def ask_choice_question
-        highline.choose(*choices) do |menu|
+        offer_choice_between(choices) { |q| yield q }
+      end
+
+      def offer_choice_between(possible_choices)
+        highline.choose(*possible_choices) do |menu|
           menu.prompt = question_text
           yield menu
         end
@@ -86,6 +90,27 @@ module Underware
 
       def ask_string_question
         highline.ask(question_text) { |q| yield q }
+      end
+
+      def ask_interface_question
+        if available_network_interfaces.length == 1
+          default_to_first_interface
+        else
+          offer_choice_between(available_network_interfaces) { |q| yield q }
+        end
+      end
+
+      def available_network_interfaces
+        @available_network_interfaces ||= Network.available_interfaces
+      end
+
+      def default_to_first_interface
+        available_network_interfaces.first.tap do |first_interface|
+          $stderr.puts <<~MESSAGE.strip_heredoc
+            #{question_text}
+            [Only one interface available, defaulting to '#{first_interface}']
+          MESSAGE
+        end
       end
 
       def question_text

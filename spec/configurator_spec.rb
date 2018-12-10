@@ -169,7 +169,7 @@ RSpec.describe Underware::Configurator do
       expect(answers).to eq(boolean_q: true)
     end
 
-    it "offers choices for question with type 'choice'" do
+    it "offers choices for question with 'choices' key set" do
       define_questions(domain: [
                          {
                            identifier: 'choice_q',
@@ -187,6 +187,51 @@ RSpec.describe Underware::Configurator do
       configure_with_answers(['bar'])
 
       expect(answers).to eq(choice_q: 'bar')
+    end
+
+    context "for question with type 'interface'" do
+      before :each do
+        define_questions(domain: [
+          {
+            identifier: 'interface_q',
+            type: 'interface',
+            question: 'What interface should we use?',
+          },
+        ])
+      end
+
+      it 'offers choice from available interfaces when multiple interfaces available' do
+        allow(Underware::Network)
+          .to receive(:available_interfaces)
+          .and_return(['eth0', 'eth1'])
+
+        expect(highline).to receive(
+          :choose
+        ).with(
+          'eth0', 'eth1'
+        ).and_call_original
+
+        configure_with_answers(['eth1'])
+
+        expect(answers).to eq(interface_q: 'eth1')
+      end
+
+      it 'automatically uses only interface when single interface available' do
+        allow(Underware::Network)
+          .to receive(:available_interfaces)
+          .and_return(['eth0'])
+
+        stderr = Underware::AlcesUtils.redirect_std(:stderr) do
+          configure_with_answers([])
+        end[:stderr].read
+
+        expect(answers).to eq(interface_q: 'eth0')
+        expected_message = <<~INFO.strip_heredoc
+          What interface should we use? (1/1)
+          [Only one interface available, defaulting to 'eth0']
+        INFO
+        expect(stderr).to include(expected_message)
+      end
     end
 
     it 'asks all questions in order' do

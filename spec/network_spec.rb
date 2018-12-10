@@ -10,5 +10,13 @@ RSpec.describe Underware::Network do
         described_class.available_interfaces
       ).to eq(['eth0', 'eth1', 'eth2'])
     end
+
+    it 'raises if no interfaces that we want to consider available' do
+      allow(NetworkInterface).to receive(:interfaces).and_return(['lo'])
+
+      expect{
+        described_class.available_interfaces
+      }.to raise_error(Underware::NoNetworkInterfacesAvailable)
+    end
   end
 end

@@ -15,7 +15,12 @@ module Underware
       # delegate :interfaces, to: NetworkInterface, private: true
 
       def available_interfaces
-        (interfaces - [LOOPBACK]).sort
+        (interfaces - [LOOPBACK]).sort.tap do |available|
+          if available.empty?
+            raise NoNetworkInterfacesAvailable,
+              'No network interfaces available, unable to proceed'
+          end
+        end
       end
     end
   end

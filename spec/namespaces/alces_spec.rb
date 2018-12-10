@@ -164,7 +164,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
     it 'gives first available network interface if answer not present' do
       allow(Underware::Network)
-        .to receive(:interfaces)
+        .to receive(:available_interfaces)
         .and_return(['eth2', 'eth4'])
       # Guarantee no answers present.
       Underware::Data.dump(Underware::FilePath.domain_answers, {})

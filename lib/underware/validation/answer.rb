@@ -143,16 +143,7 @@ module Underware
           config.namespace = 'answer'
 
           def answer_type?(value)
-            case value[:type]
-            when nil || 'string'
-              value[:answer].is_a? String
-            when 'integer'
-              value[:answer].is_a? Integer
-            when 'boolean'
-              [true, false].include?(value[:answer])
-            else
-              false
-            end
+            Configure.type_check(value[:type], value[:answer])
           end
         end
 

@@ -24,4 +24,5 @@ curl <%= config.renderedurl %>/networking/networking.sh  | /bin/bash -x
 curl <%= config.renderedurl %>/networking/hosts.sh  | /bin/bash -x
 
 info "Configuration complete - rebooting"
-shutdown -r now
+# Background and delay shutdown so the script properly exits
+shutdown -r +1 &

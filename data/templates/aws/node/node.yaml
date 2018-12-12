@@ -88,8 +88,8 @@ Resources:
 <% end -%>
 
 Outputs:
-  cloudwareNODE<%=node.name%>TAGID:
-    Description: cloudwareNODE<%=node.name%>TAGID
+  <%=node.name%>TAGID:
+    Description: <%=node.name%>TAGID
     Value: !Ref <%=node.name%>
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups

@@ -31,6 +31,7 @@ module Underware
 
     UNDERWARE_STORAGE_PATH = '/var/lib/underware'
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
+    KEYS_PATH = File.join(UNDERWARE_STORAGE_PATH, 'keys')
     RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
     RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
     GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')

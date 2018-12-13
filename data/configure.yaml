@@ -10,10 +10,6 @@ questions:
     identifier: root_password
     question: 'Password to use for root user (generate with `openssl passwd -1`)'
 
-  - &publickey
-    identifier: publickey
-    question: 'Public SSH key for the root user'
-
   - &configured_build_interface
     identifier: configured_build_interface
     question: 'Interface of this machine that the cluster should be built on (will determine IP of this machine to use when templating)'
@@ -65,7 +61,6 @@ domain:
   # BASE
   - *cluster_name
   - *root_password
-  - *publickey
   - *configured_build_interface
 
   # NETWORKS

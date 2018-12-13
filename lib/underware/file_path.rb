@@ -144,6 +144,14 @@ module Underware
         File.join(config_dir, 'platforms')
       end
 
+      def public_key
+        File.join(keys, 'id_rsa.pub')
+      end
+
+      def private_key
+        File.join(keys, 'id_rsa')
+      end
+
       private
 
       def record(record_dir, types_dir, name)

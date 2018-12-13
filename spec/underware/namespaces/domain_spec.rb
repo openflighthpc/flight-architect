@@ -15,6 +15,18 @@ RSpec.describe Underware::Namespaces::Domain do
 
     before { use_mock_determine_hostip_script }
 
+    before :each do
+      # Create key pair files here (in production created on install), both so
+      # can test in `#keys` (below) and so `HashMergerNamespace#to_h` tests
+      # pass as key values will be included in hashed domain.
+      Underware::Utils.create_file(
+        Underware::FilePath.private_key, content: 'my_private_key'
+      )
+      Underware::Utils.create_file(
+        Underware::FilePath.public_key, content: 'my_public_key'
+      )
+    end
+
     it 'has a hostip' do
       expect(subject.hostip).to eq('1.2.3.4')
     end
@@ -30,17 +42,6 @@ RSpec.describe Underware::Namespaces::Domain do
     end
 
     describe '#keys' do
-      before :each do
-        Underware::Utils.create_file(
-          Underware::FilePath.private_key,
-          content: 'my_private_key'
-        )
-        Underware::Utils.create_file(
-          Underware::FilePath.public_key,
-          content: 'my_public_key'
-        )
-      end
-
       describe '#private' do
         it 'provides access to private key from file' do
 

@@ -26,7 +26,7 @@ module Underware
       private
 
       def white_list_for_hasher
-        super.concat [:hostip, :hosts_url, :genders_url]
+        super.concat [:hostip, :hosts_url, :genders_url, :keys]
       end
 
       def additional_dynamic_namespace

@@ -168,7 +168,6 @@ Resources:
       ImageId: !FindInMap ["RegionMap", !Ref "AWS::Region", "AMI"]
       InstanceType: t2.small
       Monitoring: true
-      KeyName: aws_ireland
       NetworkInterfaces:
 <% count=0; node.config.networks.each do |name,network| -%>
 <% if network.defined -%>
@@ -196,7 +195,7 @@ Resources:
               - "runcmd:\n"
               - "  - curl <%= node.config.nodescripturl %> | /bin/bash -x | tee /tmp/mainscript-default-output\n"
 
-<% #if node.config.role == 'login' -%>
+<% if node.config.role == 'login' -%>
   <%=node.name%>publicIp:
     Type: AWS::EC2::EIP
     Properties:
@@ -207,7 +206,7 @@ Resources:
     Properties:
       NetworkInterfaceId: !Ref <%=name%>network1Interface
       AllocationId: !GetAtt <%=name%>publicIp.AllocationId
-<% #end -%>
+<% end -%>
 <% end -%>
 
 Outputs:
@@ -226,15 +225,15 @@ Outputs:
 <% end -%>
 <% nodes.each do |node| -%>
   <%=node.name%>TAGID:
-    Description: cloudwareNODE<%=node.name%>TAGID
+    Description: <%=node.name%>TAGID
     Value: !Ref <%=node.name%>
-<% #if node.config.role == 'login' -%>
-  <%=node.name%>TAGIP:
-    Description: cloudwareNODE<%=node.name%>TAGIP
-    Value: !Ref <%=node.name%>publicIp
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups
     Value: <%=NodeattrInterface.genders_for_node(node).join(',') %>
-<% #end -%>
+<% if node.config.role == 'login' -%>
+  <%=node.name%>TAGIP:
+    Description: <%=node.name%>TAGIP
+    Value: !Ref <%=node.name%>publicIp
+<% end -%>
 <% end -%>
 

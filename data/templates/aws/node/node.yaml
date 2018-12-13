@@ -46,7 +46,6 @@ Resources:
       ImageId: !FindInMap ["RegionMap", !Ref "AWS::Region", "AMI"]
       InstanceType: t2.small
       Monitoring: true
-      KeyName: aws_ireland
       NetworkInterfaces:
 <% count=0; node.config.networks.each do |name,network| -%>
 <% if network.defined -%>
@@ -94,3 +93,8 @@ Outputs:
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups
     Value: <%=NodeattrInterface.genders_for_node(node).join(',') %>
+<% if node.config.role == 'login' -%>
+  <%=node.name%>TAGIP:
+    Description: <%=node.name%>TAGIP
+    Value: !Ref <%=node.name%>publicIp
+<% end -%>

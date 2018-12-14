@@ -47,7 +47,7 @@ IPADDR=<%=network.ip%>
 NETMASK=<%=network.netmask%>
 <% end -%>
 ZONE=trusted
-<% if (config.platform == 'aws' rescue false) -%>
+<% if (node.platform == 'aws' rescue false) -%>
 MTU="9001"
 <% end -%>
 <% if network.interface.match(/\.\d+$/)-%>

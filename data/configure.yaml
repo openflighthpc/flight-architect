@@ -8,7 +8,8 @@ questions:
 
   - &root_password
     identifier: root_password
-    question: 'Password to use for root user (generate with `openssl passwd -1`)'
+    question: 'Password to use for root user'
+    type: password
 
   - &configured_build_interface
     identifier: configured_build_interface

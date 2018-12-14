@@ -72,31 +72,19 @@ RSpec.describe Underware::Configurator do
     allow(Underware::Validation::Configure).to receive(:new).and_return(v)
   end
 
-  def redirect_stdout
-    $stdout = tmp = Tempfile.new
-    yield
-    tmp.close
-  rescue StandardError => e
-    $stdout.rewind
-    STDERR.puts $stdout.read
-    raise e
-  ensure
-    $stdout = STDOUT
+  def configure_with_answers(answers, test_obj: configurator)
+    # Each answer must be entered followed by a newline to terminate it.
+    configure_with_input(answers.join("\n") + "\n", test_obj: test_obj)
   end
 
   def configure_with_input(input_string, test_obj: configurator)
-    redirect_stdout do
+    Underware::AlcesUtils.redirect_std(:stdout, :stderr) do
       input.read # Move to the end of the file
       count = input.write(input_string)
       input.pos = (input.pos - count) # Move to the start of new content
       test_obj.configure
       reset_alces
-    end
-  end
-
-  def configure_with_answers(answers, test_obj: configurator)
-    # Each answer must be entered followed by a newline to terminate it.
-    configure_with_input(answers.join("\n") + "\n", test_obj: test_obj)
+    end[:stderr].read
   end
 
   # Do not want to use readline to get input in tests as tests will then
@@ -221,9 +209,7 @@ RSpec.describe Underware::Configurator do
           .to receive(:available_interfaces)
           .and_return(['eth0'])
 
-        stderr = Underware::AlcesUtils.redirect_std(:stderr) do
-          configure_with_answers([])
-        end[:stderr].read
+        stderr = configure_with_answers([])
 
         expect(answers).to eq(interface_q: 'eth0')
         expected_message = <<~INFO.strip_heredoc
@@ -231,6 +217,105 @@ RSpec.describe Underware::Configurator do
           [Only one interface available, defaulting to 'eth0']
         INFO
         expect(stderr).to include(expected_message)
+      end
+    end
+
+    context "for question with type 'password'" do
+      before :each do
+        define_questions(domain: [
+          {
+            identifier: 'password_q',
+            type: 'password',
+            question: 'Password to use?'
+          }
+        ])
+
+        allow(SecureRandom).to receive(:base64).and_return('mocked_salt')
+      end
+
+      let :expected_encrypted_password do
+        'my_password'.crypt('$6$mocked_salt')
+      end
+
+      it 'prompts for password and confirmation, and saves hash when they match' do
+        expect(highline).to receive(:ask).twice.and_call_original
+
+        configure_with_answers(['my_password', 'my_password'])
+
+        expect(answers).to include(password_q: expected_encrypted_password)
+      end
+
+      it 're-asks for both until password and confirmation match' do
+        expect(highline).to receive(:ask).exactly(6).times.and_call_original
+
+        configure_with_answers([
+          # First unsuccessful attempt.
+          'my_password', 'not_my_password',
+
+          # Second unsuccessful attempt.
+          'something_else', 'my_password',
+
+          # Successful attempt
+          'my_password', 'my_password',
+        ])
+
+        expect(answers).to include(password_q: expected_encrypted_password)
+      end
+
+      it 'uses different text when prompting for confirmation' do
+        ['Password to use? (1/1)', 'Confirm password:'].each do |text|
+          expect(highline).to receive(:ask).with(text).ordered.and_call_original
+        end
+
+        configure_with_answers(['my_password', 'my_password'])
+      end
+
+      it 'prompts with info on failure when re-asking for password and confirmation' do
+        stderr = configure_with_answers([
+          'my_password', 'not_my_password',
+
+          'my_password', 'my_password',
+        ])
+
+        # Prompt about password and confirmation not matching should be given
+        # once, only when they don't match.
+        unmatched_text = 'Password and confirmation do not match'
+        expect(stderr).to include(unmatched_text)
+        expect(stderr).not_to match(/#{unmatched_text}.*#{unmatched_text}/)
+      end
+
+      it 'gives no extra output on successful first time entry' do
+        stderr = configure_with_answers(['my_password', 'my_password'])
+
+        expect(stderr).to be_empty
+      end
+
+      context 'when answer is already set' do
+        before :each do
+          make_configurator.configure({
+            password_q: expected_encrypted_password
+          })
+        end
+
+        it 'warns that changing could break things' do
+          stderr = configure_with_answers([''])
+
+          expect(stderr).to include('Password has already been configured')
+          expect(stderr).to include('WARNING: changing password could prevent access to nodes')
+        end
+
+        it 'skips question and keeps current answer if enter nothing' do
+          configure_with_answers([''])
+
+          expect(answers).to include(password_q: expected_encrypted_password)
+        end
+
+        it 'uses new password if entered' do
+          configure_with_answers(['new_password', 'new_password'])
+
+          expected_new_encrypted_password = 'new_password'.crypt('$6$mocked_salt')
+          expect(answers).to include(password_q: expected_new_encrypted_password)
+        end
       end
     end
 
@@ -342,11 +427,8 @@ RSpec.describe Underware::Configurator do
         should_keep_old_answer: 'old answer',
       }
 
-      first_run_configure = nil
-      redirect_stdout do
-        first_run_configure = make_configurator
-        first_run_configure.send(:save_answers, original_answers)
-      end
+      first_run_configure = make_configurator
+      first_run_configure.send(:save_answers, original_answers)
 
       configure_with_answers([''] * 5)
       expect(answers).to eq(original_answers)
@@ -360,20 +442,10 @@ RSpec.describe Underware::Configurator do
                          },
                        ])
 
-      expect do
-        old_stderr = STDERR
-        begin
-          $stderr = Tempfile.new
-          STDERR = $stderr
-          configure_with_answers([''] * 2)
-        ensure
-          STDERR = old_stderr
-          $stderr = STDERR
-        end
-        # NOTE: EOFError occurs because HighLine is reading from an array of
-        # end-line-characters. However as this is not a valid input it keeps
-        # re-asking until it reaches the end and throws EOFError
-      end.to raise_error(EOFError)
+      # NOTE: EOFError occurs because HighLine is reading from an array of
+      # end-line-characters. However as this is not a valid input it keeps
+      # re-asking until it reaches the end and throws EOFError
+      expect { configure_with_answers([''] * 2) }.to raise_error(EOFError)
 
       output.rewind
       # Checks it was re-asked twice.

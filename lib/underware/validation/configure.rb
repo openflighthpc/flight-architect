@@ -35,11 +35,17 @@ require 'underware/validation/configure/schemas'
 module Underware
   module Validation
     class Configure
-      SUPPORTED_TYPES = ['string', 'integer', 'boolean', 'interface'].freeze
+      SUPPORTED_TYPES = [
+        'boolean',
+        'integer',
+        'interface',
+        'password',
+        'string',
+      ].freeze
 
       def self.type_check(type, value)
         case type
-        when 'string', nil
+        when 'string', 'password', nil
           value.is_a?(String)
         when 'integer'
           value.is_a?(Integer)

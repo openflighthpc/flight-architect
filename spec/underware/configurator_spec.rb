@@ -72,26 +72,14 @@ RSpec.describe Underware::Configurator do
     allow(Underware::Validation::Configure).to receive(:new).and_return(v)
   end
 
-  def redirect_stdout
-    $stdout = tmp = Tempfile.new
-    yield
-    tmp.close
-  rescue StandardError => e
-    $stdout.rewind
-    STDERR.puts $stdout.read
-    raise e
-  ensure
-    $stdout = STDOUT
-  end
-
   def configure_with_input(input_string, test_obj: configurator)
-    redirect_stdout do
+    Underware::AlcesUtils.redirect_std(:stdout) do
       input.read # Move to the end of the file
       count = input.write(input_string)
       input.pos = (input.pos - count) # Move to the start of new content
       test_obj.configure
       reset_alces
-    end
+    end[:stdout].read
   end
 
   def configure_with_answers(answers, test_obj: configurator)
@@ -412,8 +400,7 @@ RSpec.describe Underware::Configurator do
         should_keep_old_answer: 'old answer',
       }
 
-      first_run_configure = nil
-      redirect_stdout do
+      Underware::AlcesUtils.redirect_std(:stdout) do
         first_run_configure = make_configurator
         first_run_configure.send(:save_answers, original_answers)
       end

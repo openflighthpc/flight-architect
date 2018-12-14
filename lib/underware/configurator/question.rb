@@ -37,15 +37,19 @@ module Underware
 
       def validate_highline_answer_given(highline_question)
         # Do not override built-in HighLine validation for `agree` questions,
-        # which will already cause the question to be re-prompted until
-        # a valid answer is given (rather than just accepting any non-empty
-        # answer, as our `ensure_answer_given` does).
+        # which will already cause the question to be re-prompted until a valid
+        # answer is given (rather than just accepting any non-empty answer, as
+        # our validation below does).
         return if type.boolean?
 
         # The answer does not need to be given if there is a default or if
         # it is optional
         return if default || optional
-        highline_question.validate = ensure_answer_given
+
+        highline_question.validate = lambda { |input| !input.empty? }
+        # Override error shown when this validation fails (see
+        # https://www.rubydoc.info/github/JEG2/highline/master/HighLine%2FQuestion:responses).
+        highline_question.responses[:not_valid] = 'An answer is required for this question.'
       end
 
       def use_readline?
@@ -174,26 +178,6 @@ module Underware
       def type
         value = question_node.type
         ActiveSupport::StringInquirer.new(value || 'string')
-      end
-
-      def ensure_answer_given
-        HighLinePrettyValidateProc.new('a non-empty input') do |input|
-          !input.empty?
-        end
-      end
-
-      class HighLinePrettyValidateProc < Proc
-        def initialize(print_message, &b)
-          # NOTE: print_message is prefaced with "must match" when used by
-          # HighLine validate
-          @print_message = print_message
-          super(&b)
-        end
-
-        # HighLine uses the result of inspect to generate the message to display
-        def inspect
-          @print_message
-        end
       end
     end
   end

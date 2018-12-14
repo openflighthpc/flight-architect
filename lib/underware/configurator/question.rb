@@ -113,6 +113,36 @@ module Underware
         end
       end
 
+      def ask_password_question
+        encrypt_password(request_password_with_confirmation)
+      end
+
+      def request_password_with_confirmation
+        loop do
+          password = ask_for_password(question_text)
+          confirmation = ask_for_password('Confirm password:')
+
+          return password if password == confirmation
+          $stderr.puts 'Password and confirmation do not match - please try again.'
+        end
+      end
+
+      def ask_for_password(prompt_text)
+        highline.ask(prompt_text) do |q|
+          configure_question(q)
+          q.echo = '*'
+        end
+      end
+
+      def encrypt_password(plaintext_password)
+        # Encrypt password with salt, in format expected by `/etc/shadow` (`$6`
+        # => use SHA-512). Relevant links:
+        # https://www.cyberciti.biz/faq/understanding-etcshadow-file/ and
+        # https://stackoverflow.com/a/5174746/2620402.
+        salt = SecureRandom.base64
+        plaintext_password.crypt("$6$#{salt}")
+      end
+
       def question_text
         "#{text.strip} #{progress_indicator}"
       end

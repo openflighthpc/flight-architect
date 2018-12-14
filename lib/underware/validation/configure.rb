@@ -39,12 +39,13 @@ module Underware
         'boolean',
         'integer',
         'interface',
+        'password',
         'string',
       ].freeze
 
       def self.type_check(type, value)
         case type
-        when 'string', nil
+        when 'string', 'password', nil
           value.is_a?(String)
         when 'integer'
           value.is_a?(Integer)

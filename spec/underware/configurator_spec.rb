@@ -234,6 +234,76 @@ RSpec.describe Underware::Configurator do
       end
     end
 
+    context "for question with type 'password'" do
+      before :each do
+        define_questions(domain: [
+          {
+            identifier: 'password_q',
+            type: 'password',
+            question: 'Password to use?'
+          }
+        ])
+
+        allow(SecureRandom).to receive(:base64).and_return('mocked_salt')
+      end
+
+      let :expected_encrypted_password do
+        'my_password'.crypt('$6$mocked_salt')
+      end
+
+      it 'prompts for password and confirmation, and saves hash when they match' do
+        expect(highline).to receive(:ask).twice.and_call_original
+
+        configure_with_answers(['my_password', 'my_password'])
+
+        expect(answers).to include(password_q: expected_encrypted_password)
+      end
+
+      it 're-asks for both until password and confirmation match' do
+        expect(highline).to receive(:ask).exactly(6).times.and_call_original
+
+        # Redirect stderr so does not pollute testing output.
+        Underware::AlcesUtils.redirect_std(:stderr) do
+          configure_with_answers([
+            # First unsuccessful attempt.
+            'my_password', 'not_my_password',
+
+            # Second unsuccessful attempt.
+            'something_else', 'my_password',
+
+            # Successful attempt
+            'my_password', 'my_password',
+          ])
+        end
+
+        expect(answers).to include(password_q: expected_encrypted_password)
+      end
+
+      it 'uses different text when prompting for confirmation' do
+        ['Password to use? (1/1)', 'Confirm password:'].each do |text|
+          expect(highline).to receive(:ask).with(text).ordered.and_call_original
+        end
+
+        configure_with_answers(['my_password', 'my_password'])
+      end
+
+      it 'prompts with info on failure when re-asking for password and confirmation' do
+        stderr = Underware::AlcesUtils.redirect_std(:stderr) do
+          configure_with_answers([
+            'my_password', 'not_my_password',
+
+            'my_password', 'my_password',
+          ])
+        end[:stderr].read
+
+        # Prompt about password and confirmation not matching should be given
+        # once, only when they don't match.
+        unmatched_text = 'Password and confirmation do not match'
+        expect(stderr).to include(unmatched_text)
+        expect(stderr).not_to match(/#{unmatched_text}.*#{unmatched_text}/)
+      end
+    end
+
     it 'asks all questions in order' do
       define_questions(domain: [
                          {

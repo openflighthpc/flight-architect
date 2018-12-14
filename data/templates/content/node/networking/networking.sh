@@ -20,7 +20,11 @@ BOOTPROTO=dhcp
 <% else -%>
 BOOTPROTO=none
 <% end -%>
+<% if network.primary -%>
 DEFROUTE=yes
+<% else -%>
+DEFROUTE=no
+<% end -%>
 <% if network.dhcpinfo -%>
 PEERDNS=yes
 PEERROUTES=yes
@@ -43,7 +47,7 @@ IPADDR=<%=network.ip%>
 NETMASK=<%=network.netmask%>
 <% end -%>
 ZONE=trusted
-<% if (config.platform == 'aws' rescue false) -%>
+<% if (node.platform == 'aws' rescue false) -%>
 MTU="9001"
 <% end -%>
 <% if network.interface.match(/\.\d+$/)-%>

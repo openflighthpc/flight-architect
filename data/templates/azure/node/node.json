@@ -8,6 +8,7 @@ end
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "resources": [
+<% if node.config.role == 'login' -%>
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "<%=config.cluster%><%=node.name%>pubIP",
@@ -25,6 +26,7 @@ end
         }
       }
     },
+<% end -%>
 <% networks=node.config.networks.select{|_,n| n.defined && !n.dhcp }
 networks.each_with_index do |(networkname,network),idx| -%>
     {
@@ -42,7 +44,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
           "properties": {
             "privateIPAllocationMethod": "Static",
             "privateIPAddress": "<%=network.ip%>",
-<% if network.primary -%>
+<% if network.primary && node.config.role == 'login' -%>
             "publicIPAddress": {
               "id": "[resourceId('Microsoft.Network/publicIpAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
             },
@@ -55,7 +57,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
         "networkSecurityGroup": {
           "id": "%securitygroup%"
         }
-      }<%if network.primary%>,
+      }<%if network.primary && node.config.role == 'login'%>,
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIpAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
       ]<%end%>
@@ -90,12 +92,12 @@ networks.each_with_index do |(networkname,network),idx| -%>
 	},
 	"osProfile": {
           "computerName": "<%=node.config.networks.network1.hostname%>",
-          "adminUsername": "tist",
+          "adminUsername": "alces",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {
             "publicKeys": [{
-              "path": "[concat ('/home/tist', '/.ssh/authorized_keys')]",
+              "path": "[concat ('/home/alces', '/.ssh/authorized_keys')]",
               "keyData": "<%=config.publickey%>"
               }]
             }
@@ -142,7 +144,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
         "settings": {
         },
         "protectedSettings": {
-          "commandToExecute": "curl <%= node.config.nodescripturl %> | /bin/bash | tee /tmp/mainscript-default-output"
+          "commandToExecute": "<% unless node.config.gateway -%>ip route replace default via <%= node.config.networks.network1.gateway %> && <% end -%>curl <%= node.config.nodescripturl %> | /bin/bash | tee /tmp/mainscript-default-output"
         }
       }
     }
@@ -152,13 +154,15 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "type": "string",
       "value": "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"
     },
-    "<%=node.name%>TAGpubIP": {
+<% if node.config.role == 'login' -%>
+    "<%=node.name%>TAGIP": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/publicIPAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', '<%=config.cluster%><%=node.name%>pubIP')).ipAddress]"
     },
+<% end -%>
     "<%=node.name%>TAGgroups": {
       "type": "string",
-      "value": "<%= NodeattrInterface.genders_for_node(node).join(',') %>"
+      "value": "<%= NodeattrInterface.genders_for_node(node.name).join(',') %>"
     }
   }
 }    

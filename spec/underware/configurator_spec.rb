@@ -72,6 +72,11 @@ RSpec.describe Underware::Configurator do
     allow(Underware::Validation::Configure).to receive(:new).and_return(v)
   end
 
+  def configure_with_answers(answers, test_obj: configurator)
+    # Each answer must be entered followed by a newline to terminate it.
+    configure_with_input(answers.join("\n") + "\n", test_obj: test_obj)
+  end
+
   def configure_with_input(input_string, test_obj: configurator)
     Underware::AlcesUtils.redirect_std(:stdout) do
       input.read # Move to the end of the file
@@ -80,11 +85,6 @@ RSpec.describe Underware::Configurator do
       test_obj.configure
       reset_alces
     end[:stdout].read
-  end
-
-  def configure_with_answers(answers, test_obj: configurator)
-    # Each answer must be entered followed by a newline to terminate it.
-    configure_with_input(answers.join("\n") + "\n", test_obj: test_obj)
   end
 
   # Do not want to use readline to get input in tests as tests will then

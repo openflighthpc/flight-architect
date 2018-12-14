@@ -58,8 +58,6 @@ module Underware
       end
 
       def default_input
-        return human_readable_boolean_default if type.boolean?
-
         # For password questions we don't want to set a default on the HighLine
         # question itself as:
         # a. it will be an encrypted password from previous `configure`, and so
@@ -67,9 +65,11 @@ module Underware
         # b. `ask_password_question` handles changing or retaining a previous
         # password itself as needed, without the re-encryption which would
         # occur if we set the default to a previously encrypted password here.
-        return if type.password?
-
-        default.nil? ? default : default.to_s
+        case type.to_sym
+        when :boolean then human_readable_boolean_default
+        when :password then nil
+        else default&.to_s
+        end
       end
 
       # Default for a boolean question which has a previous answer should be

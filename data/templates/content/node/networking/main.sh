@@ -4,18 +4,15 @@
 ## SYSTEM SERVICES 
 systemctl disable iptables
 systemctl disable NetworkManager
-systemctl disable firewalld
 
 mkdir -p /etc/systemd/system-preset
 cat <<EOF > /etc/systemd/system-preset/00-alces-base.preset
 disable libvirtd.service
 disable NetworkManager.service
-disable firewalld.service
 EOF
 
 systemctl stop libvirtd
 systemctl stop NetworkManager
-systemctl stop firewalld
 ##
 
 ##Basic Networking

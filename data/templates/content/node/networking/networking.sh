@@ -20,7 +20,11 @@ BOOTPROTO=dhcp
 <% else -%>
 BOOTPROTO=none
 <% end -%>
+<% if network.primary -%>
 DEFROUTE=yes
+<% else -%>
+DEFROUTE=no
+<% end -%>
 <% if network.dhcpinfo -%>
 PEERDNS=yes
 PEERROUTES=yes

@@ -60,6 +60,12 @@ questions:
     question: 'Define a third network?'
     type: boolean
 
+  - &is_gateway
+    identifier: is_gateway
+    question: 'Use this machine as a gateway for network traffic?'
+    type: boolean
+    default: false
+
 
 domain:
   # BASE
@@ -83,6 +89,7 @@ group:
   - *network2_defined
   - *network3_defined
 
-node: []
+node:
+  - *is_gateway
 
 local: []

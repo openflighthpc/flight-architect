@@ -71,6 +71,9 @@ Resources:
               - "hostname: <%=name%>\n"
               - "fqdn: <%=node.config.networks.network1.hostname%>\n"
               - "runcmd:\n"
+<% unless (node.config.gateway rescue false) -%>
+              - "  - ip route replace default via <%= node.config.networks.network1.gateway %>\n"
+<% end -%>
               - "  - curl <%= node.config.nodescripturl %> | /bin/bash -x | tee /tmp/mainscript-default-output\n"
 
 <% if node.config.role == 'login' -%>

@@ -39,8 +39,7 @@ role: '<%=answer.role%>'
 
 
 # PLATFORM: CLOUD
-platform: aws
-renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/rendered/<%=config.platform%>/node/<%=node.name%>
+renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/rendered/<%=node.platform%>/node/<%=node.name%>
 nodescripturl: <%= config.renderedurl %>/main.sh
 
 
@@ -55,6 +54,7 @@ domainnetmask: '255.255.0.0'
 controllernetworking: false
 internaldns: 10.10.0.1
 searchdomains: "<%= config.networks.network1.domain %> <%= config.domain %>"
+gateway: <%= answer.is_gateway %>
 
 networks:
   network1:

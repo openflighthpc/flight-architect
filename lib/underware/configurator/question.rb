@@ -59,6 +59,16 @@ module Underware
 
       def default_input
         return human_readable_boolean_default if type.boolean?
+
+        # For password questions we don't want to set a default on the HighLine
+        # question itself as:
+        # a. it will be an encrypted password from previous `configure`, and so
+        # useless/confusing to show to a user;
+        # b. `ask_password_question` handles changing or retaining a previous
+        # password itself as needed, without the re-encryption which would
+        # occur if we set the default to a previously encrypted password here.
+        return if type.password?
+
         default.nil? ? default : default.to_s
       end
 
@@ -114,17 +124,31 @@ module Underware
       end
 
       def ask_password_question
-        encrypt_password(request_password_with_confirmation)
-      end
+        $stderr.puts existing_password_present_warning if default
 
-      def request_password_with_confirmation
         loop do
           password = ask_for_password(question_text)
+
+          # If no password entered and we have a default, just return this,
+          # which will (most likely) be an already encrypted password from
+          # previous `configure` that we want to keep.
+          return default if password.empty? && default
+
           confirmation = ask_for_password('Confirm password:')
 
-          return password if password == confirmation
+          return encrypt_password(password) if password == confirmation
           $stderr.puts 'Password and confirmation do not match - please try again.'
         end
+      end
+
+      def existing_password_present_warning
+        <<~INFO.strip_heredoc
+          Password has already been configured - leave blank to keep or
+          enter new password to change.
+
+          WARNING: changing password could prevent access to nodes already
+          configured with current password.
+        INFO
       end
 
       def ask_for_password(prompt_text)

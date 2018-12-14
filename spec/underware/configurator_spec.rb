@@ -283,6 +283,40 @@ RSpec.describe Underware::Configurator do
         expect(stderr).to include(unmatched_text)
         expect(stderr).not_to match(/#{unmatched_text}.*#{unmatched_text}/)
       end
+
+      it 'gives no extra output on successful first time entry' do
+        stderr = configure_with_answers(['my_password', 'my_password'])
+
+        expect(stderr).to be_empty
+      end
+
+      context 'when answer is already set' do
+        before :each do
+          make_configurator.configure({
+            password_q: expected_encrypted_password
+          })
+        end
+
+        it 'warns that changing could break things' do
+          stderr = configure_with_answers([''])
+
+          expect(stderr).to include('Password has already been configured')
+          expect(stderr).to include('WARNING: changing password could prevent access to nodes')
+        end
+
+        it 'skips question and keeps current answer if enter nothing' do
+          configure_with_answers([''])
+
+          expect(answers).to include(password_q: expected_encrypted_password)
+        end
+
+        it 'uses new password if entered' do
+          configure_with_answers(['new_password', 'new_password'])
+
+          expected_new_encrypted_password = 'new_password'.crypt('$6$mocked_salt')
+          expect(answers).to include(password_q: expected_new_encrypted_password)
+        end
+      end
     end
 
     it 'asks all questions in order' do

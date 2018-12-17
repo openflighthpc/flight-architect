@@ -69,8 +69,8 @@ class FileSystem
   end
 
   def self.root_file_system_config(reset: false)
-    @root_file_system_config = nil if reset
-    @root_file_system_config ||= FileSystemConfigurator.new
+    @root_file_system_configurator = nil if reset
+    @root_file_system_configurator ||= FileSystemConfigurator.new
   end
 
   # Perform optional configuration of the `FileSystem` prior to a `test`. The

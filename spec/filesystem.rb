@@ -63,14 +63,17 @@ class FileSystem
 
   def self.root_setup
     FakeFS.without do
-      yield FileSystem.root_file_system_config
+      yield FileSystem.configurator
       FileSystem.test {} # Applies the changes
     end
   end
 
-  def self.root_file_system_config(reset: false)
-    @root_file_system_configurator = nil if reset
-    @root_file_system_configurator ||= FileSystemConfigurator.new
+  def self.configurator
+    @configurator ||= FileSystemConfigurator.new
+  end
+
+  def self.reset_configurator
+    @configurator = nil
   end
 
   # Perform optional configuration of the `FileSystem` prior to a `test`. The
@@ -95,7 +98,7 @@ class FileSystem
     end
   end
 
-  def self.test(configurator = FileSystem.root_file_system_config)
+  def self.test
     # Ensure the FakeFS is in a fresh state. XXX needed?
     FakeFS.deactivate!
     FakeFS.clear!

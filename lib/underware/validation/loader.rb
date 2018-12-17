@@ -73,7 +73,7 @@ module Underware
       end
 
       def core_configure_questions
-        @core_configure_questions ||= Data.load(FilePath.configure_file)
+        @core_configure_questions ||= Data.load(FilePath.configure)
       end
 
       def plugin_configure_questions

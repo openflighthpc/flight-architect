@@ -62,7 +62,7 @@ RSpec.describe Underware::Validation::Answer do
 
   def run_answer_validation(answers)
     FileSystem.test do
-      Underware::Data.dump(Underware::FilePath.configure_file, question_tree)
+      Underware::Data.dump(Underware::FilePath.configure, question_tree)
       validator = Underware::Validation::Answer.new(answers,
                                                     answer_section: :domain)
       [validator.validate, validator]

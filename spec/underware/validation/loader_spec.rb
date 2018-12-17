@@ -88,7 +88,7 @@ RSpec.describe Underware::Validation::Loader do
 
     before do
       FileSystem.root_setup do |fs|
-        fs.dump(Underware::FilePath.configure_file, configure_questions_hash)
+        fs.dump(Underware::FilePath.configure, configure_questions_hash)
 
         # Create example plugin.
         fs.mkdir_p example_plugin_dir

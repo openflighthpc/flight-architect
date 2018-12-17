@@ -11,7 +11,7 @@ module Underware
         end
 
         def record_dir
-          FilePath.layout_dir
+          FilePath.layouts_dir
         end
 
         def type_or_layout(name)

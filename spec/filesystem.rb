@@ -148,7 +148,7 @@ class FileSystem
   # file to avoid actual questions being asked in tests.
   def with_minimal_configure_file
     File.write(
-      Underware::FilePath.configure_file,
+      Underware::FilePath.configure,
       minimal_configure_file_data
     )
   end

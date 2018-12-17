@@ -91,7 +91,7 @@ module Underware
       @validate_configure ||= begin
         loader.question_tree
         unless valid_file?(:configure, '', true)
-          msg = "Could not locate answer files: #{FilePath.answer_files}"
+          msg = "Could not locate answer files: #{FilePath.answers_dir}"
           raise DependencyFailure, msg
         end
         true # Sets the @validate_configure value so it only runs once
@@ -104,7 +104,7 @@ module Underware
         when :configure
           # Configuration happens in Underware, so always check Underware paths
           # when checking `configure` dependencies.
-          File.join(FilePath.answer_files, value)
+          File.join(FilePath.answers_dir, value)
         else
           msg = "Could not generate file path for dependency #{dep}"
           raise DependencyInternalError, msg

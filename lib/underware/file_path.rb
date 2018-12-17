@@ -43,29 +43,29 @@ module Underware
         File.join(internal_data_dir, 'templates')
       end
 
-      def configure_file
+      def configure
         File.join(internal_data_dir, 'configure.yaml')
       end
 
       def domain_answers
-        File.join(answer_files, 'domain.yaml')
+        File.join(answers_dir, 'domain.yaml')
       end
 
       def group_answers(group)
         file_name = "#{group}.yaml"
-        File.join(answer_files, 'groups', file_name)
+        File.join(answers_dir, 'groups', file_name)
       end
 
       def node_answers(node)
         file_name = "#{node}.yaml"
-        File.join(answer_files, 'nodes', file_name)
+        File.join(answers_dir, 'nodes', file_name)
       end
 
       def local_answers
         node_answers('local')
       end
 
-      def answer_files
+      def answers_dir
         File.join(underware_storage, 'answers')
       end
 
@@ -97,7 +97,7 @@ module Underware
         File.join(events_dir, node_namespace.name, event)
       end
 
-      def log
+      def logs_dir
         '/var/log/underware'
       end
 
@@ -106,18 +106,18 @@ module Underware
       end
 
       def asset(*a)
-        record(asset_dir, *a)
+        record(assets_dir, *a)
       end
 
-      def asset_dir
+      def assets_dir
         File.join(underware_storage, 'assets')
       end
 
       def layout(*a)
-        record(layout_dir, *a)
+        record(layouts_dir, *a)
       end
 
-      def layout_dir
+      def layouts_dir
         File.join(underware_storage, 'layouts')
       end
 

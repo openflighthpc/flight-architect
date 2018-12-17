@@ -48,7 +48,7 @@ module Underware
     end
 
     def initialize(log_name)
-      file = "#{FilePath.log}/#{log_name}.log"
+      file = "#{FilePath.logs_dir}/#{log_name}.log"
       FileUtils.mkdir_p File.dirname(file)
       f = File.open(file, 'a')
       f.sync = true

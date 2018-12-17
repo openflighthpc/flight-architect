@@ -53,7 +53,7 @@ RSpec.describe Underware::Commands::Remove::Group do
   end
 
   def answer_files
-    Dir[File.join(Underware::FilePath.answer_files, '**/*.yaml')]
+    Dir[File.join(Underware::FilePath.answers_dir, '**/*.yaml')]
   end
 
   def expected_deleted_files(group)
@@ -61,7 +61,7 @@ RSpec.describe Underware::Commands::Remove::Group do
       .nodes_in_group(group)
       .map { |node| "nodes/#{node}.yaml" }
       .unshift(["groups/#{group}.yaml"])
-      .map { |f| File.join(Underware::FilePath.answer_files, f) }
+      .map { |f| File.join(Underware::FilePath.answers_dir, f) }
   end
 
   def test_remove_group(group)

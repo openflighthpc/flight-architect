@@ -33,8 +33,8 @@ RSpec.describe Underware::Commands::Plugin::List do
     )
   end
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
+  before :each do
+    FileSystem.root_setup do |fs|
       fs.mkdir_p example_plugin_dir_1
       fs.mkdir_p example_plugin_dir_2
       fs.touch junk_other_plugins_dir_file
@@ -52,27 +52,23 @@ RSpec.describe Underware::Commands::Plugin::List do
   end
 
   it 'outputs line for each plugin subdirectory' do
-    filesystem.test do
-      stdout = Underware::AlcesUtils.redirect_std(:stdout) do
-        run_plugin_list
-      end[:stdout].read
+    stdout = Underware::AlcesUtils.redirect_std(:stdout) do
+      run_plugin_list
+    end[:stdout].read
 
-      expect(stdout).to match(/example01.*\nexample02.*\n/)
-    end
+    expect(stdout).to match(/example01.*\nexample02.*\n/)
   end
 
   it 'specifies whether each plugin is activated in output' do
-    filesystem.test do |_fs|
-      Underware::Plugins.activate!('example01')
-      Underware::Plugins.deactivate!('example02')
+    Underware::Plugins.activate!('example01')
+    Underware::Plugins.deactivate!('example02')
 
-      stdout = Underware::AlcesUtils.redirect_std(:stdout) do
-        run_plugin_list
-      end[:stdout].read
+    stdout = Underware::AlcesUtils.redirect_std(:stdout) do
+      run_plugin_list
+    end[:stdout].read
 
-      activated = '[ACTIVATED]'.green
-      deactivated = '[DEACTIVATED]'.red
-      expect(stdout).to eq "example01 #{activated}\nexample02 #{deactivated}\n"
-    end
+    activated = '[ACTIVATED]'.green
+    deactivated = '[DEACTIVATED]'.red
+    expect(stdout).to eq "example01 #{activated}\nexample02 #{deactivated}\n"
   end
 end

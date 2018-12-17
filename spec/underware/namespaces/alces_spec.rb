@@ -365,8 +365,8 @@ RSpec.describe Underware::Namespaces::Alces do
   describe 'old Templater tests' do
     include Underware::AlcesUtils
 
-    let(:filesystem) do
-      FileSystem.setup do |fs|
+    before :each do
+      FileSystem.root_setup do |fs|
         fs.write template_path, template.strip_heredoc
       end
     end
@@ -388,15 +388,13 @@ RSpec.describe Underware::Namespaces::Alces do
     let(:template_path) { '/template' }
 
     def expect_renders(template_parameters, expected)
-      filesystem.test do
-        # Strip trailing spaces from rendered output to make comparisons less
-        # brittle.
-        rendered = alces.render_file(
-          template_path, template_parameters
-        ).gsub(/\s+\n/, "\n")
+      # Strip trailing spaces from rendered output to make comparisons less
+      # brittle.
+      rendered = alces.render_file(
+        template_path, template_parameters
+      ).gsub(/\s+\n/, "\n")
 
-        expect(rendered).to eq(expected.strip_heredoc)
-      end
+      expect(rendered).to eq(expected.strip_heredoc)
     end
 
     describe '#render_file' do
@@ -416,8 +414,10 @@ RSpec.describe Underware::Namespaces::Alces do
       end
 
       context 'with config specifying parameters' do
-        before do
-          filesystem.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
+        before :each do
+          FileSystem.root_setup do |fs|
+            fs.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
+          end
         end
 
         it 'renders template with config parameters' do
@@ -439,11 +439,9 @@ RSpec.describe Underware::Namespaces::Alces do
           end
 
           it 'raises' do
-            filesystem.test do
-              expect do
-                described_class.render_file(template_path, {})
-              end.to raise_error NameError
-            end
+            expect do
+              described_class.render_file(template_path, {})
+            end.to raise_error NameError
           end
         end
       end

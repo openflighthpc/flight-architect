@@ -34,31 +34,27 @@ RSpec.describe Underware::GroupCache do
     Underware::GroupCache.new
   end
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
+  before :each do
+    FileSystem.root_setup do |fs|
       fs.with_group_cache_fixture('cache/groups.yaml')
     end
   end
 
   describe '#group?' do
     it 'checks if a group has been configured' do
-      filesystem.test do
-        expect(cache.group?('testnodes')).to eq(true)
-        expect(cache.group?('missing_group')).to eq(false)
-      end
+      expect(cache.group?('testnodes')).to eq(true)
+      expect(cache.group?('missing_group')).to eq(false)
     end
   end
 
   describe '#add' do
     it 'adds a new group' do
-      filesystem.test do
-        expect(cache.group?('new_group')).to eq(false)
-        cache.add('new_group')
-        expect(cache.group?('new_group')).to eq(true)
+      expect(cache.group?('new_group')).to eq(false)
+      cache.add('new_group')
+      expect(cache.group?('new_group')).to eq(true)
 
-        next_available_index = 3
-        expect(cache.index('new_group')).to eq(next_available_index)
-      end
+      next_available_index = 3
+      expect(cache.index('new_group')).to eq(next_available_index)
     end
 
     it 'increments the group index' do
@@ -70,48 +66,44 @@ RSpec.describe Underware::GroupCache do
     end
 
     it 'ignores groups that have already been added' do
-      filesystem.test do
-        expect(cache.group?('testnodes')).to eq(true)
-        number_groups = cache.primary_groups.length
-        cache.add('testnodes')
-        expect(cache.primary_groups.length).to eq(number_groups)
-      end
+      expect(cache.group?('testnodes')).to eq(true)
+      number_groups = cache.primary_groups.length
+      cache.add('testnodes')
+      expect(cache.primary_groups.length).to eq(number_groups)
     end
   end
 
   describe '#remove' do
     it 'removes a group' do
-      filesystem.test do
-        expect(cache.group?('testnodes')).to eq(true)
-        static_index_of_other_group = cache.index('testnodes')
+      expect(cache.group?('testnodes')).to eq(true)
+      static_index_of_other_group = cache.index('testnodes')
 
-        expect(cache.group?('some_group')).to eq(true)
-        cache.remove('some_group')
-        expect(cache.group?('some_group')).to eq(false)
+      expect(cache.group?('some_group')).to eq(true)
+      cache.remove('some_group')
+      expect(cache.group?('some_group')).to eq(false)
 
-        expect(cache.index('testnodes')).to eq(static_index_of_other_group)
-      end
+      expect(cache.index('testnodes')).to eq(static_index_of_other_group)
     end
   end
 
   describe '#index' do
     it 'preserves incrementing index as groups are added/removed' do
-      filesystem.test do
-        group1 = 'group1'
-        cache.add(group1)
-        expect(cache.index(group1)).to eq 3
+      group1 = 'group1'
+      cache.add(group1)
+      expect(cache.index(group1)).to eq 3
 
-        cache.remove(group1)
+      cache.remove(group1)
 
-        group2 = 'group2'
-        cache.add(group2)
-        expect(cache.index(group2)).to eq 4
-      end
+      group2 = 'group2'
+      cache.add(group2)
+      expect(cache.index(group2)).to eq 4
     end
   end
 
   describe '#primary_groups' do
     it 'gives list with just orphan group by default' do
+      FileUtils.rm Underware::FilePath.group_cache
+
       expect(cache.primary_groups).to eq(['orphan'])
     end
 
@@ -124,6 +116,8 @@ RSpec.describe Underware::GroupCache do
 
   describe '#next_available_index' do
     it 'gives 1 by default' do
+      FileUtils.rm Underware::FilePath.group_cache
+
       expect(cache.next_available_index).to eq(1)
     end
 

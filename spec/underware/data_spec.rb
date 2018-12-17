@@ -48,8 +48,8 @@ RSpec.describe Underware::Data do
 
   let(:invalid_yaml) { '[half an array' }
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
+  before :each do
+    FileSystem.root_setup do |fs|
       fs.mkdir_p(File.dirname(data_file_path))
     end
   end
@@ -58,62 +58,48 @@ RSpec.describe Underware::Data do
     subject { described_class.load(data_file_path) }
 
     it 'loads the data file and recursively converts all keys to symbols' do
-      filesystem.test do
-        File.write(data_file_path, YAML.dump(string_keyed_data))
+      File.write(data_file_path, YAML.dump(string_keyed_data))
 
-        expect(subject).to eq(symbol_keyed_data)
-      end
+      expect(subject).to eq(symbol_keyed_data)
     end
 
     it 'returns {} if the file is empty' do
-      filesystem.test do
-        FileUtils.touch(data_file_path)
+      FileUtils.touch(data_file_path)
 
-        expect(subject).to eq({})
-      end
+      expect(subject).to eq({})
     end
 
     it 'returns {} if the file does not exist' do
-      filesystem.test do
-        expect(subject).to eq({})
-      end
+      expect(subject).to eq({})
     end
 
     it 'raises if the file contains invalid YAML' do
-      filesystem.test do
-        File.write(data_file_path, invalid_yaml)
+      File.write(data_file_path, invalid_yaml)
 
-        expect { subject }.to raise_error Psych::SyntaxError
-      end
+      expect { subject }.to raise_error Psych::SyntaxError
     end
 
     it 'raises if loaded file does not contain hash' do
-      filesystem.test do
-        array = ['foo', 'bar']
-        File.write(data_file_path, YAML.dump(array))
+      array = ['foo', 'bar']
+      File.write(data_file_path, YAML.dump(array))
 
-        expect { subject }.to raise_error(Underware::DataError)
-      end
+      expect { subject }.to raise_error(Underware::DataError)
     end
   end
 
   describe '#dump' do
     it 'dumps the data to the data file with all keys as strings' do
-      filesystem.test do
-        described_class.dump(data_file_path, symbol_keyed_data)
+      described_class.dump(data_file_path, symbol_keyed_data)
 
-        expect(
-          YAML.load_file(data_file_path)
-        ).to eq(string_keyed_data)
-      end
+      expect(
+        YAML.load_file(data_file_path)
+      ).to eq(string_keyed_data)
     end
 
     it 'raises if attempt to dump non-hash data' do
-      filesystem.test do
-        expect do
-          described_class.dump(data_file_path, ['foo', 'bar'])
-        end.to raise_error(Underware::DataError)
-      end
+      expect do
+        described_class.dump(data_file_path, ['foo', 'bar'])
+      end.to raise_error(Underware::DataError)
     end
   end
 end

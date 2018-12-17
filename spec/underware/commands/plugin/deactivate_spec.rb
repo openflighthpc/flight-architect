@@ -33,8 +33,8 @@ RSpec.describe Underware::Commands::Plugin::Deactivate do
     )
   end
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
+  before :each do
+    FileSystem.root_setup do |fs|
       fs.mkdir_p example_plugin_dir
     end
   end
@@ -51,37 +51,31 @@ RSpec.describe Underware::Commands::Plugin::Deactivate do
   end
 
   it 'switches the plugin to be deactivated' do
-    filesystem.test do
-      expect(example_plugin).to be_activated
+    expect(example_plugin).to be_activated
 
-      run_plugin_deactivate(example_plugin_name)
+    run_plugin_deactivate(example_plugin_name)
 
-      expect(example_plugin).not_to be_activated
-    end
+    expect(example_plugin).not_to be_activated
   end
 
   it 'does not duplicate deactivated plugin if already deactivated' do
-    filesystem.test do
-      run_plugin_deactivate(example_plugin_name)
-      run_plugin_deactivate(example_plugin_name)
+    run_plugin_deactivate(example_plugin_name)
+    run_plugin_deactivate(example_plugin_name)
 
-      matching_deactivated_plugins = Underware::Plugins.all.select do |plugin|
-        !plugin.activated? && plugin.name == example_plugin_name
-      end
-      expect(matching_deactivated_plugins.length).to eq 1
+    matching_deactivated_plugins = Underware::Plugins.all.select do |plugin|
+      !plugin.activated? && plugin.name == example_plugin_name
     end
+    expect(matching_deactivated_plugins.length).to eq 1
   end
 
   it 'gives error if plugin does not exist' do
-    filesystem.test do
-      unknown_plugin_name = 'unknown_plugin'
+    unknown_plugin_name = 'unknown_plugin'
 
-      expect do
-        Underware::AlcesUtils.redirect_std(:stderr) do
-          run_plugin_deactivate(unknown_plugin_name)
-        end
-      end.to raise_error Underware::UnderwareError,
-                         "Unknown plugin: #{unknown_plugin_name}"
-    end
+    expect do
+      Underware::AlcesUtils.redirect_std(:stderr) do
+        run_plugin_deactivate(unknown_plugin_name)
+      end
+    end.to raise_error Underware::UnderwareError,
+    "Unknown plugin: #{unknown_plugin_name}"
   end
 end

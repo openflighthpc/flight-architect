@@ -33,14 +33,6 @@ RSpec.describe Underware::Commands::Remove::Group do
     validation_off
   end
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
-      fs.with_answer_fixtures('setup1/answers')
-      fs.with_group_cache_fixture('setup1/cache/groups.yaml')
-      fs.with_genders_fixtures('setup1/genders')
-    end
-  end
-
   let(:loader) { Underware::Validation::Loader.new }
   let(:cache) { loader.group_cache[:primary_groups] }
 
@@ -49,7 +41,14 @@ RSpec.describe Underware::Commands::Remove::Group do
 
   before do
     mock_validate_genders_success
-    filesystem.test { initial_files }
+  end
+
+  before :each do
+    FileSystem.root_setup do |fs|
+      fs.with_answer_fixtures('setup1/answers')
+      fs.with_group_cache_fixture('setup1/cache/groups.yaml')
+      fs.with_genders_fixtures('setup1/genders')
+    end
   end
 
   def answer_files
@@ -65,13 +64,11 @@ RSpec.describe Underware::Commands::Remove::Group do
   end
 
   def test_remove_group(group)
-    filesystem.test do |_fs|
-      Underware::Commands::Remove::Group.new([group], OpenStruct.new)
-      expect(expected_deleted_files(group)).to include(*deleted_files)
-      expect(answer_files).not_to include(*expected_deleted_files(group))
-      expect(cache).not_to include(group)
-      yield
-    end
+    Underware::Commands::Remove::Group.new([group], OpenStruct.new)
+    expect(expected_deleted_files(group)).to include(*deleted_files)
+    expect(answer_files).not_to include(*expected_deleted_files(group))
+    expect(cache).not_to include(group)
+    yield
   end
 
   context 'with no other groups' do

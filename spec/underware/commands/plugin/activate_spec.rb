@@ -33,8 +33,8 @@ RSpec.describe Underware::Commands::Plugin::Activate do
     )
   end
 
-  let(:filesystem) do
-    FileSystem.setup do |fs|
+  before :each do
+    FileSystem.root_setup do |fs|
       fs.mkdir_p example_plugin_dir
     end
   end
@@ -51,25 +51,21 @@ RSpec.describe Underware::Commands::Plugin::Activate do
   end
 
   it 'switches the plugin to be activated' do
-    filesystem.test do
-      Underware::Plugins.deactivate!(example_plugin_name)
+    Underware::Plugins.deactivate!(example_plugin_name)
 
-      run_plugin_activate(example_plugin_name)
+    run_plugin_activate(example_plugin_name)
 
-      expect(example_plugin).to be_activated
-    end
+    expect(example_plugin).to be_activated
   end
 
   it 'gives error if plugin does not exist' do
-    filesystem.test do
-      unknown_plugin_name = 'unknown_plugin'
+    unknown_plugin_name = 'unknown_plugin'
 
-      expect do
-        Underware::AlcesUtils.redirect_std(:stderr) do
-          run_plugin_activate(unknown_plugin_name)
-        end
-      end.to raise_error Underware::UnderwareError,
-                         "Unknown plugin: #{unknown_plugin_name}"
-    end
+    expect do
+      Underware::AlcesUtils.redirect_std(:stderr) do
+        run_plugin_activate(unknown_plugin_name)
+      end
+    end.to raise_error Underware::UnderwareError,
+    "Unknown plugin: #{unknown_plugin_name}"
   end
 end

@@ -9,22 +9,20 @@ RSpec.describe Underware::Commands::Configure::Domain do
     )
   end
 
-  let(:filesystem) do
-    FileSystem.setup(&:with_minimal_configure_file)
-  end
-
   before do
     mock_validate_genders_success
   end
 
-  it 'creates correct configurator' do
-    filesystem.test do
-      expect(Underware::Configurator).to receive(:new).with(
-        instance_of(Underware::Namespaces::Alces),
-        questions_section: :domain
-      ).and_call_original
+  before :each do
+    FileSystem.root_setup(&:with_minimal_configure_file)
+  end
 
-      run_configure_domain
-    end
+  it 'creates correct configurator' do
+    expect(Underware::Configurator).to receive(:new).with(
+      instance_of(Underware::Namespaces::Alces),
+      questions_section: :domain
+    ).and_call_original
+
+    run_configure_domain
   end
 end

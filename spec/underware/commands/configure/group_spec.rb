@@ -91,7 +91,7 @@ RSpec.describe Underware::Commands::Configure::Group do
         end
       end
 
-      it 'does nothing if primary group already presnt' do
+      it 'does nothing if primary group already present' do
         filesystem.test do
           ['first_group', 'second_group'].each do |group|
             update_cache { |c| c.add(group) }

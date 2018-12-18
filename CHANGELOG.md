@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   (https://github.com/alces-software/underware/pull/29 and
   https://github.com/alces-software/underware/pull/30).
 - Added `template` command, to render all Underware templates for all platforms
-  and namespaces (https://github.com/alces-software/underware/pull/30).
+  and namespaces (https://github.com/alces-software/underware/pull/33).
 
 ## [0.3.0] - 2018-10-31
 

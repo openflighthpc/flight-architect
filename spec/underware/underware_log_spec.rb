@@ -38,13 +38,13 @@ RSpec.describe Underware::UnderwareLog do
     it 'gives warning output by default' do
       run_test_command
       expect(output).to \
-        have_received(:warning).with(test_warning)
+        have_received(:stderr).with(test_warning)
     end
 
     it 'only issues the warning once' do
       run_test_command
       run_test_command
-      expect(output).to have_received(:warning).once
+      expect(output).to have_received(:stderr).once
     end
 
     it 'does not give warning and raises when --strict passed' do
@@ -54,13 +54,13 @@ RSpec.describe Underware::UnderwareLog do
       end.to raise_error(Underware::StrictWarningError)
 
       expect(output).not_to \
-        have_received(:warning).with(test_warning)
+        have_received(:stderr).with(test_warning)
     end
 
     it 'does not give warning output when --quiet passed' do
       run_test_command(quiet: true)
       expect(output).not_to \
-        have_received(:warning).with(test_warning)
+        have_received(:stderr).with(test_warning)
     end
 
     [true, false].each do |quiet|

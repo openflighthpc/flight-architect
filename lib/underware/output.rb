@@ -35,22 +35,6 @@ module Underware
       def stderr_indented_error_message(text)
         stderr text.gsub(/^/, '>>> ')
       end
-
-      def info(*lines)
-        stderr(*lines)
-      end
-
-      def success(*lines)
-        stderr(*lines)
-      end
-
-      def warning(*lines)
-        stderr(*lines)
-      end
-
-      def error(*lines)
-        stderr(*lines)
-      end
     end
   end
 end

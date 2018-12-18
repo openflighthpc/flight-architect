@@ -309,6 +309,7 @@ commands:
     action: Commands::View
     options:
       - *color_output
+      - *platform_option
 
   eval:
     syntax: underware eval ALCES_COMMAND [options]
@@ -325,3 +326,4 @@ commands:
     action: Commands::Eval
     options:
       - *color_output
+      - *platform_option

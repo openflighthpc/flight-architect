@@ -50,7 +50,7 @@ RSpec.describe Underware::HashMergers::Answer do
   end
 
   before do
-    Underware::Data.dump Underware::FilePath.configure_file, questions
+    Underware::Data.dump Underware::FilePath.configure, questions
   end
 
   shared_examples 'run contexts with shared' do |spec_group|

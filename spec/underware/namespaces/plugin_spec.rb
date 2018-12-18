@@ -18,18 +18,14 @@ RSpec.describe Underware::Namespaces::Plugin do
     Underware::Plugins.all.find { |plugin| plugin.name == plugin_name }
   end
 
-  before do
-    FileSystem.root_setup do |fs|
-      fs.setup do
-        plugins_path = Underware::FilePath.plugins_dir
-        plugin_config_dir = File.join(plugins_path, plugin_name, 'config')
-        FileUtils.mkdir_p plugin_config_dir
+  before :each do
+    plugins_path = Underware::FilePath.plugins_dir
+    plugin_config_dir = File.join(plugins_path, plugin_name, 'config')
+    FileUtils.mkdir_p plugin_config_dir
 
-        File.write(
-          Underware::FilePath.genders, "#{node_name} #{node_group_name}\n"
-        )
-      end
-    end
+    File.write(
+      Underware::FilePath.genders, "#{node_name} #{node_group_name}\n"
+    )
   end
 
   describe '#name' do

@@ -76,7 +76,7 @@ module Underware
       end
 
       def relative_answer_file
-        answer_file.sub("#{FilePath.answer_files}/", '')
+        answer_file.sub("#{FilePath.answers_dir}/", '')
       end
 
       def dependency_hash

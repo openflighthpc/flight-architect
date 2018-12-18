@@ -21,7 +21,7 @@ RSpec.describe Underware::Commands::Asset::Add do
   end
 
   context 'with a node argument' do
-    before { FileSystem.root_setup(&:with_asset_types) }
+    before { FileSystem.setup(&:with_asset_types) }
 
     let(:asset_name) { 'asset1' }
     let(:command_arguments) { ['rack', asset_name] }
@@ -46,7 +46,7 @@ RSpec.describe Underware::Commands::Asset::Add do
     end
 
     Underware::AlcesUtils.mock(self, :each) do
-      FileSystem.root_setup(&:with_asset_types)
+      FileSystem.setup(&:with_asset_types)
       allow(Underware::Utils::Editor).to receive(:open)
       allow(HighLine).to receive(:new).and_return(mocked_highline)
       create_layout(layout_name, layout_content)

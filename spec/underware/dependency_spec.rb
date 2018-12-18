@@ -34,17 +34,13 @@ require 'underware/spec/alces_utils'
 RSpec.describe Underware::Dependency do
   include Underware::AlcesUtils
 
-  let(:filesystem) { FileSystem.setup }
-
   let(:command_input) { 'test' }
 
   def enforce_dependencies(dependency_hash)
-    filesystem.test do |_fs|
-      Underware::Dependency.new(
-        command_input: command_input,
-        dependency_hash: dependency_hash
-      ).enforce
-    end
+    Underware::Dependency.new(
+      command_input: command_input,
+      dependency_hash: dependency_hash
+    ).enforce
   end
 
   it 'fails when enforcing non-existent domain answer file presence, with error message telling you command to run' do
@@ -55,48 +51,42 @@ RSpec.describe Underware::Dependency do
     missing_domain_answers_error =
       /required answer file: domain\.yaml\. Please run 'underware configure domain'/
 
-    filesystem.test do
-      expect do
-        enforce_dependencies(
-          configure: ['domain.yaml']
-        )
-      end.to raise_error(
-        Underware::DependencyFailure,
-        missing_domain_answers_error
+    expect do
+      enforce_dependencies(
+        configure: ['domain.yaml']
       )
-    end
+    end.to raise_error(
+      Underware::DependencyFailure, missing_domain_answers_error
+    )
   end
 
   it 'fails when enforcing non-existent, non-orphan group answer file presence, with error message telling you command to run' do
     missing_group_answers_error =
       /required answer file: groups\/group1\.yaml\. Please run 'underware configure group group1'/
 
-    filesystem.test do
-      expect do
-        enforce_dependencies(
-          configure: ['groups/group1.yaml']
-        )
-      end.to raise_error(
-        Underware::DependencyFailure,
-        missing_group_answers_error
+    expect do
+      enforce_dependencies(
+        configure: ['groups/group1.yaml']
       )
-    end
+    end.to raise_error(
+      Underware::DependencyFailure, missing_group_answers_error
+    )
   end
 
   # The orphan group does not require an answer file
   it 'never fails when enforcing orphan group answer file presence' do
-    filesystem.test do
-      expect do
-        enforce_dependencies(
-          configure: ['groups/orphan.yaml']
-        )
-      end.not_to raise_error
-    end
+    expect do
+      enforce_dependencies(
+        configure: ['groups/orphan.yaml']
+      )
+    end.not_to raise_error
   end
 
   context 'when answer files exist' do
-    before do
-      filesystem.with_answer_fixtures('answers/basic_structure')
+    before :each do
+      FileSystem.setup do |fs|
+        fs.with_answer_fixtures('answers/basic_structure')
+      end
     end
 
     it 'succeeds when enforcing existent answer file presence' do

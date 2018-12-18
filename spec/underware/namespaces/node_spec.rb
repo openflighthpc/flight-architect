@@ -179,28 +179,24 @@ RSpec.describe Underware::Namespaces::Node do
     let(:unconfigured_plugin) { 'unconfigured_plugin' }
     let(:deactivated_plugin) { 'deactivated_plugin' }
 
-    before do
-      FileSystem.root_setup do |fs|
-        # Create all test plugins.
-        [
-          enabled_plugin,
-          disabled_plugin,
-          unconfigured_plugin,
-          deactivated_plugin,
-        ].each do |plugin|
-          fs.mkdir_p File.join(Underware::FilePath.plugins_dir, plugin)
-        end
+    before :each do
+      # Create all test plugins.
+      [
+        enabled_plugin,
+        disabled_plugin,
+        unconfigured_plugin,
+        deactivated_plugin,
+      ].each do |plugin|
+        FileUtils.mkdir_p File.join(Underware::FilePath.plugins_dir, plugin)
+      end
 
-        fs.setup do
-          # Activate these plugins.
-          [
-            enabled_plugin,
-            disabled_plugin,
-            unconfigured_plugin,
-          ].each do |plugin|
-            Underware::Plugins.activate!(plugin)
-          end
-        end
+      # Activate these plugins.
+      [
+        enabled_plugin,
+        disabled_plugin,
+        unconfigured_plugin,
+      ].each do |plugin|
+        Underware::Plugins.activate!(plugin)
       end
 
       # NOTE: Must be after fs setup otherwise the initially spoofed

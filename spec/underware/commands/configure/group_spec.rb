@@ -42,69 +42,61 @@ RSpec.describe Underware::Commands::Configure::Group do
     Underware::GroupCache.new
   end
 
-  let(:filesystem) do
-    FileSystem.setup(&:with_minimal_configure_file)
-  end
-
   before do
     mock_validate_genders_success
   end
 
-  it 'creates correct configurator' do
-    filesystem.test do
-      expect(Underware::Configurator).to receive(:new).with(
-        instance_of(Underware::Namespaces::Alces),
-        questions_section: :group,
-        name: 'testnodes'
-      ).and_call_original
+  before :each do
+    FileSystem.setup(&:with_minimal_configure_file)
+  end
 
-      run_configure_group 'testnodes'
-    end
+  it 'creates correct configurator' do
+    expect(Underware::Configurator).to receive(:new).with(
+      instance_of(Underware::Namespaces::Alces),
+      questions_section: :group,
+      name: 'testnodes'
+    ).and_call_original
+
+    run_configure_group 'testnodes'
   end
 
   describe 'recording groups' do
     context 'when `cache/groups.yaml` does not exist' do
       it 'creates it and inserts new primary group' do
-        filesystem.test do
-          run_configure_group 'testnodes'
+        run_configure_group 'testnodes'
 
-          expect(new_cache.primary_groups).to eq [
-            'testnodes',
-            'orphan',
-          ]
-        end
+        expect(new_cache.primary_groups).to eq [
+          'testnodes',
+          'orphan',
+        ]
       end
     end
 
     context 'when `cache/groups.yaml` exists' do
       it 'inserts primary group if new' do
-        filesystem.test do
-          update_cache { |c| c.add('first_group') }
+        update_cache { |c| c.add('first_group') }
 
-          run_configure_group 'second_group'
+        run_configure_group 'second_group'
 
-          expect(new_cache.primary_groups).to eq [
-            'first_group',
-            'second_group',
-            'orphan',
-          ]
-        end
+        expect(new_cache.primary_groups).to eq [
+          'first_group',
+          'second_group',
+          'orphan',
+        ]
       end
 
-      it 'does nothing if primary group already presnt' do
-        filesystem.test do
-          ['first_group', 'second_group'].each do |group|
-            update_cache { |c| c.add(group) }
-          end
-
-          run_configure_group 'second_group'
-
-          expect(new_cache.primary_groups).to eq [
-            'first_group',
-            'second_group',
-            'orphan',
-          ]
+      it 'does nothing if primary group already present' do
+        ['first_group', 'second_group'].each do |group|
+          update_cache { |c| c.add(group) }
         end
+
+        run_configure_group 'second_group'
+
+        expect(new_cache.primary_groups).to eq [
+          'first_group',
+          'second_group',
+          'orphan',
+        ]
       end
     end
   end

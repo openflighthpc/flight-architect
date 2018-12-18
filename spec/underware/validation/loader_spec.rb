@@ -87,8 +87,8 @@ RSpec.describe Underware::Validation::Loader do
     end
 
     before do
-      FileSystem.root_setup do |fs|
-        fs.dump(Underware::FilePath.configure_file, configure_questions_hash)
+      FileSystem.setup do |fs|
+        fs.dump(Underware::FilePath.configure, configure_questions_hash)
 
         # Create example plugin.
         fs.mkdir_p example_plugin_dir
@@ -108,7 +108,7 @@ RSpec.describe Underware::Validation::Loader do
 
         context 'when plugin activated' do
           before do
-            FileSystem.root_setup do |fs|
+            FileSystem.setup do |fs|
               fs.activate_plugin('example')
             end
           end
@@ -143,7 +143,7 @@ RSpec.describe Underware::Validation::Loader do
 
           context 'when no configure.yaml for plugin' do
             before do
-              FileSystem.root_setup do |fs|
+              FileSystem.setup do |fs|
                 fs.rm_rf example_plugin_dir
                 fs.mkdir_p example_plugin_dir
               end

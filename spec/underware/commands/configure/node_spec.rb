@@ -16,7 +16,13 @@ RSpec.describe Underware::Commands::Configure::Node do
     Underware::Namespaces::Group.new(initial_alces, 'testnodes', index: 1)
   end
 
-  let(:filesystem) do
+  before do
+    use_mock_genders
+    mock_validate_genders_success
+    allow(Underware::Namespaces::Alces).to receive(:new).and_return(alces)
+  end
+
+  before :each do
     FileSystem.setup do |fs|
       fs.with_minimal_configure_file
       fs.dump(Underware::FilePath.domain_answers, {})
@@ -24,21 +30,13 @@ RSpec.describe Underware::Commands::Configure::Node do
     end
   end
 
-  before do
-    use_mock_genders
-    mock_validate_genders_success
-    allow(Underware::Namespaces::Alces).to receive(:new).and_return(alces)
-  end
-
   it 'creates correct configurator' do
-    filesystem.test do
-      expect(Underware::Configurator).to receive(:new).with(
-        instance_of(Underware::Namespaces::Alces),
-        questions_section: :node,
-        name: 'testnode01'
-      ).and_call_original
+    expect(Underware::Configurator).to receive(:new).with(
+      instance_of(Underware::Namespaces::Alces),
+      questions_section: :node,
+      name: 'testnode01'
+    ).and_call_original
 
-      run_configure_node 'testnode01'
-    end
+    run_configure_node 'testnode01'
   end
 end

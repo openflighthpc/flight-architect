@@ -49,7 +49,7 @@ RSpec.describe Underware::Data do
   let(:invalid_yaml) { '[half an array' }
 
   before :each do
-    FileSystem.root_setup do |fs|
+    FileSystem.setup do |fs|
       fs.mkdir_p(File.dirname(data_file_path))
     end
   end

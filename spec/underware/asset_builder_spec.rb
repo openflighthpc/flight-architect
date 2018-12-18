@@ -111,7 +111,7 @@ RSpec.describe Underware::AssetBuilder do
     let(:asset) { subject.pop_asset }
     let(:source_content) { Underware::Data.load(asset.source_path) }
 
-    before { FileSystem.root_setup(&:with_asset_types) }
+    before { FileSystem.setup(&:with_asset_types) }
 
     context 'with the test asset' do
       before { push_test_asset }

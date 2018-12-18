@@ -31,7 +31,7 @@ RSpec.describe Underware::Commands::Each do
   include Underware::AlcesUtils
 
   before do
-    FileSystem.root_setup do |fs|
+    FileSystem.setup do |fs|
       fs.with_genders_fixtures
       fs.with_clone_fixture('configs/unit-test.yaml')
     end

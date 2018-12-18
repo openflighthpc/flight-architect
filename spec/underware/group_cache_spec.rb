@@ -35,7 +35,7 @@ RSpec.describe Underware::GroupCache do
   end
 
   before :each do
-    FileSystem.root_setup do |fs|
+    FileSystem.setup do |fs|
       fs.with_group_cache_fixture('cache/groups.yaml')
     end
   end

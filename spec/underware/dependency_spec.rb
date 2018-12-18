@@ -84,7 +84,7 @@ RSpec.describe Underware::Dependency do
 
   context 'when answer files exist' do
     before :each do
-      FileSystem.root_setup do |fs|
+      FileSystem.setup do |fs|
         fs.with_answer_fixtures('answers/basic_structure')
       end
     end

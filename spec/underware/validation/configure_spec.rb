@@ -31,7 +31,7 @@ require 'underware/spec/alces_utils'
 RSpec.describe Underware::Validation::Configure do
   include Underware::AlcesUtils
 
-  before { FileSystem.root_setup(&:with_validation_error_file) }
+  before { FileSystem.setup(&:with_validation_error_file) }
 
   let(:file_path) { Underware::FilePath }
 

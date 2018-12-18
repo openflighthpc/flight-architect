@@ -47,7 +47,7 @@ RSpec.describe Underware::Commands::Configure::Group do
   end
 
   before :each do
-    FileSystem.root_setup(&:with_minimal_configure_file)
+    FileSystem.setup(&:with_minimal_configure_file)
   end
 
   it 'creates correct configurator' do

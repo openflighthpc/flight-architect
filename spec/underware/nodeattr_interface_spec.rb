@@ -63,7 +63,7 @@ RSpec.describe Underware::NodeattrInterface do
 
   context 'using mock genders' do
     before do
-      FileSystem.root_setup(&:with_genders_fixtures)
+      FileSystem.setup(&:with_genders_fixtures)
     end
 
     describe '#nodes_in_gender' do

@@ -34,7 +34,7 @@ RSpec.describe Underware::Commands::Plugin::List do
   end
 
   before :each do
-    FileSystem.root_setup do |fs|
+    FileSystem.setup do |fs|
       fs.mkdir_p example_plugin_dir_1
       fs.mkdir_p example_plugin_dir_2
       fs.touch junk_other_plugins_dir_file

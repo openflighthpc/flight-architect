@@ -16,7 +16,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
   before :each do
     fp = Underware::FilePath
 
-    FileSystem.root_setup do |fs|
+    FileSystem.setup do |fs|
       fs.with_minimal_configure_file
 
       dump_data = lambda do |data, config_path, answers_path|

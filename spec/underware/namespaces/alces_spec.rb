@@ -366,7 +366,7 @@ RSpec.describe Underware::Namespaces::Alces do
     include Underware::AlcesUtils
 
     before :each do
-      FileSystem.root_setup do |fs|
+      FileSystem.setup do |fs|
         fs.write template_path, template.strip_heredoc
       end
     end
@@ -415,7 +415,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
       context 'with config specifying parameters' do
         before :each do
-          FileSystem.root_setup do |fs|
+          FileSystem.setup do |fs|
             fs.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
           end
         end

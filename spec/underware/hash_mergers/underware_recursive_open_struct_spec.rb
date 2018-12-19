@@ -22,14 +22,16 @@ end
 RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   let(:alces) do
     namespace = Underware::Namespaces::Alces.new
-    allow(namespace).to receive(:testing).and_return(build_default_hash)
+    allow(namespace).to receive(:testing).and_return(subject)
     namespace
   end
 
-  let(:struct) { build_default_hash }
+  let(:subject) do
+    build_struct(default_table)
+  end
 
-  def build_default_hash
-    my_hash = {
+  let :default_table do
+    {
       key: 'value',
       erb1: '<%= alces.testing.key %>',
       erb2: '<%= alces.testing.erb1 %>',
@@ -39,46 +41,45 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
         recursive_hash2: '<%= alces.testing.key %>',
       },
     }
-    build_hash(my_hash)
   end
 
-  def build_hash(my_hash)
+  def build_struct(table)
     Underware::HashMergers::UnderwareRecursiveOpenStruct
-      .new(my_hash) do |template_string|
+      .new(table) do |template_string|
       alces.render_string(template_string)
     end
   end
 
   it 'does a single ERB replacement' do
-    expect(struct.erb1).to eq('value')
+    expect(subject.erb1).to eq('value')
   end
 
   it 'can replace multiple embedded erb' do
-    expect(struct.erb4).to eq('value')
+    expect(subject.erb4).to eq('value')
   end
 
   it 'can loop through the entire structure' do
-    struct.each do |key, value|
+    subject.each do |key, value|
       next if value.is_a? described_class
-      exp = struct.send(key)
+      exp = subject.send(key)
       msg = "#{key} was not rendered, expected: '#{exp}', got: '#{value}'"
       expect(exp).to eq(value), msg
     end
   end
 
   it 'renderes parameters in a recursive hash' do
-    expect(struct.recursive_hash1.recursive_hash2).to eq('value')
+    expect(subject.recursive_hash1.recursive_hash2).to eq('value')
   end
 
   context 'with array of hashes' do
     let(:array_of_hashes) do
-      my_hash = {
+      table = {
         array: [
           { key: 'value' },
           { key: 'value' },
         ],
       }
-      build_hash(my_hash)
+      build_struct(table)
     end
 
     it 'converts the hashes to own class' do

@@ -26,6 +26,10 @@ anchor_options:
     type: String
     description: >
       Include config for specified platform in namespace for rendering.
+  render_option: &render_option
+    tags: [-r, --render]
+    description: >
+      Fully render all values in the namespace for display.
 
 global_options:
   - tags: [--strict]
@@ -310,6 +314,7 @@ commands:
     options:
       - *color_output
       - *platform_option
+      - *render_option
 
   eval:
     syntax: underware eval ALCES_COMMAND [options]
@@ -327,3 +332,4 @@ commands:
     options:
       - *color_output
       - *platform_option
+      - *render_option

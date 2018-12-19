@@ -27,7 +27,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   end
 
   let(:subject) do
-    build_struct(default_table)
+    build_struct(default_table, eager_render: false)
   end
 
   let :default_table do
@@ -43,9 +43,9 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
     }
   end
 
-  def build_struct(table)
+  def build_struct(table, eager_render:)
     Underware::HashMergers::UnderwareRecursiveOpenStruct
-      .new(table) do |template_string|
+      .new(table, eager_render: eager_render) do |template_string|
       alces.render_string(template_string)
     end
   end
@@ -79,7 +79,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
           { key: 'value' },
         ],
       }
-      build_struct(table)
+      build_struct(table, eager_render: false)
     end
 
     it 'converts the hashes to own class' do
@@ -92,7 +92,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   end
 
   context 'when using an inherited class' do
-    subject { inherited_class.new(data) }
+    subject { inherited_class.new(data, eager_render: false) }
 
     let(:data) { { sub_hash: { key: 'value' } } }
     let(:inherited_class) do
@@ -111,9 +111,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
 
     context 'when eager_render passed when creating struct' do
       subject do
-        described_class.new(default_table, eager_render: true) do |template_string|
-          alces.render_string(template_string)
-        end
+        build_struct(default_table, eager_render: true)
       end
 
       it 'recursively renders all values in table up-front' do

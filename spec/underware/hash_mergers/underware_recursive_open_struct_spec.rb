@@ -103,4 +103,10 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
       expect(subject.sub_hash).to be_a(inherited_class)
     end
   end
+
+  describe '#to_h' do
+    it 'by default returns the originally passed in table' do
+      expect(subject.to_h).to eq(default_table)
+    end
+  end
 end

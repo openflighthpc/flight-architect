@@ -108,5 +108,28 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
     it 'by default returns the originally passed in table' do
       expect(subject.to_h).to eq(default_table)
     end
+
+    context 'when eager_render passed when creating struct' do
+      subject do
+        described_class.new(default_table, eager_render: true) do |template_string|
+          alces.render_string(template_string)
+        end
+      end
+
+      it 'recursively renders all values in table up-front' do
+        expect(subject.to_h).to eq(
+          {
+            key: 'value',
+            erb1: 'value',
+            erb2: 'value',
+            erb3: 'value',
+            erb4: 'value',
+            recursive_hash1: {
+              recursive_hash2: 'value',
+            },
+          }
+        )
+      end
+    end
   end
 end

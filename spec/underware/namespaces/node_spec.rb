@@ -43,7 +43,7 @@ RSpec.describe Underware::Namespaces::Node do
     let(:node_array) { ['some_other_node', node_name] }
 
     let(:config_hash) do
-      Underware::Constants::HASH_MERGER_DATA_STRUCTURE.new(
+      Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
         key: test_value,
         erb_value1: '<%= alces.node.config.key  %>'
       ) { |template_string| node.render_string(template_string) }

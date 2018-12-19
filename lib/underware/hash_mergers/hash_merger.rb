@@ -19,8 +19,7 @@ module Underware
 
       def merge(groups: [], node: nil, platform: nil, &templater_block)
         arr = hash_array(groups: groups, node: node, platform: platform)
-        Constants::HASH_MERGER_DATA_STRUCTURE
-          .new(combine_hashes(arr), &templater_block)
+        UnderwareRecursiveOpenStruct.new(combine_hashes(arr), &templater_block)
       end
 
       private

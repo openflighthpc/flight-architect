@@ -177,7 +177,7 @@ module Underware
       end
 
       def dynamic_hash(namespace)
-        Constants::HASH_MERGER_DATA_STRUCTURE.new(namespace) do |template|
+        HashMergers::UnderwareRecursiveOpenStruct.new(namespace) do |template|
           alces.render_string(template)
         end
       end

@@ -37,15 +37,19 @@ module Underware
 
       def validate_highline_answer_given(highline_question)
         # Do not override built-in HighLine validation for `agree` questions,
-        # which will already cause the question to be re-prompted until
-        # a valid answer is given (rather than just accepting any non-empty
-        # answer, as our `ensure_answer_given` does).
+        # which will already cause the question to be re-prompted until a valid
+        # answer is given (rather than just accepting any non-empty answer, as
+        # our validation below does).
         return if type.boolean?
 
         # The answer does not need to be given if there is a default or if
         # it is optional
         return if default || optional
-        highline_question.validate = ensure_answer_given
+
+        highline_question.validate = lambda { |input| !input.empty? }
+        # Override error shown when this validation fails (see
+        # https://www.rubydoc.info/github/JEG2/highline/master/HighLine%2FQuestion:responses).
+        highline_question.responses[:not_valid] = 'An answer is required for this question.'
       end
 
       def use_readline?
@@ -58,8 +62,18 @@ module Underware
       end
 
       def default_input
-        return human_readable_boolean_default if type.boolean?
-        default.nil? ? default : default.to_s
+        # For password questions we don't want to set a default on the HighLine
+        # question itself as:
+        # a. it will be an encrypted password from previous `configure`, and so
+        # useless/confusing to show to a user;
+        # b. `ask_password_question` handles changing or retaining a previous
+        # password itself as needed, without the re-encryption which would
+        # occur if we set the default to a previously encrypted password here.
+        case type.to_sym
+        when :boolean then human_readable_boolean_default
+        when :password then nil
+        else default&.to_s
+        end
       end
 
       # Default for a boolean question which has a previous answer should be
@@ -74,7 +88,11 @@ module Underware
       end
 
       def ask_choice_question
-        highline.choose(*choices) do |menu|
+        offer_choice_between(choices) { |q| yield q }
+      end
+
+      def offer_choice_between(possible_choices)
+        highline.choose(*possible_choices) do |menu|
           menu.prompt = question_text
           yield menu
         end
@@ -88,6 +106,71 @@ module Underware
         highline.ask(question_text) { |q| yield q }
       end
 
+      def ask_interface_question
+        if available_network_interfaces.length == 1
+          default_to_first_interface
+        else
+          offer_choice_between(available_network_interfaces) { |q| yield q }
+        end
+      end
+
+      def available_network_interfaces
+        @available_network_interfaces ||= Network.available_interfaces
+      end
+
+      def default_to_first_interface
+        available_network_interfaces.first.tap do |first_interface|
+          $stderr.puts <<~MESSAGE.strip_heredoc
+            #{question_text}
+            [Only one interface available, defaulting to '#{first_interface}']
+          MESSAGE
+        end
+      end
+
+      def ask_password_question
+        $stderr.puts existing_password_present_warning if default
+
+        loop do
+          password = ask_for_password(question_text)
+
+          # If no password entered and we have a default, just return this,
+          # which will (most likely) be an already encrypted password from
+          # previous `configure` that we want to keep.
+          return default if password.empty? && default
+
+          confirmation = ask_for_password('Confirm password:')
+
+          return encrypt_password(password) if password == confirmation
+          $stderr.puts 'Password and confirmation do not match - please try again.'
+        end
+      end
+
+      def existing_password_present_warning
+        <<~INFO.strip_heredoc
+          Password has already been configured - leave blank to keep or
+          enter new password to change.
+
+          WARNING: changing password could prevent access to nodes already
+          configured with current password.
+        INFO
+      end
+
+      def ask_for_password(prompt_text)
+        highline.ask(prompt_text) do |q|
+          configure_question(q)
+          q.echo = '*'
+        end
+      end
+
+      def encrypt_password(plaintext_password)
+        # Encrypt password with salt, in format expected by `/etc/shadow` (`$6`
+        # => use SHA-512). Relevant links:
+        # https://www.cyberciti.biz/faq/understanding-etcshadow-file/ and
+        # https://stackoverflow.com/a/5174746/2620402.
+        salt = SecureRandom.base64
+        plaintext_password.crypt("$6$#{salt}")
+      end
+
       def question_text
         "#{text.strip} #{progress_indicator}"
       end
@@ -95,26 +178,6 @@ module Underware
       def type
         value = question_node.type
         ActiveSupport::StringInquirer.new(value || 'string')
-      end
-
-      def ensure_answer_given
-        HighLinePrettyValidateProc.new('a non-empty input') do |input|
-          !input.empty?
-        end
-      end
-
-      class HighLinePrettyValidateProc < Proc
-        def initialize(print_message, &b)
-          # NOTE: print_message is prefaced with "must match" when used by
-          # HighLine validate
-          @print_message = print_message
-          super(&b)
-        end
-
-        # HighLine uses the result of inspect to generate the message to display
-        def inspect
-          @print_message
-        end
       end
     end
   end

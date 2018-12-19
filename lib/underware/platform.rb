@@ -1,4 +1,6 @@
 
+require 'ruby-progressbar'
+
 require 'underware/template'
 
 module Underware
@@ -8,19 +10,29 @@ module Underware
       Pathname.glob(platforms_glob).map do |config_path|
         name = config_path.basename.sub_ext('').to_s
         new(name)
-      end
+      end.sort_by(&:name)
     end
 
     def render_templates
       namespaces.each do |namespace|
         render_templates_for_namespace(namespace)
+        progress_bar.increment
       end
     end
 
     private
 
+    def progress_bar
+      @progress_bar ||=
+        ProgressBar.create(
+          title: name,
+          total: namespaces.length,
+          output: $stderr
+      )
+    end
+
     def namespaces
-       [alces.domain] + alces.groups + alces.nodes
+       @namespaces ||= [alces.domain] + alces.groups + alces.nodes
     end
 
     def alces

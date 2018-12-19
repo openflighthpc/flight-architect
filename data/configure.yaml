@@ -8,15 +8,13 @@ questions:
 
   - &root_password
     identifier: root_password
-    question: 'Password to use for root user (generate with `openssl passwd -1`)'
-
-  - &publickey
-    identifier: publickey
-    question: 'Public SSH key for the root user'
+    question: 'Password to use for root user'
+    type: password
 
   - &configured_build_interface
     identifier: configured_build_interface
     question: 'Interface of this machine that the cluster should be built on (will determine IP of this machine to use when templating)'
+    type: interface
 
   #
   # GROUPS
@@ -59,12 +57,17 @@ questions:
     question: 'Define a third network?'
     type: boolean
 
+  - &is_gateway
+    identifier: is_gateway
+    question: 'Use this machine as a gateway for network traffic?'
+    type: boolean
+    default: false
+
 
 domain:
   # BASE
   - *cluster_name
   - *root_password
-  - *publickey
   - *configured_build_interface
 
   # NETWORKS
@@ -82,6 +85,7 @@ group:
   - *network2_defined
   - *network3_defined
 
-node: []
+node:
+  - *is_gateway
 
 local: []

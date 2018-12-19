@@ -11,7 +11,7 @@ module Underware
         end
 
         def record_dir
-          FilePath.asset_dir
+          FilePath.assets_dir
         end
       end
     end

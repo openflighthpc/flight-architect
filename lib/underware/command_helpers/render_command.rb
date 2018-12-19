@@ -30,7 +30,16 @@ module Underware
       end
 
       def template_path
-        args.last
+        path_arg = Pathname.new(args.last)
+        path_arg.absolute? ? path_arg : working_directory.join(path_arg).to_s
+      end
+
+      def working_directory
+        # Working directory that user actually invoked Underware from will be
+        # `$OLDPWD` rather than `$PWD`, as we temporarily `cd` in the
+        # `underware` shell function in order to ensure a consistent
+        # environment (see `etc/profile.d/base.sh`).
+        Pathname.new(ENV.fetch('OLDPWD'))
       end
     end
   end

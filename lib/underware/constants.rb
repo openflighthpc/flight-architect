@@ -31,6 +31,7 @@ module Underware
 
     UNDERWARE_STORAGE_PATH = '/var/lib/underware'
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
+    KEYS_PATH = File.join(UNDERWARE_STORAGE_PATH, 'keys')
     RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
     RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
     GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')
@@ -62,8 +63,6 @@ module Underware
     CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
 
-    HASH_MERGER_DATA_STRUCTURE =
-      Underware::HashMergers::UnderwareRecursiveOpenStruct
 
     # This only exists for legacy purposes so we have a constant we can stub to
     # skip validations; ideally we would handle wanting to test things without

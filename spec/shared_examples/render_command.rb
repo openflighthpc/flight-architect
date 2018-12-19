@@ -48,4 +48,21 @@ RSpec.shared_examples 'render command' do |args|
       )
     end
   end
+
+  it 'attempts to render relative to working directory, when relative path passed' do
+    ENV['OLDPWD'] = '/some/working/dir'
+    command_args_with_relative_template = command_args.tap do |args_|
+      args_[-1] = 'relative/template'
+    end
+
+    # The specific type of namespace which is rendered against will depend on
+    # which command we are actually testing, but we can reasonably assume the
+    # correct one is rendered against in each case as this is covered by other
+    # tests, and just check the correct template path is passed here.
+    expect_any_instance_of(Underware::Namespaces::HashMergerNamespace)
+      .to receive(:render_file)
+      .with('/some/working/dir/relative/template')
+
+    run_command(*command_args_with_relative_template)
+  end
 end

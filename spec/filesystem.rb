@@ -50,52 +50,31 @@ class FileSystem
     def activate_plugin(plugin_name)
       Underware::Plugins.activate!(plugin_name)
     end
-
-    # Perform arbitrary other FileSystem setup.
-    # TODO Maybe everything/more things should be changed to just do this,
-    # rather than continuing to add new methods here every time we want to
-    # create a file in a new way?
-    def setup
-      yield
-    end
   end
   include SetupMethods
 
-  def self.root_setup
+  # XXX Now that all our tests run within a FakeFS environment, and we set this
+  # up via a single FileSystemConfigurator at a time (using
+  # `self.configurator`, below), having this method is possibly unnecessary
+  # indirection and we could simplify things by refactoring to just set files
+  # up directly in `before :each` blocks (would also then be able to remove
+  # `SetupMethods` above).
+  def self.setup
     FakeFS.without do
-      yield FileSystem.root_file_system_config
+      yield FileSystem.configurator
       FileSystem.test {} # Applies the changes
     end
   end
 
-  def self.root_file_system_config(reset: false)
-    @root_file_system_config = nil if reset
-    @root_file_system_config ||= FileSystemConfigurator.new
+  def self.configurator
+    @configurator ||= FileSystemConfigurator.new
   end
 
-  # Perform optional configuration of the `FileSystem` prior to a `test`. The
-  # yielded and returned `FileSystemConfigurator` caches any unknown method
-  # calls it receives. When `test` is later called on it, it runs
-  # `FileSystem#test` in the usual way but any cached `FileSystem` method calls
-  # will be executed prior to yielding the setup `FileSystem` to the
-  # user-passed block.
-  #
-  # Since there is a single global `FakeFS`, this has an advantage over running
-  # method calls to set this up directly as it prevents it from being in an
-  # inconsistent state, as well as ensuring the `FakeFS` is used only while the
-  # `FakeFS do` block is executing in `test`.
-  #
-  # XXX This has the disadvantage that for calls which fail the exception is
-  # not thrown from where the actual failing call is made; it could be worth
-  # actually running the methods to check this, and then replaying them afresh
-  # when `test` is run.
-  def self.setup(&block)
-    FileSystemConfigurator.new.tap do |configurator|
-      yield configurator if block
-    end
+  def self.reset_configurator
+    @configurator = nil
   end
 
-  def self.test(configurator = FileSystem.root_file_system_config)
+  def self.test
     # Ensure the FakeFS is in a fresh state. XXX needed?
     FakeFS.deactivate!
     FakeFS.clear!
@@ -148,7 +127,7 @@ class FileSystem
   # file to avoid actual questions being asked in tests.
   def with_minimal_configure_file
     File.write(
-      Underware::FilePath.configure_file,
+      Underware::FilePath.configure,
       minimal_configure_file_data
     )
   end
@@ -222,10 +201,6 @@ class FileSystem
       method_calls.each do |method|
         filesystem.send(method.name, *method.args, &method.block)
       end
-    end
-
-    def test(&block)
-      FileSystem.test(self, &block)
     end
 
     private

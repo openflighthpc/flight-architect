@@ -47,7 +47,6 @@ Resources:
       ImageId: !FindInMap ["RegionMap", !Ref "AWS::Region", "AMI"]
       InstanceType: t2.small
       Monitoring: true
-      KeyName: aws_ireland
       NetworkInterfaces:
 <% count=0; node.config.networks.each do |name,network| -%>
 <% if network.defined -%>
@@ -73,6 +72,9 @@ Resources:
               - "hostname: <%=name%>\n"
               - "fqdn: <%=node.config.networks.network1.hostname%>\n"
               - "runcmd:\n"
+<% unless (node.config.gateway rescue false) -%>
+              - "  - ip route replace default via <%= node.config.networks.network1.gateway %>\n"
+<% end -%>
               - "  - curl <%= node.config.nodescripturl %> | /bin/bash -x | tee /tmp/mainscript-default-output\n"
 
 <% if node.config.role == 'login' -%>
@@ -96,5 +98,10 @@ Outputs:
     Value: !Ref <%=node.name%>
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups
-    Value: <%=NodeattrInterface.genders_for_node(node).join(',') %>
+    Value: <%=NodeattrInterface.genders_for_node(node.name).join(',') %>
+<% if node.config.role == 'login' -%>
+  <%=node.name%>TAGIP:
+    Description: <%=node.name%>TAGIP
+    Value: !Ref <%=node.name%>publicIp
+<% end -%>
 <% end -%>

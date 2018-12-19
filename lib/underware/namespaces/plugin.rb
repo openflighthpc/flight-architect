@@ -22,6 +22,7 @@ module Underware
         @node_namespace = node
         @plugin = plugin
         alces = node.send(:alces)
+        @eager_render = alces.eager_render
         super(alces, plugin.name)
       end
 
@@ -31,8 +32,10 @@ module Underware
 
       private
 
+      attr_reader :eager_render
+
       def plugin_config_hash_merger
-        HashMergers::PluginConfig.new(plugin: plugin)
+        HashMergers::PluginConfig.new(plugin: plugin, eager_render: eager_render)
       end
 
       def hash_merger_input

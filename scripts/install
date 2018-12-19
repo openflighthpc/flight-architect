@@ -98,11 +98,29 @@ mkdir -p /var/lib/underware/plugins
 mkdir -p /var/lib/underware/answers/{groups,nodes}
 mkdir -p /var/lib/underware/assets
 mkdir -p /var/lib/underware/data
+keys_path=/var/lib/underware/keys
+mkdir -p "$keys_path"
 
 mkdir -p "${target}"
 cp -R "${source}/"{Gemfile,Gemfile.lock,underware.gemspec,bin,etc,libexec,lib,data} "${target}"
 cp ${source}/etc/logrotate.d/* /etc/logrotate.d/
 say_done $?
+
+title 'Generating cluster key pair'
+doing 'Generate'
+private_key_path="$keys_path"/id_rsa
+if [ -f "$private_key_path" ]; then
+  toggle_spin
+  echo '[33mALREADY EXISTS - SKIPPING[0m'
+else
+  # `-N ""` => generated key pair doesn't have a passphrase.
+  # `< /dev/zero` => do nothing if key pair already exists at this path (rather
+  # than prompting for user input; this shouldn't matter in practise though
+  # since we check file presence above, but worth doing just in case so install
+  # doesn't hang).
+  ssh-keygen -N "" -f "$keys_path"/id_rsa < /dev/zero > /dev/null
+  say_done $?
+fi
 
 for dep in ${deps}; do
     source "${source}/scripts/dependencies/${dep}.sh"

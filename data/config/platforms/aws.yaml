@@ -1,0 +1,7 @@
+networks:
+  network1:
+    interface: eth0
+  network2:
+    interface: eth1
+  network3:
+    interface: eth2

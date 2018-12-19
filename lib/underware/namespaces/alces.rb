@@ -28,7 +28,7 @@ module Underware
       EOF
 
       delegate :config, :answer, to: :scope
-      attr_reader :platform
+      attr_reader :platform, :eager_render
       alias_method :alces, :itself
 
       class << self
@@ -49,8 +49,9 @@ module Underware
         end
       end
 
-      def initialize(platform: nil)
+      def initialize(platform: nil, eager_render: false)
         @platform = platform&.to_sym
+        @eager_render = eager_render
         @stacks_hash = {}
       end
 
@@ -146,8 +147,8 @@ module Underware
       #
       def hash_mergers
         @hash_mergers ||= begin
-          OpenStruct.new(config: HashMergers::Config.new,
-                         answer: HashMergers::Answer.new(alces))
+          OpenStruct.new(config: HashMergers::Config.new(eager_render: eager_render),
+                         answer: HashMergers::Answer.new(alces, eager_render: eager_render))
         end
       end
 
@@ -177,7 +178,9 @@ module Underware
       end
 
       def dynamic_hash(namespace)
-        Constants::HASH_MERGER_DATA_STRUCTURE.new(namespace) do |template|
+        HashMergers::UnderwareRecursiveOpenStruct.new(
+          namespace, eager_render: eager_render
+        ) do |template|
           alces.render_string(template)
         end
       end
@@ -224,7 +227,7 @@ module Underware
         else
           # Default to first network interface if `build_interface` has not
           # been configured by user.
-          Network.interfaces.first
+          Network.available_interfaces.first
         end
       end
     end

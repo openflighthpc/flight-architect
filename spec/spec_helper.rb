@@ -147,14 +147,14 @@ RSpec.configure do |config|
   config.around do |example|
     # Run every test using `FakeFS`, this prevents us polluting the real file
     # system
-    FileSystem.test(FileSystem.root_file_system_config) do
+    FileSystem.test do
       example.run
     end
   end
 
   # Resets the filesystem after each test
   config.after do
-    FileSystem.root_file_system_config(reset: true)
+    FileSystem.reset_configurator
   end
 
   # Make our test helper functions available in all tests.

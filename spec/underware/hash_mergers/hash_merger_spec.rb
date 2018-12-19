@@ -80,11 +80,13 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   let :merged_namespace do
-    hm = Underware::HashMergers
-    OpenStruct.new(
-      config: hm::Config.new.merge(**hash_input, &:itself),
-      answer: hm::Answer.new(alces).merge(**hash_input, &:itself)
-    )
+    config = Underware::HashMergers::Config
+      .new(eager_render: false)
+      .merge(**hash_input, &:itself)
+    answer = Underware::HashMergers::Answer
+      .new(alces, eager_render: false)
+      .merge(**hash_input, &:itself)
+    OpenStruct.new(config: config, answer: answer)
   end
 
   RSpec.shared_examples 'it handles merging config, with and without platform specified' do

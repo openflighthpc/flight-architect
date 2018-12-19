@@ -9,22 +9,24 @@ require 'underware/constants'
 module Underware
   module HashMergers
     class HashMerger
-      # NOTE: `_args` argument is needed so child classes can take arguments
-      # and then call `super`, though this class does not need arguments
-      # itself.
-      def initialize(*_args)
+      # NOTE: `_args` argument is needed so child classes can take their own
+      # arguments and then call `super`.
+      def initialize(*_args, eager_render:)
         @loader = Validation::Loader.new
         @cache = {}
+        @eager_render = eager_render
       end
 
       def merge(groups: [], node: nil, platform: nil, &templater_block)
         arr = hash_array(groups: groups, node: node, platform: platform)
-        UnderwareRecursiveOpenStruct.new(combine_hashes(arr), &templater_block)
+        UnderwareRecursiveOpenStruct.new(
+          combine_hashes(arr), eager_render: eager_render, &templater_block
+        )
       end
 
       private
 
-      attr_reader :loader, :cache
+      attr_reader :loader, :cache, :eager_render
 
       # Method to be overridden with the hash defaults
       def defaults

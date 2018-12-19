@@ -44,8 +44,11 @@ RSpec.describe Underware::Namespaces::Node do
 
     let(:config_hash) do
       Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
-        key: test_value,
-        erb_value1: '<%= alces.node.config.key  %>'
+        {
+          key: test_value,
+          erb_value1: '<%= alces.node.config.key  %>'
+        },
+        eager_render: alces.eager_render
       ) { |template_string| node.render_string(template_string) }
     end
 

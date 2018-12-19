@@ -21,15 +21,17 @@ module Underware
 
         def data
           @data ||= begin
-            HashMergers::UnderwareRecursiveOpenStruct.new(load_file) do |str|
-              if str[0] == '^'
-                other_asset_name = str[1..-1]
-                alces.assets.find_by_name(other_asset_name)
-              else
-                str
-              end
-            end
-          end
+                      HashMergers::UnderwareRecursiveOpenStruct.new(
+                        load_file, eager_render: alces.eager_render
+                      ) do |str|
+                        if str[0] == '^'
+                          other_asset_name = str[1..-1]
+                          alces.assets.find_by_name(other_asset_name)
+                        else
+                          str
+                        end
+                      end
+                    end
         end
 
         private

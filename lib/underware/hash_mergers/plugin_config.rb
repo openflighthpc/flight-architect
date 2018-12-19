@@ -6,9 +6,9 @@ require 'underware/hash_mergers/hash_merger'
 module Underware
   module HashMergers
     class PluginConfig < HashMerger
-      def initialize(plugin:)
+      def initialize(plugin:, eager_render:)
         @plugin = plugin
-        super
+        super(eager_render: eager_render)
       end
 
       private

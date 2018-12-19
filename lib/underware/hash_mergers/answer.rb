@@ -6,7 +6,7 @@ require 'underware/hash_mergers/hash_merger'
 module Underware
   module HashMergers
     class Answer < HashMerger
-      def initialize(alces)
+      def initialize(alces, eager_render:)
         @alces = alces
         super
       end

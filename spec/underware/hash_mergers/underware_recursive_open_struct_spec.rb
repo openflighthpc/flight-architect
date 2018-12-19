@@ -22,14 +22,16 @@ end
 RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   let(:alces) do
     namespace = Underware::Namespaces::Alces.new
-    allow(namespace).to receive(:testing).and_return(build_default_hash)
+    allow(namespace).to receive(:testing).and_return(subject)
     namespace
   end
 
-  let(:struct) { build_default_hash }
+  let(:subject) do
+    build_struct(default_table, eager_render: false)
+  end
 
-  def build_default_hash
-    my_hash = {
+  let :default_table do
+    {
       key: 'value',
       erb1: '<%= alces.testing.key %>',
       erb2: '<%= alces.testing.erb1 %>',
@@ -39,46 +41,45 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
         recursive_hash2: '<%= alces.testing.key %>',
       },
     }
-    build_hash(my_hash)
   end
 
-  def build_hash(my_hash)
+  def build_struct(table, eager_render:)
     Underware::HashMergers::UnderwareRecursiveOpenStruct
-      .new(my_hash) do |template_string|
+      .new(table, eager_render: eager_render) do |template_string|
       alces.render_string(template_string)
     end
   end
 
   it 'does a single ERB replacement' do
-    expect(struct.erb1).to eq('value')
+    expect(subject.erb1).to eq('value')
   end
 
   it 'can replace multiple embedded erb' do
-    expect(struct.erb4).to eq('value')
+    expect(subject.erb4).to eq('value')
   end
 
   it 'can loop through the entire structure' do
-    struct.each do |key, value|
+    subject.each do |key, value|
       next if value.is_a? described_class
-      exp = struct.send(key)
+      exp = subject.send(key)
       msg = "#{key} was not rendered, expected: '#{exp}', got: '#{value}'"
       expect(exp).to eq(value), msg
     end
   end
 
   it 'renderes parameters in a recursive hash' do
-    expect(struct.recursive_hash1.recursive_hash2).to eq('value')
+    expect(subject.recursive_hash1.recursive_hash2).to eq('value')
   end
 
   context 'with array of hashes' do
     let(:array_of_hashes) do
-      my_hash = {
+      table = {
         array: [
           { key: 'value' },
           { key: 'value' },
         ],
       }
-      build_hash(my_hash)
+      build_struct(table, eager_render: false)
     end
 
     it 'converts the hashes to own class' do
@@ -91,7 +92,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
   end
 
   context 'when using an inherited class' do
-    subject { inherited_class.new(data) }
+    subject { inherited_class.new(data, eager_render: false) }
 
     let(:data) { { sub_hash: { key: 'value' } } }
     let(:inherited_class) do
@@ -100,6 +101,33 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
 
     it 'returns sub hashes of that class' do
       expect(subject.sub_hash).to be_a(inherited_class)
+    end
+  end
+
+  describe '#to_h' do
+    it 'by default returns the originally passed in table' do
+      expect(subject.to_h).to eq(default_table)
+    end
+
+    context 'when eager_render passed when creating struct' do
+      subject do
+        build_struct(default_table, eager_render: true)
+      end
+
+      it 'recursively renders all values in table up-front' do
+        expect(subject.to_h).to eq(
+          {
+            key: 'value',
+            erb1: 'value',
+            erb2: 'value',
+            erb3: 'value',
+            erb4: 'value',
+            recursive_hash1: {
+              recursive_hash2: 'value',
+            },
+          }
+        )
+      end
     end
   end
 end

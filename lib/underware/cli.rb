@@ -23,9 +23,19 @@
 #==============================================================================
 
 require 'bundler/setup'
-require 'active_support/all'
 require 'commander'
 require 'colorize'
+
+# Require just parts of ActiveSupport that we use throughout Underware - do not
+# just `require 'active_support/all'` as this can cause surprising issues due
+# to unexpected monkey-patching, e.g.
+# https://github.com/alces-software/underware/issues/40.
+require 'active_support/core_ext/hash'
+require 'active_support/core_ext/module/delegation'
+require 'active_support/core_ext/object/deep_dup'
+require 'active_support/core_ext/string/strip'
+require 'active_support/inflector'
+require 'active_support/string_inquirer'
 
 require 'underware/config'
 require 'underware/cli_helper/parser'

@@ -207,9 +207,9 @@ module Underware
       end
 
       def hash_object(h = {})
-        Underware::Constants::HASH_MERGER_DATA_STRUCTURE.new(h) do |str|
-          str
-        end
+        Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
+          h, eager_render: alces.eager_render
+        ) { |str| str }
       end
     end
   end

@@ -63,8 +63,6 @@ module Underware
     CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
 
-    HASH_MERGER_DATA_STRUCTURE =
-      Underware::HashMergers::UnderwareRecursiveOpenStruct
 
     # This only exists for legacy purposes so we have a constant we can stub to
     # skip validations; ideally we would handle wanting to test things without

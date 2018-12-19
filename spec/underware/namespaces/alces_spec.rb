@@ -19,11 +19,14 @@ RSpec.describe Underware::Namespaces::Alces do
     Underware::AlcesUtils.mock self, :each do
       define_method_testing do
         Underware::HashMergers::UnderwareRecursiveOpenStruct.new(
-          key: 'value',
-          embedded_key: '<%= alces.testing.key %>',
-          infinite_value1: '<%= alces.testing.infinite_value2 %>',
-          infinite_value2: '<%= alces.testing.infinite_value1 %>',
-          false_key: false
+          {
+            key: 'value',
+            embedded_key: '<%= alces.testing.key %>',
+            infinite_value1: '<%= alces.testing.infinite_value2 %>',
+            infinite_value2: '<%= alces.testing.infinite_value1 %>',
+            false_key: false
+          },
+          eager_render: alces.eager_render
         ) do |template_string|
           alces.render_string(template_string)
         end

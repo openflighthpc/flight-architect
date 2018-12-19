@@ -6,9 +6,10 @@ module Underware
     class UnderwareRecursiveOpenStruct
       include Enumerable
 
-      def initialize(table = {}, &input_block)
-        @convert_string_block = input_block || proc { |s| s }
+      def initialize(table, eager_render:, &input_block)
         @table = table
+        @eager_render = eager_render
+        @convert_string_block = input_block || proc { |s| s }
       end
 
       delegate :key?, to: :table
@@ -38,7 +39,7 @@ module Underware
       end
 
       def to_h
-        table
+        eager_render? ? eager_rendered_to_h : table
       end
 
       def to_json(*_a)
@@ -47,19 +48,30 @@ module Underware
 
       private
 
-      attr_reader :table, :convert_string_block
+      attr_reader :table, :eager_render, :convert_string_block
+      alias_method :eager_render?, :eager_render
 
       def convert_value(value)
         case value
         when String
           convert_string_block.call(value)
         when Hash
-          self.class.new(value, &convert_string_block)
+          self.class.new(
+            value, eager_render: eager_render, &convert_string_block
+          )
         when Array
           value.map { |arg| convert_value(arg) }
         else
           value
         end
+      end
+
+      def eager_rendered_to_h
+        table.map do |k, v|
+          converted = convert_value(v)
+          converted = converted.to_h if converted.is_a?(self.class)
+          [k, converted]
+        end.to_h
       end
     end
   end

@@ -94,7 +94,10 @@ module Underware
       end
 
       def alces
-        @alces ||= Namespaces::Alces.new(platform: platform_option)
+        @alces ||= Namespaces::Alces.new(
+          platform: platform_option,
+          eager_render: options.render
+        )
       end
 
       def platform_option

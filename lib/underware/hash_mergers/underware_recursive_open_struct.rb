@@ -7,8 +7,8 @@ module Underware
       include Enumerable
 
       def initialize(table, &input_block)
-        @convert_string_block = input_block || proc { |s| s }
         @table = table
+        @convert_string_block = input_block || proc { |s| s }
       end
 
       delegate :key?, to: :table

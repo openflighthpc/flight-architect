@@ -6,7 +6,7 @@ module Underware
     class UnderwareRecursiveOpenStruct
       include Enumerable
 
-      def initialize(table = {}, &input_block)
+      def initialize(table, &input_block)
         @convert_string_block = input_block || proc { |s| s }
         @table = table
       end

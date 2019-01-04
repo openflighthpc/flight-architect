@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -43,6 +43,7 @@ module Underware
       def dump(data_file, data)
         raise dump_error(data) unless valid_data?(data)
         yaml = data.deep_transform_keys(&:to_s).to_yaml
+        FileUtils.mkdir_p(File.dirname(data_file))
         File.write(data_file, yaml)
         log.info "dump: #{data_file}"
       end

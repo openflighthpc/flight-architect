@@ -39,6 +39,7 @@ module Underware
       end
 
       def start(args, options)
+        global_setup(options)
         pre_setup(args, options)
         setup
         post_setup
@@ -53,9 +54,12 @@ module Underware
 
       attr_reader :args, :options
 
-      def pre_setup(args, options)
+      def global_setup(options)
         setup_global_log_options(options)
         log_command
+      end
+
+      def pre_setup(args, options)
         @args = args
         @options = options
       end

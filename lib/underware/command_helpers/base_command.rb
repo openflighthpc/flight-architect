@@ -33,7 +33,12 @@ require 'underware/namespaces/alces'
 module Underware
   module CommandHelpers
     class BaseCommand
-      def initialize(args, options)
+      def initialize(args = [], options = nil, noop: false)
+        options ||= Commander::Command::Options.new
+        start(args, options) unless noop
+      end
+
+      def start(args, options)
         pre_setup(args, options)
         setup
         post_setup

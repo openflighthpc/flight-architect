@@ -41,6 +41,7 @@ module Underware
         full_new_genders_content = ManagedFile.content(
           FilePath.genders, rendered_genders_content
         )
+        FileUtils.mkdir_p(File.dirname(FilePath.genders))
         File.write(FilePath.genders, full_new_genders_content)
       end
 

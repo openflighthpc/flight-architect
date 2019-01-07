@@ -29,6 +29,7 @@ module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
       LOGIN_GROUP = 'login'
+      NODES_GROUP = 'nodes'
 
       private
 
@@ -38,6 +39,7 @@ module Underware
         # Run the domain configuration
         configure_domain
         configure_login_group
+        configure_nodes_group
         configure_login_nodes
         template
       end
@@ -51,6 +53,12 @@ module Underware
       def configure_login_group
         new_command(Configure::Group).run!(
           [LOGIN_GROUP], load_answer_options("groups/#{LOGIN_GROUP}.yaml")
+        )
+      end
+
+      def configure_nodes_group
+        new_command(Configure::Group).run!(
+          [NODES_GROUP], load_answer_options("groups/#{NODES_GROUP}.yaml")
         )
       end
 

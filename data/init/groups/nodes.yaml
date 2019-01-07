@@ -1,0 +1,3 @@
+---
+hostname_range: node[01-10]
+role: compute

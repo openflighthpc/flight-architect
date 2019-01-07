@@ -30,7 +30,14 @@ module Underware
 
       def setup; end
 
-      def run; end
+      def run
+        # Run the domain configuration
+        configure_domain
+      end
+
+      def configure_domain
+        Configure::Domain.new(noop: true).run!([], self.class.options)
+      end
     end
   end
 end

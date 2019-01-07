@@ -52,13 +52,13 @@ module Underware
 
       def configure_login_group
         new_command(Configure::Group).run!(
-          [LOGIN_GROUP], load_answer_options("groups/#{LOGIN_GROUP}.yaml")
+          [LOGIN_GROUP], load_answers_options("groups/#{LOGIN_GROUP}.yaml")
         )
       end
 
       def configure_nodes_group
         new_command(Configure::Group).run!(
-          [NODES_GROUP], load_answer_options("groups/#{NODES_GROUP}.yaml")
+          [NODES_GROUP], load_answers_options("groups/#{NODES_GROUP}.yaml")
         )
       end
 
@@ -66,7 +66,7 @@ module Underware
         reset_alces
         alces.groups.login.nodes.each do |node|
           new_command(Configure::Node).run!(
-            [node.name], load_answer_options("nodes/gateway.yaml")
+            [node.name], load_answers_options("nodes/gateway.yaml")
           )
         end
       end
@@ -80,7 +80,7 @@ module Underware
         klass.new(noop: true, alces: alces)
       end
 
-      def load_answer_options(relative_path)
+      def load_answers_options(relative_path)
         data = Data.load(FilePath.init_data(relative_path))
         json = JSON.dump(data)
         options = self.class.options

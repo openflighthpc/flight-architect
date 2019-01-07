@@ -38,8 +38,8 @@ module Underware
       def run
         # Run the domain configuration
         configure_domain
-        configure_login_group
-        configure_nodes_group
+        configure_group(LOGIN_GROUP)
+        configure_group(NODES_GROUP)
         configure_login_nodes
         template
       end
@@ -50,15 +50,9 @@ module Underware
         new_command(Configure::Domain).run!([], self.class.options)
       end
 
-      def configure_login_group
+      def configure_group(name)
         new_command(Configure::Group).run!(
-          [LOGIN_GROUP], load_answers_options("groups/#{LOGIN_GROUP}.yaml")
-        )
-      end
-
-      def configure_nodes_group
-        new_command(Configure::Group).run!(
-          [NODES_GROUP], load_answers_options("groups/#{NODES_GROUP}.yaml")
+          [name], load_answers_options("groups/#{name}.yaml")
         )
       end
 

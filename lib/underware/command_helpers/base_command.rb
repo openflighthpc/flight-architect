@@ -40,14 +40,18 @@ module Underware
 
       def start(args, options)
         global_setup(options)
-        pre_setup(args, options)
-        setup
-        post_setup
-        run
+        run!(args, options)
       rescue Interrupt => e
         handle_interrupt(e)
       rescue IntentionallyCatchAnyException => e
         handle_fatal_exception(e)
+      end
+
+      def run!(args, options)
+        pre_setup(args, options)
+        setup
+        post_setup
+        run
       end
 
       private

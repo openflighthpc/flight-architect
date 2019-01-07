@@ -39,6 +39,7 @@ module Underware
         configure_domain
         configure_login_group
         configure_login_nodes
+        template
       end
 
       private
@@ -60,6 +61,11 @@ module Underware
             [node.name], load_answer_options("nodes/gateway.yaml")
           )
         end
+      end
+
+      def template
+        reset_alces
+        new_command(Template).run!([], self.class.options)
       end
 
       def new_command(klass)

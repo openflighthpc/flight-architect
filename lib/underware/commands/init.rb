@@ -23,9 +23,13 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
+require 'json'
+
 module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
+      LOGIN_GROUP = 'login'
+
       private
 
       def setup; end
@@ -33,10 +37,31 @@ module Underware
       def run
         # Run the domain configuration
         configure_domain
+        configure_login_group
       end
 
+      private
+
       def configure_domain
-        Configure::Domain.new(noop: true).run!([], self.class.options)
+        new_command(Configure::Domain).run!([], self.class.options)
+      end
+
+      def configure_login_group
+        new_command(Configure::Group).run!(
+          [LOGIN_GROUP], load_answer_options("groups/#{LOGIN_GROUP}.yaml")
+        )
+      end
+
+      def new_command(klass)
+        klass.new(noop: true, alces: alces)
+      end
+
+      def load_answer_options(relative_path)
+        data = Data.load(FilePath.init_data(relative_path))
+        json = JSON.dump(data)
+        options = self.class.options
+        options.default({ answers: json })
+        options
       end
     end
   end

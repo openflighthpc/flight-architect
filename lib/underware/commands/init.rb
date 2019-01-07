@@ -38,6 +38,7 @@ module Underware
         # Run the domain configuration
         configure_domain
         configure_login_group
+        configure_login_nodes
       end
 
       private
@@ -50,6 +51,15 @@ module Underware
         new_command(Configure::Group).run!(
           [LOGIN_GROUP], load_answer_options("groups/#{LOGIN_GROUP}.yaml")
         )
+      end
+
+      def configure_login_nodes
+        reset_alces
+        alces.groups.login.nodes.each do |node|
+          new_command(Configure::Node).run!(
+            [node.name], load_answer_options("nodes/gateway.yaml")
+          )
+        end
       end
 
       def new_command(klass)

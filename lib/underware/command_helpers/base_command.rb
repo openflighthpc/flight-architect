@@ -120,6 +120,10 @@ module Underware
         )
       end
 
+      def reset_alces
+        @alces = nil
+      end
+
       def platform_option
         platform = options.platform
         return unless platform

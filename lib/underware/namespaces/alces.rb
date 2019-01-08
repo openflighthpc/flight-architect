@@ -55,11 +55,12 @@ module Underware
         @stacks_hash = {}
       end
 
-      # NOTE: This is a temporary stop gap measure that allows the cluster
-      # name to be accessed off `alces`
-      # TODO: Remove the dependency off the `config`
+      # NOTE: This can't use the actual clustername as it hasn't been
+      # configured correctly in all the specs. However there is not point
+      # writing the answer as this is going to change in the future
+      # TODO: set this during initialize
       def cluster_name
-        domain.config.cluster
+        'dumby-cluster-for-refactoring-purposes'
       end
 
       def domain

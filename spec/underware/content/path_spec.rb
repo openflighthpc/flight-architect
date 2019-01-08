@@ -26,15 +26,23 @@
 require 'underware/content/path'
 
 RSpec.describe Underware::Content::Path do
-  describe '#base' do
+  context 'with a cluster' do
     let(:cluster_name) { 'my-cluster' }
     let(:base_path) do
       File.join(Underware::Constants::UNDERWARE_STORAGE_PATH, cluster_name)
     end
     subject { described_class.new(cluster: cluster_name) }
 
-    it 'points to the "var" directory' do
-      expect(subject.base).to eq(base_path)
+    describe '#base' do
+      it 'points to the "var" directory' do
+        expect(subject.base).to eq(base_path)
+      end
+    end
+
+    describe '#templates.dir' do
+      it 'returns the templates dir' do
+        expect(subject.templates.dir).to eq(File.join(base_path, 'templates'))
+      end
     end
   end
 end

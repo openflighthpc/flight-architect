@@ -26,8 +26,11 @@
 module Underware
   module Content
     class Path
+      attr_reader :templates
+
       def initialize(cluster:)
         @cluster = cluster
+        @templates = Templates.new(self)
       end
 
       def base
@@ -37,6 +40,12 @@ module Underware
       private
 
       attr_reader :cluster
+
+      Templates = Struct.new(:paths) do
+        def dir
+          File.join(paths.base, 'templates')
+        end
+      end
     end
   end
 end

@@ -25,6 +25,7 @@
 require 'underware/command_helpers/base_command'
 require 'underware/configurator'
 require 'underware/managed_file'
+require 'underware/content/path'
 
 module Underware
   module CommandHelpers
@@ -36,7 +37,9 @@ module Underware
         # The genders file must be templated with a new namespace object as the
         # answers may have changed since they where loaded
         new_alces = Namespaces::Alces.new
-        template = new_alces.paths.templates.genders
+        template = Content::Path.new(cluster: new_alces.cluster_name)
+                                .templates
+                                .genders
         rendered_genders_content = new_alces.render_file(template)
         full_new_genders_content = ManagedFile.content(
           FilePath.genders, rendered_genders_content

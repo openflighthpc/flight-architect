@@ -131,7 +131,7 @@ module Underware
     end
 
     def loader
-      @loader ||= Validation::Loader.new
+      @loader ||= Validation::Loader.new(cluster)
     end
 
     def primary_groups_hash

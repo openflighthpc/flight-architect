@@ -101,7 +101,7 @@ module Underware
       end
 
       def loader
-        @loader ||= Validation::Loader.new
+        @loader ||= Validation::Loader.new(alces.cluster_name)
       end
 
       def command_name

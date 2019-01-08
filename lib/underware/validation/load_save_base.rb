@@ -30,6 +30,10 @@ require 'underware/data'
 module Underware
   module Validation
     class LoadSaveBase
+      def initialize(cluster)
+        @cluster = cluster
+      end
+
       def domain_answers
         answer(FilePath.domain_answers, :domain)
       end
@@ -74,7 +78,7 @@ module Underware
 
       private
 
-      attr_reader :config
+      attr_reader :config, :cluster
 
       def answer(_absolute_path, _section)
         raise NotImplementedError

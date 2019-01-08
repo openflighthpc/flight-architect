@@ -57,7 +57,7 @@ module Underware
                 :group_cache
 
     def loader
-      @loader ||= Validation::Loader.new
+      @loader ||= Validation::Loader.new(alces.cluster_name)
     end
 
     def saver

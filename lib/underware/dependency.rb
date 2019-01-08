@@ -137,7 +137,7 @@ module Underware
     end
 
     def loader
-      @loader ||= Validation::Loader.new
+      @loader ||= Validation::Loader.new(cluster)
     end
   end
 end

@@ -28,10 +28,11 @@ require 'underware/spec/alces_utils'
 RSpec.describe Underware::GroupCache do
   include Underware::AlcesUtils
 
+  let(:cluster_name) { 'my-cluster' }
   let(:cache) { new_cache }
 
   def new_cache
-    Underware::GroupCache.new
+    Underware::GroupCache.new(cluster_name)
   end
 
   before :each do
@@ -161,7 +162,7 @@ RSpec.describe Underware::GroupCache do
 
   describe '#update' do
     it 'yields the group cache' do
-      described_class.update do |cache|
+      described_class.update(cluster_name) do |cache|
         expect(cache).to be_a(described_class)
       end
     end
@@ -169,12 +170,12 @@ RSpec.describe Underware::GroupCache do
     it 'does not save if there is an error' do
       group = 'my-new-group'
       expect do
-        described_class.update do |cache|
+        described_class.update(cluster_name) do |cache|
           cache.add group
           raise 'something has gone wrong'
         end
       end.to raise_error(RuntimeError)
-      expect(described_class.new.group?(group)).to eq false
+      expect(described_class.new(cluster_name).group?(group)).to eq false
     end
   end
 end

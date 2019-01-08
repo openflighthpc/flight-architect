@@ -35,11 +35,11 @@ RSpec.describe Underware::Commands::Configure::Group do
   end
 
   def update_cache
-    Underware::GroupCache.update { |c| yield c }
+    Underware::GroupCache.update(alces.cluster_name) { |c| yield c }
   end
 
   def new_cache
-    Underware::GroupCache.new
+    Underware::GroupCache.new(alces.cluster_name)
   end
 
   before do

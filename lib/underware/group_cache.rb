@@ -41,10 +41,14 @@ module Underware
   class GroupCache
     include Enumerable
 
-    def self.update
-      cache = new
+    def self.update(*a)
+      cache = new(*a)
       yield cache
       cache.save
+    end
+
+    def initialize(cluster)
+      @cluster = cluster
     end
 
     def group?(group)
@@ -107,6 +111,8 @@ module Underware
     end
 
     private
+
+    attr_reader :cluster
 
     def data
       @data ||= load_data

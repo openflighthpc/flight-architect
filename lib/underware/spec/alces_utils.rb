@@ -203,7 +203,9 @@ module Underware
       end
 
       def group_cache
-        Underware::GroupCache.update { |c| yield c }
+        Underware::GroupCache.update(alces.cluster_name) do |cache|
+          yield cache
+        end
       end
 
       def hash_object(h = {})

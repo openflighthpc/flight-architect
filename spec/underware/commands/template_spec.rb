@@ -1,5 +1,7 @@
 
 RSpec.describe Underware::Commands::Template do
+  let(:cluster_name) { 'my-test-cluster' }
+
   def run_command
     Underware::AlcesUtils.redirect_std(:stderr) do
       Underware::Utils.run_command(described_class)
@@ -94,7 +96,9 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all platform files for each group (including orphan group)' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::GroupCache.update(cluster_name) do |cache|
+      cache.add(:user_configured_group)
+    end
     create_template 'platform_x/group/some/path/x_template'
     create_template 'platform_y/group/some/path/y_template'
 
@@ -127,7 +131,9 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all content files for each group, for each platform' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::GroupCache.update(cluster_name) do |cache|
+      cache.add(:user_configured_group)
+    end
     create_template 'content/group/some/path/shared_template'
 
     run_command

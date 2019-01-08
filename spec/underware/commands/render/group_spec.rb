@@ -6,7 +6,7 @@ RSpec.describe Underware::Commands::Render::Group do
   include_context 'render command'
 
   before :each do
-    Underware::GroupCache.update do |cache|
+    Underware::GroupCache.update(cluster_name) do |cache|
       cache.add(test_group_name)
     end
   end

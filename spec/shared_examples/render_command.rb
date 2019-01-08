@@ -1,5 +1,7 @@
 
 RSpec.shared_examples 'render command' do |args|
+  let(:cluster_name) { 'my-test-cluster' }
+
   def run_command(*args)
     Underware::AlcesUtils.redirect_std(:stdout) do
       Underware::Utils.run_command(

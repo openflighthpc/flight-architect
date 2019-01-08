@@ -541,7 +541,7 @@ RSpec.describe Underware::Configurator do
     let(:configure_orphan) { described_class.for_node(alces, orphan) }
 
     def new_group_cache
-      Underware::GroupCache.new
+      Underware::GroupCache.new(alces.cluster_name)
     end
 
     before do

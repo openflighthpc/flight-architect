@@ -31,18 +31,17 @@ module Underware
       class Group < CommandHelpers::BaseCommand
         def setup
           @primary_group = args[0]
-          @cache = GroupCache.new
         end
 
         def run
           delete_answer_files
-          GroupCache.update { |c| c.remove(primary_group) }
+          GroupCache.update(alces.cluster_name) { |c| c.remove(primary_group) }
           CommandHelpers::ConfigureCommand.render_genders
         end
 
         private
 
-        attr_reader :primary_group, :cache
+        attr_reader :primary_group
 
         def dependency_hash
           {

@@ -48,7 +48,7 @@ module Underware
         end
 
         def custom_configuration
-          GroupCache.update { |c| c.add group_name }
+          GroupCache.update(alces.cluster_name) { |c| c.add group_name }
         end
       end
     end

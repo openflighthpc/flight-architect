@@ -222,7 +222,7 @@ module Underware
       end
 
       def group_cache
-        @group_cache ||= GroupCache.new
+        @group_cache ||= GroupCache.new(cluster_name)
       end
 
       def loader

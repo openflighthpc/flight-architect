@@ -42,7 +42,7 @@ module Underware
     end
 
     def configure(answers = nil)
-      GroupCache.update do |cache|
+      GroupCache.update(alces.cluster_name) do |cache|
         @group_cache = cache
         answers ||= ask_questions
         save_answers(answers)

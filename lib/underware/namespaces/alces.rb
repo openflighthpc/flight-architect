@@ -16,6 +16,8 @@ require 'underware/hash_mergers.rb'
 require 'underware/underware_log'
 Underware::Utils::DynamicRequire.relative('.')
 
+require 'underware/content/path'
+
 module Underware
   module Namespaces
     class Alces
@@ -53,6 +55,10 @@ module Underware
         @platform = platform&.to_sym
         @eager_render = eager_render
         @stacks_hash = {}
+      end
+
+      def paths
+        @paths ||= Content::Path.new(cluster: cluster_name)
       end
 
       # NOTE: This is a temporary stop gap measure that allows the cluster

@@ -95,7 +95,8 @@ module Underware
       def enforce_dependency
         Dependency.new(
           command_input: command_name,
-          dependency_hash: dependency_hash
+          dependency_hash: dependency_hash,
+          cluster: alces.cluster_name
         ).enforce
       end
 

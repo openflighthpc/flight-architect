@@ -34,12 +34,14 @@ require 'underware/spec/alces_utils'
 RSpec.describe Underware::Dependency do
   include Underware::AlcesUtils
 
+  let(:cluster_name) { 'my-cluster' }
   let(:command_input) { 'test' }
 
   def enforce_dependencies(dependency_hash)
     Underware::Dependency.new(
       command_input: command_input,
-      dependency_hash: dependency_hash
+      dependency_hash: dependency_hash,
+      cluster: cluster_name
     ).enforce
   end
 

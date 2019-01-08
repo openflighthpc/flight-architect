@@ -27,11 +27,12 @@ require 'underware/validation/loader'
 
 module Underware
   class Dependency
-    def initialize(command_input:, dependency_hash: {})
+    def initialize(cluster:, command_input:, dependency_hash: {})
       @dependency_hash = dependency_hash
       @optional_dependency_hash = @dependency_hash.delete(:optional)
       @optional_dependency_hash ||= {}
       @command = command_input
+      @cluster = cluster
     end
 
     def enforce
@@ -41,7 +42,7 @@ module Underware
 
     private
 
-    attr_reader :command
+    attr_reader :command, :cluster
 
     def run_dependencies(dep_hash, optional = false)
       dep_hash.each do |dep, values|

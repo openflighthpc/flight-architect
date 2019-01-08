@@ -55,6 +55,13 @@ module Underware
         @stacks_hash = {}
       end
 
+      # NOTE: This is a temporary stop gap measure that allows the cluster
+      # name to be accessed off `alces`
+      # TODO: Remove the dependency off the `config`
+      def cluster_name
+        domain.config.cluster
+      end
+
       def domain
         @domain ||= Namespaces::Domain.new(alces)
       end

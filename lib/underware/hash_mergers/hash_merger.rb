@@ -9,9 +9,8 @@ require 'underware/constants'
 module Underware
   module HashMergers
     class HashMerger
-      # NOTE: `_args` argument is needed so child classes can take their own
-      # arguments and then call `super`.
-      def initialize(*_args, eager_render:)
+      def initialize(alces, eager_render:)
+        @alces = alces
         @loader = Validation::Loader.new
         @cache = {}
         @eager_render = eager_render
@@ -26,7 +25,7 @@ module Underware
 
       private
 
-      attr_reader :loader, :cache, :eager_render
+      attr_reader :loader, :cache, :eager_render, :alces
 
       # Method to be overridden with the hash defaults
       def defaults

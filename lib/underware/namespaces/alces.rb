@@ -155,7 +155,7 @@ module Underware
       #
       def hash_mergers
         @hash_mergers ||= begin
-          OpenStruct.new(config: HashMergers::Config.new(eager_render: eager_render),
+          OpenStruct.new(config: HashMergers::Config.new(alces, eager_render: eager_render),
                          answer: HashMergers::Answer.new(alces, eager_render: eager_render))
         end
       end

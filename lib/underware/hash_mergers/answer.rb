@@ -6,14 +6,7 @@ require 'underware/hash_mergers/hash_merger'
 module Underware
   module HashMergers
     class Answer < HashMerger
-      def initialize(alces, eager_render:)
-        @alces = alces
-        super
-      end
-
       private
-
-      attr_reader :alces
 
       def defaults
         alces.questions.root_defaults

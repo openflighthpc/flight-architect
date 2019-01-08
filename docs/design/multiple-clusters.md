@@ -133,3 +133,41 @@ can only change which additional groups it belongs to.
 The genders file is no longer used internally any more. However it might be used
 eternally so it needs to rendered during the `template` stage
 
+## Support Multiple Clusters
+
+The existing `FilePath` method does not work with multiple clusters as it acts
+as a global. However as everything relies on it, it can not be easily removed.
+
+Instead the `FilePath` is going to go through a staged removal. This section
+focuses on setting it up to work with a particular cluster in mind.
+
+### Step 1: Copy the over the cluster data during init
+
+The `init` process is responsible for creating a new cluster:
+
+1. Accept a `cluster_identifier` from the CLI
+2. Save it into `/var/lib/underware/etc/config.yaml`
+3. Copy the `data` directory from `/v/l/u/<cluster_identifier>`
+4. Forget that you have copied the data and continue using the original location
+   of the files for the time being
+
+### Step 2: Create the `DataPath` class
+
+This is class will be the replacement to `FilePath` for all paths that are
+cluster specific. It needs to be initialized with a cluster.
+
+1. Create the class initializing it with a cluster
+2. Create a `cache` class method that caches an instance with the current
+   `cluster_indetifier`
+3. Delegate missing methods on `FilePath` to the cached version of `DataPath`
+
+### Step 3: Move all the cluster data paths across to `DataPath`
+
+1. Move all cluster path methods onto `DataPath`, using delegation to handle
+   the move
+2. Update them to point to the new directory
+
+### Step 4: Add a command to switch the current cluster
+
+TBD
+

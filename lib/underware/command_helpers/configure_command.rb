@@ -36,7 +36,7 @@ module Underware
         # The genders file must be templated with a new namespace object as the
         # answers may have changed since they where loaded
         new_alces = Namespaces::Alces.new
-        template = FilePath.genders_template
+        template = new_alces.paths.templates.genders
         rendered_genders_content = new_alces.render_file(template)
         full_new_genders_content = ManagedFile.content(
           FilePath.genders, rendered_genders_content

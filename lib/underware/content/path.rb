@@ -45,6 +45,10 @@ module Underware
         def dir
           File.join(paths.base, 'templates')
         end
+
+        def genders
+          File.join(FilePath.templates_dir, 'genders')
+        end
       end
     end
   end

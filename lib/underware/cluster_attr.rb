@@ -35,9 +35,11 @@ module Underware
       def update(*a)
         new(*a).tap do |attr|
           attr.__data__.read unless attr.__data__.source_file.nil?
+          yield attr if block_given?
           attr.__data__.write(force: true)
         end
       end
+      alias_method :load, :update
     end
 
     attr_reader :cluster, :__data__

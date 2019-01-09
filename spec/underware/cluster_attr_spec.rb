@@ -58,6 +58,12 @@ RSpec.describe Underware::ClusterAttr do
       expect(described_class.update(subject.cluster)).to be_a(described_class)
     end
 
+    it 'updates the config for future reference' do
+      new_group = 'my-new-group'
+      described_class.update(subject.cluster) { |a| a.add_group(new_group) }
+      expect(described_class.load(subject.cluster).raw_groups).to include(new_group)
+    end
+
     describe 'with an existing group' do
       include_context 'with a ClusterAttr instance'
       include_context 'with the first group'

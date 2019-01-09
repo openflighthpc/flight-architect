@@ -87,4 +87,7 @@ module Underware
 
   class ExistingNodeError < UserUnderwareError
   end
+
+  class ExistingGroupError < UserUnderwareError
+  end
 end

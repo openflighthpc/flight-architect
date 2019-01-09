@@ -65,6 +65,7 @@ module Underware
     end
 
     def add_group(group_name)
+      raise_error_if_group_exists(group_name)
       config.append(group_name, to: :groups)
     end
 
@@ -84,6 +85,14 @@ module Underware
       if config.fetch(:nodes, node)
         raise ExistingNodeError, <<~ERROR
           Failed to add node as it already exists: '#{node}'
+        ERROR
+      end
+    end
+
+    def raise_error_if_group_exists(group)
+      if config.fetch(:groups).include?(group)
+        raise ExistingGroupError, <<~ERROR
+          Failed to add group as it already exists: '#{group}'
         ERROR
       end
     end

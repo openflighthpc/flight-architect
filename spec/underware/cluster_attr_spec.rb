@@ -68,6 +68,14 @@ RSpec.describe Underware::ClusterAttr do
     include_context 'with a ClusterAttr instance'
     include_context 'with the first group'
 
+    describe '#add_group' do
+      it 'errors when adding an existing group' do
+        expect do
+          subject.add_group(first_group)
+        end.to raise_error(Underware::ExistingGroupError)
+      end
+    end
+
     describe '#raw_groups' do
       it 'contains the group' do
         expect(subject.raw_groups).to include(first_group)

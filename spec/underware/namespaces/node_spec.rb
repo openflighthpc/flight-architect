@@ -67,6 +67,10 @@ RSpec.describe Underware::Namespaces::Node do
       allow(Underware::HashMergers::Answer).to receive(:new)
         .and_return(answer_double)
 
+      Underware::ClusterAttr.update('something') do |attr|
+        node_array.each { |n| attr.add_nodes(n) }
+      end
+
       ##
       # Spoofs the results of NodeattrInterface
       #
@@ -74,8 +78,6 @@ RSpec.describe Underware::Namespaces::Node do
         receive(:genders_for_node).and_return(['primary_group'])
       allow(Underware::NodeattrInterface).to \
         receive(:nodes_in_gender).and_return(node_array)
-      allow(Underware::NodeattrInterface).to \
-        receive(:all_nodes).and_return(node_array)
 
       # Spoofs the hostip
       use_mock_determine_hostip_script
@@ -97,7 +99,7 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node.group.index).to eq(primary_group_index)
     end
 
-    xit 'can determine the node index' do
+    it 'can determine the node index' do
       expect(node.index).to eq(2)
     end
 

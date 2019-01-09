@@ -230,6 +230,11 @@ commands:
     options:
       - *gender_option
 
+  init: &init
+    syntax: underware init [options]
+    summary: Create a basic cluster configuration
+    action: Commands::Init
+
   layout:
     syntax: underware layout [SUB_COMMAND] [options]
     summary: Manage the layout record files

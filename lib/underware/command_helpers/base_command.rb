@@ -33,24 +33,44 @@ require 'underware/namespaces/alces'
 module Underware
   module CommandHelpers
     class BaseCommand
-      def initialize(args, options)
-        pre_setup(args, options)
-        setup
-        post_setup
-        run
+      def self.options
+        Commander::Command::Options.new
+      end
+
+      def initialize(args = [], options = nil, noop: false, alces: nil)
+        @alces ||= alces
+        unless noop
+          options ||= self.class.options
+          start(args, options)
+        end
+      end
+
+      def start(args, options)
+        global_setup(options)
+        run!(args, options)
       rescue Interrupt => e
         handle_interrupt(e)
       rescue IntentionallyCatchAnyException => e
         handle_fatal_exception(e)
       end
 
+      def run!(args, options)
+        pre_setup(args, options)
+        setup
+        post_setup
+        run
+      end
+
       private
 
       attr_reader :args, :options
 
-      def pre_setup(args, options)
+      def global_setup(options)
         setup_global_log_options(options)
         log_command
+      end
+
+      def pre_setup(args, options)
         @args = args
         @options = options
       end
@@ -98,6 +118,10 @@ module Underware
           platform: platform_option,
           eager_render: options.render
         )
+      end
+
+      def reset_alces
+        @alces = nil
       end
 
       def platform_option

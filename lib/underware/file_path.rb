@@ -152,6 +152,10 @@ module Underware
         File.join(keys, 'id_rsa')
       end
 
+      def init_data(relative_path)
+        File.join(internal_data_dir, 'init', relative_path)
+      end
+
       private
 
       def record(record_dir, types_dir, name)

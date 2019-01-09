@@ -31,8 +31,6 @@ RSpec.describe Underware::ClusterAttr do
   end
 
   shared_context 'with the first group' do
-    include_context 'with a ClusterAttr instance'
-
     let(:first_group) { 'my-first-group' }
     before { subject.add_group(first_group) }
   end
@@ -67,6 +65,7 @@ RSpec.describe Underware::ClusterAttr do
   end
 
   context 'when adding a single group' do
+    include_context 'with a ClusterAttr instance'
     include_context 'with the first group'
 
     describe '#raw_groups' do
@@ -88,16 +87,55 @@ RSpec.describe Underware::ClusterAttr do
     end
   end
 
-  context 'when adding nodes to the first group' do
-    include_context 'with the first group'
+  context 'when adding nodes' do
+    include_context 'with a ClusterAttr instance'
 
     let(:node_str) { 'node[01-10]' }
     let(:nodes) { described_class.expand(node_str) }
-    before { subject.add_nodes(node_str) }
 
-    describe '#raw_nodes' do
-      it 'returns the node list' do
-        expect(subject.raw_nodes).to contain_exactly(*nodes)
+    before do
+      if node_groups
+        subject.add_nodes(node_str, groups: node_groups)
+      else
+        subject.add_nodes(node_str)
+      end
+    end
+
+    context 'without any groups' do
+      let(:node_groups) { nil }
+
+      describe '#raw_nodes' do
+        it 'returns the node list' do
+          expect(subject.raw_nodes).to contain_exactly(*nodes)
+        end
+      end
+
+      describe '#groups_for_node' do
+        it 'returns an empty array' do
+          expect(subject.groups_for_node(nodes.first)).to eq([])
+        end
+      end
+    end
+
+    context 'when adding them to the first group' do
+      include_context 'with the first group'
+
+      let(:node_groups) { first_group }
+
+      describe '#groups_for_node' do
+        it 'returns an array of the group' do
+          expect(subject.groups_for_node(nodes.first)).to contain_exactly(first_group)
+        end
+      end
+    end
+
+    context 'when adding multiple missing groups' do
+      let(:node_groups) { ['missing1', 'missing2'] }
+
+      describe '#groups_for_node' do
+        it 'returns the missing groups in the correct order' do
+          expect(subject.groups_for_node(nodes.last)).to eq(node_groups)
+        end
       end
     end
   end

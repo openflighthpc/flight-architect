@@ -45,7 +45,7 @@ module Underware
 
     def setup
       config.set_if_empty(:groups, value: ['orphan'])
-      config.set_if_empty(:nodes, value: [])
+      config.set_if_empty(:nodes, value: {})
     end
 
     def raw_groups
@@ -53,20 +53,26 @@ module Underware
     end
 
     def raw_nodes
-      config.fetch(:nodes)
+      config.fetch(:nodes).keys
     end
 
     def group_index(group)
       raw_groups.find_index(group)
     end
 
+    def groups_for_node(node)
+      config.fetch(:nodes, node)
+    end
+
     def add_group(group_name)
       config.append(group_name, to: :groups)
     end
 
-    def add_nodes(node_string)
-      node_array = self.class.expand(node_string)
-      config.append(*node_array, to: :nodes)
+    def add_nodes(node_string, groups: [])
+      groups = Array.wrap(groups)
+      self.class.expand(node_string).each do |node|
+        config.set(:nodes, node, value: groups)
+      end
     end
 
     private

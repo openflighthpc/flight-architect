@@ -40,6 +40,7 @@ module Underware
       @config = TTY::Config.new
       config.prepend_path(FilePath.internal_data_dir)
       config.filename = 'cluster-attributes'
+      config.set_if_empty(:groups, value: ['orphan'])
     end
 
     def raw_groups

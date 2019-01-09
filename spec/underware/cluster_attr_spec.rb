@@ -39,6 +39,14 @@ RSpec.describe Underware::ClusterAttr do
     end
   end
 
+  context 'without any additional groups' do
+    include_context 'with a ClusterAttr instance'
+
+    it 'contains the orphan group' do
+      expect(subject.raw_groups).to include('orphan')
+    end
+  end
+
   context 'when adding a single group' do
     include_context 'with a ClusterAttr instance'
 

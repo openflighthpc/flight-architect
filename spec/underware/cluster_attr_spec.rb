@@ -57,6 +57,18 @@ RSpec.describe Underware::ClusterAttr do
     it 'returns the instance' do
       expect(described_class.update(subject.cluster)).to be_a(described_class)
     end
+
+    describe 'with an existing group' do
+      include_context 'with a ClusterAttr instance'
+      include_context 'with the first group'
+
+      before { subject.__data__.write }
+
+      it 'preserves the existing data' do
+        new_attr = described_class.update(subject.cluster)
+        expect(new_attr.raw_groups).to eq(subject.raw_groups)
+      end
+    end
   end
 
   context 'without any additional groups' do

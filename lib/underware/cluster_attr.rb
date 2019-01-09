@@ -33,8 +33,9 @@ module Underware
       end
 
       def update(*a)
-        new(*a).tap do |cluster_attr|
-          cluster_attr.__data__.write
+        new(*a).tap do |attr|
+          attr.__data__.read unless attr.__data__.source_file.nil?
+          attr.__data__.write(force: true)
         end
       end
     end

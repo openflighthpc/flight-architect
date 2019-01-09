@@ -23,11 +23,11 @@ RSpec.shared_examples \
       answer(subject, test_answer)
     end
 
-    xit 'converts the config into a hash' do
+    it 'converts the config into a hash' do
       expect(subject.to_h[:config]).to eq(test_config)
     end
 
-    xit 'converts the answer into a hash' do
+    it 'converts the answer into a hash' do
       expect(subject.to_h[:answer]).to eq(test_answer)
     end
   end

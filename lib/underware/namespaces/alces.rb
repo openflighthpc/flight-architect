@@ -55,6 +55,10 @@ module Underware
         @stacks_hash = {}
       end
 
+      def cluster_identifier
+        'placeholder-cluster-identifier'
+      end
+
       def domain
         @domain ||= Namespaces::Domain.new(alces)
       end

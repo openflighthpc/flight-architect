@@ -32,8 +32,9 @@ module Underware
         'cluster-attributes'
       end
 
-      def expand(nodes_string)
-        Expand.explode_nodes(nodes_string)
+      def expand(nodes)
+        # Do not expand single nodes as the libray can not handle it
+        nodes.include?('[') ? Expand.explode_nodes(nodes) : [nodes]
       end
 
       def update(*a)

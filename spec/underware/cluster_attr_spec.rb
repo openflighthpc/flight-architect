@@ -42,6 +42,11 @@ RSpec.describe Underware::ClusterAttr do
                       .push('node10')
       expect(described_class.expand(node_str)).to contain_exactly(*nodes)
     end
+
+    it 'can expand a single node' do
+      node = 'node01'
+      expect(described_class.expand(node)).to contain_exactly(node)
+    end
   end
 
   describe '::update' do

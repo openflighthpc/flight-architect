@@ -70,6 +70,12 @@ module Underware
       __data__.fetch(:nodes).keys
     end
 
+    def groups_hash
+      raw_groups.map do |group|
+        [group, group_index(group)]
+      end.to_h
+    end
+
     def group_index(group)
       raw_groups.find_index(group)
     end

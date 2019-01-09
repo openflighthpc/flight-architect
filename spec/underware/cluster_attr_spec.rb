@@ -131,6 +131,12 @@ RSpec.describe Underware::ClusterAttr do
         expect(subject.group_index(first_group)).to eq(1)
       end
     end
+
+    describe '#groups_hash' do
+      it 'returns key-value pairs of names to indices' do
+        expect(subject.groups_hash).to include(first_group => 1, 'orphan' => 0)
+      end
+    end
   end
 
   context 'when adding nodes' do

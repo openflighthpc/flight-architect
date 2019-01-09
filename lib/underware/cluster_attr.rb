@@ -71,6 +71,7 @@ module Underware
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
       self.class.expand(node_string).each do |node|
+        raise_error_if_node_exists(node)
         config.set(:nodes, node, value: groups)
       end
     end
@@ -78,5 +79,13 @@ module Underware
     private
 
     attr_reader :config
+
+    def raise_error_if_node_exists(node)
+      if config.fetch(:nodes, node)
+        raise ExistingNodeError, <<~ERROR
+          Failed to add node as it already exists: '#{node}'
+        ERROR
+      end
+    end
   end
 end

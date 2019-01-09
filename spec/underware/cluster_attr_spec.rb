@@ -92,6 +92,7 @@ RSpec.describe Underware::ClusterAttr do
 
     let(:node_str) { 'node[01-10]' }
     let(:nodes) { described_class.expand(node_str) }
+    let(:node_groups) { nil }
 
     before do
       if node_groups
@@ -101,9 +102,15 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
-    context 'without any groups' do
-      let(:node_groups) { nil }
+    describe '#add_nodes' do
+      it 'errors if a node is re-added' do
+        expect do
+          subject.add_nodes(node_str)
+        end.to raise_error(Underware::ExistingNodeError)
+      end
+    end
 
+    context 'without any groups' do
       describe '#raw_nodes' do
         it 'returns the node list' do
           expect(subject.raw_nodes).to contain_exactly(*nodes)

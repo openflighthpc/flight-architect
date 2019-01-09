@@ -44,6 +44,21 @@ RSpec.describe Underware::ClusterAttr do
     end
   end
 
+  describe '::update' do
+    include_context 'with a ClusterAttr instance'
+
+    let(:path) { subject.config.source_file }
+
+    it 'writes the file if it does not already exist' do
+      described_class.update(subject.cluster)
+      expect(File.exists?(path)).to be true
+    end
+
+    it 'returns the instance' do
+      expect(described_class.update(subject.cluster)).to be_a(described_class)
+    end
+  end
+
   context 'without any additional groups' do
     include_context 'with a ClusterAttr instance'
 

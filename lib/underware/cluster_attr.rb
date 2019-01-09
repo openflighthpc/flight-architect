@@ -31,9 +31,15 @@ module Underware
       def expand(nodes_string)
         Expand.explode_nodes(nodes_string)
       end
+
+      def update(*a)
+        new(*a).tap do |cluster_attr|
+          cluster_attr.config.write
+        end
+      end
     end
 
-    attr_reader :cluster
+    attr_reader :cluster, :config
 
     def initialize(cluster)
       @cluster = cluster
@@ -78,8 +84,6 @@ module Underware
     end
 
     private
-
-    attr_reader :config
 
     def raise_error_if_node_exists(node)
       if config.fetch(:nodes, node)

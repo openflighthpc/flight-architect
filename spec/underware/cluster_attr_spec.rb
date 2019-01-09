@@ -70,7 +70,7 @@ RSpec.describe Underware::ClusterAttr do
     include_context 'with the first group'
 
     describe '#raw_groups' do
-      it 'adds the group' do
+      it 'contains the group' do
         expect(subject.raw_groups).to include(first_group)
       end
     end
@@ -84,6 +84,20 @@ RSpec.describe Underware::ClusterAttr do
     describe '#group_index' do
       it 'returns 1 for the first group' do
         expect(subject.group_index(first_group)).to eq(1)
+      end
+    end
+  end
+
+  context 'when adding nodes to the first group' do
+    include_context 'with the first group'
+
+    let(:node_str) { 'node[01-10]' }
+    let(:nodes) { described_class.expand(node_str) }
+    before { subject.add_nodes(node_str) }
+
+    describe '#raw_nodes' do
+      it 'returns the node list' do
+        expect(subject.raw_nodes).to contain_exactly(*nodes)
       end
     end
   end

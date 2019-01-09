@@ -40,7 +40,12 @@ module Underware
       @config = TTY::Config.new
       config.prepend_path(FilePath.internal_data_dir)
       config.filename = 'cluster-attributes'
+      setup
+    end
+
+    def setup
       config.set_if_empty(:groups, value: ['orphan'])
+      config.set_if_empty(:nodes, value: [])
     end
 
     def raw_groups
@@ -48,7 +53,7 @@ module Underware
     end
 
     def raw_nodes
-      []
+      config.fetch(:nodes)
     end
 
     def group_index(group)
@@ -57,6 +62,11 @@ module Underware
 
     def add_group(group_name)
       config.append(group_name, to: :groups)
+    end
+
+    def add_nodes(node_string)
+      node_array = self.class.expand(node_string)
+      config.append(*node_array, to: :nodes)
     end
 
     private

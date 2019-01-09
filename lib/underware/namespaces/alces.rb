@@ -114,6 +114,10 @@ module Underware
         @asset_cache ||= Underware::Cache::Asset.new
       end
 
+      def cluster_attr
+        @cluster_attr ||= ClusterAttr.load(cluster_identifier)
+      end
+
       def node
         raise ScopeError, NODE_ERROR unless scope.is_a? Namespaces::Node
         scope
@@ -214,10 +218,6 @@ module Underware
 
       def wrapped_binding
         Templating::NilDetectionWrapper.wrap(self)
-      end
-
-      def cluster_attr
-        @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end
 
       def loader

@@ -34,32 +34,32 @@ module Underware
 
       def update(*a)
         new(*a).tap do |cluster_attr|
-          cluster_attr.config.write
+          cluster_attr.__data__.write
         end
       end
     end
 
-    attr_reader :cluster, :config
+    attr_reader :cluster, :__data__
 
     def initialize(cluster)
       @cluster = cluster
-      @config = TTY::Config.new
-      config.prepend_path(FilePath.internal_data_dir)
-      config.filename = 'cluster-attributes'
+      @__data__ = TTY::Config.new
+      __data__.prepend_path(FilePath.internal_data_dir)
+      __data__.filename = 'cluster-attributes'
       setup
     end
 
     def setup
-      config.set_if_empty(:groups, value: ['orphan'])
-      config.set_if_empty(:nodes, value: {})
+      __data__.set_if_empty(:groups, value: ['orphan'])
+      __data__.set_if_empty(:nodes, value: {})
     end
 
     def raw_groups
-      config.fetch(:groups)
+      __data__.fetch(:groups)
     end
 
     def raw_nodes
-      config.fetch(:nodes).keys
+      __data__.fetch(:nodes).keys
     end
 
     def group_index(group)
@@ -67,26 +67,26 @@ module Underware
     end
 
     def groups_for_node(node)
-      config.fetch(:nodes, node)
+      __data__.fetch(:nodes, node)
     end
 
     def add_group(group_name)
       raise_error_if_group_exists(group_name)
-      config.append(group_name, to: :groups)
+      __data__.append(group_name, to: :groups)
     end
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
       self.class.expand(node_string).each do |node|
         raise_error_if_node_exists(node)
-        config.set(:nodes, node, value: groups)
+        __data__.set(:nodes, node, value: groups)
       end
     end
 
     private
 
     def raise_error_if_node_exists(node)
-      if config.fetch(:nodes, node)
+      if __data__.fetch(:nodes, node)
         raise ExistingNodeError, <<~ERROR
           Failed to add node as it already exists: '#{node}'
         ERROR
@@ -94,7 +94,7 @@ module Underware
     end
 
     def raise_error_if_group_exists(group)
-      if config.fetch(:groups).include?(group)
+      if __data__.fetch(:groups).include?(group)
         raise ExistingGroupError, <<~ERROR
           Failed to add group as it already exists: '#{group}'
         ERROR

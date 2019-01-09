@@ -47,7 +47,7 @@ RSpec.describe Underware::ClusterAttr do
   describe '::update' do
     include_context 'with a ClusterAttr instance'
 
-    let(:path) { subject.config.source_file }
+    let(:path) { subject.__data__.source_file }
 
     it 'writes the file if it does not already exist' do
       described_class.update(subject.cluster)

@@ -25,12 +25,29 @@
 require 'underware/cluster_attr'
 
 RSpec.describe Underware::ClusterAttr do
+  shared_context 'with a ClusterAttr instance' do
+    let(:cluster_name) { 'my-test-cluster' }
+    subject { described_class.new(cluster_name) }
+  end
+
   describe '::expand' do
     it 'can expand multiple nodes' do
       node_str = 'node[01-10]'
       nodes = (1...10).map { |i| "node0#{i}" }
                       .push('node10')
       expect(described_class.expand(node_str)).to contain_exactly(*nodes)
+    end
+  end
+
+  context 'when adding a single group' do
+    include_context 'with a ClusterAttr instance'
+
+    let(:first_group) { 'my-first-group' }
+
+    before { subject.add_group(first_group) }
+
+    it 'adds the group' do
+      expect(subject.raw_groups).to include(first_group)
     end
   end
 end

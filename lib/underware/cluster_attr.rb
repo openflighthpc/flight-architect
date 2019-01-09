@@ -23,6 +23,7 @@
 #==============================================================================
 
 require 'underware/cluster_attr/expand'
+require 'tty/config'
 
 module Underware
   class ClusterAttr
@@ -36,12 +37,21 @@ module Underware
 
     def initialize(cluster)
       @cluster = cluster
+      @config = TTY::Config.new
+      config.prepend_path(FilePath.internal_data_dir)
+      config.filename = 'cluster-attributes'
+    end
+
+    def raw_groups
+      config.fetch(:groups)
+    end
+
+    def add_group(group_name)
+      config.append(group_name, to: :groups)
     end
 
     private
 
-    def path
-      File.join(FilePath.internal_data_dir, 'cluster_attributes.yaml')
-    end
+    attr_reader :config
   end
 end

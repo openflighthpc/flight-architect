@@ -28,6 +28,10 @@ require 'tty/config'
 module Underware
   class ClusterAttr
     class << self
+      def filename
+        'cluster-attributes'
+      end
+
       def expand(nodes_string)
         Expand.explode_nodes(nodes_string)
       end
@@ -48,7 +52,7 @@ module Underware
       @cluster = cluster
       @__data__ = TTY::Config.new
       __data__.prepend_path(FilePath.internal_data_dir)
-      __data__.filename = 'cluster-attributes'
+      __data__.filename = self.class.filename
       setup
     end
 

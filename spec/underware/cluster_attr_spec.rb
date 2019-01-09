@@ -25,4 +25,12 @@
 require 'underware/cluster_attr'
 
 RSpec.describe Underware::ClusterAttr do
+  describe '::expand' do
+    it 'can expand multiple nodes' do
+      node_str = 'node[01-10]'
+      nodes = (1...10).map { |i| "node0#{i}" }
+                      .push('node10')
+      expect(described_class.expand(node_str)).to contain_exactly(*nodes)
+    end
+  end
 end

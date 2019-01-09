@@ -53,6 +53,9 @@ require 'underware/cli'
 require 'underware/spec/spec_utils'
 require 'filesystem'
 
+require 'pry'
+require 'pry-byebug'
+
 FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
 

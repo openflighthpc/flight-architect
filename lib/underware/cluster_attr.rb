@@ -22,8 +22,16 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
+require 'underware/cluster_attr/expand'
+
 module Underware
   class ClusterAttr
+    class << self
+      def expand(nodes_string)
+        Expand.explode_nodes(nodes_string)
+      end
+    end
+
     attr_reader :cluster
 
     def initialize(cluster)

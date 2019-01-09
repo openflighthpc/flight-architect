@@ -82,7 +82,7 @@ RSpec.describe Underware::ClusterAttr do
     end
   end
 
-  context 'without any additional groups' do
+  context 'without any additional groups or nodes' do
     include_context 'with a ClusterAttr instance'
 
     describe '#raw_groups' do
@@ -98,6 +98,12 @@ RSpec.describe Underware::ClusterAttr do
 
       it 'returns 0 for the orphan group' do
         expect(subject.group_index('orphan')).to eq(0)
+      end
+    end
+
+    describe '#orphans' do
+      it 'is an empty array' do
+        expect(subject.orphans).to eq([])
       end
     end
   end
@@ -170,8 +176,14 @@ RSpec.describe Underware::ClusterAttr do
       end
 
       describe '#groups_for_node' do
-        it 'returns an empty array' do
-          expect(subject.groups_for_node(nodes.first)).to eq([])
+        it 'is placed in the orphan group' do
+          expect(subject.groups_for_node(nodes.first)).to eq(['orphan'])
+        end
+      end
+
+      describe '#orphans' do
+        it 'includes the nodes' do
+          expect(subject.orphans).to contain_exactly(*nodes)
         end
       end
     end

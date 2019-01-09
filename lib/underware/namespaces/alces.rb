@@ -99,7 +99,7 @@ module Underware
       end
 
       def orphan_list
-        @orphan_list ||= group_cache.orphans
+        @orphan_list ||= cluster_attr.orphans
       end
 
       def questions

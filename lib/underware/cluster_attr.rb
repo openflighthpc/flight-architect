@@ -91,10 +91,16 @@ module Underware
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
+      groups.push 'orphan' if groups.empty?
       self.class.expand(node_string).each do |node|
         raise_error_if_node_exists(node)
         __data__.set(:nodes, node, value: groups)
       end
+    end
+
+    def orphans
+      __data__.fetch(:nodes).select { |_, groups| groups.include?('orphan') }
+                            .keys
     end
 
     private

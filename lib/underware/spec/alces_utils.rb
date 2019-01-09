@@ -147,6 +147,7 @@ module Underware
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
         ClusterAttr.update(alces.cluster_identifier) do |attr|
+          genders.push AlcesUtils.default_group if genders.empty?
           attr.add_nodes(name, groups: genders)
         end
         raise_if_node_exists(name)

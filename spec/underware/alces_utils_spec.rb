@@ -160,7 +160,7 @@ RSpec.describe Underware::AlcesUtils do
       it 'errors if the node already exists' do
         expect do
           described_class.mock(self) { mock_node(name) }
-        end.to raise_error(Underware::InternalError)
+        end.to raise_error(Underware::ExistingNodeError)
       end
 
       it 'uses the genders input' do

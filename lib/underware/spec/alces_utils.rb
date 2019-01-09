@@ -145,6 +145,9 @@ module Underware
       # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
+        ClusterAttr.update(alces.cluster_identifier) do |attr|
+          attr.add_nodes(name, groups: genders)
+        end
         raise_if_node_exists(name)
         add_node_to_genders_file(name, *genders)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
@@ -156,6 +159,7 @@ module Underware
 
       def mock_group(name)
         AlcesUtils.check_and_raise_fakefs_error
+        ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
         group_cache { |c| c.add(name) }
         alces.instance_variable_set(:@groups, nil)
         alces.instance_variable_set(:@group_cache, nil)

@@ -29,5 +29,11 @@ module Underware
     def initialize(cluster)
       @cluster = cluster
     end
+
+    private
+
+    def path
+      File.join(FilePath.internal_data_dir, 'cluster_attributes.yaml')
+    end
   end
 end

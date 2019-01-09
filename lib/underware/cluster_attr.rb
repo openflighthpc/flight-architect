@@ -37,6 +37,12 @@ module Underware
         nodes.include?('[') ? Expand.explode_nodes(nodes) : [nodes]
       end
 
+      # TODO: Actually collapse the nodes array instead of joining them
+      # as a single string
+      def collapse(*nodes)
+        nodes.flatten.join(',')
+      end
+
       def update(*a)
         new(*a).tap do |attr|
           attr.__data__.read unless attr.__data__.source_file.nil?

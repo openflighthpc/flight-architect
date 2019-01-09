@@ -23,9 +23,7 @@ module Underware
       end
 
       def hostlist_nodes
-        @short_nodes_string ||= begin
-          NodeattrInterface.hostlist_nodes_in_gender(name)
-        end
+        Underware::ClusterAttr.collapse(*nodes.map(&:name))
       end
 
       private

@@ -47,6 +47,10 @@ module Underware
       config.fetch(:groups)
     end
 
+    def group_index(group)
+      raw_groups.find_index(group)
+    end
+
     def add_group(group_name)
       config.append(group_name, to: :groups)
     end

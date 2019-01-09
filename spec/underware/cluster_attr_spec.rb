@@ -42,8 +42,20 @@ RSpec.describe Underware::ClusterAttr do
   context 'without any additional groups' do
     include_context 'with a ClusterAttr instance'
 
-    it 'contains the orphan group' do
-      expect(subject.raw_groups).to include('orphan')
+    describe '#raw_groups' do
+      it 'contains the orphan group' do
+        expect(subject.raw_groups).to include('orphan')
+      end
+    end
+
+    describe '#group_index' do
+      it 'returns nil for missing groups' do
+        expect(subject.group_index('some-missing-group')).to eq(nil)
+      end
+
+      it 'returns 0 for the orphan group' do
+        expect(subject.group_index('orphan')).to eq(0)
+      end
     end
   end
 
@@ -54,8 +66,16 @@ RSpec.describe Underware::ClusterAttr do
 
     before { subject.add_group(first_group) }
 
-    it 'adds the group' do
-      expect(subject.raw_groups).to include(first_group)
+    describe '#raw_groups' do
+      it 'adds the group' do
+        expect(subject.raw_groups).to include(first_group)
+      end
+    end
+
+    describe '#group_index' do
+      it 'returns 1 for the first group' do
+        expect(subject.group_index(first_group)).to eq(1)
+      end
     end
   end
 end

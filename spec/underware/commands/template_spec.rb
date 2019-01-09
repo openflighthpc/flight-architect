@@ -36,6 +36,8 @@ RSpec.describe Underware::Commands::Template do
     ).to be false
   end
 
+  let(:cluster) { 'my-test-cluster' }
+
   before :each do
     # Ensure templates directory is initially empty, so only testing with files
     # setup in individual tests.
@@ -95,6 +97,9 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all platform files for each group (including orphan group)' do
     Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::ClusterAttr.update(cluster) do |attr|
+      attr.add_group('user_configured_group')
+    end
     create_template 'platform_x/group/some/path/x_template'
     create_template 'platform_y/group/some/path/y_template'
 
@@ -128,6 +133,9 @@ RSpec.describe Underware::Commands::Template do
 
   it 'correctly renders all content files for each group, for each platform' do
     Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::ClusterAttr.update(cluster)  do |attr|
+      attr.add_group('user_configured_group')
+    end
     create_template 'content/group/some/path/shared_template'
 
     run_command

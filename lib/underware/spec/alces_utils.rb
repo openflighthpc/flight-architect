@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'underware/namespaces/alces'
+require 'underware/cluster_attr'
 require 'recursive_open_struct'
 
 module Underware
@@ -163,6 +164,7 @@ module Underware
         group_cache { |c| c.add(name) }
         alces.instance_variable_set(:@groups, nil)
         alces.instance_variable_set(:@group_cache, nil)
+        alces.instance_variable_set(:@cluster_attr, nil)
         group = alces.groups.find_by_name(name)
         group
       end

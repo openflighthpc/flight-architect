@@ -74,9 +74,8 @@ module Underware
 
       def groups
         @groups ||= begin
-          arr = group_cache.map do |group_name|
-            index = group_cache.index(group_name)
-            Namespaces::Group.new(alces, group_name, index: index)
+          arr = cluster_attr.groups_hash.map do |name, index|
+            Namespaces::Group.new(alces, name, index: index)
           end
           Namespaces::UnderwareArray.new(arr)
         end
@@ -219,6 +218,10 @@ module Underware
 
       def group_cache
         @group_cache ||= GroupCache.new
+      end
+
+      def cluster_attr
+        @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end
 
       def loader

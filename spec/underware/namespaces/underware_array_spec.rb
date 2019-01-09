@@ -4,6 +4,7 @@
 require 'underware/namespaces/alces'
 require 'underware/constants'
 require 'underware/nodeattr_interface'
+require 'underware/cluster_attr'
 
 ##
 # NOTE: alces.nodes is an UnderwareArray
@@ -16,12 +17,15 @@ RSpec.describe Underware::Namespaces::UnderwareArray do
   let(:node_names) { ['node1', 'node2', 'node3'] }
 
   before do
-    allow(Underware::NodeattrInterface).to \
-      receive(:all_nodes).and_return(node_names)
+    Underware::ClusterAttr.update('something') do |attr|
+      node_names.each { |node| attr.add_nodes(node) }
+    end
   end
 
   it 'has the correct number of items' do
-    expect(alces.nodes.length).to eq(node_names.length)
+    # NOTE: The `+ 1` is accounting for the local node
+    # Remove this if and when the local node is removed
+    expect(alces.nodes.length).to eq(node_names.length + 1)
   end
 
   it 'can find all the items' do

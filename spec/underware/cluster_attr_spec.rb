@@ -91,9 +91,9 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
-    describe '#raw_nodes' do
+    describe '#nodes_list' do
       it 'contains the local node' do
-        expect(subject.raw_nodes).to include('local')
+        expect(subject.nodes_list).to include('local')
       end
     end
 
@@ -132,9 +132,9 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
-    describe '#raw_nodes' do
+    describe '#nodes_list' do
       it 'contains only the local node' do
-        expect(subject.raw_nodes).to contain_exactly('local')
+        expect(subject.nodes_list).to contain_exactly('local')
       end
     end
 
@@ -175,9 +175,9 @@ RSpec.describe Underware::ClusterAttr do
     end
 
     context 'without any groups' do
-      describe '#raw_nodes' do
+      describe '#nodes_list' do
         it 'returns the node list' do
-          expect(subject.raw_nodes).to contain_exactly(*nodes)
+          expect(subject.nodes_list).to contain_exactly(*nodes)
         end
       end
 

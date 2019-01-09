@@ -150,7 +150,6 @@ module Underware
           genders.push AlcesUtils.default_group if genders.empty?
           attr.add_nodes(name, groups: genders)
         end
-        raise_if_node_exists(name)
         add_node_to_genders_file(name, *genders)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)
@@ -187,12 +186,6 @@ module Underware
       private
 
       attr_reader :alces, :test
-
-      def raise_if_node_exists(name)
-        return unless File.exist? Underware::FilePath.genders
-        msg = "Node '#{name}' already exists"
-        raise Underware::InternalError, msg if alces.nodes.find_by_name(name)
-      end
 
       def add_node_to_genders_file(name, *genders)
         genders = [AlcesUtils.default_group] if genders.empty?

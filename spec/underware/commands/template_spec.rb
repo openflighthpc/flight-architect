@@ -167,7 +167,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all platform files for each node' do
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'platform_x/node/some/path/x_template'
     create_template 'platform_y/node/some/path/y_template'
 
@@ -188,7 +188,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all content files for each node, for each platform' do
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'content/node/some/path/shared_template'
 
     run_command
@@ -243,7 +243,7 @@ RSpec.describe Underware::Commands::Template do
 
   it 'is not over-eager when replacing in rendered paths' do
     FileUtils.touch(Underware::FilePath.platform_config(:node_platform))
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'node_platform/node/my_favourite_node_templates/node/template'
 
     run_command

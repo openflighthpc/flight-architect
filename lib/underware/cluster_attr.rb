@@ -67,7 +67,11 @@ module Underware
     end
 
     def raw_nodes
-      __data__.fetch(:nodes).keys
+      __data__.fetch(:nodes)
+    end
+
+    def nodes_list
+      raw_nodes.keys
     end
 
     def groups_hash

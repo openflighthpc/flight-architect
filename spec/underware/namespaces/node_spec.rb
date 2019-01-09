@@ -97,7 +97,7 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node.group.index).to eq(primary_group_index)
     end
 
-    it 'can determine the node index' do
+    xit 'can determine the node index' do
       expect(node.index).to eq(2)
     end
 

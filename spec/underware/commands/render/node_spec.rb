@@ -1,14 +1,15 @@
 
 require 'shared_examples/render_command'
 require 'underware/commands/render/node'
+require 'underware/cluster_attr'
 
 RSpec.describe Underware::Commands::Render::Node do
   include_context 'render command'
 
   before :each do
-    allow(Underware::NodeattrInterface)
-      .to receive(:all_nodes)
-      .and_return([test_node_name])
+    Underware::ClusterAttr.update('some-cluster') do |attr|
+      attr.add_nodes(test_node_name)
+    end
   end
 
   let :test_node_name { 'testnode01' }

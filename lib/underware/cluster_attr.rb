@@ -52,7 +52,7 @@ module Underware
     def initialize(cluster)
       @cluster = cluster
       @__data__ = TTY::Config.new
-      __data__.prepend_path(FilePath.internal_data_dir)
+      __data__.prepend_path(FilePath.underware_storage)
       __data__.filename = self.class.filename
       setup
     end

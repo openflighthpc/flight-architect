@@ -67,15 +67,9 @@ RSpec.describe Underware::Namespaces::Node do
       allow(Underware::HashMergers::Answer).to receive(:new)
         .and_return(answer_double)
 
-      Underware::ClusterAttr.update('something') do |attr|
+      Underware::ClusterAttr.update(alces.cluster_identifier) do |attr|
         node_array.each { |n| attr.add_nodes(n, groups: 'primary_group') }
       end
-
-      ##
-      # Spoofs the results of NodeattrInterface
-      #
-      allow(Underware::NodeattrInterface).to \
-        receive(:genders_for_node).and_return(['primary_group'])
 
       # Spoofs the hostip
       use_mock_determine_hostip_script
@@ -253,10 +247,9 @@ RSpec.describe Underware::Namespaces::Node do
       stubbed_groups = ['primary_group', 'additional_group']
 
       before :each do
-        allow(Underware::NodeattrInterface)
-          .to receive(:genders_for_node)
-          .with(test_node_name)
-          .and_return(stubbed_groups)
+        Underware::ClusterAttr.update('something') do |attr|
+          attr.add_nodes(test_node_name, groups: stubbed_groups)
+        end
       end
 
       include_examples 'namespace_hash_merging',
@@ -264,22 +257,6 @@ RSpec.describe Underware::Namespaces::Node do
         expected_hash_merger_input: {
           node: test_node_name,
           groups: stubbed_groups
-        }
-    end
-
-    context 'when node not in genders file' do
-      before :each do
-        allow(Underware::NodeattrInterface)
-          .to receive(:genders_for_node)
-          .with(test_node_name)
-          .and_raise(Underware::NodeNotInGendersError)
-      end
-
-      include_examples 'namespace_hash_merging',
-        description: 'passes own name as `node`, just `orphan` as `groups`',
-        expected_hash_merger_input: {
-          node: test_node_name,
-          groups: ['orphan'],
         }
     end
   end

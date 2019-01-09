@@ -85,7 +85,7 @@ module Underware
     end
 
     def groups_for_node(node)
-      __data__.fetch(:nodes, node)
+      __data__.fetch(:nodes, node, default: [])
     end
 
     def nodes_in_group(group)

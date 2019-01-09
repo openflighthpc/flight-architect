@@ -150,6 +150,7 @@ module Underware
           genders.push AlcesUtils.default_group if genders.empty?
           attr.add_nodes(name, groups: genders)
         end
+        alces.instance_variable_set(:@cluster_attr, nil)
         add_node_to_genders_file(name, *genders)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)

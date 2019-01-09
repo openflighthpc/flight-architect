@@ -13,7 +13,7 @@ module Underware
       end
 
       def genders
-        @genders ||= NodeattrInterface.genders_for_node(name)
+        @genders ||= alces.cluster_attr.groups_for_node(name)
       end
 
       def index

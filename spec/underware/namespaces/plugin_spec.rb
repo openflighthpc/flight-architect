@@ -1,6 +1,28 @@
-
 # frozen_string_literal: true
 
+#==============================================================================
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
+#
+# This file/package is part of Alces Underware.
+#
+# Alces Underware is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Alces Underware is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+#
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
+#==============================================================================
+
+require 'underware/cluster_attr'
 
 RSpec.describe Underware::Namespaces::Plugin do
   include Underware::AlcesUtils
@@ -23,9 +45,9 @@ RSpec.describe Underware::Namespaces::Plugin do
     plugin_config_dir = File.join(plugins_path, plugin_name, 'config')
     FileUtils.mkdir_p plugin_config_dir
 
-    File.write(
-      Underware::FilePath.genders, "#{node_name} #{node_group_name}\n"
-    )
+    Underware::ClusterAttr.update('something') do |attr|
+      attr.add_nodes(node_name, groups: node_group_name)
+    end
   end
 
   describe '#name' do

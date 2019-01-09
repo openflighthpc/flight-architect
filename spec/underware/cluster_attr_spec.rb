@@ -112,6 +112,12 @@ RSpec.describe Underware::ClusterAttr do
         expect(subject.orphans).to contain_exactly('local')
       end
     end
+
+    describe '#nodes_in_group' do
+      it 'returns an empty array when there are no nodes' do
+        expect(subject.nodes_in_group('some-random-group')).to eq([])
+      end
+    end
   end
 
   context 'when adding a single group' do
@@ -213,6 +219,25 @@ RSpec.describe Underware::ClusterAttr do
         it 'returns the missing groups in the correct order' do
           expect(subject.groups_for_node(nodes.first)).to eq(node_groups)
         end
+      end
+    end
+  end
+
+  context 'when adding multiple nodes' do
+    include_context 'with a ClusterAttr instance'
+    let(:group1_nodes) { ['node1', 'node2', 'node4'] }
+
+    # Other nodes are injected in to make the example more realistic
+    before do
+      group1_nodes.each do |node|
+        subject.add_nodes(node, groups: 'group1')
+        subject.add_nodes("not_#{node}")
+      end
+    end
+
+    describe '#nodes_in_group' do
+      it 'returns a specific group of nodes' do
+        expect(subject.nodes_in_group('group1')).to eq(group1_nodes)
       end
     end
   end

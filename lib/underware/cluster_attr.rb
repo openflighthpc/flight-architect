@@ -88,6 +88,11 @@ module Underware
       __data__.fetch(:nodes, node)
     end
 
+    def nodes_in_group(group)
+      __data__.fetch(:nodes).select { |_, groups| groups.include?(group) }
+                            .keys
+    end
+
     def add_group(group_name)
       raise_error_if_group_exists(group_name)
       __data__.append(group_name, to: :groups)
@@ -103,8 +108,7 @@ module Underware
     end
 
     def orphans
-      __data__.fetch(:nodes).select { |_, groups| groups.include?('orphan') }
-                            .keys
+      nodes_in_group('orphan')
     end
 
     private

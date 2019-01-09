@@ -59,7 +59,7 @@ module Underware
 
     def setup
       __data__.set_if_empty(:groups, value: ['orphan'])
-      __data__.set_if_empty(:nodes, value: {})
+      __data__.set_if_empty(:nodes, :local, value: ['orphan'])
     end
 
     def raw_groups

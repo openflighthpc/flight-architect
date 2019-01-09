@@ -91,6 +91,12 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
+    describe '#raw_nodes' do
+      it 'contains the local node' do
+        expect(subject.raw_nodes).to include('local')
+      end
+    end
+
     describe '#group_index' do
       it 'returns nil for missing groups' do
         expect(subject.group_index('some-missing-group')).to eq(nil)
@@ -102,8 +108,8 @@ RSpec.describe Underware::ClusterAttr do
     end
 
     describe '#orphans' do
-      it 'is an empty array' do
-        expect(subject.orphans).to eq([])
+      it 'only contains the local node' do
+        expect(subject.orphans).to contain_exactly('local')
       end
     end
   end
@@ -127,8 +133,8 @@ RSpec.describe Underware::ClusterAttr do
     end
 
     describe '#raw_nodes' do
-      it 'returns and empty array' do
-        expect(subject.raw_nodes).to eq([])
+      it 'contains only the local node' do
+        expect(subject.raw_nodes).to contain_exactly('local')
       end
     end
 
@@ -149,7 +155,7 @@ RSpec.describe Underware::ClusterAttr do
     include_context 'with a ClusterAttr instance'
 
     let(:node_str) { 'node[01-10]' }
-    let(:nodes) { described_class.expand(node_str) }
+    let(:nodes) { described_class.expand(node_str).push('local') }
     let(:node_groups) { nil }
 
     before do
@@ -205,7 +211,7 @@ RSpec.describe Underware::ClusterAttr do
 
       describe '#groups_for_node' do
         it 'returns the missing groups in the correct order' do
-          expect(subject.groups_for_node(nodes.last)).to eq(node_groups)
+          expect(subject.groups_for_node(nodes.first)).to eq(node_groups)
         end
       end
     end

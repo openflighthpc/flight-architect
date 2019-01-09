@@ -30,6 +30,13 @@ RSpec.describe Underware::ClusterAttr do
     subject { described_class.new(cluster_name) }
   end
 
+  shared_context 'with the first group' do
+    include_context 'with a ClusterAttr instance'
+
+    let(:first_group) { 'my-first-group' }
+    before { subject.add_group(first_group) }
+  end
+
   describe '::expand' do
     it 'can expand multiple nodes' do
       node_str = 'node[01-10]'
@@ -60,15 +67,17 @@ RSpec.describe Underware::ClusterAttr do
   end
 
   context 'when adding a single group' do
-    include_context 'with a ClusterAttr instance'
-
-    let(:first_group) { 'my-first-group' }
-
-    before { subject.add_group(first_group) }
+    include_context 'with the first group'
 
     describe '#raw_groups' do
       it 'adds the group' do
         expect(subject.raw_groups).to include(first_group)
+      end
+    end
+
+    describe '#raw_nodes' do
+      it 'returns and empty array' do
+        expect(subject.raw_nodes).to eq([])
       end
     end
 

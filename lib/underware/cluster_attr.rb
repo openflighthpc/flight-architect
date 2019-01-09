@@ -47,6 +47,10 @@ module Underware
       config.fetch(:groups)
     end
 
+    def raw_nodes
+      []
+    end
+
     def group_index(group)
       raw_groups.find_index(group)
     end

@@ -216,10 +216,6 @@ module Underware
         Templating::NilDetectionWrapper.wrap(self)
       end
 
-      def group_cache
-        @group_cache ||= GroupCache.new
-      end
-
       def cluster_attr
         @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end

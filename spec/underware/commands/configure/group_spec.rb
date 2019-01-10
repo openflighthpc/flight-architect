@@ -41,10 +41,6 @@ RSpec.describe Underware::Commands::Configure::Group do
     Underware::ClusterAttr.load('something')
   end
 
-  before do
-    mock_validate_genders_success
-  end
-
   before :each do
     FileSystem.setup(&:with_minimal_configure_file)
   end

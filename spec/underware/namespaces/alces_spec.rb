@@ -289,11 +289,6 @@ RSpec.describe Underware::Namespaces::Alces do
 
     describe '#local' do
       it 'returns the local node' do
-        # Mock that the local node has been configured.
-        allow(
-          Underware::NodeattrInterface
-        ).to receive(:all_nodes).and_return(['local'])
-
         expect(alces.render_string('<%= alces.local.local? %>')).to be true
       end
     end

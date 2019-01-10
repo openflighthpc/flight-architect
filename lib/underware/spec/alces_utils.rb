@@ -49,47 +49,11 @@ module Underware
             @spec_alces = nil
             alces
           end
-
-          before { AlcesUtils.spoof_nodeattr(self) }
         end
       end
 
       def included(base)
         start(base)
-      end
-
-      def nodeattr_genders_file_path(command)
-        return Underware::FilePath.genders unless command.include?('-f')
-        command.match(AlcesUtils::GENDERS_FILE_REGEX)[0].sub('-f ', '')
-      end
-
-      def nodeattr_cmd_trim_f(command)
-        command.sub(AlcesUtils::GENDERS_FILE_REGEX, '')
-      end
-
-      # Mocks nodeattr to use faked genders file
-      def spoof_nodeattr(context)
-        context.instance_exec do
-          genders_path = Underware::FilePath.genders
-          genders_exist = File.exist? genders_path
-          File.write(genders_path, "local local\n") unless genders_exist
-
-          allow(Underware::NodeattrInterface)
-            .to receive(:nodeattr).and_wrap_original do |method, *args|
-            AlcesUtils.check_and_raise_fakefs_error
-            path = AlcesUtils.nodeattr_genders_file_path(args[0])
-            cmd = AlcesUtils.nodeattr_cmd_trim_f(args[0])
-            genders_data = File.read(path).tr('`', '"')
-            tempfile = `mktemp /tmp/genders.XXXXX`.chomp
-            begin
-              `echo "#{genders_data}" > #{tempfile}`
-              nodeattr_cmd = "nodeattr -f #{tempfile}"
-              method.call(cmd, mock_nodeattr: nodeattr_cmd)
-            ensure
-              `rm #{tempfile} -f`
-            end
-          end
-        end
       end
 
       def redirect_std(*input, &_b)

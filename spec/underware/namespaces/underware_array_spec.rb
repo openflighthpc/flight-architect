@@ -3,7 +3,6 @@
 
 require 'underware/namespaces/alces'
 require 'underware/constants'
-require 'underware/nodeattr_interface'
 require 'underware/cluster_attr'
 
 ##

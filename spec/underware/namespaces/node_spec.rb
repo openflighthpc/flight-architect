@@ -196,10 +196,6 @@ RSpec.describe Underware::Namespaces::Node do
         Underware::Plugins.activate!(plugin)
       end
 
-      # NOTE: Must be after fs setup otherwise the initially spoofed
-      # genders file will be deleted
-      Underware::AlcesUtils.spoof_nodeattr(self)
-
       # Enable/disable plugins for node as needed.
       enabled_identifier = \
         Underware::Plugins.enabled_question_identifier(enabled_plugin)

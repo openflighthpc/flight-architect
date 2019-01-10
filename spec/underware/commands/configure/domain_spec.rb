@@ -9,10 +9,6 @@ RSpec.describe Underware::Commands::Configure::Domain do
     )
   end
 
-  before do
-    mock_validate_genders_success
-  end
-
   before :each do
     FileSystem.setup(&:with_minimal_configure_file)
   end

@@ -36,8 +36,6 @@ RSpec.describe Underware::Commands::Configure::Node do
   end
 
   before do
-    use_mock_genders
-    mock_validate_genders_success
     allow(Underware::Namespaces::Alces).to receive(:new).and_return(alces)
   end
 

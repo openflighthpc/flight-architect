@@ -27,11 +27,6 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
   end
 
   describe 'option handling' do
-    before do
-      use_mock_genders
-      mock_validate_genders_success
-    end
-
     it 'passes answers through to configurator as hash' do
       FileSystem.test do |fs|
         answers = { question_1: 'answer_1' }

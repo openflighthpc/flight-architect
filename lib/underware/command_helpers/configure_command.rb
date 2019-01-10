@@ -29,28 +29,11 @@ require 'underware/managed_file'
 module Underware
   module CommandHelpers
     class ConfigureCommand < BaseCommand
-      # XXX This only lives here for now as I'm not sure where it should
-      # ideally live, and it needs to be usable from other commands; at some
-      # point it should move somewhere better however.
-      def self.render_genders
-        # The genders file must be templated with a new namespace object as the
-        # answers may have changed since they where loaded
-        new_alces = Namespaces::Alces.new
-        template = FilePath.genders_template
-        rendered_genders_content = new_alces.render_file(template)
-        full_new_genders_content = ManagedFile.content(
-          FilePath.genders, rendered_genders_content
-        )
-        FileUtils.mkdir_p(File.dirname(FilePath.genders))
-        File.write(FilePath.genders, full_new_genders_content)
-      end
-
       private
 
       def run
         configurator.configure(answers)
         custom_configuration
-        self.class.render_genders
       end
 
       def answers

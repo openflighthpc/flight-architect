@@ -14,6 +14,7 @@ require 'underware/namespaces/hash_merger_namespace'
 require 'underware/namespaces/node'
 require 'underware/hash_mergers.rb'
 require 'underware/underware_log'
+require 'underware/cluster_attr'
 Underware::Utils::DynamicRequire.relative('.')
 
 module Underware

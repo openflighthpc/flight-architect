@@ -162,7 +162,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
 <% end -%>
     "<%=node.name%>TAGgroups": {
       "type": "string",
-      "value": "<%= NodeattrInterface.genders_for_node(node.name).join(',') %>"
+      "value": "<%= node.genders.join(',') %>"
     }
   }
 }    

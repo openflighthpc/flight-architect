@@ -29,12 +29,17 @@ module Underware
     class NodePrototype < HashMergerNamespace
       include Namespaces::Mixins::Name
 
-      def group
-        @group ||= alces.groups.send(genders.first)
+      def initialize(*a, genders: nil)
+        super(*a)
+        @genders = genders
       end
 
       def genders
-        @genders ||= alces.cluster_attr.groups_for_node(name)
+        @genders ||= []
+      end
+
+      def group
+        @group ||= alces.groups.send(genders.first)
       end
 
       def index

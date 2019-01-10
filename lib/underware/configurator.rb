@@ -122,9 +122,9 @@ module Underware
         when :domain
           alces.domain
         when :group
-          alces.groups.find_by_name(name) || create_new_group
+          alces.groups.find_by_name(name)
         when :node, :local
-          alces.nodes.find_by_name(name) || create_orphan_node
+          alces.nodes.find_by_name(name)
         else
           raise InternalError, <<-EOF
             Unrecognised question section: #{questions_section}
@@ -148,17 +148,6 @@ module Underware
         A node can be removed from the orphan group by editing:
       EOF
       msg + "\n" + FilePath.group_cache
-    end
-
-    def create_new_group
-      idx = group_cache.next_available_index
-      Namespaces::Group.new(alces, name, index: idx)
-    end
-
-    def create_orphan_node
-      UnderwareLog.warn orphan_warning unless questions_section == :local
-      group_cache.push_orphan(name)
-      Namespaces::Node.new(alces, name)
     end
   end
 end

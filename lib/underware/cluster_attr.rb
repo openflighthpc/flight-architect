@@ -23,7 +23,7 @@
 #==============================================================================
 
 require 'underware/cluster_attr/expand'
-require 'tty/config'
+require 'underware/patches/tty_config'
 
 module Underware
   class ClusterAttr

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -119,7 +119,7 @@ module Underware
         when :group
           alces.groups.find_by_name(name) || new_group
         when :node, :local
-          alces.nodes.find_by_name(name)
+          alces.nodes.find_by_name(name) || new_node
         else
           raise InternalError, <<-EOF
             Unrecognised question section: #{questions_section}
@@ -134,6 +134,10 @@ module Underware
 
     def new_group
       Namespaces::Group.new(alces, name, index: nil)
+    end
+
+    def new_node
+      Namespaces::NodePrototype.new(alces, name, genders: ['orphan'])
     end
   end
 end

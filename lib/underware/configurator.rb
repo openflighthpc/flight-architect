@@ -117,7 +117,7 @@ module Underware
         when :domain
           alces.domain
         when :group
-          alces.groups.find_by_name(name)
+          alces.groups.find_by_name(name) || new_group
         when :node, :local
           alces.nodes.find_by_name(name)
         else
@@ -129,7 +129,11 @@ module Underware
     end
 
     def default_hash
-      @default_hash ||= configure_object.answer.to_h
+      @default_hash ||= configure_object&.answer.to_h
+    end
+
+    def new_group
+      Namespaces::Group.new(alces, name, index: nil)
     end
   end
 end

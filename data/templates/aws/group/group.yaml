@@ -98,7 +98,7 @@ Outputs:
     Value: !Ref <%=node.name%>
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups
-    Value: <%=NodeattrInterface.genders_for_node(node.name).join(',') %>
+    Value: <%=node.genders.join(',') %>
 <% if node.config.role == 'login' -%>
   <%=node.name%>TAGIP:
     Description: <%=node.name%>TAGIP

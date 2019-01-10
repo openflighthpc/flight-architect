@@ -28,7 +28,6 @@ RSpec.describe Underware::AlcesUtils do
   include described_class
 
   let(:file_path) { Underware::FilePath }
-  let(:group_cache) { Underware::GroupCache.new }
 
   describe '#new' do
     it 'returns the mocked alces' do
@@ -118,12 +117,7 @@ RSpec.describe Underware::AlcesUtils do
       let(:group2) { 'some other group' }
 
       described_class.mock self, :each do
-        expect(File.exist?(file_path.group_cache)).to eq(false)
         mock_group(group)
-      end
-
-      it 'creates the group cache' do
-        expect(File.exist?(file_path.group_cache)).to eq(true)
       end
 
       it 'creates the group' do

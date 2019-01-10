@@ -22,7 +22,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/group_cache'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Configure::Group do

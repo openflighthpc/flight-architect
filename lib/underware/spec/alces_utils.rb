@@ -25,7 +25,6 @@
 require 'underware/namespaces/alces'
 require 'underware/cluster_attr'
 require 'recursive_open_struct'
-require 'underware/group_cache'
 
 module Underware
   module AlcesUtils
@@ -184,9 +183,7 @@ module Underware
       def mock_group(name)
         AlcesUtils.check_and_raise_fakefs_error
         ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
-        group_cache { |c| c.add(name) }
         alces.instance_variable_set(:@groups, nil)
-        alces.instance_variable_set(:@group_cache, nil)
         alces.instance_variable_set(:@cluster_attr, nil)
         group = alces.groups.find_by_name(name)
         group
@@ -223,10 +220,6 @@ module Underware
 
       def method_missing(s, *a, &b)
         respond_to_missing?(s) ? test.send(s, *a, &b) : super
-      end
-
-      def group_cache
-        Underware::GroupCache.update { |c| yield c }
       end
 
       def hash_object(h = {})

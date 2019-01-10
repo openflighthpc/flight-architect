@@ -1,5 +1,26 @@
-
 # frozen_string_literal: true
+
+#==============================================================================
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
+#
+# This file/package is part of Alces Underware.
+#
+# Alces Underware is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Alces Underware is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+#
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
+#==============================================================================
 
 require 'underware/spec/alces_utils'
 
@@ -149,7 +170,9 @@ RSpec.describe Underware::AlcesUtils do
       end
 
       it 'appears in the nodes list' do
-        expect(alces.nodes.length).to eq(2)
+        # NOTE: The `+ 1`  is accounting for the local node
+        # Remove it if and when the local node is removed
+        expect(alces.nodes.length).to eq(2 + 1)
         expect(alces.nodes.find_by_name(name).name).to eq(name)
       end
 
@@ -160,7 +183,7 @@ RSpec.describe Underware::AlcesUtils do
       it 'errors if the node already exists' do
         expect do
           described_class.mock(self) { mock_node(name) }
-        end.to raise_error(Underware::InternalError)
+        end.to raise_error(Underware::ExistingNodeError)
       end
 
       it 'uses the genders input' do

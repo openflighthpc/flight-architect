@@ -37,6 +37,12 @@ module Underware
         nodes.include?('[') ? Expand.explode_nodes(nodes) : [nodes]
       end
 
+      # TODO: Actually collapse the nodes array instead of joining them
+      # as a single string
+      def collapse(*nodes)
+        nodes.flatten.join(',')
+      end
+
       def update(*a)
         new(*a).tap do |attr|
           attr.__data__.read unless attr.__data__.source_file.nil?
@@ -59,7 +65,7 @@ module Underware
 
     def setup
       __data__.set_if_empty(:groups, value: ['orphan'])
-      __data__.set_if_empty(:nodes, value: {})
+      __data__.set_if_empty(:nodes, :local, value: ['orphan'])
     end
 
     def raw_groups
@@ -67,7 +73,17 @@ module Underware
     end
 
     def raw_nodes
-      __data__.fetch(:nodes).keys
+      __data__.fetch(:nodes)
+    end
+
+    def nodes_list
+      raw_nodes.keys
+    end
+
+    def groups_hash
+      raw_groups.map do |group|
+        [group, group_index(group)]
+      end.to_h
     end
 
     def group_index(group)
@@ -75,7 +91,12 @@ module Underware
     end
 
     def groups_for_node(node)
-      __data__.fetch(:nodes, node)
+      __data__.fetch(:nodes, node, default: [])
+    end
+
+    def nodes_in_group(group)
+      __data__.fetch(:nodes).select { |_, groups| groups.include?(group) }
+                            .keys
     end
 
     def add_group(group_name)
@@ -85,10 +106,15 @@ module Underware
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
+      groups.push 'orphan' if groups.empty?
       self.class.expand(node_string).each do |node|
         raise_error_if_node_exists(node)
         __data__.set(:nodes, node, value: groups)
       end
+    end
+
+    def orphans
+      nodes_in_group('orphan')
     end
 
     private

@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'underware/namespaces/alces'
+require 'underware/cluster_attr'
 require 'recursive_open_struct'
 
 module Underware
@@ -145,7 +146,11 @@ module Underware
       # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
-        raise_if_node_exists(name)
+        ClusterAttr.update(alces.cluster_identifier) do |attr|
+          genders.push AlcesUtils.default_group if genders.empty?
+          attr.add_nodes(name, groups: genders)
+        end
+        alces.instance_variable_set(:@cluster_attr, nil)
         add_node_to_genders_file(name, *genders)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)
@@ -156,9 +161,11 @@ module Underware
 
       def mock_group(name)
         AlcesUtils.check_and_raise_fakefs_error
+        ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
         group_cache { |c| c.add(name) }
         alces.instance_variable_set(:@groups, nil)
         alces.instance_variable_set(:@group_cache, nil)
+        alces.instance_variable_set(:@cluster_attr, nil)
         group = alces.groups.find_by_name(name)
         group
       end
@@ -180,12 +187,6 @@ module Underware
       private
 
       attr_reader :alces, :test
-
-      def raise_if_node_exists(name)
-        return unless File.exist? Underware::FilePath.genders
-        msg = "Node '#{name}' already exists"
-        raise Underware::InternalError, msg if alces.nodes.find_by_name(name)
-      end
 
       def add_node_to_genders_file(name, *genders)
         genders = [AlcesUtils.default_group] if genders.empty?

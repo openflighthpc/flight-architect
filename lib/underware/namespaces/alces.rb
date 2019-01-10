@@ -65,7 +65,7 @@ module Underware
 
       def nodes
         @nodes ||= begin
-          arr = NodeattrInterface.all_nodes.map do |node_name|
+          arr = cluster_attr.nodes_list.map do |node_name|
             Namespaces::Node.new(alces, node_name)
           end
           Namespaces::UnderwareArray.new(arr)
@@ -74,9 +74,8 @@ module Underware
 
       def groups
         @groups ||= begin
-          arr = group_cache.map do |group_name|
-            index = group_cache.index(group_name)
-            Namespaces::Group.new(alces, group_name, index: index)
+          arr = cluster_attr.groups_hash.map do |name, index|
+            Namespaces::Group.new(alces, name, index: index)
           end
           Namespaces::UnderwareArray.new(arr)
         end
@@ -100,7 +99,7 @@ module Underware
       end
 
       def orphan_list
-        @orphan_list ||= group_cache.orphans
+        @orphan_list ||= cluster_attr.orphans
       end
 
       def questions
@@ -113,6 +112,10 @@ module Underware
 
       def asset_cache
         @asset_cache ||= Underware::Cache::Asset.new
+      end
+
+      def cluster_attr
+        @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end
 
       def node
@@ -215,10 +218,6 @@ module Underware
 
       def wrapped_binding
         Templating::NilDetectionWrapper.wrap(self)
-      end
-
-      def group_cache
-        @group_cache ||= GroupCache.new
       end
 
       def loader

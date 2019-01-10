@@ -25,7 +25,6 @@
 require 'underware/validation/loader'
 require 'underware/validation/saver'
 require 'underware/file_path'
-require 'underware/group_cache'
 require 'underware/configurator/question'
 require 'underware/configurator/class_methods'
 
@@ -42,19 +41,15 @@ module Underware
     end
 
     def configure(answers = nil)
-      GroupCache.update do |cache|
-        @group_cache = cache
-        answers ||= ask_questions
-        save_answers(answers)
-      end
+      answers ||= ask_questions
+      save_answers(answers)
     end
 
     private
 
     attr_reader :alces,
                 :questions_section,
-                :name,
-                :group_cache
+                :name
 
     def loader
       @loader ||= Validation::Loader.new
@@ -103,7 +98,7 @@ module Underware
     # All other nodes should already appear in the genders file
     def group_for_node(node)
       orphan_group = alces.groups.find_by_name 'orphan'
-      if group_cache.orphans.include? node.name
+      if alces.orphan_list.include? node.name
         orphan_group
       elsif node.name == 'local'
         orphan_group
@@ -135,19 +130,6 @@ module Underware
 
     def default_hash
       @default_hash ||= configure_object.answer.to_h
-    end
-
-    def orphan_warning
-      msg = <<-EOF.squish
-        Could not find node '#{name}' in genders file. The node will be added
-        to the orphan group.
-      EOF
-      msg += "\n\n" + <<-EOF.squish
-        The node will not be removed from the orphan group automatically. The
-        behaviour of an orphan node that is later added to a group is undefined.
-        A node can be removed from the orphan group by editing:
-      EOF
-      msg + "\n" + FilePath.group_cache
     end
   end
 end

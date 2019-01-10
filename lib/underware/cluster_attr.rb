@@ -100,7 +100,7 @@ module Underware
     end
 
     def add_group(group_name)
-      raise_error_if_group_exists(group_name)
+      return if raw_groups.include?(group_name)
       __data__.append(group_name, to: :groups)
     end
 
@@ -108,31 +108,12 @@ module Underware
       groups = Array.wrap(groups)
       groups.push 'orphan' if groups.empty?
       self.class.expand(node_string).each do |node|
-        raise_error_if_node_exists(node)
         __data__.set(:nodes, node, value: groups)
       end
     end
 
     def orphans
       nodes_in_group('orphan')
-    end
-
-    private
-
-    def raise_error_if_node_exists(node)
-      if __data__.fetch(:nodes, node)
-        raise ExistingNodeError, <<~ERROR
-          Failed to add node as it already exists: '#{node}'
-        ERROR
-      end
-    end
-
-    def raise_error_if_group_exists(group)
-      if __data__.fetch(:groups).include?(group)
-        raise ExistingGroupError, <<~ERROR
-          Failed to add group as it already exists: '#{group}'
-        ERROR
-      end
     end
   end
 end

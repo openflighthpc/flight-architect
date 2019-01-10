@@ -84,10 +84,4 @@ module Underware
   # Alias for Exception to use to indicate we want to catch everything, and to
   # also tell Rubocop to be quiet about this.
   IntentionallyCatchAnyException = Exception
-
-  class ExistingNodeError < UserUnderwareError
-  end
-
-  class ExistingGroupError < UserUnderwareError
-  end
 end

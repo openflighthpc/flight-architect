@@ -65,7 +65,7 @@ module Underware
 
     def setup
       __data__.set_if_empty(:groups, value: ['orphan'])
-      __data__.set_if_empty(:nodes, :local, value: ['orphan'])
+      __data__.set_if_empty(:nodes, :local, value: [])
     end
 
     def raw_groups
@@ -91,12 +91,13 @@ module Underware
     end
 
     def groups_for_node(node)
-      __data__.fetch(:nodes, node, default: [])
+      __data__.fetch(:nodes, node, default: []).dup.tap do |groups|
+        groups.push 'orphan' if groups.empty?
+      end
     end
 
     def nodes_in_group(group)
-      __data__.fetch(:nodes).select { |_, groups| groups.include?(group) }
-                            .keys
+      nodes_list.select { |node| groups_for_node(node).include?(group) }
     end
 
     def add_group(group_name)
@@ -106,7 +107,6 @@ module Underware
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
-      groups.push 'orphan' if groups.empty?
       self.class.expand(node_string).each do |node|
         __data__.set(:nodes, node, value: groups)
       end

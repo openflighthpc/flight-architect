@@ -159,9 +159,7 @@ RSpec.describe Underware::AlcesUtils do
       end
 
       it 'appears in the nodes list' do
-        # NOTE: The `+ 1`  is accounting for the local node
-        # Remove it if and when the local node is removed
-        expect(alces.nodes.length).to eq(2 + 1)
+        expect(alces.nodes.length).to eq(2)
         expect(alces.nodes.find_by_name(name).name).to eq(name)
       end
 

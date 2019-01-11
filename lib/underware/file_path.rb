@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -31,7 +31,6 @@ module Underware
       delegate :domain_config,
                :group_config,
                :node_config,
-               :local_config,
                :config_dir,
                to: :config_path
 
@@ -59,10 +58,6 @@ module Underware
       def node_answers(node)
         file_name = "#{node}.yaml"
         File.join(answers_dir, 'nodes', file_name)
-      end
-
-      def local_answers
-        node_answers('local')
       end
 
       def answers_dir

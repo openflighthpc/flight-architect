@@ -28,7 +28,6 @@ module Underware
       delegate :domain_config,
                :group_config,
                :node_config,
-               :local_config,
                to: :config_path
 
       def name

@@ -39,23 +39,13 @@ module Underware
       end
 
       def node_answers(name)
-        if name == 'local'
-          local_answers
-        else
-          answer(FilePath.node_answers(name), :node)
-        end
-      end
-
-      def local_answers
-        answer(FilePath.local_answers, :local)
+        answer(FilePath.node_answers(name), :node)
       end
 
       def section_answers(section, name = nil)
         case section
         when :domain
           domain_answers
-        when :local
-          local_answers
         when :group
           raise InternalError, 'No group name given' if name.nil?
           group_answers(name)

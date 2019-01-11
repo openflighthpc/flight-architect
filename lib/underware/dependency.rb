@@ -71,8 +71,6 @@ module Underware
 
     def validate_answer_file(relative_path)
       case relative_path
-      when 'local.yaml'
-        loader.local_answers
       when 'domain.yaml'
         loader.domain_answers
       when /^groups\/.+/

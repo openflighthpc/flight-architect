@@ -44,12 +44,7 @@ module Underware
             arr.push(cached_yaml(:group, group))
           end
 
-          if node == 'local'
-            arr.push(cached_yaml(:local))
-          elsif node
-            arr.push(cached_yaml(:node, node))
-          end
-
+          arr.push(cached_yaml(:node, node)) if node
           arr.push(cached_yaml(:platform, platform)) if platform
         end
       end

@@ -23,10 +23,6 @@ module Underware
       NODE_ERROR = 'Error, a Node is not in scope'
       GROUP_ERROR = 'Error, a Group is not in scope'
       DOUBLE_SCOPE_ERROR = 'A node and group can not both be in scope'
-      LOCAL_ERROR = <<-EOF.strip_heredoc
-        The local node has not been configured Please run: `underware
-        configure local`
-      EOF
 
       delegate :config, :answer, to: :scope
       attr_reader :platform, :eager_render
@@ -84,15 +80,6 @@ module Underware
 
       def data
         DataFileNamespace.new
-      end
-
-      def local
-        @local ||= begin
-          unless nodes.respond_to?(:local)
-            raise UninitializedLocalNode, LOCAL_ERROR
-          end
-          nodes.local
-        end
       end
 
       def build_interface

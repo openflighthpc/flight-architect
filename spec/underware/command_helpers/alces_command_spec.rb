@@ -52,8 +52,4 @@ RSpec.describe Underware::CommandHelpers::AlcesCommand do
   it 'allows short name for domain' do
     expect(test_command('alces.d.config')).to eq(alces.domain.config)
   end
-
-  it 'allows short name for local' do
-    expect(test_command('alces.l')).to eq(alces.local)
-  end
 end

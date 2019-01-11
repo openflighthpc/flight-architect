@@ -34,10 +34,6 @@ module Underware
                :config_dir,
                to: :config_path
 
-      def genders_template
-        File.join(templates_dir, 'genders')
-      end
-
       def templates_dir
         File.join(internal_data_dir, 'templates')
       end

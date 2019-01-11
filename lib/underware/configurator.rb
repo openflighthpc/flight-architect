@@ -30,6 +30,8 @@ require 'underware/configurator/class_methods'
 
 module Underware
   class Configurator
+    include ClassMethods
+
     def initialize(
       alces,
       questions_section:,

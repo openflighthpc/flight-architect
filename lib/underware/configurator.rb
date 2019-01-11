@@ -95,16 +95,8 @@ module Underware
       end.to_h # Ensure the un-rendered answer are used
     end
 
-    # Orphan nodes will not appear in the genders file at this point
-    # Thus the orphan group needs to be manually found
-    # All other nodes should already appear in the genders file
     def group_for_node(node)
-      orphan_group = alces.groups.find_by_name 'orphan'
-      if alces.orphan_list.include? node.name
-        orphan_group
-      else
-        node.group
-      end
+      node.group
     end
 
     def section_question_tree

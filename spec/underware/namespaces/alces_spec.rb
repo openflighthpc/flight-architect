@@ -110,19 +110,6 @@ RSpec.describe Underware::Namespaces::Alces do
     end
   end
 
-  describe '#local' do
-    it 'errors if not initialized' do
-      # XXX We shouldn't stub the System Under Test here (see
-      # https://robots.thoughtbot.com/don-t-stub-the-system-under-test).
-      allow(alces).to receive(:nodes)
-        .and_return(Underware::Namespaces::UnderwareArray.new([]))
-
-      expect do
-        alces.local
-      end.to raise_error(Underware::UninitializedLocalNode)
-    end
-  end
-
   # NOTE: Trailing/ (leading) white space should be ignored for the
   # conversion. Hence why some of the strings have spaces
   describe 'parses the rendered results' do
@@ -284,12 +271,6 @@ RSpec.describe Underware::Namespaces::Alces do
       it 'returns the domain namespace' do
         domain_class = Underware::Namespaces::Domain.to_s
         expect(alces.render_string('<%= alces.domain.class %>')).to eq(domain_class)
-      end
-    end
-
-    describe '#local' do
-      it 'returns the local node' do
-        expect(alces.render_string('<%= alces.local.local? %>')).to be true
       end
     end
 

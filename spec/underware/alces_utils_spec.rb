@@ -51,11 +51,6 @@ RSpec.describe Underware::AlcesUtils do
                       .define_method_testing {} # Intentionally blank
     end
 
-    it 'only has the local node by default' do
-      expect(alces.nodes.length).to eq(1)
-      expect(alces.nodes[0]).to be_local
-    end
-
     context 'with a block before each test' do
       described_class.mock self, :each do
         allow(alces).to receive(:testing).and_return(100)

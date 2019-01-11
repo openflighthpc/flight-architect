@@ -570,7 +570,6 @@ RSpec.describe Underware::Configurator do
     let(:group_name) { 'my-super-awesome-group' }
     let(:group_default) { 'I am the group level yaml default' }
     let(:node_default) { 'I am the node level yaml default' }
-    let(:local_default) { 'I am the local level yaml default' }
     let(:domain_answer) { 'Domain answer with ERB, <%= node.name %>' }
     let(:identifier) { :question_identifier }
     let(:question) do
@@ -585,8 +584,7 @@ RSpec.describe Underware::Configurator do
       define_questions(
         domain: [question.merge(default: original_default)],
         group: [question.merge(default: group_default)],
-        node: [question.merge(default: node_default)],
-        local: [question.merge(default: local_default)]
+        node: [question.merge(default: node_default)]
       )
       configure_with_answers([domain_answer])
     end
@@ -683,38 +681,6 @@ RSpec.describe Underware::Configurator do
       context 'when the answer matches the group level' do
         let(:answer) { group_answer }
         let(:saved_answer) { nil }
-
-        include_examples 'gets the answer'
-      end
-    end
-
-    context 'when configuring the local node' do
-      subject do
-        alces.local.answer.to_h[identifier]
-      end
-
-      let(:load_answer) do
-        path = Underware::FilePath.local_answers
-        Underware::Data.load(path)[identifier]
-      end
-
-      before do
-        conf = described_class.for_local(alces)
-        configure_with_answers([answer], test_obj: conf)
-      end
-
-      context 'when the answer matches the domain default' do
-        let(:answer) { domain_answer }
-        let(:saved_answer) { nil }
-
-        include_examples 'gets the answer'
-      end
-
-      # The local yaml defaults should be ignored and thus treated like
-      # any other answer
-      context 'when the answer matches the local level default' do
-        let(:answer) { local_default }
-        let(:saved_answer) { local_default }
 
         include_examples 'gets the answer'
       end

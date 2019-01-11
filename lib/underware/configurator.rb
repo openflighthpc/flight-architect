@@ -37,7 +37,7 @@ module Underware
     )
       @alces = alces
       @questions_section = questions_section
-      @name = (questions_section == :local ? 'local' : name)
+      @name = name
     end
 
     def configure(answers = nil)
@@ -100,8 +100,6 @@ module Underware
       orphan_group = alces.groups.find_by_name 'orphan'
       if alces.orphan_list.include? node.name
         orphan_group
-      elsif node.name == 'local'
-        orphan_group
       else
         node.group
       end
@@ -118,7 +116,7 @@ module Underware
           alces.domain
         when :group
           alces.groups.find_by_name(name) || new_group
-        when :node, :local
+        when :node
           alces.nodes.find_by_name(name) || new_node
         else
           raise InternalError, <<-EOF

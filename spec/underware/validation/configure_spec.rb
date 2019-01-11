@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -119,28 +119,6 @@ RSpec.describe Underware::Validation::Configure do
           default: '',
         },
       ],
-
-      local: [
-        {
-          identifier: 'choice question',
-          question: 'Are all my choices strings?',
-          choice: [
-            'choice1',
-            'choice2',
-            'choice3',
-          ],
-          default: 'choice1',
-        },
-        {
-          identifier: 'choice_question_no_default',
-          question: 'Are all my choices strings without a default?',
-          choice: [
-            'choice1',
-            'choice2',
-            'choice3',
-          ],
-        },
-      ],
     }
   end
 
@@ -183,12 +161,12 @@ RSpec.describe Underware::Validation::Configure do
     context 'with invalid identifier' do
       it 'fails when missing' do
         h = correct_hash
-            .deep_merge(local: [{ question: 'I have no identifier' }])
+            .deep_merge(group: [{ question: 'I have no identifier' }])
         expect_validation_failure(h, /is missing/)
       end
 
       it 'fails when empty' do
-        h = correct_hash.deep_merge(local: [{
+        h = correct_hash.deep_merge(group: [{
                                       question: 'I have no identifier',
                                       identifier: '',
                                     }])
@@ -232,12 +210,12 @@ RSpec.describe Underware::Validation::Configure do
 
     context 'with invalid question' do
       it 'fails when missing' do
-        h = correct_hash.deep_merge(local: [{ identifier: 'missing_question' }])
+        h = correct_hash.deep_merge(domain: [{ identifier: 'missing_question' }])
         expect_validation_failure(h, /is missing/)
       end
 
       it 'fails when empty' do
-        h = correct_hash.deep_merge(local: [{
+        h = correct_hash.deep_merge(domain: [{
                                       question: '',
                                       identifier: 'no_question',
                                     }])
@@ -315,7 +293,7 @@ RSpec.describe Underware::Validation::Configure do
 
   context 'with invalid choice options' do
     it 'fail when the default is not in the choice list' do
-      h = correct_hash.deep_merge(local: [{
+      h = correct_hash.deep_merge(node: [{
                                     identifier:
                                       'choice_question_no_bad_default',
                                     question: 'Is my default valid?',
@@ -330,7 +308,7 @@ RSpec.describe Underware::Validation::Configure do
     end
 
     it 'fails with inconsistent choice types' do
-      h = correct_hash.deep_merge(local: [{
+      h = correct_hash.deep_merge(node: [{
                                     identifier: 'choice_question_no_bad_type',
                                     question: 'Are my choice types valid?',
                                     choice: [

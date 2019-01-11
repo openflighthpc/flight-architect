@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -60,7 +60,7 @@ module Underware
                                            'lib/underware/validation',
                                            'errors.yaml')
 
-    CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze
+    CONFIGURE_SECTIONS = [:domain, :group, :node].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
 
 

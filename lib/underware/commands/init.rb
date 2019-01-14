@@ -24,10 +24,12 @@
 #==============================================================================
 
 require 'json'
+require 'underware/data_path'
 
 module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
+      CLUSTER_IDENTIFIER = 'cluster'
       LOGIN_GROUP = 'login'
       LOGIN_NODE_RANGE = 'gateway1'
       NODES_GROUP = 'nodes'
@@ -38,7 +40,7 @@ module Underware
       def setup; end
 
       def run
-        # Run the domain configuration
+        create_cluster
         configure_domain
         configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
         configure_group(NODES_GROUP, NODES_RANGE)
@@ -47,6 +49,17 @@ module Underware
       end
 
       private
+
+      # Makes a cluster specific copy of the internal data directory
+      def create_cluster
+        data_path = DataPath.new
+        cluster_path = DataPath.new(cluster: CLUSTER_IDENTIFIER)
+        FileUtils.mkdir_p cluster_path.base
+        Dir.glob(data_path.relative('*')).each do |source|
+          relative_path = File.basename(source)
+          FileUtils.copy_entry source, cluster_path.relative(relative_path)
+        end
+      end
 
       def configure_domain
         new_command(Configure::Domain).run!([], self.class.options)

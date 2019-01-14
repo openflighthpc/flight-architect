@@ -29,5 +29,14 @@ RSpec.describe Underware::GroupListParser do
     it 'converts nil to an empty array' do
       expect(described_class.parse(nil)).to eq([])
     end
+
+    it 'handles blank values within the list' do
+      expect(described_class.parse(',,,')).to eq([])
+    end
+
+    it 'returns the list of groups' do
+      groups = ['group', 'differentgroup', 'group4', 'agroup1']
+      expect(described_class.parse(groups.join(','))).to eq(groups)
+    end
   end
 end

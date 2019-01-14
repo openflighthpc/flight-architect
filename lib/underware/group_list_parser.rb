@@ -25,7 +25,7 @@
 module Underware
   class GroupListParser
     def self.parse(string)
-      []
+      string.to_s.split(',')
     end
   end
 end

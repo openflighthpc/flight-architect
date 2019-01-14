@@ -40,6 +40,10 @@ module Underware
       File.join(base, *relative_path)
     end
 
+    def template(*relative_path)
+      relative('templates', *relative_path)
+    end
+
     # Generate a list of relative path methods
     {
       configure: 'configure.yaml'

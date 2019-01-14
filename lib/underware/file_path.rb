@@ -44,8 +44,10 @@ module Underware
                              end
       end
 
+      # NOTE: This method is not going to be migrated onto DataPath
+      # It has been replaced by the more general `template` method
       def templates_dir
-        File.join(internal_data_dir, 'templates')
+        data_path_cache.template
       end
 
       def domain_answers

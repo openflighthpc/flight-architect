@@ -41,8 +41,12 @@ module Underware
         @data_path_cache ||= DataPath.new(cluster: Config.current_cluster)
       end
 
-      # NOTE: This method is not going to be migrated onto DataPath
-      # It has been replaced by the more general `template` method
+      # TODO: Should the asset be configurable on a cluster by cluster basis
+      def asset_type(type)
+        DataPath.new.relative('asset_types', type + '.yaml')
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
       def templates_dir
         data_path_cache.template
       end
@@ -98,18 +102,12 @@ module Underware
         '/var/log/underware'
       end
 
-      def asset_type(type)
-        File.join(underware_install, 'data/asset_types', type + '.yaml')
-      end
-
-      # NOTE: This method has been deprecated and will not be ported to
-      # DataPath
+      # NOTE: Deprecated! This method should be removed completely
       def assets_dir
         data_path_cache.asset
       end
 
-      # NOTE: This method has been deprecated and will not be ported to
-      # DataPath
+      # NOTE: Deprecated! This method should be removed completely
       def layouts_dir
         data_path_cache.layout
       end

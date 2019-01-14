@@ -24,7 +24,7 @@
 
 require 'underware/command_helpers/configure_command'
 require 'underware/constants'
-require 'underware/group_cache'
+require 'underware/cluster_attr'
 
 module Underware
   module Commands
@@ -48,7 +48,23 @@ module Underware
         end
 
         def custom_configuration
-          GroupCache.update { |c| c.add group_name }
+          node_range, genders = configured_nodes_and_genders
+          ClusterAttr.update('something') do |attr|
+            attr.add_group(group_name)
+            attr.add_nodes(node_range, groups: genders)
+          end
+        end
+
+        def configured_nodes_and_genders
+          reset_alces
+          new_group = Namespaces::Group.new(alces, group_name, index: nil)
+          genders = [
+            group_name,
+            new_group.config.role,
+            new_group.answer.secondary_groups,
+            'all'
+          ]
+          [new_group.answer.hostname_range.to_s, genders]
         end
       end
     end

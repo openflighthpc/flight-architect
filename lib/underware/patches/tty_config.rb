@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -22,46 +22,37 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/nodeattr_interface'
-require 'underware/data'
+require 'tty/config'
 
 module Underware
-  module Commands
-    module Remove
-      class Group < CommandHelpers::BaseCommand
-        def setup
-          @primary_group = args[0]
-          @cache = GroupCache.new
+  module Patches
+    module TTYConfig
+      ##
+      # Redefine TTY::Config to use the custom YAML parser
+      #
+      def self.included(base)
+        base.const_set('YAML', PatchedYAML)
+      end
+
+      module PatchedYAML
+        class << self
+          delegate_missing_to Psych
         end
 
-        def run
-          delete_answer_files
-          GroupCache.update { |c| c.remove(primary_group) }
-          CommandHelpers::ConfigureCommand.render_genders
-        end
-
-        private
-
-        attr_reader :primary_group, :cache
-
-        def dependency_hash
-          {
-            configure: ["groups/#{primary_group}.yaml"],
-          }
-        end
-
-        def delete_answer_files
-          list_of_answer_files.each do |file|
-            File.delete(file) if File.file?(file)
-          end
-        end
-
-        def list_of_answer_files
-          NodeattrInterface.nodes_in_group(primary_group)
-                           .map { |node| FilePath.node_answers(node) }
-                           .unshift(FilePath.group_answers(primary_group))
+        ##
+        # Overload `safe_load` to always allow aliases. It obeys the other
+        # directives however
+        #
+        def self.safe_load(yaml,
+                      whitelist_classes = [],
+                      whitelist_symbols = [],
+                      _aliases = false,
+                      filename = nil)
+          super(yaml, whitelist_classes, whitelist_symbols, true, filename)
         end
       end
     end
+
+    TTY::Config.include TTYConfig
   end
 end

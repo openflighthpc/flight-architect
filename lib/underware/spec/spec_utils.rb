@@ -29,18 +29,6 @@ require 'underware/dependency'
 module Underware
   module SpecUtils
     # Mocks.
-
-    def mock_validate_genders_success
-      mock_validate_genders(true, '')
-    end
-
-    def use_mock_genders(genders_file: 'genders/default')
-      genders_path = File.join(FIXTURES_PATH, genders_file)
-
-      nodeattr_command = 'Underware::Constants::NODEATTR_COMMAND'
-      stub_const(nodeattr_command, "nodeattr -f #{genders_path}")
-    end
-
     def use_mock_determine_hostip_script
       stub_const(
         'Underware::Constants::UNDERWARE_INSTALL_PATH',
@@ -52,14 +40,6 @@ module Underware
 
     def enable_output_to_stderr
       $rspec_suppress_output_to_stderr = false
-    end
-
-    private
-
-    def mock_validate_genders(valid, error)
-      allow(Underware::NodeattrInterface).to receive(
-        :validate_genders_file
-      ).and_return([valid, error])
     end
   end
 end

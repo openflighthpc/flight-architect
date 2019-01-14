@@ -24,6 +24,11 @@ module Underware
         def answer_file
           FilePath.node_answers(node_name)
         end
+
+        def custom_configuration
+          return if alces.nodes.find_by_name(node_name)
+          ClusterAttr.update('something') { |a| a.add_nodes(node_name) }
+        end
       end
     end
   end

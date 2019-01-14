@@ -23,7 +23,7 @@
 #==============================================================================
 
 require 'underware/cluster_attr/expand'
-require 'tty/config'
+require 'underware/patches/tty_config'
 
 module Underware
   class ClusterAttr
@@ -65,7 +65,7 @@ module Underware
 
     def setup
       __data__.set_if_empty(:groups, value: ['orphan'])
-      __data__.set_if_empty(:nodes, :local, value: ['orphan'])
+      __data__.set_if_empty(:nodes, :local, value: [])
     end
 
     def raw_groups
@@ -91,48 +91,29 @@ module Underware
     end
 
     def groups_for_node(node)
-      __data__.fetch(:nodes, node, default: [])
+      __data__.fetch(:nodes, node, default: []).dup.tap do |groups|
+        groups.push 'orphan' if groups.empty?
+      end
     end
 
     def nodes_in_group(group)
-      __data__.fetch(:nodes).select { |_, groups| groups.include?(group) }
-                            .keys
+      nodes_list.select { |node| groups_for_node(node).include?(group) }
     end
 
     def add_group(group_name)
-      raise_error_if_group_exists(group_name)
+      return if raw_groups.include?(group_name)
       __data__.append(group_name, to: :groups)
     end
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
-      groups.push 'orphan' if groups.empty?
       self.class.expand(node_string).each do |node|
-        raise_error_if_node_exists(node)
         __data__.set(:nodes, node, value: groups)
       end
     end
 
     def orphans
       nodes_in_group('orphan')
-    end
-
-    private
-
-    def raise_error_if_node_exists(node)
-      if __data__.fetch(:nodes, node)
-        raise ExistingNodeError, <<~ERROR
-          Failed to add node as it already exists: '#{node}'
-        ERROR
-      end
-    end
-
-    def raise_error_if_group_exists(group)
-      if __data__.fetch(:groups).include?(group)
-        raise ExistingGroupError, <<~ERROR
-          Failed to add group as it already exists: '#{group}'
-        ERROR
-      end
     end
   end
 end

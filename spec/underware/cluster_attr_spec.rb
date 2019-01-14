@@ -125,10 +125,23 @@ RSpec.describe Underware::ClusterAttr do
     include_context 'with the first group'
 
     describe '#add_group' do
-      it 'errors when adding an existing group' do
-        expect do
-          subject.add_group(first_group)
-        end.to raise_error(Underware::ExistingGroupError)
+      let!(:original_index) { subject.group_index(first_group) }
+
+      before do
+        # Adds another group to make the spec more realistic
+        subject.add_group('some-other-group')
+
+        # Ensure the original_index is set
+        original_index
+        subject.add_group(first_group)
+      end
+
+      it 'does not re add the group' do
+        expect(subject.raw_groups.count(first_group)).to eq(1)
+      end
+
+      it 'does not change the index' do
+        expect(subject.group_index(first_group)).to eq(original_index)
       end
     end
 
@@ -173,10 +186,15 @@ RSpec.describe Underware::ClusterAttr do
     end
 
     describe '#add_nodes' do
-      it 'errors if a node is re-added' do
-        expect do
-          subject.add_nodes(node_str)
-        end.to raise_error(Underware::ExistingNodeError)
+      let(:new_groups) { ['new_group1', 'new_group2'] }
+      before { subject.add_nodes(node_str, groups: new_groups) }
+
+      it 'does not duplicate the node entry' do
+        expect(subject.nodes_list.count(nodes.first)).to eq(1)
+      end
+
+      it 'updates the groups entry' do
+        expect(subject.groups_for_node(nodes.first)).to eq(new_groups)
       end
     end
 

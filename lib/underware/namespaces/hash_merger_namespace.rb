@@ -3,7 +3,6 @@
 
 require 'underware/exceptions'
 require 'underware/templating/renderer'
-require 'underware/nodeattr_interface'
 require 'underware/hash_mergers'
 
 module Underware

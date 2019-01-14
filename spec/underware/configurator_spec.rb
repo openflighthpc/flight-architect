@@ -536,30 +536,6 @@ RSpec.describe Underware::Configurator do
     end
   end
 
-  context 'with an orphan node' do
-    let(:orphan) { 'i_am_a_orphan_node' }
-    let(:configure_orphan) { described_class.for_node(alces, orphan) }
-
-    def new_group_cache
-      Underware::GroupCache.new
-    end
-
-    before do
-      define_questions(node: [
-                         {
-                           identifier: 'string_q',
-                           question: 'String?',
-                           default: 'default',
-                         },
-                       ])
-      configure_with_answers(['answer', 'sagh'], test_obj: configure_orphan)
-    end
-
-    it 'creates the orphan node' do
-      expect(new_group_cache.orphans).to include(orphan)
-    end
-  end
-
   context 'with a dependent questions' do
     before do
       define_questions(domain: [

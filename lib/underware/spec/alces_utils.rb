@@ -1,5 +1,26 @@
-
 # frozen_string_literal: true
+
+#==============================================================================
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
+#
+# This file/package is part of Alces Underware.
+#
+# Alces Underware is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Alces Underware is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+#
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
+#==============================================================================
 
 require 'underware/namespaces/alces'
 require 'underware/cluster_attr'
@@ -28,47 +49,11 @@ module Underware
             @spec_alces = nil
             alces
           end
-
-          before { AlcesUtils.spoof_nodeattr(self) }
         end
       end
 
       def included(base)
         start(base)
-      end
-
-      def nodeattr_genders_file_path(command)
-        return Underware::FilePath.genders unless command.include?('-f')
-        command.match(AlcesUtils::GENDERS_FILE_REGEX)[0].sub('-f ', '')
-      end
-
-      def nodeattr_cmd_trim_f(command)
-        command.sub(AlcesUtils::GENDERS_FILE_REGEX, '')
-      end
-
-      # Mocks nodeattr to use faked genders file
-      def spoof_nodeattr(context)
-        context.instance_exec do
-          genders_path = Underware::FilePath.genders
-          genders_exist = File.exist? genders_path
-          File.write(genders_path, "local local\n") unless genders_exist
-
-          allow(Underware::NodeattrInterface)
-            .to receive(:nodeattr).and_wrap_original do |method, *args|
-            AlcesUtils.check_and_raise_fakefs_error
-            path = AlcesUtils.nodeattr_genders_file_path(args[0])
-            cmd = AlcesUtils.nodeattr_cmd_trim_f(args[0])
-            genders_data = File.read(path).tr('`', '"')
-            tempfile = `mktemp /tmp/genders.XXXXX`.chomp
-            begin
-              `echo "#{genders_data}" > #{tempfile}`
-              nodeattr_cmd = "nodeattr -f #{tempfile}"
-              method.call(cmd, mock_nodeattr: nodeattr_cmd)
-            ensure
-              `rm #{tempfile} -f`
-            end
-          end
-        end
       end
 
       def redirect_std(*input, &_b)
@@ -162,9 +147,7 @@ module Underware
       def mock_group(name)
         AlcesUtils.check_and_raise_fakefs_error
         ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
-        group_cache { |c| c.add(name) }
         alces.instance_variable_set(:@groups, nil)
-        alces.instance_variable_set(:@group_cache, nil)
         alces.instance_variable_set(:@cluster_attr, nil)
         group = alces.groups.find_by_name(name)
         group
@@ -201,10 +184,6 @@ module Underware
 
       def method_missing(s, *a, &b)
         respond_to_missing?(s) ? test.send(s, *a, &b) : super
-      end
-
-      def group_cache
-        Underware::GroupCache.update { |c| yield c }
       end
 
       def hash_object(h = {})

@@ -45,11 +45,6 @@ RSpec.describe Underware::Commands::Template do
 
     FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
     FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
-
-    # To render templates for nodes we need to be able to call this and have an
-    # array of nodes returned; stub this out so don't need to care about this
-    # when not explicitly testing rendering for nodes.
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return([])
   end
 
   it 'correctly renders all platform files for domain' do
@@ -96,7 +91,6 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all platform files for each group (including orphan group)' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
     Underware::ClusterAttr.update(cluster) do |attr|
       attr.add_group('user_configured_group')
     end
@@ -132,7 +126,6 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all content files for each group, for each platform' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
     Underware::ClusterAttr.update(cluster)  do |attr|
       attr.add_group('user_configured_group')
     end

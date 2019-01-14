@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -25,7 +25,6 @@
 require 'underware/validation/loader'
 require 'underware/validation/saver'
 require 'underware/file_path'
-require 'underware/group_cache'
 require 'underware/configurator/question'
 require 'underware/configurator/class_methods'
 
@@ -42,19 +41,15 @@ module Underware
     end
 
     def configure(answers = nil)
-      GroupCache.update do |cache|
-        @group_cache = cache
-        answers ||= ask_questions
-        save_answers(answers)
-      end
+      answers ||= ask_questions
+      save_answers(answers)
     end
 
     private
 
     attr_reader :alces,
                 :questions_section,
-                :name,
-                :group_cache
+                :name
 
     def loader
       @loader ||= Validation::Loader.new
@@ -103,7 +98,7 @@ module Underware
     # All other nodes should already appear in the genders file
     def group_for_node(node)
       orphan_group = alces.groups.find_by_name 'orphan'
-      if group_cache.orphans.include? node.name
+      if alces.orphan_list.include? node.name
         orphan_group
       elsif node.name == 'local'
         orphan_group
@@ -122,9 +117,9 @@ module Underware
         when :domain
           alces.domain
         when :group
-          alces.groups.find_by_name(name) || create_new_group
+          alces.groups.find_by_name(name) || new_group
         when :node, :local
-          alces.nodes.find_by_name(name) || create_orphan_node
+          alces.nodes.find_by_name(name) || new_node
         else
           raise InternalError, <<-EOF
             Unrecognised question section: #{questions_section}
@@ -134,31 +129,15 @@ module Underware
     end
 
     def default_hash
-      @default_hash ||= configure_object.answer.to_h
+      @default_hash ||= configure_object&.answer.to_h
     end
 
-    def orphan_warning
-      msg = <<-EOF.squish
-        Could not find node '#{name}' in genders file. The node will be added
-        to the orphan group.
-      EOF
-      msg += "\n\n" + <<-EOF.squish
-        The node will not be removed from the orphan group automatically. The
-        behaviour of an orphan node that is later added to a group is undefined.
-        A node can be removed from the orphan group by editing:
-      EOF
-      msg + "\n" + FilePath.group_cache
+    def new_group
+      Namespaces::Group.new(alces, name, index: nil)
     end
 
-    def create_new_group
-      idx = group_cache.next_available_index
-      Namespaces::Group.new(alces, name, index: idx)
-    end
-
-    def create_orphan_node
-      UnderwareLog.warn orphan_warning unless questions_section == :local
-      group_cache.push_orphan(name)
-      Namespaces::Node.new(alces, name)
+    def new_node
+      Namespaces::NodePrototype.new(alces, name, genders: ['orphan'])
     end
   end
 end

@@ -24,16 +24,26 @@
 
 require 'underware/namespaces/node_prototype'
 
-module Underware
-  module Namespaces
-    class Node < NodePrototype
-      # Node can not be initialized with the `genders` key
-      def initialize(*_a)
-        super
-      end
+RSpec.describe Underware::Namespaces::NodePrototype do
+  include Underware::AlcesUtils
 
-      def genders
-        @genders ||= alces.cluster_attr.groups_for_node(name)
+  context 'without a genders input into initialize' do
+    subject { described_class.new(alces) }
+
+    describe '#genders' do
+      it 'returns and empty array' do
+        expect(subject.genders).to eq([])
+      end
+    end
+  end
+
+  context 'with a genders input into initialize' do
+    let(:genders) { ['group1', 'group2'] }
+    subject { described_class.new(alces, genders: genders) }
+
+    describe '#genders' do
+      it 'returns the genders' do
+        expect(subject.genders).to eq(genders)
       end
     end
   end

@@ -36,6 +36,10 @@ module Underware
       end
     end
 
+    def relative(*relative_path)
+      File.join(base, *relative_path)
+    end
+
     private
 
     attr_reader :cluster

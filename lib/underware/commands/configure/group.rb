@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -25,6 +25,7 @@
 require 'underware/command_helpers/configure_command'
 require 'underware/constants'
 require 'underware/cluster_attr'
+require 'underware/group_list_parser'
 
 module Underware
   module Commands
@@ -32,10 +33,11 @@ module Underware
       class Group < CommandHelpers::ConfigureCommand
         private
 
-        attr_reader :group_name, :cache
+        attr_reader :group_name, :cache, :groups
 
         def setup
           @group_name = args.first
+          @groups = parse_groups
         end
 
         def configurator
@@ -51,7 +53,7 @@ module Underware
           node_range, genders = configured_nodes_and_genders
           ClusterAttr.update('something') do |attr|
             attr.add_group(group_name)
-            attr.add_nodes(node_range, groups: genders)
+            attr.add_nodes(node_range, groups: groups)
           end
         end
 
@@ -65,6 +67,10 @@ module Underware
             'all'
           ]
           [new_group.answer.hostname_range.to_s, genders]
+        end
+
+        def parse_groups
+          GroupListParser.parse("#{group_name},#{options.groups}")
         end
       end
     end

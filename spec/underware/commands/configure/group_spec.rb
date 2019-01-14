@@ -67,29 +67,29 @@ RSpec.describe Underware::Commands::Configure::Group do
       end
     end
 
-    context 'when `cache/groups.yaml` exists' do
+    context 'with an existing unrelated group' do
       it 'inserts primary group if new' do
-        update_cache { |c| c.add_group('first_group') }
+        update_cache { |c| c.add_group('firstgroup') }
 
-        run_configure_group 'second_group'
+        run_configure_group 'secondgroup'
 
         expect(new_cache.raw_groups).to contain_exactly *[
-          'first_group',
-          'second_group',
+          'firstgroup',
+          'secondgroup',
           'orphan',
         ]
       end
 
-      xit 'does nothing if primary group already present' do
-        ['first_group', 'second_group'].each do |group|
+      it 'does nothing if primary group already present' do
+        ['firstgroup', 'secondgroup'].each do |group|
           update_cache { |c| c.add_group(group) }
         end
 
-        run_configure_group 'second_group'
+        run_configure_group 'secondgroup'
 
         expect(new_cache.raw_groups).to contain_exactly *[
-          'first_group',
-          'second_group',
+          'firstgroup',
+          'secondgroup',
           'orphan',
         ]
       end

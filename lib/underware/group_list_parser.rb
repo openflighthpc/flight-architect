@@ -28,6 +28,8 @@ module Underware
       string.to_s.split(',').each { |n| error_if_invalid_name(n) }
     end
 
+    private_class_method
+
     def self.error_if_invalid_name(name)
       return if /\A[[:alnum:]]*\z/.match?(name)
       raise InvalidGroupName, <<~ERROR

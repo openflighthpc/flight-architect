@@ -90,6 +90,9 @@ subcommands:
     action: Commands::Configure::Group
     options:
       - *configure_answers_option
+      - tags: [-g SECONDARY_GROUPS, --groups SECONDARY_GROUPS]
+        type: String
+        description: 'A comma separated list of additional secondary groups'
 
   configure_node: &configure_node
     syntax: underware configure node NODE_NAME [options]

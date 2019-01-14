@@ -47,10 +47,10 @@ Resources:
       InstanceType: t2.small
       Monitoring: true
       NetworkInterfaces:
-<% count=0; node.config.networks.each do |name,network| -%>
+<% count=0; node.config.networks.each do |netname,network| -%>
 <% if network.defined -%>
         -
-          NetworkInterfaceId: !Ref <%=node.name%><%=name%>Interface
+          NetworkInterfaceId: !Ref <%=name%><%=netname%>Interface
           DeviceIndex: <%=count%>
 <% count+=1 -%>
 <% end -%>

@@ -26,6 +26,10 @@ require 'underware/data_path'
 
 module Underware
   class DataCopy
+    def self.init_cluster(cluster)
+      new(nil, cluster).all
+    end
+
     def initialize(source_cluster, destination_cluster)
       @source = DataPath.new(cluster: source_cluster)
       @destination = DataPath.new(cluster: destination_cluster)

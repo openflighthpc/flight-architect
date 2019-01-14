@@ -29,7 +29,7 @@ RSpec.describe Underware::Commands::Configure::Group do
 
   def run_configure_group(group)
     Underware::Utils.run_command(
-      Underware::Commands::Configure::Group, group
+      Underware::Commands::Configure::Group, group, 'node[01-10]'
     )
   end
 

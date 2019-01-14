@@ -33,10 +33,11 @@ module Underware
       class Group < CommandHelpers::ConfigureCommand
         private
 
-        attr_reader :group_name, :cache, :groups
+        attr_reader :group_name, :cache, :groups, :nodes_string
 
         def setup
           @group_name = args.first
+          @nodes_string = args[1]
           @groups = parse_groups
         end
 
@@ -50,23 +51,10 @@ module Underware
         end
 
         def custom_configuration
-          node_range, genders = configured_nodes_and_genders
           ClusterAttr.update('something') do |attr|
             attr.add_group(group_name)
-            attr.add_nodes(node_range, groups: groups)
+            attr.add_nodes(nodes_string, groups: groups)
           end
-        end
-
-        def configured_nodes_and_genders
-          reset_alces
-          new_group = Namespaces::Group.new(alces, group_name, index: nil)
-          genders = [
-            group_name,
-            new_group.config.role,
-            new_group.answer.secondary_groups,
-            'all'
-          ]
-          [new_group.answer.hostname_range.to_s, genders]
         end
 
         def parse_groups

@@ -12,7 +12,7 @@ end
 module Underware
   class Config
     def self.current_cluster
-      Underware::Commands::Init::CLUSTER_IDENTIFIER
+      'cluster'
     end
   end
 end

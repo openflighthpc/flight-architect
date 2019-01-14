@@ -38,10 +38,7 @@ module Underware
       delegate_missing_to :data_path_cache
 
       def data_path_cache
-        @data_path_cache ||= begin
-                               cluster = Commands::Init::CLUSTER_IDENTIFIER
-                               DataPath.new(cluster: cluster)
-                             end
+        @data_path_cache ||= DataPath.new(cluster: Config.current_cluster)
       end
 
       # NOTE: This method is not going to be migrated onto DataPath

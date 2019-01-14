@@ -25,11 +25,11 @@
 
 require 'json'
 require 'underware/data_copy'
+require 'underware/config'
 
 module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
-      CLUSTER_IDENTIFIER = 'cluster'
       LOGIN_GROUP = 'login'
       LOGIN_NODE_RANGE = 'gateway1'
       NODES_GROUP = 'nodes'
@@ -40,7 +40,7 @@ module Underware
       def setup; end
 
       def run
-        DataCopy.init_cluster(CLUSTER_IDENTIFIER)
+        DataCopy.init_cluster(Config.current_cluster)
         configure_domain
         configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
         configure_group(NODES_GROUP, NODES_RANGE)

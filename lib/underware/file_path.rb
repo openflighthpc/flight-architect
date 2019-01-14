@@ -113,12 +113,10 @@ module Underware
         File.join(underware_storage, 'assets')
       end
 
-      def layout(*a)
-        record(layouts_dir, *a)
-      end
-
+      # NOTE: This method has been deprecated and will not be ported to
+      # DataPath
       def layouts_dir
-        File.join(underware_storage, 'layouts')
+        data_path_cache.layout
       end
 
       def asset_cache

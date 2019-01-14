@@ -40,17 +40,21 @@ module Underware
       File.join(base, *relative_path)
     end
 
-    def template(*relative_path)
-      relative('templates', *relative_path)
-    end
-
-    # Generate a list of relative path methods
+    # Generate a list of static path methods
     {
       configure: 'configure.yaml',
       public_key: ['keys', 'id_rsa.pub'],
       private_key: ['keys', 'id_rsa']
     }.each do |method, path|
       define_method(method) { relative(*Array.wrap(path)) }
+    end
+
+    # Generate a list of directory path methods
+    {
+      template: 'templates',
+      layout: 'layouts'
+    }.each do |method, path|
+      define_method(method) { |*a| relative(*Array.wrap(path), *a) }
     end
 
     private

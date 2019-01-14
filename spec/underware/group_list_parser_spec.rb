@@ -39,6 +39,12 @@ RSpec.describe Underware::GroupListParser do
       expect(described_class.parse(groups.join(','))).to eq(groups)
     end
 
+    it 'errors if a group is repeated' do
+      expect do
+        expect(described_class.parse('group,group'))
+      end.to raise_error(Underware::RepeatedGroupError)
+    end
+
     context 'with non alphanumeric characters' do
       ['_', '-', '!', '*', '.'].each do |char|
         it "errors with: #{char}" do

@@ -25,7 +25,10 @@
 module Underware
   class GroupListParser
     def self.parse(string)
-      string.to_s.split(',').each { |n| error_if_invalid_name(n) }
+      string.to_s.split(',').tap do |groups|
+        groups.each { |n| error_if_invalid_name(n) }
+        error_if_repeated_group(groups)
+      end
     end
 
     private_class_method
@@ -34,6 +37,17 @@ module Underware
       return if /\A[[:alnum:]]*\z/.match?(name)
       raise InvalidGroupName, <<~ERROR
         The group name must be alphanumeric: #{name}
+      ERROR
+    end
+
+    def self.error_if_repeated_group(groups)
+      repeats = groups.group_by { |g| g }
+                      .select { |_, group_array| group_array.length > 1 }
+                      .keys
+      return if repeats.empty?
+      raise RepeatedGroupError, <<~ERROR.squish
+        The following #{repeats.length == 1 ? 'group has' : 'groups have' }
+        been specified multiple times: #{repeats.join(',')}
       ERROR
     end
   end

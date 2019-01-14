@@ -46,7 +46,9 @@ module Underware
 
     # Generate a list of relative path methods
     {
-      configure: 'configure.yaml'
+      configure: 'configure.yaml',
+      public_key: ['keys', 'id_rsa.pub'],
+      private_key: ['keys', 'id_rsa']
     }.each do |method, path|
       define_method(method) { relative(*Array.wrap(path)) }
     end

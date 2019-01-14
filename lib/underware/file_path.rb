@@ -68,6 +68,7 @@ module Underware
         File.join(underware_storage, 'answers')
       end
 
+      # TODO: Is this going to in built or configurable per cluster?
       def overview
         File.join(internal_data_dir, 'overview.yaml')
       end
@@ -141,14 +142,6 @@ module Underware
 
       def platform_configs_dir
         File.join(config_dir, 'platforms')
-      end
-
-      def public_key
-        File.join(keys, 'id_rsa.pub')
-      end
-
-      def private_key
-        File.join(keys, 'id_rsa')
       end
 
       def init_data(relative_path)

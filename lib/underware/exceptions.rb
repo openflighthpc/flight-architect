@@ -44,6 +44,8 @@ module Underware
   class MissingRecordError < UserUnderwareError; end
   class NoNetworkInterfacesAvailable < UserUnderwareError; end
 
+  class InvalidGroupName < UserUnderwareError; end
+
   class RecursiveConfigDepthExceededError < UserUnderwareError
     def initialize(msg = 'Input hash may contain infinitely recursive ERB')
       super

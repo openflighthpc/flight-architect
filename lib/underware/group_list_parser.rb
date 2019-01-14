@@ -25,7 +25,14 @@
 module Underware
   class GroupListParser
     def self.parse(string)
-      string.to_s.split(',')
+      string.to_s.split(',').each { |n| error_if_invalid_name(n) }
+    end
+
+    def self.error_if_invalid_name(name)
+      return if /\A[[:alnum:]]*\z/.match?(name)
+      raise InvalidGroupName, <<~ERROR
+        The group name must be alphanumeric: #{name}
+      ERROR
     end
   end
 end

@@ -38,5 +38,16 @@ RSpec.describe Underware::GroupListParser do
       groups = ['group', 'differentgroup', 'group4', 'agroup1']
       expect(described_class.parse(groups.join(','))).to eq(groups)
     end
+
+    context 'with non alphanumeric characters' do
+      ['_', '-', '!', '*', '.'].each do |char|
+        it "errors with: #{char}" do
+          str = "group#{char}"
+          expect do
+            described_class.parse(str)
+          end.to raise_error(Underware::InvalidGroupName)
+        end
+      end
+    end
   end
 end

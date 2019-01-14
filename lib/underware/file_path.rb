@@ -24,6 +24,7 @@
 
 require 'underware/constants'
 require 'underware/file_path/config_path'
+require 'underware/data_path'
 
 module Underware
   module FilePath
@@ -33,6 +34,15 @@ module Underware
                :node_config,
                :config_dir,
                to: :config_path
+
+      delegate_missing_to :data_path_cache
+
+      def data_path_cache
+        @data_path_cache ||= begin
+                               cluster = Commands::Init::CLUSTER_IDENTIFIER
+                               DataPath.new(cluster: cluster)
+                             end
+      end
 
       def templates_dir
         File.join(internal_data_dir, 'templates')

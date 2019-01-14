@@ -40,6 +40,13 @@ module Underware
       File.join(base, *relative_path)
     end
 
+    # Generate a list of relative path methods
+    {
+      configure: 'configure.yaml'
+    }.each do |method, path|
+      define_method(method) { relative(*Array.wrap(path)) }
+    end
+
     private
 
     attr_reader :cluster

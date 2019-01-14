@@ -163,6 +163,8 @@ RSpec.describe Underware::Namespaces::Node do
     let(:deactivated_plugin) { 'deactivated_plugin' }
 
     before :each do
+      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+
       # Create all test plugins.
       [
         enabled_plugin,

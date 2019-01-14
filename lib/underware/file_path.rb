@@ -48,10 +48,6 @@ module Underware
         File.join(internal_data_dir, 'templates')
       end
 
-      def configure
-        File.join(internal_data_dir, 'configure.yaml')
-      end
-
       def domain_answers
         File.join(answers_dir, 'domain.yaml')
       end

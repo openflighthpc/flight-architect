@@ -28,13 +28,12 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
 
   describe 'option handling' do
     it 'passes answers through to configurator as hash' do
-      FileSystem.test do |fs|
-        answers = { question_1: 'answer_1' }
-        expect_any_instance_of(Underware::Configurator)
-          .to receive(:configure).with(answers)
+      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+      answers = { question_1: 'answer_1' }
+      expect_any_instance_of(Underware::Configurator)
+        .to receive(:configure).with(answers)
 
-        Underware::Utils.run_command(TestCommand, answers: answers.to_json)
-      end
+      Underware::Utils.run_command(TestCommand, answers: answers.to_json)
     end
   end
 end

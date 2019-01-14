@@ -23,6 +23,7 @@
 #==============================================================================
 
 require 'underware/namespaces/plugin'
+require 'underware/system_command'
 
 module Underware
   module Namespaces

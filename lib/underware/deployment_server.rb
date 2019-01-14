@@ -23,6 +23,7 @@
 #==============================================================================
 
 require 'underware/network'
+require 'underware/system_command'
 
 # XXX All the URLs here have paths under `/metalware`, and only make sense/have
 # any chance of resolving when Metalware (and the web server set up by this) is

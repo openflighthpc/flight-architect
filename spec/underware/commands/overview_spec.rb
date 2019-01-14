@@ -2,6 +2,7 @@
 
 require 'underware/commands'
 require 'fixtures/shared_context/overview'
+require 'underware/data_copy'
 
 RSpec.describe Underware::Commands::Overview do
   include_context 'overview context'
@@ -25,6 +26,7 @@ RSpec.describe Underware::Commands::Overview do
   end
 
   it 'does not error when using the real overview.yaml' do
+    Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
     expect do
       run_command
     end.not_to raise_error

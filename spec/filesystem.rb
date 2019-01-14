@@ -122,10 +122,9 @@ class FileSystem
   # Useful when a `configure.yaml` file is required, but don't want to use real
   # file to avoid actual questions being asked in tests.
   def with_minimal_configure_file
-    File.write(
-      Underware::FilePath.configure,
-      minimal_configure_file_data
-    )
+    path = Underware::FilePath.configure
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(path, minimal_configure_file_data)
   end
 
   # Create same directory hierarchy that would be created by an Underware

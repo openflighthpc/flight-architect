@@ -53,7 +53,6 @@ module Underware
 
       private
 
-      # TODO: Currently the parser does not support the example option
       def parse_command_attributes(command, attributes)
         @calling_obj.command command do |c|
           attributes.each do |a, v|
@@ -78,6 +77,8 @@ module Underware
                 subcommand = "#{command} #{subcommand}"
                 parse_command_attributes(subcommand, subattributes)
               end
+            when 'examples'
+              v.each { |e| c.example(*e) }
             else
               c.send("#{a}=", v.respond_to?(:chomp) ? v.chomp : v)
             end

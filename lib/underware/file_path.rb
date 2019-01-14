@@ -105,12 +105,10 @@ module Underware
         File.join(underware_install, 'data/asset_types', type + '.yaml')
       end
 
-      def asset(*a)
-        record(assets_dir, *a)
-      end
-
+      # NOTE: This method has been deprecated and will not be ported to
+      # DataPath
       def assets_dir
-        File.join(underware_storage, 'assets')
+        data_path_cache.asset
       end
 
       # NOTE: This method has been deprecated and will not be ported to

@@ -52,7 +52,8 @@ module Underware
     # Generate a list of directory path methods
     {
       template: 'templates',
-      layout: 'layouts'
+      layout: 'layouts',
+      asset: 'assets'
     }.each do |method, path|
       define_method(method) { |*a| relative(*Array.wrap(path), *a) }
     end

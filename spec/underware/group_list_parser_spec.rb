@@ -22,43 +22,36 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/command_helpers/configure_command'
-require 'underware/constants'
-require 'underware/cluster_attr'
 require 'underware/group_list_parser'
 
-module Underware
-  module Commands
-    module Configure
-      class Group < CommandHelpers::ConfigureCommand
-        private
+RSpec.describe Underware::GroupListParser do
+  describe '::parse' do
+    it 'converts nil to an empty array' do
+      expect(described_class.parse(nil)).to eq([])
+    end
 
-        attr_reader :group_name, :cache, :groups, :nodes_string
+    it 'handles blank values within the list' do
+      expect(described_class.parse(',,,')).to eq([])
+    end
 
-        def setup
-          @group_name = args.first
-          @nodes_string = args[1]
-          @groups = parse_groups
-        end
+    it 'returns the list of groups' do
+      groups = ['group', 'differentgroup', 'group4', 'agroup1']
+      expect(described_class.parse(groups.join(','))).to eq(groups)
+    end
 
-        def configurator
-          @configurator ||=
-            Configurator.for_group(alces, group_name)
-        end
+    it 'errors if a group is repeated' do
+      expect do
+        expect(described_class.parse('group,group'))
+      end.to raise_error(Underware::RepeatedGroupError)
+    end
 
-        def answer_file
-          FilePath.group_answers(group_name)
-        end
-
-        def custom_configuration
-          ClusterAttr.update('something') do |attr|
-            attr.add_group(group_name)
-            attr.add_nodes(nodes_string, groups: groups)
-          end
-        end
-
-        def parse_groups
-          GroupListParser.parse("#{group_name},#{options.groups}")
+    context 'with non alphanumeric characters' do
+      ['_', '-', '!', '*', '.'].each do |char|
+        it "errors with: #{char}" do
+          str = "group#{char}"
+          expect do
+            described_class.parse(str)
+          end.to raise_error(Underware::InvalidGroupName)
         end
       end
     end

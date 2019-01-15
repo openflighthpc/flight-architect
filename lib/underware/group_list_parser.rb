@@ -22,45 +22,33 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/command_helpers/configure_command'
-require 'underware/constants'
-require 'underware/cluster_attr'
-require 'underware/group_list_parser'
-
 module Underware
-  module Commands
-    module Configure
-      class Group < CommandHelpers::ConfigureCommand
-        private
-
-        attr_reader :group_name, :cache, :groups, :nodes_string
-
-        def setup
-          @group_name = args.first
-          @nodes_string = args[1]
-          @groups = parse_groups
-        end
-
-        def configurator
-          @configurator ||=
-            Configurator.for_group(alces, group_name)
-        end
-
-        def answer_file
-          FilePath.group_answers(group_name)
-        end
-
-        def custom_configuration
-          ClusterAttr.update('something') do |attr|
-            attr.add_group(group_name)
-            attr.add_nodes(nodes_string, groups: groups)
-          end
-        end
-
-        def parse_groups
-          GroupListParser.parse("#{group_name},#{options.groups}")
-        end
+  class GroupListParser
+    def self.parse(string)
+      string.to_s.split(',').tap do |groups|
+        groups.each { |n| error_if_invalid_name(n) }
+        error_if_repeated_group(groups)
       end
+    end
+
+    private_class_method
+
+    def self.error_if_invalid_name(name)
+      return if /\A[[:alnum:]]*\z/.match?(name)
+      raise InvalidGroupName, <<~ERROR
+        The group name must be alphanumeric: #{name}
+      ERROR
+    end
+
+    def self.error_if_repeated_group(groups)
+      repeats = groups.group_by { |g| g }
+                      .select { |_, group_array| group_array.length > 1 }
+                      .keys
+      return if repeats.empty?
+      raise RepeatedGroupError, <<~ERROR.squish
+        The following #{repeats.length == 1 ? 'group has' : 'groups have' }
+        been specified multiple times: #{repeats.join(',')}
+      ERROR
     end
   end
 end

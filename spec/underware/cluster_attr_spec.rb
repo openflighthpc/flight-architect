@@ -118,6 +118,13 @@ RSpec.describe Underware::ClusterAttr do
         expect(subject.nodes_in_group('some-random-group')).to eq([])
       end
     end
+
+    describe '#path' do
+      it 'returns a cluster path' do
+        base = Underware::DataPath.cluster(subject.cluster).base
+        expect(subject.path).to match(/#{base}.*\.yaml/)
+      end
+    end
   end
 
   context 'when adding a single group' do

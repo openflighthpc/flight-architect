@@ -24,6 +24,10 @@
 
 module Underware
   class DataPath
+    def self.cluster(cluster)
+      new(cluster: cluster)
+    end
+
     def initialize(cluster: nil, base: nil)
       @base = if base
                 base

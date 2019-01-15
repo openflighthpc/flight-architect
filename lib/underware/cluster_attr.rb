@@ -73,6 +73,10 @@ module Underware
       setup
     end
 
+    def path
+      DataPath.cluster(cluster).relative(self.class.filename + '.yaml')
+    end
+
     def setup
       __data__.set_if_empty(:groups, value: ['orphan'])
     end

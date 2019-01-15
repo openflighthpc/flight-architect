@@ -42,7 +42,7 @@ module Underware
 
       # TODO: Is this going to in built or configurable per cluster?
       def overview
-        File.join(internal_data_dir, 'overview.yaml')
+        File.join(DataPath.new.base, 'overview.yaml')
       end
 
       # TODO: Does this need to be ported? It is more metalware related code
@@ -121,10 +121,6 @@ module Underware
       # NOTE: Deprecated! This method should be removed completely
       def namespace_data_file(name)
         data_path_cache.data_config(name)
-      end
-
-      def internal_data_dir
-        File.join(underware_install, 'data')
       end
 
       private

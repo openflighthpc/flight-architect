@@ -144,8 +144,10 @@ class FileSystem
     end
   end
 
+  # NOTE: Is this method really required?
+  # Or does it make more sense to merge in DataCopy here?
   def clone_in_data_dir
-    data_dir = Underware::FilePath.internal_data_dir
+    data_dir = Underware::DataPath.new.base
     clone(data_dir, data_dir)
   end
 

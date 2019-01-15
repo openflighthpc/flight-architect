@@ -106,8 +106,10 @@ module Underware
         data_path_cache.layout
       end
 
+      # NOTE: Deprecated! This is a specific method that should be extracted
+      # to a dedicated class
       def asset_cache
-        File.join(cache, 'assets.yaml')
+        data_path_cache.relative('assets-cache.yaml')
       end
 
       def namespace_data_file(name)

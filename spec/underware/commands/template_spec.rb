@@ -43,6 +43,7 @@ RSpec.describe Underware::Commands::Template do
     # setup in individual tests.
     FileUtils.rm_rf(Underware::FilePath.templates_dir)
 
+    FileUtils.mkdir_p(Underware::FilePath.platform_configs_dir)
     FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
     FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
   end

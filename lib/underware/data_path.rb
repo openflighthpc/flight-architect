@@ -59,7 +59,8 @@ module Underware
     end
 
     {
-      answers: 'answers'
+      answers: 'answers',
+      config: 'configs'
     }.each do |method, path|
       path = Array.wrap(path)
       define_method(:"domain_#{method}") { relative(path, 'domain.yaml') }

@@ -23,19 +23,12 @@
 #==============================================================================
 
 require 'underware/constants'
-require 'underware/file_path/config_path'
 require 'underware/data_path'
 require 'underware/config'
 
 module Underware
   module FilePath
     class << self
-      delegate :domain_config,
-               :group_config,
-               :node_config,
-               :config_dir,
-               to: :config_path
-
       delegate_missing_to :data_path_cache
 
       def data_path_cache
@@ -55,6 +48,16 @@ module Underware
       # NOTE: Deprecated! This method should be removed completely
       def answers_dir
         data_path_cache.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def config_dir
+        data_path_cache.relative('configs').tap { |p| FileUtils.mkdir_p(p) }
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def platform_configs_dir
+        File.join(config_dir, 'platforms')
       end
 
       # TODO: Is this going to in built or configurable per cluster?
@@ -117,14 +120,6 @@ module Underware
         File.join(underware_install, 'data')
       end
 
-      def platform_config(platform)
-        File.join(platform_configs_dir, "#{platform}.yaml")
-      end
-
-      def platform_configs_dir
-        File.join(config_dir, 'platforms')
-      end
-
       def init_data(relative_path)
         File.join(internal_data_dir, 'init', relative_path)
       end
@@ -133,10 +128,6 @@ module Underware
 
       def record(record_dir, types_dir, name)
         File.join(record_dir, types_dir, name + '.yaml')
-      end
-
-      def config_path
-        ConfigPath.new(base: internal_data_dir)
       end
     end
   end

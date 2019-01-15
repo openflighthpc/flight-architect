@@ -45,6 +45,16 @@ module Underware
         File.join(internal_data_dir, 'overview.yaml')
       end
 
+      # TODO: Does this need to be ported? It is more metalware related code
+      def event(node_namespace, event = '')
+        File.join(events_dir, node_namespace.name, event)
+      end
+
+      # TODO: As above
+      def build_complete(node_namespace)
+        event(node_namespace, 'complete')
+      end
+
       # NOTE: Deprecated! This method should be removed completely
       def templates_dir
         data_path_cache.template
@@ -80,16 +90,6 @@ module Underware
                      Constants.const_get(const)
                    end
                  end
-      end
-
-      # TODO: Does this need to be ported? It is more metalware related code
-      def event(node_namespace, event = '')
-        File.join(events_dir, node_namespace.name, event)
-      end
-
-      # TODO: As above
-      def build_complete(node_namespace)
-        event(node_namespace, 'complete')
       end
 
       def logs_dir

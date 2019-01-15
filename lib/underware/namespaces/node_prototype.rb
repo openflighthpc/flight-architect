@@ -83,10 +83,6 @@ module Underware
         end
       end
 
-      def local?
-        name == 'local'
-      end
-
       private
 
       def white_list_for_hasher
@@ -112,7 +108,7 @@ module Underware
         { groups: genders, node: name }
       rescue NodeNotInGendersError
         # The answer hash needs to be accessible by the Configurator. Nodes in
-        # a group work fine as they appear in the genders file BUT local and
+        # a group work fine as they appear in the genders file BUT
         # orphan nodes DO NOT appear in the genders file and cause the above
         # error.
         { groups: ['orphan'], node: name }

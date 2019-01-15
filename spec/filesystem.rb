@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -103,10 +103,6 @@ class FileSystem
     with_fixtures(answer_fixtures_dir, at: '/var/lib/underware/answers')
   end
 
-  def with_genders_fixtures(genders_file = 'genders/default')
-    with_fixtures(genders_file, at: Underware::Constants::GENDERS_PATH)
-  end
-
   def with_group_cache_fixture(group_cache_file)
     with_fixtures(
       group_cache_file,
@@ -183,8 +179,7 @@ class FileSystem
       questions: [],
       domain: [],
       group: [],
-      node: [],
-      local: []
+      node: []
     )
   end
 

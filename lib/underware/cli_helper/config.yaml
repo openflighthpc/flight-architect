@@ -102,17 +102,6 @@ subcommands:
     options:
       - *configure_answers_option
 
-  configure_local: &configure_local
-    syntax: underware configure local [options]
-    summary: Configure the master Underware node
-    description: >
-      Configures the node that underware is running on. This is treated as the
-      underware master node. This must be ran to configure underware to match
-      the system environment. This command is intended to only be ran once.
-    action: Commands::Configure::Local
-    options:
-      - *configure_answers_option
-
   layout_add: &layout_add
     syntax: underware layout add TYPE_OR_LAYOUT LAYOUT_NAME [options]
     summary: Add a new layout record
@@ -207,7 +196,6 @@ commands:
       domain: *configure_domain
       group: *configure_group
       node: *configure_node
-      local: *configure_local
 
   each:
     syntax: underware each NODE_IDENTIFIER COMMAND [options]
@@ -290,7 +278,7 @@ commands:
       may optionally begin with 'alces' but this is optional.
 
 
-      The nodes, groups, domain and local namespaces can be viewed. The nodes
+      The nodes, groups, and domain namepaces can be viewed. The nodes
       and groups have to be followed by the name of the object. The command
       can be delimited by spaces or periods.
 

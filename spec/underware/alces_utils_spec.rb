@@ -51,11 +51,6 @@ RSpec.describe Underware::AlcesUtils do
                       .define_method_testing {} # Intentionally blank
     end
 
-    it 'only has the local node by default' do
-      expect(alces.nodes.length).to eq(1)
-      expect(alces.nodes[0]).to be_local
-    end
-
     context 'with a block before each test' do
       described_class.mock self, :each do
         allow(alces).to receive(:testing).and_return(100)
@@ -164,9 +159,7 @@ RSpec.describe Underware::AlcesUtils do
       end
 
       it 'appears in the nodes list' do
-        # NOTE: The `+ 1`  is accounting for the local node
-        # Remove it if and when the local node is removed
-        expect(alces.nodes.length).to eq(2 + 1)
+        expect(alces.nodes.length).to eq(2)
         expect(alces.nodes.find_by_name(name).name).to eq(name)
       end
 

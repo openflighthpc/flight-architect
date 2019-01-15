@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -21,6 +21,7 @@
 # For more information on the Alces Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
+
 require 'underware/validation/answer'
 require 'underware/data'
 require 'underware/spec/alces_utils'
@@ -48,7 +49,6 @@ RSpec.describe Underware::Validation::Answer do
 
       group: [],
       node: [],
-      local: [],
     }
   end
 

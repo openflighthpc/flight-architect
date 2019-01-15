@@ -22,9 +22,7 @@ RSpec.describe Underware::Namespaces::UnderwareArray do
   end
 
   it 'has the correct number of items' do
-    # NOTE: The `+ 1` is accounting for the local node
-    # Remove this if and when the local node is removed
-    expect(alces.nodes.length).to eq(node_names.length + 1)
+    expect(alces.nodes.length).to eq(node_names.length)
   end
 
   it 'can find all the items' do

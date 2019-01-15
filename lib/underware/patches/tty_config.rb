@@ -44,10 +44,10 @@ module Underware
         # directives however
         #
         def self.safe_load(yaml,
-                      whitelist_classes = [],
-                      whitelist_symbols = [],
-                      _aliases = false,
-                      filename = nil)
+                           whitelist_classes = [],
+                           whitelist_symbols = [],
+                           _aliases = false,
+                           filename = nil)
           super(yaml, whitelist_classes, whitelist_symbols, true, filename)
         end
       end

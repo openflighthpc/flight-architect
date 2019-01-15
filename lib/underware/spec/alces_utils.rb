@@ -28,7 +28,6 @@ require 'recursive_open_struct'
 
 module Underware
   module AlcesUtils
-    GENDERS_FILE_REGEX = /-f [[:graph:]]+/
     # Causes the testing version of alces (/config) to be used by underware
     class << self
       def start(example_group)
@@ -128,7 +127,6 @@ module Underware
         allow(namespace).to receive(:answer).and_return(OpenStruct.new)
       end
 
-      # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
         ClusterAttr.update(alces.cluster_identifier) do |attr|
@@ -136,7 +134,6 @@ module Underware
           attr.add_nodes(name, groups: genders)
         end
         alces.instance_variable_set(:@cluster_attr, nil)
-        add_node_to_genders_file(name, *genders)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)
           underware_nodes = Underware::Namespaces::UnderwareArray.new(new_nodes)
@@ -149,8 +146,7 @@ module Underware
         ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
         alces.instance_variable_set(:@groups, nil)
         alces.instance_variable_set(:@cluster_attr, nil)
-        group = alces.groups.find_by_name(name)
-        group
+        alces.groups.find_by_name(name)
       end
 
       def create_asset(asset_name, data, type: 'server')
@@ -170,12 +166,6 @@ module Underware
       private
 
       attr_reader :alces, :test
-
-      def add_node_to_genders_file(name, *genders)
-        genders = [AlcesUtils.default_group] if genders.empty?
-        genders_entry = "#{name} #{genders.join(',')}\n"
-        File.write(Underware::FilePath.genders, genders_entry, mode: 'a')
-      end
 
       # Allows the RSpec methods to be accessed
       def respond_to_missing?(s, *_a)

@@ -65,7 +65,6 @@ RSpec.describe Underware::AnswersTableCreator do
           question: 'question 3',
         },
       ],
-      local: [],
     }
   end
 

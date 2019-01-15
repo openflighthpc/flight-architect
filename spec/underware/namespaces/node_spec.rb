@@ -123,20 +123,6 @@ RSpec.describe Underware::Namespaces::Node do
       end
     end
 
-    describe '#local?' do
-      context 'with a regular node' do
-        subject { described_class.new(alces, 'node01') }
-
-        it { is_expected.not_to be_local }
-      end
-
-      context "with the 'local' node" do
-        subject { described_class.new(alces, 'local') }
-
-        it { is_expected.to be_local }
-      end
-    end
-
     describe '#asset' do
       let(:content) do
         { node: { node_name.to_sym => 'asset_test' } }

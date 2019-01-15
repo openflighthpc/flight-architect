@@ -24,8 +24,5 @@ RSpec.describe Underware::Plugins::Plugin do
     expect(
       subject.group_config('some_node')
     ).to eq("#{plugin_dir_path}/config/some_node.yaml")
-    expect(
-      subject.local_config
-    ).to eq("#{plugin_dir_path}/config/local.yaml")
   end
 end

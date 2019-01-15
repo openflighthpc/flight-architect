@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -34,7 +34,6 @@ module Underware
     KEYS_PATH = File.join(UNDERWARE_STORAGE_PATH, 'keys')
     RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
     RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
-    GENDERS_PATH = File.join(RENDERED_SYSTEM_FILES_PATH, 'genders')
 
     # Directory name where shared 'content' templates live.
     CONTENT_DIR_NAME = 'content'
@@ -60,7 +59,7 @@ module Underware
                                            'lib/underware/validation',
                                            'errors.yaml')
 
-    CONFIGURE_SECTIONS = [:domain, :group, :node, :local].freeze
+    CONFIGURE_SECTIONS = [:domain, :group, :node].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
 
 

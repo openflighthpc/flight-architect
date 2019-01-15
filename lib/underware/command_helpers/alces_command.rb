@@ -32,7 +32,7 @@ module Underware
       end
 
       def alces_command_replace_short_methods(arr)
-        ['nodes', 'groups', 'domain', 'local'].each do |method|
+        ['nodes', 'groups', 'domain'].each do |method|
           next unless /\A#{arr[0]}/.match?(method)
           arr.shift
           arr.unshift(method)

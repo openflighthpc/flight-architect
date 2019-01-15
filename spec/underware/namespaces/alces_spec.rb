@@ -190,6 +190,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
     it 'appropriately handles respond_to? as whether data file exists' do
       existent_path = Underware::FilePath.namespace_data_file('existent')
+      FileUtils.mkdir_p(File.dirname(existent_path))
       FileUtils.touch(existent_path)
 
       expect(alces.data).to respond_to(:existent)

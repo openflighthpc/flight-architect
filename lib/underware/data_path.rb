@@ -41,7 +41,7 @@ module Underware
       File.join(base, *relative_path)
     end
 
-    # Generate a list of static path methods
+    # Generate static path methods
     {
       configure: 'configure.yaml',
       public_key: ['keys', 'id_rsa.pub'],
@@ -50,7 +50,7 @@ module Underware
       define_method(method) { relative(*Array.wrap(path)) }
     end
 
-    # Generate a list of directory path methods
+    # Generate directory path methods
     {
       template: 'templates',
       layout: 'layouts',
@@ -60,6 +60,17 @@ module Underware
       define_method(method) { |*a| relative(*Array.wrap(path), *a) }
     end
 
+    # Generate named yaml path methods
+    {
+      data_config: 'data'
+    }.each do |method, path|
+      define_method(method) do |name|
+        relative(*Array.wrap(path), "#{name}.yaml")
+      end
+    end
+
+    # Generate domain_/group_/node_/platform_ path methods
+    # NOTE: Should 'platform' methods live here or in 'named yaml' above?
     {
       answers: 'answers',
       config: 'configs'

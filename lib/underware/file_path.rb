@@ -118,11 +118,9 @@ module Underware
         data_path_cache.relative('assets-cache.yaml')
       end
 
+      # NOTE: Deprecated! This method should be removed completely
       def namespace_data_file(name)
-        File.join(
-          Constants::NAMESPACE_DATA_PATH,
-          "#{name}.yaml"
-        )
+        data_path_cache.data_config(name)
       end
 
       def internal_data_dir

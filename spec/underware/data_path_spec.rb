@@ -64,4 +64,12 @@ RSpec.describe Underware::DataPath do
 
     it_behaves_like 'generic path interface'
   end
+
+  context 'with a specified base path' do
+    let(:cluster) { 'this-cluster-should-be-ignored' }
+    let(:base_path) { '/some/random/base/path' }
+    subject { described_class.new(cluster: cluster, base: base_path) }
+
+    it_behaves_like 'generic path interface'
+  end
 end

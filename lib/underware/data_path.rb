@@ -24,15 +24,18 @@
 
 module Underware
   class DataPath
-    def initialize(cluster: nil)
+    def initialize(cluster: nil, base: nil)
       @cluster = cluster
+      @base = base
     end
 
     def base
-      if cluster
-        File.join(Constants::UNDERWARE_STORAGE_PATH, 'clusters', cluster)
-      else
-        File.join(Constants::UNDERWARE_INSTALL_PATH, 'data')
+      @base ||= begin
+        if cluster
+          File.join(Constants::UNDERWARE_STORAGE_PATH, 'clusters', cluster)
+        else
+          File.join(Constants::UNDERWARE_INSTALL_PATH, 'data')
+        end
       end
     end
 

@@ -47,7 +47,8 @@ module Underware
 
       # TODO: Does this need to be ported? It is more metalware related code
       def event(node_namespace, event = '')
-        File.join(events_dir, node_namespace.name, event)
+        File.join(Underware::Constants::EVENTS_DIR_PATH,
+                  node_namespace.name, event)
       end
 
       # TODO: As above
@@ -86,20 +87,13 @@ module Underware
         data_path_cache.plugin
       end
 
-      def define_constant_paths
-        Constants.constants
-                 .map(& :to_s)
-                 .select { |const| /\A.+_PATH\Z/.match?(const) }
-                 .each do |const|
-                   method_name = :"#{const.chomp('_PATH').downcase}"
-                   define_singleton_method method_name do
-                     Constants.const_get(const)
-                   end
-                 end
-      end
-
       def logs_dir
         '/var/log/underware'
+      end
+
+      def dry_validation_errors
+        File.join(Underware::Constants::INSTALL_PATH,
+                  'lib/underware/validation/errors.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely
@@ -125,5 +119,3 @@ module Underware
     end
   end
 end
-
-Underware::FilePath.define_constant_paths

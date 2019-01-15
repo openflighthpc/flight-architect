@@ -26,8 +26,10 @@ require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
   module Constants
-    UNDERWARE_INSTALL_PATH =
+    INSTALL_PATH =
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
+    # TODO: Replace the long constant with the short version
+    UNDERWARE_INSTALL_PATH = INSTALL_PATH
 
     UNDERWARE_STORAGE_PATH = '/var/lib/underware'
     NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
@@ -53,10 +55,6 @@ module Underware
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10
 
     NODEATTR_COMMAND = 'nodeattr'
-
-    DRY_VALIDATION_ERRORS_PATH = File.join(UNDERWARE_INSTALL_PATH,
-                                           'lib/underware/validation',
-                                           'errors.yaml')
 
     CONFIGURE_SECTIONS = [:domain, :group, :node].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'

@@ -21,7 +21,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_rendered(path:, for_platform:, for_scope_type:, for_scope_name: nil)
-    rendered_template = File.read("#{Underware::Constants::RENDERED_PATH}/#{path}")
+    rendered_template = File.read(Underware::FilePath.rendered(path))
 
     expect(rendered_template).to include("platform: #{for_platform}")
     expect(rendered_template).to include("scope_type: #{for_scope_type}")
@@ -31,9 +31,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_not_rendered(path:)
-    expect(
-      File.exists?("#{Underware::Constants::RENDERED_PATH}/#{path}")
-    ).to be false
+    expect(File.exists?(Underware::FilePath.rendered(path))).to be false
   end
 
   let(:cluster) { Underware::Config.current_cluster }
@@ -210,8 +208,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'clears out pre-existing files from rendered files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
+    previously_rendered_file_path = Underware::FilePath.rendered(
       'some_platform/node/some_node/some_template'
     )
     Underware::Utils.create_file(previously_rendered_file_path)

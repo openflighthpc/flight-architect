@@ -17,6 +17,7 @@ module Underware
       end
 
       def clear_current_rendered_dir
+        FileUtils.mkdir_p(FilePath.rendered)
         Pathname.new(FilePath.rendered).children.map(&:to_s).each do |rendered_dir|
           unless PRESERVE_RENDERED_DIRS.include?(rendered_dir)
             FileUtils.rm_rf(rendered_dir)

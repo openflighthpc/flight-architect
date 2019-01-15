@@ -36,7 +36,7 @@ RSpec.describe Underware::Commands::Template do
     ).to be false
   end
 
-  let(:cluster) { 'my-test-cluster' }
+  let(:cluster) { Underware::Config.current_cluster }
 
   before :each do
     # Ensure templates directory is initially empty, so only testing with files

@@ -45,7 +45,7 @@ RSpec.describe Underware::Namespaces::Plugin do
     plugin_config_dir = File.join(plugins_path, plugin_name, 'config')
     FileUtils.mkdir_p plugin_config_dir
 
-    Underware::ClusterAttr.update('something') do |attr|
+    Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
       attr.add_nodes(node_name, groups: node_group_name)
     end
   end

@@ -45,7 +45,7 @@ module Underware
 
       def update(*a)
         new(*a).tap do |attr|
-          read(attr) unless attr.__data__.source_file.nil?
+          read(attr)
           yield attr if block_given?
           write(attr)
         end
@@ -54,12 +54,17 @@ module Underware
 
       private_class_method
 
+      # NOTE: `read` and `write` are class methods are they are not intended
+      # to be called directly. As these are file handling methods, they should
+      # be called through the `update` mechanism
       def read(attr)
-        attr.__data__.read
+        return unless File.exists?(attr.path)
+        attr.__data__.read(attr.path)
       end
 
       def write(attr)
-        attr.__data__.write(force: true)
+        FileUtils.mkdir_p(File.dirname(attr.path))
+        attr.__data__.write(attr.path, force: true)
       end
     end
 
@@ -68,8 +73,6 @@ module Underware
     def initialize(cluster)
       @cluster = cluster
       @__data__ = TTY::Config.new
-      __data__.prepend_path(FilePath.underware_storage)
-      __data__.filename = self.class.filename
       setup
     end
 

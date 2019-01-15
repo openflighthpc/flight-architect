@@ -231,7 +231,7 @@ RSpec.describe Underware::Namespaces::Node do
       stubbed_groups = ['primary_group', 'additional_group']
 
       before :each do
-        Underware::ClusterAttr.update('something') do |attr|
+        Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
           attr.add_nodes(test_node_name, groups: stubbed_groups)
         end
       end

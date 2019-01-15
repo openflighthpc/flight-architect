@@ -16,7 +16,7 @@ RSpec.describe Underware::Namespaces::UnderwareArray do
   let(:node_names) { ['node1', 'node2', 'node3'] }
 
   before do
-    Underware::ClusterAttr.update('something') do |attr|
+    Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
       node_names.each { |node| attr.add_nodes(node) }
     end
   end

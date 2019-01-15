@@ -55,6 +55,12 @@ module Underware
         event(node_namespace, 'complete')
       end
 
+      # TODO: The `init` process shouldn't rely on pre configured answers
+      # Instead it should be able to configure all the groups directly
+      def init_data(relative_path)
+        File.join(DataPath.new.base, 'init', relative_path)
+      end
+
       # NOTE: Deprecated! This method should be removed completely
       def templates_dir
         data_path_cache.template
@@ -121,10 +127,6 @@ module Underware
 
       def internal_data_dir
         File.join(underware_install, 'data')
-      end
-
-      def init_data(relative_path)
-        File.join(internal_data_dir, 'init', relative_path)
       end
 
       private

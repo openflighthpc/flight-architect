@@ -70,7 +70,7 @@ module Underware
 
       def determine_hostip_script
         File.join(
-          Constants::UNDERWARE_INSTALL_PATH,
+          Constants::INSTALL_PATH,
           'libexec/determine-hostip'
         )
       end

@@ -31,7 +31,7 @@ module Underware
     # Mocks.
     def use_mock_determine_hostip_script
       stub_const(
-        'Underware::Constants::UNDERWARE_INSTALL_PATH',
+        'Underware::Constants::INSTALL_PATH',
         FIXTURES_PATH
       )
     end

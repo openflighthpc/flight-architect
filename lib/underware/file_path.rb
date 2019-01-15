@@ -87,6 +87,12 @@ module Underware
         data_path_cache.plugin
       end
 
+      # NOTE: Deprecated! This is a specific method that should be extracted
+      # to a dedicated class
+      def plugin_cache
+        data_path_cache.relative('plugins.yaml')
+      end
+
       def logs_dir
         '/var/log/underware'
       end

@@ -54,7 +54,8 @@ module Underware
     {
       template: 'templates',
       layout: 'layouts',
-      asset: 'assets'
+      asset: 'assets',
+      plugin: 'plugins'
     }.each do |method, path|
       define_method(method) { |*a| relative(*Array.wrap(path), *a) }
     end

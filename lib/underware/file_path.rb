@@ -40,6 +40,11 @@ module Underware
         DataPath.new.relative('asset_types', type + '.yaml')
       end
 
+      # TODO: Is this going to in built or configurable per cluster?
+      def overview
+        File.join(internal_data_dir, 'overview.yaml')
+      end
+
       # NOTE: Deprecated! This method should be removed completely
       def templates_dir
         data_path_cache.template
@@ -60,13 +65,9 @@ module Underware
         File.join(config_dir, 'platforms')
       end
 
-      # TODO: Is this going to in built or configurable per cluster?
-      def overview
-        File.join(internal_data_dir, 'overview.yaml')
-      end
-
+      # NOTE: Deprecated! This method should be removed completely
       def plugins_dir
-        File.join(underware_storage, 'plugins')
+        data_path_cache.plugin
       end
 
       def define_constant_paths

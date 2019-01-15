@@ -25,19 +25,17 @@
 module Underware
   class DataPath
     def initialize(cluster: nil, base: nil)
-      @cluster = cluster
-      @base = base
+      @base = if base
+                base
+              elsif cluster
+                File.join(Constants::UNDERWARE_STORAGE_PATH,
+                          'clusters', cluster)
+              else
+                File.join(Constants::UNDERWARE_INSTALL_PATH, 'data')
+              end
     end
 
-    def base
-      @base ||= begin
-        if cluster
-          File.join(Constants::UNDERWARE_STORAGE_PATH, 'clusters', cluster)
-        else
-          File.join(Constants::UNDERWARE_INSTALL_PATH, 'data')
-        end
-      end
-    end
+    attr_reader :base
 
     def relative(*relative_path)
       File.join(base, *relative_path)
@@ -73,9 +71,5 @@ module Underware
         end
       end
     end
-
-    private
-
-    attr_reader :cluster
   end
 end

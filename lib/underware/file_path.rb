@@ -122,12 +122,6 @@ module Underware
       def namespace_data_file(name)
         data_path_cache.data_config(name)
       end
-
-      private
-
-      def record(record_dir, types_dir, name)
-        File.join(record_dir, types_dir, name + '.yaml')
-      end
     end
   end
 end

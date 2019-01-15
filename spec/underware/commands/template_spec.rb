@@ -218,20 +218,6 @@ RSpec.describe Underware::Commands::Template do
     expect(File.exists?(previously_rendered_file_path)).not_to be true
   end
 
-  # Do not clear previously rendered system files to preserve rendered genders
-  # file, as well as any possible other future rendered system filess.
-  it 'does not clear out pre-existing files in rendered system files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
-      'system/some_file'
-    )
-    Underware::Utils.create_file(previously_rendered_file_path)
-
-    run_command
-
-    expect(File.exists?(previously_rendered_file_path)).to be true
-  end
-
   it 'is not over-eager when replacing in rendered paths' do
     FileUtils.touch(Underware::FilePath.platform_config(:node_platform))
     Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }

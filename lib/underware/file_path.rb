@@ -25,6 +25,7 @@
 require 'underware/constants'
 require 'underware/file_path/config_path'
 require 'underware/data_path'
+require 'underware/config'
 
 module Underware
   module FilePath
@@ -51,22 +52,9 @@ module Underware
         data_path_cache.template
       end
 
-      def domain_answers
-        File.join(answers_dir, 'domain.yaml')
-      end
-
-      def group_answers(group)
-        file_name = "#{group}.yaml"
-        File.join(answers_dir, 'groups', file_name)
-      end
-
-      def node_answers(node)
-        file_name = "#{node}.yaml"
-        File.join(answers_dir, 'nodes', file_name)
-      end
-
+      # NOTE: Deprecated! This method should be removed completely
       def answers_dir
-        File.join(underware_storage, 'answers')
+        data_path_cache.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # TODO: Is this going to in built or configurable per cluster?
@@ -76,10 +64,6 @@ module Underware
 
       def plugins_dir
         File.join(underware_storage, 'plugins')
-      end
-
-      def build_complete(node_namespace)
-        event(node_namespace, 'complete')
       end
 
       def define_constant_paths
@@ -94,8 +78,14 @@ module Underware
                  end
       end
 
+      # TODO: Does this need to be ported? It is more metalware related code
       def event(node_namespace, event = '')
         File.join(events_dir, node_namespace.name, event)
+      end
+
+      # TODO: As above
+      def build_complete(node_namespace)
+        event(node_namespace, 'complete')
       end
 
       def logs_dir

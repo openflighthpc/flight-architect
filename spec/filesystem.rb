@@ -100,7 +100,7 @@ class FileSystem
   end
 
   def with_answer_fixtures(answer_fixtures_dir)
-    with_fixtures(answer_fixtures_dir, at: '/var/lib/underware/answers')
+    with_fixtures(answer_fixtures_dir, at: Underware::FilePath.answers_dir)
   end
 
   def with_group_cache_fixture(group_cache_file)

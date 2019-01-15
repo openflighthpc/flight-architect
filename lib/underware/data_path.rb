@@ -58,6 +58,18 @@ module Underware
       define_method(method) { |*a| relative(*Array.wrap(path), *a) }
     end
 
+    {
+      answers: 'answers'
+    }.each do |method, path|
+      path = Array.wrap(path)
+      define_method(:"domain_#{method}") { relative(path, 'domain.yaml') }
+      ['group', 'node', 'platform'].each do |type|
+        define_method(:"#{type}_#{method}") do |name|
+          relative(path, type.pluralize, "#{name}.yaml")
+        end
+      end
+    end
+
     private
 
     attr_reader :cluster

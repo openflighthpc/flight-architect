@@ -240,8 +240,14 @@ commands:
       - *render_option
 
   init: &init
-    syntax: underware init [options]
+    syntax: underware init CLUSTER_IDENTIFIER [options]
     summary: Create a basic cluster configuration
+    description: >
+      Creates a new cluster with a basic cluster layout. This command will
+      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
+      the configuration is saved.
+
+      Please use the `switch` command to change to a different cluster.
     action: Commands::Init
 
   layout:

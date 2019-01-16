@@ -68,20 +68,19 @@ module Underware
       end
     end
 
-    attr_reader :cluster, :__data__
+    attr_reader :cluster
 
     def initialize(cluster)
       @cluster = cluster
-      @__data__ = TTY::Config.new
-      setup
+      __data__.set_if_empty(:groups, value: ['orphan'])
+    end
+
+    def __data__
+      @__data__ ||= TTY::Config.new
     end
 
     def path
       DataPath.cluster(cluster).relative(self.class.filename + '.yaml')
-    end
-
-    def setup
-      __data__.set_if_empty(:groups, value: ['orphan'])
     end
 
     def raw_groups

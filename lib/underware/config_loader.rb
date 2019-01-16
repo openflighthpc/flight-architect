@@ -34,11 +34,16 @@ module Underware
       def update(*a)
         new(*a).tap do |attr|
           read(attr)
-          yield attr if block_given?
-          write(attr)
+          if block_given?
+            yield attr
+            write(attr)
+          end
         end
       end
-      alias_method :load, :update
+
+      def load(*a, &_b)
+        update(*a)
+      end
 
       private_class_method
 

@@ -34,7 +34,7 @@ module Underware
               elsif cluster
                 File.join(Config.storage_path, 'clusters', cluster)
               else
-                File.join(Config.install_path, 'data')
+                File.join(Config.install_path, 'data', 'base')
               end
     end
 

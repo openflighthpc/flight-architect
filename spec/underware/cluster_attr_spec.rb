@@ -52,7 +52,7 @@ RSpec.describe Underware::ClusterAttr do
   describe '::update' do
     include_context 'with a ClusterAttr instance'
 
-    let(:path) { subject.__data__.source_file }
+    let(:path) { subject.path }
 
     it 'writes the file if it does not already exist' do
       described_class.update(subject.cluster)
@@ -73,7 +73,7 @@ RSpec.describe Underware::ClusterAttr do
       include_context 'with a ClusterAttr instance'
       include_context 'with the first group'
 
-      before { subject.__data__.write }
+      before { subject.class.send(:write, subject) }
 
       it 'preserves the existing data' do
         new_attr = described_class.update(subject.cluster)
@@ -116,6 +116,13 @@ RSpec.describe Underware::ClusterAttr do
     describe '#nodes_in_group' do
       it 'returns an empty array when there are no nodes' do
         expect(subject.nodes_in_group('some-random-group')).to eq([])
+      end
+    end
+
+    describe '#path' do
+      it 'returns a cluster path' do
+        base = Underware::DataPath.cluster(subject.cluster).base
+        expect(subject.path).to match(/#{base}.*\.yaml/)
       end
     end
   end

@@ -26,21 +26,14 @@ require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
   module Constants
-    UNDERWARE_INSTALL_PATH =
-      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
+    INSTALL_PATH = File.absolute_path(
+      File.join(File.dirname(__FILE__), '../..')
+    )
 
-    UNDERWARE_STORAGE_PATH = '/var/lib/underware'
-    NAMESPACE_DATA_PATH = File.join(UNDERWARE_STORAGE_PATH, 'data')
-    KEYS_PATH = File.join(UNDERWARE_STORAGE_PATH, 'keys')
-    RENDERED_PATH = File.join(UNDERWARE_STORAGE_PATH, 'rendered')
-    RENDERED_SYSTEM_FILES_PATH = File.join(RENDERED_PATH, 'system')
+    STORAGE_PATH = '/var/lib/underware'
 
     # Directory name where shared 'content' templates live.
     CONTENT_DIR_NAME = 'content'
-
-    CACHE_PATH = File.join(UNDERWARE_STORAGE_PATH, 'cache')
-    GROUP_CACHE_PATH = File.join(CACHE_PATH, 'groups.yaml')
-    PLUGINS_CACHE_PATH = File.join(CACHE_PATH, 'plugins.yaml')
 
     # XXX For now Underware needs some knowledge of Metalware, so it can
     # provide access to Metalware-specific things in the Underware namespace.
@@ -53,15 +46,8 @@ module Underware
 
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10
 
-    NODEATTR_COMMAND = 'nodeattr'
-
-    DRY_VALIDATION_ERRORS_PATH = File.join(UNDERWARE_INSTALL_PATH,
-                                           'lib/underware/validation',
-                                           'errors.yaml')
-
     CONFIGURE_SECTIONS = [:domain, :group, :node].freeze
     CONFIGURE_INTERNAL_QUESTION_PREFIX = 'underware_internal'
-
 
     # This only exists for legacy purposes so we have a constant we can stub to
     # skip validations; ideally we would handle wanting to test things without

@@ -100,7 +100,7 @@ class FileSystem
   end
 
   def with_answer_fixtures(answer_fixtures_dir)
-    with_fixtures(answer_fixtures_dir, at: '/var/lib/underware/answers')
+    with_fixtures(answer_fixtures_dir, at: Underware::FilePath.answers_dir)
   end
 
   def with_group_cache_fixture(group_cache_file)
@@ -122,10 +122,9 @@ class FileSystem
   # Useful when a `configure.yaml` file is required, but don't want to use real
   # file to avoid actual questions being asked in tests.
   def with_minimal_configure_file
-    File.write(
-      Underware::FilePath.configure,
-      minimal_configure_file_data
-    )
+    path = Underware::FilePath.configure
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(path, minimal_configure_file_data)
   end
 
   # Create same directory hierarchy that would be created by an Underware
@@ -145,8 +144,10 @@ class FileSystem
     end
   end
 
+  # NOTE: Is this method really required?
+  # Or does it make more sense to merge in DataCopy here?
   def clone_in_data_dir
-    data_dir = Underware::FilePath.internal_data_dir
+    data_dir = Underware::DataPath.new.base
     clone(data_dir, data_dir)
   end
 

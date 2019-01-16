@@ -61,7 +61,7 @@ module Underware
       private
 
       def config_path
-        @config_path ||= FilePath::ConfigPath.new(base: path)
+        @config_path ||= DataPath.new(base: path)
       end
     end
   end

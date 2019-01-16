@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -34,11 +34,13 @@ RSpec.describe Underware::Commands::Configure::Group do
   end
 
   def update_cache
-    Underware::ClusterAttr.update('something') { |a| yield a }
+    Underware::ClusterAttr.update(Underware::Config.current_cluster) do
+      |a| yield a
+    end
   end
 
   def new_cache
-    Underware::ClusterAttr.load('something')
+    Underware::ClusterAttr.load(Underware::Config.current_cluster)
   end
 
   before :each do

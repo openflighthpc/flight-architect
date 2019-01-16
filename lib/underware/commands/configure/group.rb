@@ -51,7 +51,7 @@ module Underware
         end
 
         def custom_configuration
-          ClusterAttr.update('something') do |attr|
+          ClusterAttr.update(Underware::Config.current_cluster) do |attr|
             attr.add_group(group_name)
             attr.add_nodes(nodes_string, groups: groups)
           end

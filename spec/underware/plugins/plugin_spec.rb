@@ -17,12 +17,12 @@ RSpec.describe Underware::Plugins::Plugin do
   it 'gives correct path for each path method' do
     expect(
       subject.domain_config
-    ).to eq("#{plugin_dir_path}/config/domain.yaml")
+    ).to eq("#{plugin_dir_path}/configs/domain.yaml")
     expect(
       subject.group_config('some_group')
-    ).to eq("#{plugin_dir_path}/config/some_group.yaml")
+    ).to eq("#{plugin_dir_path}/configs/groups/some_group.yaml")
     expect(
-      subject.group_config('some_node')
-    ).to eq("#{plugin_dir_path}/config/some_node.yaml")
+      subject.node_config('some_node')
+    ).to eq("#{plugin_dir_path}/configs/nodes/some_node.yaml")
   end
 end

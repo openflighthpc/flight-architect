@@ -43,6 +43,8 @@ RSpec.describe Underware::Dependency do
     ).enforce
   end
 
+  before { Underware::DataCopy.init_cluster(Underware::Config.current_cluster) }
+
   it 'fails when enforcing non-existent domain answer file presence, with error message telling you command to run' do
     # Note: here and in missing group answers error message, the command to
     # run includes `underware`, as no matter what tool the Dependency class
@@ -87,6 +89,7 @@ RSpec.describe Underware::Dependency do
       FileSystem.setup do |fs|
         fs.with_answer_fixtures('answers/basic_structure')
       end
+      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
     end
 
     it 'succeeds when enforcing existent answer file presence' do

@@ -24,6 +24,8 @@
 #==============================================================================
 
 require 'json'
+require 'underware/data_copy'
+require 'underware/config'
 
 module Underware
   module Commands
@@ -38,7 +40,7 @@ module Underware
       def setup; end
 
       def run
-        # Run the domain configuration
+        DataCopy.init_cluster(Config.current_cluster)
         configure_domain
         configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
         configure_group(NODES_GROUP, NODES_RANGE)

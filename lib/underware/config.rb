@@ -8,3 +8,11 @@
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'chassis', 'chassis'
 end
+
+module Underware
+  class Config
+    def self.current_cluster
+      'cluster'
+    end
+  end
+end

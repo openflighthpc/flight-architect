@@ -21,7 +21,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_rendered(path:, for_platform:, for_scope_type:, for_scope_name: nil)
-    rendered_template = File.read("#{Underware::Constants::RENDERED_PATH}/#{path}")
+    rendered_template = File.read(Underware::FilePath.rendered(path))
 
     expect(rendered_template).to include("platform: #{for_platform}")
     expect(rendered_template).to include("scope_type: #{for_scope_type}")
@@ -31,18 +31,17 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_not_rendered(path:)
-    expect(
-      File.exists?("#{Underware::Constants::RENDERED_PATH}/#{path}")
-    ).to be false
+    expect(File.exists?(Underware::FilePath.rendered(path))).to be false
   end
 
-  let(:cluster) { 'my-test-cluster' }
+  let(:cluster) { Underware::Config.current_cluster }
 
   before :each do
     # Ensure templates directory is initially empty, so only testing with files
     # setup in individual tests.
     FileUtils.rm_rf(Underware::FilePath.templates_dir)
 
+    FileUtils.mkdir_p(Underware::FilePath.platform_configs_dir)
     FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
     FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
   end
@@ -209,8 +208,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'clears out pre-existing files from rendered files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
+    previously_rendered_file_path = Underware::FilePath.rendered(
       'some_platform/node/some_node/some_template'
     )
     Underware::Utils.create_file(previously_rendered_file_path)
@@ -218,20 +216,6 @@ RSpec.describe Underware::Commands::Template do
     run_command
 
     expect(File.exists?(previously_rendered_file_path)).not_to be true
-  end
-
-  # Do not clear previously rendered system files to preserve rendered genders
-  # file, as well as any possible other future rendered system filess.
-  it 'does not clear out pre-existing files in rendered system files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
-      'system/some_file'
-    )
-    Underware::Utils.create_file(previously_rendered_file_path)
-
-    run_command
-
-    expect(File.exists?(previously_rendered_file_path)).to be true
   end
 
   it 'is not over-eager when replacing in rendered paths' do

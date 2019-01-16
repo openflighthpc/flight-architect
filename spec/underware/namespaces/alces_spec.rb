@@ -1,5 +1,26 @@
-
 # frozen_string_literal: true
+
+#==============================================================================
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
+#
+# This file/package is part of Alces Underware.
+#
+# Alces Underware is free software: you can redistribute it and/or
+# modify it under the terms of the GNU Affero General Public License
+# as published by the Free Software Foundation, either version 3 of
+# the License, or (at your option) any later version.
+#
+# Alces Underware is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+#
+# For more information on the Alces Underware, please visit:
+# https://github.com/alces-software/underware
+#==============================================================================
 
 require 'underware/namespaces/alces'
 require 'underware/hash_mergers'
@@ -144,6 +165,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
   describe '#build_interface' do
     before :each do
+      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
       allow(Underware::Network)
         .to receive(:available_interfaces)
         .and_return(['eth2', 'eth4'])
@@ -189,6 +211,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
     it 'appropriately handles respond_to? as whether data file exists' do
       existent_path = Underware::FilePath.namespace_data_file('existent')
+      FileUtils.mkdir_p(File.dirname(existent_path))
       FileUtils.touch(existent_path)
 
       expect(alces.data).to respond_to(:existent)
@@ -327,102 +350,6 @@ RSpec.describe Underware::Namespaces::Alces do
     describe '#group' do
       it 'returns a Group' do
         expect(alces.group.class).to eq(Underware::Namespaces::Group.to_s)
-      end
-    end
-  end
-end
-
-RSpec.describe Underware::Namespaces::Alces do
-  # These tests were formerly tests of the `Underware::Templater` class, but
-  # are no longer applicable to that now rendering has been moved to the
-  # namespaces. They have been moved here (and slightly tweaked to still work),
-  # since I think they may still have some value as they test additional things
-  # to the above like the availability of config values when templating.
-  # Keeping these in a separate `describe` for now to avoid
-  # conflicts/interactions with the above, and since we may just end up
-  # deleting/refactoring these away at some point.
-  describe 'old Templater tests' do
-    include Underware::AlcesUtils
-
-    before :each do
-      FileSystem.setup do |fs|
-        fs.write template_path, template.strip_heredoc
-      end
-    end
-
-    # XXX Could adjust tests using this to only use template with parts they
-    # need, to make them simpler and less dependent on changes to this or each
-    # other.
-    let(:template) do
-      <<-EOF
-        This is a test template
-        some_passed_value: <%= domain.config.some_passed_value %>
-        some_config_value: <%= domain.config.some_config_value %>
-        erb_config_value: <%= domain.config.erb_config_value %>
-        very_recursive_erb_config_value: <%= domain.config.very_recursive_erb_config_value %>
-        nested.config_value: <%= domain.config.nested ? domain.config.nested.config_value : nil %>
-      EOF
-    end
-
-    let(:template_path) { '/template' }
-
-    def expect_renders(template_parameters, expected)
-      # Strip trailing spaces from rendered output to make comparisons less
-      # brittle.
-      rendered = alces.render_file(
-        template_path, template_parameters
-      ).gsub(/\s+\n/, "\n")
-
-      expect(rendered).to eq(expected.strip_heredoc)
-    end
-
-    describe '#render_file' do
-      context 'without config specifying parameters' do
-        it 'renders template with no extra parameters' do
-          expected = <<-EOF
-            This is a test template
-            some_passed_value:
-            some_config_value:
-            erb_config_value:
-            very_recursive_erb_config_value:
-            nested.config_value:
-          EOF
-
-          expect_renders({}, expected)
-        end
-      end
-
-      context 'with config specifying parameters' do
-        before :each do
-          FileSystem.setup do |fs|
-            fs.with_fixtures('repo/config', at: Underware::FilePath.config_dir)
-          end
-        end
-
-        it 'renders template with config parameters' do
-          expected = <<-EOF
-            This is a test template
-            some_passed_value:
-            some_config_value: config_value
-            erb_config_value: config_value
-            very_recursive_erb_config_value: config_value
-            nested.config_value: nested_config_value
-          EOF
-
-          expect_renders({}, expected)
-        end
-
-        context 'when template uses property of unset parameter' do
-          let(:template) do
-            'unset.parameter: <%= unset.parameter %>'
-          end
-
-          it 'raises' do
-            expect do
-              described_class.render_file(template_path, {})
-            end.to raise_error NameError
-          end
-        end
       end
     end
   end

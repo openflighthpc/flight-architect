@@ -53,7 +53,7 @@ module Underware
       end
 
       def cluster_identifier
-        'placeholder-cluster-identifier'
+        Underware::Config.current_cluster
       end
 
       def domain

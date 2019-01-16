@@ -22,35 +22,30 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
+require 'underware/data_path'
+
 module Underware
-  module FilePath
-    class ConfigPath
-      attr_reader :base
-
-      def initialize(base:)
-        @base = base
-      end
-
-      def domain_config
-        path 'domain'
-      end
-
-      def path(name)
-        file_name = "#{name}.yaml"
-        File.join(config_dir, file_name)
-      end
-
-      def config_dir
-        File.join(base, 'config')
-      end
-
-      # These are the names we currently expect to use to access the different
-      # config paths elsewhere. Since they all go the same place maybe we don't
-      # need different methods. Or maybe we should change configs to use same
-      # file structure as answers, which is more structured and helps prevent
-      # conflicts.
-      alias group_config path
-      alias node_config path
+  class DataCopy
+    def self.init_cluster(cluster)
+      new(nil, cluster).all
     end
+
+    def initialize(source_cluster, destination_cluster)
+      @source = DataPath.new(cluster: source_cluster)
+      @destination = DataPath.new(cluster: destination_cluster)
+    end
+
+    def all
+      FileUtils.mkdir_p(destination.base)
+      Dir.glob(source.relative('*')) do |source_path|
+        relative_path = File.basename(source_path)
+        destination_path = destination.relative(relative_path)
+        FileUtils.copy_entry source_path, destination_path
+      end
+    end
+
+    private
+
+    attr_reader :source, :destination
   end
 end

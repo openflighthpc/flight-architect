@@ -23,141 +23,105 @@
 #==============================================================================
 
 require 'underware/constants'
-require 'underware/file_path/config_path'
+require 'underware/data_path'
+require 'underware/config'
 
 module Underware
   module FilePath
     class << self
-      delegate :domain_config,
-               :group_config,
-               :node_config,
-               :config_dir,
-               to: :config_path
+      delegate_missing_to :data_path_cache
 
-      def templates_dir
-        File.join(internal_data_dir, 'templates')
+      def data_path_cache
+        @data_path_cache ||= DataPath.new(cluster: Config.current_cluster)
       end
 
-      def configure
-        File.join(internal_data_dir, 'configure.yaml')
+      # TODO: Should the asset be configurable on a cluster by cluster basis
+      def asset_type(type)
+        DataPath.new.relative('asset_types', type + '.yaml')
       end
 
-      def domain_answers
-        File.join(answers_dir, 'domain.yaml')
-      end
-
-      def group_answers(group)
-        file_name = "#{group}.yaml"
-        File.join(answers_dir, 'groups', file_name)
-      end
-
-      def node_answers(node)
-        file_name = "#{node}.yaml"
-        File.join(answers_dir, 'nodes', file_name)
-      end
-
-      def answers_dir
-        File.join(underware_storage, 'answers')
-      end
-
+      # TODO: Is this going to in built or configurable per cluster?
       def overview
-        File.join(internal_data_dir, 'overview.yaml')
+        File.join(DataPath.new.base, 'overview.yaml')
       end
 
-      def plugins_dir
-        File.join(underware_storage, 'plugins')
+      # TODO: Does this need to be ported? It is more metalware related code
+      def event(node_namespace, event = '')
+        File.join(Underware::Constants::EVENTS_DIR_PATH,
+                  node_namespace.name, event)
       end
 
+      # TODO: As above
       def build_complete(node_namespace)
         event(node_namespace, 'complete')
       end
 
-      def define_constant_paths
-        Constants.constants
-                 .map(& :to_s)
-                 .select { |const| /\A.+_PATH\Z/.match?(const) }
-                 .each do |const|
-                   method_name = :"#{const.chomp('_PATH').downcase}"
-                   define_singleton_method method_name do
-                     Constants.const_get(const)
-                   end
-                 end
+      # TODO: The `init` process shouldn't rely on pre configured answers
+      # Instead it should be able to configure all the groups directly
+      def init_data(relative_path)
+        File.join(DataPath.new.base, 'init', relative_path)
       end
 
-      def event(node_namespace, event = '')
-        File.join(events_dir, node_namespace.name, event)
+      # NOTE: Deprecated! This method should be removed completely
+      def templates_dir
+        data_path_cache.template
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def answers_dir
+        data_path_cache.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def config_dir
+        data_path_cache.relative('configs').tap { |p| FileUtils.mkdir_p(p) }
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def platform_configs_dir
+        File.join(config_dir, 'platforms')
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def plugins_dir
+        data_path_cache.plugin
+      end
+
+      # NOTE: Deprecated! This is a specific method that should be extracted
+      # to a dedicated class
+      def plugin_cache
+        data_path_cache.relative('plugins.yaml')
       end
 
       def logs_dir
         '/var/log/underware'
       end
 
-      def asset_type(type)
-        File.join(underware_install, 'data/asset_types', type + '.yaml')
+      def dry_validation_errors
+        File.join(Underware::Constants::INSTALL_PATH,
+                  'lib/underware/validation/errors.yaml')
       end
 
-      def asset(*a)
-        record(assets_dir, *a)
-      end
-
+      # NOTE: Deprecated! This method should be removed completely
       def assets_dir
-        File.join(underware_storage, 'assets')
+        data_path_cache.asset
       end
 
-      def layout(*a)
-        record(layouts_dir, *a)
-      end
-
+      # NOTE: Deprecated! This method should be removed completely
       def layouts_dir
-        File.join(underware_storage, 'layouts')
+        data_path_cache.layout
       end
 
+      # NOTE: Deprecated! This is a specific method that should be extracted
+      # to a dedicated class
       def asset_cache
-        File.join(cache, 'assets.yaml')
+        data_path_cache.relative('assets-cache.yaml')
       end
 
+      # NOTE: Deprecated! This method should be removed completely
       def namespace_data_file(name)
-        File.join(
-          Constants::NAMESPACE_DATA_PATH,
-          "#{name}.yaml"
-        )
-      end
-
-      def internal_data_dir
-        File.join(underware_install, 'data')
-      end
-
-      def platform_config(platform)
-        File.join(platform_configs_dir, "#{platform}.yaml")
-      end
-
-      def platform_configs_dir
-        File.join(config_dir, 'platforms')
-      end
-
-      def public_key
-        File.join(keys, 'id_rsa.pub')
-      end
-
-      def private_key
-        File.join(keys, 'id_rsa')
-      end
-
-      def init_data(relative_path)
-        File.join(internal_data_dir, 'init', relative_path)
-      end
-
-      private
-
-      def record(record_dir, types_dir, name)
-        File.join(record_dir, types_dir, name + '.yaml')
-      end
-
-      def config_path
-        ConfigPath.new(base: internal_data_dir)
+        data_path_cache.data_config(name)
       end
     end
   end
 end
-
-Underware::FilePath.define_constant_paths

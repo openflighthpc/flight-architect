@@ -46,7 +46,7 @@ module Underware
 
       def node_names
         @node_names ||= if options.gender
-                          ClusterAttr.load('something')
+                          ClusterAttr.load(Underware::Config.current_cluster)
                                      .nodes_in_group(node_identifier)
                         else
                           [node_identifier]

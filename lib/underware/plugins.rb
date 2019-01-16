@@ -76,7 +76,7 @@ module Underware
 
       def update_deactivated_plugins!(new_deactivated_plugins)
         new_cache = cache.merge(deactivated: new_deactivated_plugins)
-        Data.dump(Constants::PLUGINS_CACHE_PATH, new_cache)
+        Data.dump(FilePath.plugin_cache, new_cache)
       end
 
       def exists?(plugin_name)
@@ -101,7 +101,7 @@ module Underware
       end
 
       def cache
-        Data.load(Constants::PLUGINS_CACHE_PATH)
+        Data.load(FilePath.plugin_cache)
       end
     end
   end

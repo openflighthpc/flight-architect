@@ -43,6 +43,11 @@ module Underware
         @cache ||= self.load
       end
       delegate_missing_to :cache
+
+      def update(*a)
+        @cache = nil
+        super
+      end
     end
 
     def path

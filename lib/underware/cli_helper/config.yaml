@@ -221,6 +221,24 @@ commands:
     options:
       - *gender_option
 
+  eval:
+    syntax: underware eval ALCES_COMMAND [options]
+    summary: Evaluate argument in context of `alces` namespace
+    description: >
+      Similar to 'underware view', but evaluates argument directly in 'alces'
+      namespace without any preprocessing, and then returns result as JSON.
+
+
+      Intended to have more stable behaviour than 'underware view', and to provide
+      external programs with access to Underware data, whereas 'underware view' is
+      intended purely for human usage and its behaviour may change as needed to
+      whatever is most useful for this.
+    action: Commands::Eval
+    options:
+      - *color_output
+      - *platform_option
+      - *render_option
+
   init: &init
     syntax: underware init [options]
     summary: Create a basic cluster configuration
@@ -300,24 +318,6 @@ commands:
       means 'alces.domain' will show all domain level parameters, where
       'alces.domain.config' will only show the config.
     action: Commands::View
-    options:
-      - *color_output
-      - *platform_option
-      - *render_option
-
-  eval:
-    syntax: underware eval ALCES_COMMAND [options]
-    summary: Evaluate argument in context of `alces` namespace
-    description: >
-      Similar to 'underware view', but evaluates argument directly in 'alces'
-      namespace without any preprocessing, and then returns result as JSON.
-
-
-      Intended to have more stable behaviour than 'underware view', and to provide
-      external programs with access to Underware data, whereas 'underware view' is
-      intended purely for human usage and its behaviour may change as needed to
-      whatever is most useful for this.
-    action: Commands::Eval
     options:
       - *color_output
       - *platform_option

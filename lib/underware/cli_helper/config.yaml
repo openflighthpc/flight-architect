@@ -272,6 +272,11 @@ commands:
       group: *render_group
       node: *render_node
 
+  switch:
+    syntax: underware switch CLUSTER_IDENTIFIER [options]
+    summary: Set the current cluster that is being configured
+    action: Commands::Switch
+
   template:
     syntax: underware template [options]
     summary: Render all Underware templates for all platforms

@@ -39,7 +39,6 @@ module Underware
 
       def run
         switch_cluster
-        reset_alces
         DataCopy.init_cluster(Config.current_cluster)
         configure_domain
         configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
@@ -74,12 +73,11 @@ module Underware
       end
 
       def template
-        reset_alces
         new_command(Template).run!([], self.class.options)
       end
 
       def new_command(klass)
-        klass.new(noop: true, alces: alces)
+        klass.new(noop: true)
       end
 
       def load_answers_options(relative_path)

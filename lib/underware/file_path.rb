@@ -29,10 +29,10 @@ require 'underware/config'
 module Underware
   module FilePath
     class << self
-      delegate_missing_to :data_path_cache
+      delegate_missing_to :data_path
 
-      def data_path_cache
-        @data_path_cache ||= DataPath.new(cluster: Config.current_cluster)
+      def data_path
+        DataPath.cluster(Config.current_cluster)
       end
 
       # TODO: Should the asset be configurable on a cluster by cluster basis
@@ -63,17 +63,17 @@ module Underware
 
       # NOTE: Deprecated! This method should be removed completely
       def templates_dir
-        data_path_cache.template
+        data_path.template
       end
 
       # NOTE: Deprecated! This method should be removed completely
       def answers_dir
-        data_path_cache.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
+        data_path.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # NOTE: Deprecated! This method should be removed completely
       def config_dir
-        data_path_cache.relative('configs').tap { |p| FileUtils.mkdir_p(p) }
+        data_path.relative('configs').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # NOTE: Deprecated! This method should be removed completely
@@ -83,13 +83,13 @@ module Underware
 
       # NOTE: Deprecated! This method should be removed completely
       def plugins_dir
-        data_path_cache.plugin
+        data_path.plugin
       end
 
       # NOTE: Deprecated! This is a specific method that should be extracted
       # to a dedicated class
       def plugin_cache
-        data_path_cache.relative('plugins.yaml')
+        data_path.relative('plugins.yaml')
       end
 
       def logs_dir
@@ -102,23 +102,23 @@ module Underware
 
       # NOTE: Deprecated! This method should be removed completely
       def assets_dir
-        data_path_cache.asset
+        data_path.asset
       end
 
       # NOTE: Deprecated! This method should be removed completely
       def layouts_dir
-        data_path_cache.layout
+        data_path.layout
       end
 
       # NOTE: Deprecated! This is a specific method that should be extracted
       # to a dedicated class
       def asset_cache
-        data_path_cache.relative('assets-cache.yaml')
+        data_path.relative('assets-cache.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely
       def namespace_data_file(name)
-        data_path_cache.data_config(name)
+        data_path.data_config(name)
       end
     end
   end

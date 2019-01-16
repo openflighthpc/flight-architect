@@ -84,7 +84,7 @@ RSpec.describe Underware::ClusterAttr do
       include_context 'with a ClusterAttr instance'
       include_context 'with the first group'
 
-      before { subject.class.send(:write, subject) }
+      before { Underware::ConfigLoader.write(subject) }
 
       it 'preserves the existing data' do
         new_attr = described_class.update(subject.cluster)

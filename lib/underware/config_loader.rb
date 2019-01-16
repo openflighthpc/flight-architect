@@ -30,34 +30,29 @@ module Underware
       base.extend(ClassMethods)
     end
 
+    def self.read(obj)
+      return unless File.exists?(obj.path)
+      obj.__data__.read(obj.path)
+    end
+
+    def self.write(obj)
+      FileUtils.mkdir_p(File.dirname(obj.path))
+      obj.__data__.write(obj.path, force: true)
+    end
+
     module ClassMethods
       def update(*a)
         new(*a).tap do |attr|
-          read(attr)
+          ConfigLoader.read(attr)
           if block_given?
             yield attr
-            write(attr)
+            ConfigLoader.write(attr)
           end
         end
       end
 
       def load(*a, &_b)
         update(*a)
-      end
-
-      private_class_method
-
-      # NOTE: `read` and `write` are class methods are they are not intended
-      # to be called directly. As these are file handling methods, they should
-      # be called through the `update` mechanism
-      def read(attr)
-        return unless File.exists?(attr.path)
-        attr.__data__.read(attr.path)
-      end
-
-      def write(attr)
-        FileUtils.mkdir_p(File.dirname(attr.path))
-        attr.__data__.write(attr.path, force: true)
       end
     end
 

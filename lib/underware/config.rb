@@ -27,6 +27,7 @@
 #
 
 require 'active_support/core_ext/module/delegation'
+require 'underware/config_loader'
 
 # Make 'chassis' both the singular and plural
 ActiveSupport::Inflector.inflections do |inflect|
@@ -35,14 +36,20 @@ end
 
 module Underware
   class Config
+    include ConfigLoader
+
     class << self
       def cache
-        @cache ||= new
+        @cache ||= self.load
       end
       delegate_missing_to :cache
     end
 
     def initialize
+    end
+
+    def path
+      File.join(install_path, 'etc/config.yaml')
     end
 
     def current_cluster

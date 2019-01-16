@@ -37,6 +37,9 @@ module Underware
         Config.update do |config|
           config.current_cluster = new_cluster_identifier
         end
+        puts <<~MESSAGE
+          Switched the current cluster to: #{Config.current_cluster}
+        MESSAGE
       end
     end
   end

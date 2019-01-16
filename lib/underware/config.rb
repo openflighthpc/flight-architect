@@ -45,15 +45,12 @@ module Underware
       delegate_missing_to :cache
     end
 
-    def initialize
-    end
-
     def path
       File.join(install_path, 'etc/config.yaml')
     end
 
     def current_cluster
-      'cluster'
+      __data__.fetch(:current_cluster, default: 'default')
     end
 
     def install_path

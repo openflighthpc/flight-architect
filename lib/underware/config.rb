@@ -53,6 +53,16 @@ module Underware
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
     end
 
+    # XXX For now Underware needs some knowledge of Metalware, so it can
+    # provide access to Metalware-specific things in the Underware namespace.
+    # See from https://alces.slack.com/archives/CD7GNLP8D/p1540303912000100 for
+    # details; long term we should implement some generic way for Metalware and
+    # other clients to provide Underware with access to their own data for
+    # nodes.
+    def events_dir
+      '/var/lib/metalware/events'
+    end
+
     def storage_path
       '/var/lib/underware'
     end

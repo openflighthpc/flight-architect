@@ -47,8 +47,7 @@ module Underware
 
       # TODO: Does this need to be ported? It is more metalware related code
       def event(node_namespace, event = '')
-        File.join(Underware::Constants::EVENTS_DIR_PATH,
-                  node_namespace.name, event)
+        File.join(Config.events_dir, node_namespace.name, event)
       end
 
       # TODO: As above

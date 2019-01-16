@@ -29,15 +29,6 @@ module Underware
     # Directory name where shared 'content' templates live.
     CONTENT_DIR_NAME = 'content'
 
-    # XXX For now Underware needs some knowledge of Metalware, so it can
-    # provide access to Metalware-specific things in the Underware namespace.
-    # See from https://alces.slack.com/archives/CD7GNLP8D/p1540303912000100 for
-    # details; long term we should implement some generic way for Metalware and
-    # other clients to provide Underware with access to their own data for
-    # nodes.
-    METALWARE_DATA_PATH = '/var/lib/metalware'
-    EVENTS_DIR_PATH = File.join(METALWARE_DATA_PATH, 'events')
-
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10
 
     CONFIGURE_SECTIONS = [:domain, :group, :node].freeze

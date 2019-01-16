@@ -98,8 +98,7 @@ module Underware
       end
 
       def dry_validation_errors
-        File.join(Underware::Constants::INSTALL_PATH,
-                  'lib/underware/validation/errors.yaml')
+        File.join(Config.install_path, 'lib/underware/validation/errors.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely

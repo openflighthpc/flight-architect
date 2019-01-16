@@ -48,7 +48,7 @@ RSpec.describe Underware::DataPath do
 
   context 'without a cluster' do
     let(:base_path) do
-      File.join(Underware::Constants::INSTALL_PATH, 'data')
+      File.join(Underware::Config.install_path, 'data')
     end
     subject { described_class.new }
 

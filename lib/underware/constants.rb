@@ -26,10 +26,6 @@ require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
   module Constants
-    INSTALL_PATH = File.absolute_path(
-      File.join(File.dirname(__FILE__), '../..')
-    )
-
     STORAGE_PATH = '/var/lib/underware'
 
     # Directory name where shared 'content' templates live.

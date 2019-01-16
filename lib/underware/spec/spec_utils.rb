@@ -28,14 +28,6 @@ require 'underware/dependency'
 
 module Underware
   module SpecUtils
-    # Mocks.
-    def use_mock_determine_hostip_script
-      stub_const(
-        'Underware::Constants::INSTALL_PATH',
-        FIXTURES_PATH
-      )
-    end
-
     # Other shared utils.
 
     def enable_output_to_stderr

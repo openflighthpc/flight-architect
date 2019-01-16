@@ -69,10 +69,7 @@ module Underware
       end
 
       def determine_hostip_script
-        File.join(
-          Constants::INSTALL_PATH,
-          'libexec/determine-hostip'
-        )
+        File.join(Config.install_path, 'libexec/determine-hostip')
       end
 
       def alces

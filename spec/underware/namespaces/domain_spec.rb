@@ -13,8 +13,6 @@ RSpec.describe Underware::Namespaces::Domain do
 
     include_examples Underware::Namespaces::HashMergerNamespace
 
-    before { use_mock_determine_hostip_script }
-
     before :each do
       # Create key pair files here (in production created on install), both so
       # can test in `#keys` (below) and so `HashMergerNamespace#to_h` tests
@@ -27,18 +25,26 @@ RSpec.describe Underware::Namespaces::Domain do
       )
     end
 
-    it 'has a hostip' do
-      expect(subject.hostip).to eq('1.2.3.4')
-    end
+    context 'with mocked ip' do
+      let(:ip) { '1.2.3.4' }
 
-    it 'has a hosts_url' do
-      url = 'http://1.2.3.4/metalware/system/hosts'
-      expect(subject.hosts_url).to eq(url)
-    end
+      before do
+        allow(Underware::DeploymentServer).to receive(:ip).and_return(ip)
+      end
 
-    it 'has a genders_url' do
-      url = 'http://1.2.3.4/metalware/system/genders'
-      expect(subject.genders_url).to eq(url)
+      it 'has a hostip' do
+        expect(subject.hostip).to eq(ip)
+      end
+
+      it 'has a hosts_url' do
+        url = "http://#{ip}/metalware/system/hosts"
+        expect(subject.hosts_url).to eq(url)
+      end
+
+      it 'has a genders_url' do
+        url = "http://#{ip}/metalware/system/genders"
+        expect(subject.genders_url).to eq(url)
+      end
     end
 
     describe '#keys' do

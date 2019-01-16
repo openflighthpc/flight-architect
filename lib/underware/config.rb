@@ -48,5 +48,9 @@ module Underware
     def current_cluster
       'cluster'
     end
+
+    def install_path
+      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
+    end
   end
 end

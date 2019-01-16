@@ -55,20 +55,34 @@ RSpec.describe Underware::DataPath do
     it_behaves_like 'generic path interface'
   end
 
+  context 'with a specified layout path' do
+    let(:layout) { 'my-layout' }
+    let(:base_path) do
+      File.join(Underware::Config.install_path, 'data', layout)
+    end
+    subject { described_class.new(layout: layout) }
+
+    it_behaves_like 'generic path interface'
+  end
+
   context 'with a cluster' do
     let(:cluster) { 'my-cluster' }
+    let(:layout) { 'this-layout-should-be-ignored' }
     let(:base_path) do
       File.join(Underware::Config.storage_path, 'clusters', cluster)
     end
-    subject { described_class.new(cluster: cluster) }
+    subject { described_class.new(cluster: cluster, layout: layout) }
 
     it_behaves_like 'generic path interface'
   end
 
   context 'with a specified base path' do
     let(:cluster) { 'this-cluster-should-be-ignored' }
+    let(:layout) { 'this-layout-should-be-ignored' }
     let(:base_path) { '/some/random/base/path' }
-    subject { described_class.new(cluster: cluster, base: base_path) }
+    subject do
+      described_class.new(cluster: cluster, base: base_path, layout: layout)
+    end
 
     it_behaves_like 'generic path interface'
   end

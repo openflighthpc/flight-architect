@@ -23,10 +23,12 @@
 #==============================================================================
 
 require 'underware/cluster_attr/expand'
-require 'underware/patches/tty_config'
+require 'underware/config_loader'
 
 module Underware
   class ClusterAttr
+    include ConfigLoader
+
     class << self
       def filename
         'cluster-attributes'
@@ -42,30 +44,6 @@ module Underware
       def collapse(*nodes)
         nodes.flatten.join(',')
       end
-
-      def update(*a)
-        new(*a).tap do |attr|
-          read(attr)
-          yield attr if block_given?
-          write(attr)
-        end
-      end
-      alias_method :load, :update
-
-      private_class_method
-
-      # NOTE: `read` and `write` are class methods are they are not intended
-      # to be called directly. As these are file handling methods, they should
-      # be called through the `update` mechanism
-      def read(attr)
-        return unless File.exists?(attr.path)
-        attr.__data__.read(attr.path)
-      end
-
-      def write(attr)
-        FileUtils.mkdir_p(File.dirname(attr.path))
-        attr.__data__.write(attr.path, force: true)
-      end
     end
 
     attr_reader :cluster
@@ -73,10 +51,6 @@ module Underware
     def initialize(cluster)
       @cluster = cluster
       __data__.set_if_empty(:groups, value: ['orphan'])
-    end
-
-    def __data__
-      @__data__ ||= TTY::Config.new
     end
 
     def path

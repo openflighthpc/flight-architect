@@ -25,7 +25,18 @@
 module Underware
   module Commands
     class Switch < CommandHelpers::BaseCommand
+      private
+
+      attr_reader :new_cluster_identifier
+
+      def setup
+        @new_cluster_identifier = args.first
+      end
+
       def run
+        Config.update do |config|
+          config.current_cluster = new_cluster_identifier
+        end
       end
     end
   end

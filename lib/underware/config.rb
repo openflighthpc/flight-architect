@@ -53,6 +53,10 @@ module Underware
       __data__.fetch(:current_cluster, default: 'default')
     end
 
+    def current_cluster=(cluster_identifier)
+      __data__.set(:current_cluster, value: cluster_identifier)
+    end
+
     def install_path
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
     end

@@ -58,7 +58,7 @@ RSpec.describe Underware::DataPath do
   context 'with a cluster' do
     let(:cluster) { 'my-cluster' }
     let(:base_path) do
-      File.join(Underware::Constants::STORAGE_PATH, 'clusters', cluster)
+      File.join(Underware::Config.storage_path, 'clusters', cluster)
     end
     subject { described_class.new(cluster: cluster) }
 

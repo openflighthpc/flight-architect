@@ -26,8 +26,6 @@ require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
   module Constants
-    STORAGE_PATH = '/var/lib/underware'
-
     # Directory name where shared 'content' templates live.
     CONTENT_DIR_NAME = 'content'
 

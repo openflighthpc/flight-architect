@@ -32,7 +32,7 @@ module Underware
       @base = if base
                 base
               elsif cluster
-                File.join(Constants::STORAGE_PATH, 'clusters', cluster)
+                File.join(Config.storage_path, 'clusters', cluster)
               else
                 File.join(Config.install_path, 'data')
               end

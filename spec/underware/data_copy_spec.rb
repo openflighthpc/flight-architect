@@ -45,20 +45,18 @@ RSpec.describe Underware::DataCopy do
 
   shared_context 'with existing cluster1 files' do
     let(:cluster1_path) { Underware::DataPath.cluster('cluster1') }
-    let(:cluster1_files) do
+    let(:relative_cluster1_files) do
       [
         'file1',
-        ['directory', 'file2'],
-        ['directory', 'sub-directory', 'file3']
-      ].map { |p| cluster1_path.relative(*p) }
+        'directory/file2',
+        'directory/sub-directory/file3'
+      ]
+    end
+    let(:cluster1_files) do
+      relative_cluster1_files.map { |p| cluster1_path.relative(p) }
     end
 
-    before do
-      cluster1_files.each do |path|
-        FileUtils.mkdir_p(File.dirname(path))
-        FileUtils.touch(path)
-      end
-    end
+    before { cluster1_files.each { |p| touch_file(p) } }
   end
 
   shared_context 'with an existing layout' do
@@ -68,9 +66,7 @@ RSpec.describe Underware::DataCopy do
 
     before do
       relative_layout_files.each do |rel_path|
-        path = layout_path.relative(rel_path)
-        FileUtils.mkdir_p(File.dirname(path))
-        FileUtils.touch(path)
+        touch_file(layout_path.relative(rel_path))
       end
     end
   end
@@ -78,6 +74,14 @@ RSpec.describe Underware::DataCopy do
   shared_context 'with a non-existant new cluster' do
     let(:new_cluster) { 'new-cluster' }
     let(:new_cluster_path) { Underware::DataPath.new(cluster: new_cluster) }
+  end
+
+  shared_examples 'copy to new cluster' do
+    it 'copies the files to the new cluster' do
+      expect_relative_copied_files.each do |rel_path|
+        expect_path(new_cluster_path.relative(rel_path)).to be_exist
+      end
+    end
   end
 
   context 'when copying to a non existant cluster' do
@@ -94,11 +98,10 @@ RSpec.describe Underware::DataCopy do
     end
 
     describe '#all' do
+      let(:expect_relative_copied_files) { relative_cluster1_files }
       before { subject.all }
 
-      it 'copyies all the files into the new clusters directory' do
-        new_paths.each { |p| expect(Pathname.new(p)).to be_exist }
-      end
+      include_examples 'copy to new cluster'
     end
   end
 
@@ -110,12 +113,8 @@ RSpec.describe Underware::DataCopy do
       end
 
       describe '#all' do
-        it 'copies the files to the new cluster' do
-          subject.all
-          expect_relative_copied_files.each do |rel_path|
-            expect_path(new_cluster_path.relative(rel_path)).to be_exist
-          end
-        end
+        before { subject.all }
+        include_examples 'copy to new cluster'
       end
     end
 

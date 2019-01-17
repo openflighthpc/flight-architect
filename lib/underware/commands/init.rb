@@ -39,9 +39,9 @@ module Underware
 
       def run
         switch_cluster
-        layout = (options.bare ? nil : 'example')
-        DataCopy.init_cluster(Config.current_cluster, layout: layout)
+        DataCopy.layout_to_cluster(nil, Config.current_cluster).all
         unless options.bare
+          DataCopy.layout_to_cluster('example', Config.current_cluster).all
           configure_domain
 
           # NOTE: The files created by the configure have been cached in

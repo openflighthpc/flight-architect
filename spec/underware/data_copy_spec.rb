@@ -157,33 +157,14 @@ RSpec.describe Underware::DataCopy do
       let(:expect_join_copied_files) { join_base_files }
 
       before do
-        described_class.init_cluster(new_cluster, layout: subject_layout)
+        described_class.init_cluster(new_cluster)
       end
 
       include_examples 'copy to new cluster'
     end
 
-    let(:subject_layout) { nil }
-
     context 'when copying to a new cluster' do
       it_behaves_like 'a standard init'
-    end
-
-    context 'with a layout as part of the init' do
-      include_context 'with an existing layout'
-      let(:subject_layout) { layout }
-
-      it_behaves_like 'a standard init'
-
-      context 'with layout files' do
-        include_context 'with a non-existant new cluster'
-        let(:expect_join_copied_files) { join_layout_files }
-
-        before do
-          described_class.init_cluster(new_cluster, layout: subject_layout)
-        end
-        include_examples 'copy to new cluster'
-      end
     end
   end
 end

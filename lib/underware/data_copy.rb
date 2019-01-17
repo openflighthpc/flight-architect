@@ -26,8 +26,9 @@ require 'underware/data_path'
 
 module Underware
   class DataCopy
-    def self.init_cluster(cluster)
+    def self.init_cluster(cluster, layout: nil)
       layout_to_cluster(nil, cluster).all
+      layout_to_cluster(layout, cluster).all if layout
     end
 
     def self.layout_to_cluster(layout, cluster)

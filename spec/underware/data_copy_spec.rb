@@ -105,11 +105,11 @@ RSpec.describe Underware::DataCopy do
     end
   end
 
-  describe '::layout_to_cluster' do
+  describe '::overlay_to_cluster' do
     shared_examples 'a layout cluster generator' do
       include_context 'with a non-existant new cluster'
       subject do
-        described_class.layout_to_cluster(subject_layout, new_cluster)
+        described_class.overlay_to_cluster(subject_layout, new_cluster)
       end
 
       describe '#all' do
@@ -120,12 +120,12 @@ RSpec.describe Underware::DataCopy do
 
     shared_examples 'a protected copy' do
       # The `nil` cluster also corresponds to the base layout. There should
-      # be no way to copy to the base section through `layout_to_cluster`
+      # be no way to copy to the base section through `overlay_to_cluster`
       # Similarly, it shouldn't be able to write to the empty string cluster
       ['', nil, false].each do |dst|
         it "errors when copying to the #{dst.inspect} cluster" do
           expect do
-            described_class.layout_to_cluster(subject_layout, dst)
+            described_class.overlay_to_cluster(subject_layout, dst)
           end.to raise_error(Underware::InternalError)
         end
       end

@@ -26,12 +26,12 @@ require 'underware/data_path'
 
 module Underware
   class DataCopy
-    # NOTE: Deprecated! Use the `layout_to_cluster` method instead
+    # NOTE: Deprecated! Use the `overlay_to_cluster` method instead
     def self.init_cluster(cluster)
-      layout_to_cluster(nil, cluster).all
+      overlay_to_cluster(nil, cluster).all
     end
 
-    def self.layout_to_cluster(layout, cluster)
+    def self.overlay_to_cluster(layout, cluster)
       error_if_invalid_cluster(cluster)
       layout_path = DataPath.layout(layout)
       cluster_path = DataPath.cluster(cluster)

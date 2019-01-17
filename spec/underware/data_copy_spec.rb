@@ -58,7 +58,9 @@ RSpec.describe Underware::DataCopy do
       cluster1_files.map { |p| Pathname.new(p).relative_path_from(base).to_s }
                     .map { |p| File.expand_path(p, new_cluster_path.base) }
     end
-    subject { described_class.new('cluster1', new_cluster) }
+    subject do
+      described_class.new(cluster1_path, new_cluster_path)
+    end
 
     describe '#all' do
       before { subject.all }

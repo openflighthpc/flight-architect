@@ -85,13 +85,13 @@ module Underware
         klass.new(noop: true)
       end
 
-      def load_answers_options(relative_path)
-        data = Data.load(FilePath.init_data(relative_path))
-        json = JSON.dump(data)
-        options = self.class.options
-        options.default({ answers: json })
-        options
-      end
+      # def load_answers_options(relative_path)
+      #   data = Data.load(FilePath.init_data(relative_path))
+      #   json = JSON.dump(data)
+      #   options = self.class.options
+      #   options.default({ answers: json })
+      #   options
+      # end
     end
   end
 end

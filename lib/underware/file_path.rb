@@ -55,12 +55,6 @@ module Underware
         event(node_namespace, 'complete')
       end
 
-      # TODO: The `init` process shouldn't rely on pre configured answers
-      # Instead it should be able to configure all the groups directly
-      def init_data(join_path)
-        File.join(DataPath.new.base, 'init', join_path)
-      end
-
       # NOTE: Deprecated! This method should be removed completely
       def templates_dir
         data_path.template

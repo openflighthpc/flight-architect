@@ -54,9 +54,9 @@ module Underware
 
     def all
       FileUtils.mkdir_p(destination.base)
-      Dir.glob(source.relative('*')) do |source_path|
+      Dir.glob(source.join('*')) do |source_path|
         relative_path = File.basename(source_path)
-        destination_path = destination.relative(relative_path)
+        destination_path = destination.join(relative_path)
         FileUtils.copy_entry source_path, destination_path
       end
     end

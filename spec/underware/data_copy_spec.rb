@@ -36,16 +36,16 @@ RSpec.describe Underware::DataCopy do
   end
 
   shared_context 'with base files' do
-    let(:relative_base_files) { ['base-file1', 'base-file2'] }
+    let(:join_base_files) { ['base-file1', 'base-file2'] }
     let(:base_path) { Underware::DataPath.new }
     before do
-      relative_base_files.each { |p| touch_file(base_path.relative(p)) }
+      join_base_files.each { |p| touch_file(base_path.join(p)) }
     end
   end
 
   shared_context 'with existing cluster1 files' do
     let(:cluster1_path) { Underware::DataPath.cluster('cluster1') }
-    let(:relative_cluster1_files) do
+    let(:join_cluster1_files) do
       [
         'file1',
         'directory/file2',
@@ -53,7 +53,7 @@ RSpec.describe Underware::DataCopy do
       ]
     end
     let(:cluster1_files) do
-      relative_cluster1_files.map { |p| cluster1_path.relative(p) }
+      join_cluster1_files.map { |p| cluster1_path.join(p) }
     end
 
     before { cluster1_files.each { |p| touch_file(p) } }
@@ -62,11 +62,11 @@ RSpec.describe Underware::DataCopy do
   shared_context 'with an existing layout' do
     let(:layout) { 'my-layout' }
     let(:layout_path) { Underware::DataPath.layout(layout) }
-    let(:relative_layout_files) { ['file1', 'directory/file2'] }
+    let(:join_layout_files) { ['file1', 'directory/file2'] }
 
     before do
-      relative_layout_files.each do |rel_path|
-        touch_file(layout_path.relative(rel_path))
+      join_layout_files.each do |rel_path|
+        touch_file(layout_path.join(rel_path))
       end
     end
   end
@@ -78,8 +78,8 @@ RSpec.describe Underware::DataCopy do
 
   shared_examples 'copy to new cluster' do
     it 'copies the files to the new cluster' do
-      expect_relative_copied_files.each do |rel_path|
-        expect_path(new_cluster_path.relative(rel_path)).to be_exist
+      expect_join_copied_files.each do |rel_path|
+        expect_path(new_cluster_path.join(rel_path)).to be_exist
       end
     end
   end
@@ -90,7 +90,7 @@ RSpec.describe Underware::DataCopy do
 
     let(:new_paths) do
       base = Pathname.new(cluster1_path.base)
-      cluster1_files.map { |p| Pathname.new(p).relative_path_from(base).to_s }
+      cluster1_files.map { |p| Pathname.new(p).join_path_from(base).to_s }
                     .map { |p| File.expand_path(p, new_cluster_path.base) }
     end
     subject do
@@ -98,7 +98,7 @@ RSpec.describe Underware::DataCopy do
     end
 
     describe '#all' do
-      let(:expect_relative_copied_files) { relative_cluster1_files }
+      let(:expect_join_copied_files) { join_cluster1_files }
       before { subject.all }
 
       include_examples 'copy to new cluster'
@@ -134,7 +134,7 @@ RSpec.describe Underware::DataCopy do
     context 'when the from the nil (aka base) layout' do
       include_context 'with base files'
       let(:subject_layout) { nil }
-      let(:expect_relative_copied_files) { relative_base_files }
+      let(:expect_join_copied_files) { join_base_files }
 
       it_behaves_like 'a layout cluster generator'
       it_behaves_like 'a protected copy'
@@ -143,7 +143,7 @@ RSpec.describe Underware::DataCopy do
     context 'when copying from a layout' do
       include_context 'with an existing layout'
       let(:subject_layout) { layout }
-      let(:expect_relative_copied_files) { relative_layout_files }
+      let(:expect_join_copied_files) { join_layout_files }
 
       it_behaves_like 'a layout cluster generator'
       it_behaves_like 'a protected copy'
@@ -154,7 +154,7 @@ RSpec.describe Underware::DataCopy do
     shared_examples 'a standard init' do
       include_context 'with base files'
       include_context 'with a non-existant new cluster'
-      let(:expect_relative_copied_files) { relative_base_files }
+      let(:expect_join_copied_files) { join_base_files }
 
       before do
         described_class.init_cluster(new_cluster, layout: subject_layout)
@@ -177,7 +177,7 @@ RSpec.describe Underware::DataCopy do
 
       context 'with layout files' do
         include_context 'with a non-existant new cluster'
-        let(:expect_relative_copied_files) { relative_layout_files }
+        let(:expect_join_copied_files) { join_layout_files }
 
         before do
           described_class.init_cluster(new_cluster, layout: subject_layout)

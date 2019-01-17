@@ -37,7 +37,7 @@ module Underware
 
       # TODO: Should the asset be configurable on a cluster by cluster basis
       def asset_type(type)
-        DataPath.new.relative('asset_types', type + '.yaml')
+        DataPath.new.join('asset_types', type + '.yaml')
       end
 
       # TODO: Is this going to in built or configurable per cluster?
@@ -57,8 +57,8 @@ module Underware
 
       # TODO: The `init` process shouldn't rely on pre configured answers
       # Instead it should be able to configure all the groups directly
-      def init_data(relative_path)
-        File.join(DataPath.new.base, 'init', relative_path)
+      def init_data(join_path)
+        File.join(DataPath.new.base, 'init', join_path)
       end
 
       # NOTE: Deprecated! This method should be removed completely
@@ -68,12 +68,12 @@ module Underware
 
       # NOTE: Deprecated! This method should be removed completely
       def answers_dir
-        data_path.relative('answers').tap { |p| FileUtils.mkdir_p(p) }
+        data_path.join('answers').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # NOTE: Deprecated! This method should be removed completely
       def config_dir
-        data_path.relative('configs').tap { |p| FileUtils.mkdir_p(p) }
+        data_path.join('configs').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # NOTE: Deprecated! This method should be removed completely
@@ -89,7 +89,7 @@ module Underware
       # NOTE: Deprecated! This is a specific method that should be extracted
       # to a dedicated class
       def plugin_cache
-        data_path.relative('plugins.yaml')
+        data_path.join('plugins.yaml')
       end
 
       def logs_dir
@@ -113,7 +113,7 @@ module Underware
       # NOTE: Deprecated! This is a specific method that should be extracted
       # to a dedicated class
       def asset_cache
-        data_path.relative('assets-cache.yaml')
+        data_path.join('assets-cache.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely

@@ -32,16 +32,16 @@ RSpec.describe Underware::DataPath do
       end
     end
 
-    describe '#relative' do
-      let(:relative_path) { '/some/relative/path' }
-      let(:absolute_path) { File.join(base_path, relative_path) }
+    describe '#join' do
+      let(:join_path) { '/some/join/path' }
+      let(:absolute_path) { File.join(base_path, join_path) }
 
-      it 'returns the absolute path relative to the base path' do
-        expect(subject.relative(relative_path)).to eq(absolute_path)
+      it 'returns the absolute path join to the base path' do
+        expect(subject.join(join_path)).to eq(absolute_path)
       end
 
       it 'wraps File.join' do
-        expect(subject.relative(*relative_path.split('/'))).to eq(absolute_path)
+        expect(subject.join(*join_path.split('/'))).to eq(absolute_path)
       end
     end
   end

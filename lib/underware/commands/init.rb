@@ -39,7 +39,7 @@ module Underware
 
       def run
         switch_cluster
-        DataCopy.init_cluster(Config.current_cluster)
+        DataCopy.init_cluster(Config.current_cluster, layout: 'example')
         configure_domain
         configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
         configure_group(NODES_GROUP, NODES_RANGE)

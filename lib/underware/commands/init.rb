@@ -39,17 +39,20 @@ module Underware
 
       def run
         switch_cluster
-        DataCopy.init_cluster(Config.current_cluster, layout: 'example')
-        configure_domain
+        layout = (options.bare ? nil : 'example')
+        DataCopy.init_cluster(Config.current_cluster, layout: layout)
+        unless options.bare
+          configure_domain
 
-        # NOTE: The files created by the configure have been cached in
-        # the `data/example` overlay. This code is being maintained for
-        # posterity
+          # NOTE: The files created by the configure have been cached in
+          # the `data/example` overlay. This code is being maintained for
+          # posterity
 
-        # configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
-        # configure_group(NODES_GROUP, NODES_RANGE)
-        # configure_login_nodes
-        template
+          # configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
+          # configure_group(NODES_GROUP, NODES_RANGE)
+          # configure_login_nodes
+          template
+        end
       end
 
       private

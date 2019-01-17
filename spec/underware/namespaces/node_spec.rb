@@ -70,9 +70,6 @@ RSpec.describe Underware::Namespaces::Node do
       Underware::ClusterAttr.update(alces.cluster_identifier) do |attr|
         node_array.each { |n| attr.add_nodes(n, groups: 'primary_group') }
       end
-
-      # Spoofs the hostip
-      use_mock_determine_hostip_script
     end
 
     it 'can access the node name' do
@@ -95,14 +92,21 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node.index).to eq(2)
     end
 
-    it 'has a kickstart_url' do
-      expected = "http://1.2.3.4/metalware/kickstart/#{node_name}"
-      expect(node.kickstart_url).to eq(expected)
-    end
+    context 'with a mocked ip' do
+      let(:ip) { '1.2.3.4' }
+      before do
+        allow(Underware::DeploymentServer).to receive(:ip).and_return(ip)
+      end
 
-    it 'has a build complete url' do
-      exp = "http://1.2.3.4/metalware/exec/kscomplete.php?name=#{node_name}"
-      expect(node.build_complete_url).to eq(exp)
+      it 'has a kickstart_url' do
+        expected = "http://#{ip}/metalware/kickstart/#{node_name}"
+        expect(node.kickstart_url).to eq(expected)
+      end
+
+      it 'has a build complete url' do
+        exp = "http://#{ip}/metalware/exec/kscomplete.php?name=#{node_name}"
+        expect(node.build_complete_url).to eq(exp)
+      end
     end
 
     describe '#==' do

@@ -37,8 +37,7 @@ module Underware
         Commander::Command::Options.new
       end
 
-      def initialize(args = [], options = nil, noop: false, alces: nil)
-        @alces ||= alces
+      def initialize(args = [], options = nil, noop: false)
         unless noop
           options ||= self.class.options
           start(args, options)

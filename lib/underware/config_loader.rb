@@ -1,6 +1,7 @@
-#!/bin/sh
+# frozen_string_literal: true
+
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -21,4 +22,46 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-echo 1.2.3.4
+require 'underware/patches/tty_config'
+
+module Underware
+  module ConfigLoader
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+
+    def self.read(obj)
+      return unless File.exists?(obj.path)
+      obj.__data__.read(obj.path)
+    end
+
+    def self.write(obj)
+      FileUtils.mkdir_p(File.dirname(obj.path))
+      obj.__data__.write(obj.path, force: true)
+    end
+
+    module ClassMethods
+      def update(*a)
+        new(*a).tap do |attr|
+          ConfigLoader.read(attr)
+          if block_given?
+            yield attr
+            ConfigLoader.write(attr)
+          end
+        end
+      end
+
+      def load(*a, &_b)
+        update(*a)
+      end
+    end
+
+    def __data__
+      @__data__ ||= TTY::Config.new
+    end
+
+    def path
+      raise NotImplementedError
+    end
+  end
+end

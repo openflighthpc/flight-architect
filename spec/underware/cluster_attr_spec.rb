@@ -54,9 +54,20 @@ RSpec.describe Underware::ClusterAttr do
 
     let(:path) { subject.path }
 
-    it 'writes the file if it does not already exist' do
-      described_class.update(subject.cluster)
-      expect(File.exists?(path)).to be true
+    context 'when called with a block' do
+      before { described_class.update(subject.cluster) {} }
+
+      it 'writes the file if it does not exist' do
+        expect(File.exists?(path)).to be true
+      end
+    end
+
+    context 'when called without a block' do
+      before { described_class.update(subject.cluster) }
+
+      it 'does not write the file' do
+        expect(File.exists?(path)).to be false
+      end
     end
 
     it 'returns the instance' do
@@ -73,7 +84,7 @@ RSpec.describe Underware::ClusterAttr do
       include_context 'with a ClusterAttr instance'
       include_context 'with the first group'
 
-      before { subject.class.send(:write, subject) }
+      before { Underware::ConfigLoader.write(subject) }
 
       it 'preserves the existing data' do
         new_attr = described_class.update(subject.cluster)

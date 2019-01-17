@@ -221,9 +221,33 @@ commands:
     options:
       - *gender_option
 
+  eval:
+    syntax: underware eval ALCES_COMMAND [options]
+    summary: Evaluate argument in context of `alces` namespace
+    description: >
+      Similar to 'underware view', but evaluates argument directly in 'alces'
+      namespace without any preprocessing, and then returns result as JSON.
+
+
+      Intended to have more stable behaviour than 'underware view', and to provide
+      external programs with access to Underware data, whereas 'underware view' is
+      intended purely for human usage and its behaviour may change as needed to
+      whatever is most useful for this.
+    action: Commands::Eval
+    options:
+      - *color_output
+      - *platform_option
+      - *render_option
+
   init: &init
-    syntax: underware init [options]
+    syntax: underware init CLUSTER_IDENTIFIER [options]
     summary: Create a basic cluster configuration
+    description: >
+      Creates a new cluster with a basic cluster layout. This command will
+      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
+      the configuration is saved.
+
+      Please use the `switch` command to change to a different cluster.
     action: Commands::Init
 
   layout:
@@ -253,6 +277,11 @@ commands:
       domain: *render_domain
       group: *render_group
       node: *render_node
+
+  switch:
+    syntax: underware switch CLUSTER_IDENTIFIER [options]
+    summary: Set the current cluster that is being configured
+    action: Commands::Switch
 
   template:
     syntax: underware template [options]
@@ -300,24 +329,6 @@ commands:
       means 'alces.domain' will show all domain level parameters, where
       'alces.domain.config' will only show the config.
     action: Commands::View
-    options:
-      - *color_output
-      - *platform_option
-      - *render_option
-
-  eval:
-    syntax: underware eval ALCES_COMMAND [options]
-    summary: Evaluate argument in context of `alces` namespace
-    description: >
-      Similar to 'underware view', but evaluates argument directly in 'alces'
-      namespace without any preprocessing, and then returns result as JSON.
-
-
-      Intended to have more stable behaviour than 'underware view', and to provide
-      external programs with access to Underware data, whereas 'underware view' is
-      intended purely for human usage and its behaviour may change as needed to
-      whatever is most useful for this.
-    action: Commands::Eval
     options:
       - *color_output
       - *platform_option

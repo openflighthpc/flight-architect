@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -22,15 +22,25 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/constants'
-require 'underware/file_path'
+module Underware
+  module Commands
+    class Switch < CommandHelpers::BaseCommand
+      private
 
-RSpec.describe Underware::FilePath do
-  describe 'dynamic constant paths' do
-    let(:storage_path) { Underware::Config.storage_path }
+      attr_reader :new_cluster_identifier
 
-    it 'does not define non-paths' do
-      expect(described_class.respond_to?(:nodeattr_command)).to eq(false)
+      def setup
+        @new_cluster_identifier = args.first
+      end
+
+      def run
+        Config.update do |config|
+          config.current_cluster = new_cluster_identifier
+        end
+        puts <<~MESSAGE
+          Switched the current cluster to: #{Config.current_cluster}
+        MESSAGE
+      end
     end
   end
 end

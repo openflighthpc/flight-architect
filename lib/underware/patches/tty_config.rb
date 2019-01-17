@@ -23,6 +23,7 @@
 #==============================================================================
 
 require 'tty/config'
+require 'yaml'
 
 module Underware
   module Patches

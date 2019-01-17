@@ -32,6 +32,12 @@ module Underware
       new(src, dst).all
     end
 
+    def self.layout_to_cluster(layout, cluster)
+      layout_path = DataPath.layout(layout)
+      cluster_path = DataPath.cluster(cluster)
+      new(layout_path, cluster_path)
+    end
+
     def initialize(source, destination)
       @source = source
       @destination = destination

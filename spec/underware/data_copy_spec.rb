@@ -26,8 +26,25 @@ require 'underware/data_copy'
 require 'pathname'
 
 RSpec.describe Underware::DataCopy do
+  def touch_file(path)
+    FileUtils.mkdir_p(File.dirname(path))
+    FileUtils.touch(path)
+  end
+
+  def expect_path(path)
+    expect(Pathname.new(path))
+  end
+
+  shared_context 'with base files' do
+    let(:relative_base_files) { ['base-file1', 'base-file2'] }
+    let(:base_path) { Underware::DataPath.new }
+    before do
+      relative_base_files.each { |p| touch_file(base_path.relative(p)) }
+    end
+  end
+
   shared_context 'with existing cluster1 files' do
-    let(:cluster1_path) { Underware::DataPath.new(cluster: 'cluster1') }
+    let(:cluster1_path) { Underware::DataPath.cluster('cluster1') }
     let(:cluster1_files) do
       [
         'file1',
@@ -38,6 +55,20 @@ RSpec.describe Underware::DataCopy do
 
     before do
       cluster1_files.each do |path|
+        FileUtils.mkdir_p(File.dirname(path))
+        FileUtils.touch(path)
+      end
+    end
+  end
+
+  shared_context 'with an existing layout' do
+    let(:layout) { 'my-layout' }
+    let(:layout_path) { Underware::DataPath.layout(layout) }
+    let(:relative_layout_files) { ['file1', 'directory/file2'] }
+
+    before do
+      relative_layout_files.each do |rel_path|
+        path = layout_path.relative(rel_path)
         FileUtils.mkdir_p(File.dirname(path))
         FileUtils.touch(path)
       end
@@ -67,6 +98,46 @@ RSpec.describe Underware::DataCopy do
 
       it 'copyies all the files into the new clusters directory' do
         new_paths.each { |p| expect(Pathname.new(p)).to be_exist }
+      end
+    end
+  end
+
+  describe '::layout_to_cluster' do
+    context 'when the nil layout is copied to the cluster' do
+      include_context 'with base files'
+      include_context 'with a non-existant new cluster'
+
+      subject do
+        described_class.layout_to_cluster(nil, new_cluster)
+      end
+
+      describe '#all' do
+        before { subject.all }
+
+        it 'copies the base files accross' do
+          relative_base_files.each do |path|
+            expect_path(new_cluster_path.relative(path)).to be_exist
+          end
+        end
+      end
+    end
+
+    context 'when copying a layout to a new cluster' do
+      include_context 'with an existing layout'
+      include_context 'with a non-existant new cluster'
+
+      subject do
+        described_class.layout_to_cluster(layout, new_cluster)
+      end
+
+      describe '#all' do
+        before { subject.all }
+
+        it 'copies the layout files accross' do
+          relative_layout_files.each do |path|
+            expect_path(new_cluster_path.relative(path)).to be_exist
+          end
+        end
       end
     end
   end

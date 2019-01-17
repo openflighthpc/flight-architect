@@ -149,4 +149,20 @@ RSpec.describe Underware::DataCopy do
       it_behaves_like 'a protected copy'
     end
   end
+
+  describe '::init_cluster' do
+    shared_examples 'a standard init' do
+      include_context 'with base files'
+      include_context 'with a non-existant new cluster'
+      let(:expect_relative_copied_files) { relative_base_files }
+
+      before do
+        described_class.init_cluster(new_cluster)
+      end
+    end
+
+    context 'when copying to a new cluster' do
+      include_examples 'a standard init'
+    end
+  end
 end

@@ -59,14 +59,14 @@ RSpec.describe Underware::DataCopy do
     before { cluster1_files.each { |p| touch_file(p) } }
   end
 
-  shared_context 'with an existing layout' do
-    let(:layout) { 'my-layout' }
-    let(:layout_path) { Underware::DataPath.layout(layout) }
-    let(:join_layout_files) { ['file1', 'directory/file2'] }
+  shared_context 'with an existing overlay' do
+    let(:overlay) { 'my-overlay' }
+    let(:overlay_path) { Underware::DataPath.overlay(overlay) }
+    let(:join_overlay_files) { ['file1', 'directory/file2'] }
 
     before do
-      join_layout_files.each do |rel_path|
-        touch_file(layout_path.join(rel_path))
+      join_overlay_files.each do |rel_path|
+        touch_file(overlay_path.join(rel_path))
       end
     end
   end
@@ -106,10 +106,10 @@ RSpec.describe Underware::DataCopy do
   end
 
   describe '::overlay_to_cluster' do
-    shared_examples 'a layout cluster generator' do
+    shared_examples 'a overlay cluster generator' do
       include_context 'with a non-existant new cluster'
       subject do
-        described_class.overlay_to_cluster(subject_layout, new_cluster)
+        described_class.overlay_to_cluster(subject_overlay, new_cluster)
       end
 
       describe '#all' do
@@ -119,33 +119,33 @@ RSpec.describe Underware::DataCopy do
     end
 
     shared_examples 'a protected copy' do
-      # The `nil` cluster also corresponds to the base layout. There should
+      # The `nil` cluster also corresponds to the base overlay. There should
       # be no way to copy to the base section through `overlay_to_cluster`
       # Similarly, it shouldn't be able to write to the empty string cluster
       ['', nil, false].each do |dst|
         it "errors when copying to the #{dst.inspect} cluster" do
           expect do
-            described_class.overlay_to_cluster(subject_layout, dst)
+            described_class.overlay_to_cluster(subject_overlay, dst)
           end.to raise_error(Underware::InternalError)
         end
       end
     end
 
-    context 'when the from the nil (aka base) layout' do
+    context 'when the from the nil (aka base) overlay' do
       include_context 'with base files'
-      let(:subject_layout) { nil }
+      let(:subject_overlay) { nil }
       let(:expect_join_copied_files) { join_base_files }
 
-      it_behaves_like 'a layout cluster generator'
+      it_behaves_like 'a overlay cluster generator'
       it_behaves_like 'a protected copy'
     end
 
-    context 'when copying from a layout' do
-      include_context 'with an existing layout'
-      let(:subject_layout) { layout }
-      let(:expect_join_copied_files) { join_layout_files }
+    context 'when copying from a overlay' do
+      include_context 'with an existing overlay'
+      let(:subject_overlay) { overlay }
+      let(:expect_join_copied_files) { join_overlay_files }
 
-      it_behaves_like 'a layout cluster generator'
+      it_behaves_like 'a overlay cluster generator'
       it_behaves_like 'a protected copy'
     end
   end

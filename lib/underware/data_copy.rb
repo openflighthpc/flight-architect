@@ -31,11 +31,11 @@ module Underware
       overlay_to_cluster(nil, cluster).all
     end
 
-    def self.overlay_to_cluster(layout, cluster)
+    def self.overlay_to_cluster(overlay, cluster)
       error_if_invalid_cluster(cluster)
-      layout_path = DataPath.layout(layout)
+      overlay_path = DataPath.overlay(overlay)
       cluster_path = DataPath.cluster(cluster)
-      new(layout_path, cluster_path)
+      new(overlay_path, cluster_path)
     end
 
     private_class_method

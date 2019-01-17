@@ -28,18 +28,18 @@ module Underware
       new(cluster: cluster)
     end
 
-    def self.layout(layout)
-      new(layout: layout)
+    def self.overlay(overlay)
+      new(overlay: overlay)
     end
 
-    def initialize(cluster: nil, base: nil, layout: nil)
+    def initialize(cluster: nil, base: nil, overlay: nil)
       @base = if base
                 base
               elsif cluster
                 File.join(Config.storage_path, 'clusters', cluster)
               else
-                layout ||= 'base'
-                File.join(Config.install_path, 'data', layout)
+                overlay ||= 'base'
+                File.join(Config.install_path, 'data', overlay)
               end
     end
 

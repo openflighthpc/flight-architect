@@ -41,9 +41,14 @@ module Underware
         switch_cluster
         DataCopy.init_cluster(Config.current_cluster, layout: 'example')
         configure_domain
-        configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
-        configure_group(NODES_GROUP, NODES_RANGE)
-        configure_login_nodes
+
+        # NOTE: The files created by the configure have been cached in
+        # the `data/example` overlay. This code is being maintained for
+        # posterity
+
+        # configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
+        # configure_group(NODES_GROUP, NODES_RANGE)
+        # configure_login_nodes
         template
       end
 
@@ -57,20 +62,20 @@ module Underware
         new_command(Configure::Domain).run!([], self.class.options)
       end
 
-      def configure_group(name, nodes)
-        new_command(Configure::Group).run!(
-          [name, nodes], load_answers_options("groups/#{name}.yaml")
-        )
-      end
+      # def configure_group(name, nodes)
+      #   new_command(Configure::Group).run!(
+      #     [name, nodes], load_answers_options("groups/#{name}.yaml")
+      #   )
+      # end
 
-      def configure_login_nodes
-        reset_alces
-        alces.groups.login.nodes.each do |node|
-          new_command(Configure::Node).run!(
-            [node.name], load_answers_options("nodes/gateway.yaml")
-          )
-        end
-      end
+      # def configure_login_nodes
+      #   reset_alces
+      #   alces.groups.login.nodes.each do |node|
+      #     new_command(Configure::Node).run!(
+      #       [node.name], load_answers_options("nodes/gateway.yaml")
+      #     )
+      #   end
+      # end
 
       def template
         new_command(Template).run!([], self.class.options)

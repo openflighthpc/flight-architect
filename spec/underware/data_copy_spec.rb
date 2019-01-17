@@ -119,12 +119,26 @@ RSpec.describe Underware::DataCopy do
       end
     end
 
+    shared_examples 'a protected copy' do
+      # The `nil` cluster also corresponds to the base layout. There should
+      # be no way to copy to the base section through `layout_to_cluster`
+      # Similarly, it shouldn't be able to write to the empty string cluster
+      ['', nil, false].each do |dst|
+        it "errors when copying to the #{dst.inspect} cluster" do
+          expect do
+            described_class.layout_to_cluster(subject_layout, dst)
+          end.to raise_error(Underware::InternalError)
+        end
+      end
+    end
+
     context 'when the from the nil (aka base) layout' do
       include_context 'with base files'
       let(:subject_layout) { nil }
       let(:expect_relative_copied_files) { relative_base_files }
 
       it_behaves_like 'a layout cluster generator'
+      it_behaves_like 'a protected copy'
     end
 
     context 'when copying from a layout' do
@@ -133,6 +147,7 @@ RSpec.describe Underware::DataCopy do
       let(:expect_relative_copied_files) { relative_layout_files }
 
       it_behaves_like 'a layout cluster generator'
+      it_behaves_like 'a protected copy'
     end
   end
 end

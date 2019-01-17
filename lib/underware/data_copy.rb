@@ -31,9 +31,19 @@ module Underware
     end
 
     def self.layout_to_cluster(layout, cluster)
+      error_if_invalid_cluster(cluster)
       layout_path = DataPath.layout(layout)
       cluster_path = DataPath.cluster(cluster)
       new(layout_path, cluster_path)
+    end
+
+    private_class_method
+
+    def self.error_if_invalid_cluster(cluster)
+      return if cluster && cluster.present?
+      raise InternalError, <<~ERROR
+        Can not copy to cluster: #{cluster.inspect}
+      ERROR
     end
 
     def initialize(source, destination)

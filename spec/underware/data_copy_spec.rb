@@ -103,42 +103,36 @@ RSpec.describe Underware::DataCopy do
   end
 
   describe '::layout_to_cluster' do
-    context 'when the nil layout is copied to the cluster' do
-      include_context 'with base files'
+    shared_examples 'a layout cluster generator' do
       include_context 'with a non-existant new cluster'
-
       subject do
-        described_class.layout_to_cluster(nil, new_cluster)
+        described_class.layout_to_cluster(subject_layout, new_cluster)
       end
 
       describe '#all' do
-        before { subject.all }
-
-        it 'copies the base files accross' do
-          relative_base_files.each do |path|
-            expect_path(new_cluster_path.relative(path)).to be_exist
+        it 'copies the files to the new cluster' do
+          subject.all
+          expect_relative_copied_files.each do |rel_path|
+            expect_path(new_cluster_path.relative(rel_path)).to be_exist
           end
         end
       end
     end
 
-    context 'when copying a layout to a new cluster' do
+    context 'when the from the nil (aka base) layout' do
+      include_context 'with base files'
+      let(:subject_layout) { nil }
+      let(:expect_relative_copied_files) { relative_base_files }
+
+      it_behaves_like 'a layout cluster generator'
+    end
+
+    context 'when copying from a layout' do
       include_context 'with an existing layout'
-      include_context 'with a non-existant new cluster'
+      let(:subject_layout) { layout }
+      let(:expect_relative_copied_files) { relative_layout_files }
 
-      subject do
-        described_class.layout_to_cluster(layout, new_cluster)
-      end
-
-      describe '#all' do
-        before { subject.all }
-
-        it 'copies the layout files accross' do
-          relative_layout_files.each do |path|
-            expect_path(new_cluster_path.relative(path)).to be_exist
-          end
-        end
-      end
+      it_behaves_like 'a layout cluster generator'
     end
   end
 end

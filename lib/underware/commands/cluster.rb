@@ -33,6 +33,7 @@ module Underware
 
       def run
         switch_cluster
+        list_clusters
       end
 
       def switch_cluster
@@ -42,6 +43,17 @@ module Underware
 
       def cluster_input
         args.first
+      end
+
+      def list_clusters
+        puts clusters
+      end
+
+      def clusters
+        @clusters ||= begin
+          Dir.glob(DataPath.cluster('*').base)
+             .map { |p| File.basename(p) }
+        end
       end
     end
   end

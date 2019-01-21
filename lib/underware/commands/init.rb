@@ -30,6 +30,8 @@ require 'underware/config'
 module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
+      include CommandHelpers::Clusters
+
       LOGIN_GROUP = 'login'
       LOGIN_NODE_RANGE = 'gateway1'
       NODES_GROUP = 'nodes'
@@ -60,7 +62,8 @@ module Underware
       private
 
       def switch_cluster
-        new_command(Cluster).run!(args, self.class.options)
+        error_if_cluster_exists(args.first)
+        Config.update { |c| c.current_cluster = args.first }
       end
 
       def configure_domain
@@ -97,6 +100,13 @@ module Underware
       #   options.default({ answers: json })
       #   options
       # end
+
+      def error_if_cluster_exists(cluster)
+        return unless cluster_exists?(cluster)
+        raise InvalidInput, <<~ERROR.chomp
+          Can not init '#{cluster}' as it already exists
+        ERROR
+      end
     end
   end
 end

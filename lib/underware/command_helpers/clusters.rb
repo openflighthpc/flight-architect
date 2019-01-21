@@ -49,7 +49,7 @@ module Underware
 
       def current_cluster_existence_check
         return if self.class.allow_missing_current_cluster(fetch: true)
-        return if File.exists?(DataPath.cluster(Config.current_cluster).configure)
+        return if cluster_exists?(Config.current_cluster)
         raise DataError, <<~ERROR.chomp
           The current cluster '#{Config.current_cluster}' does not exist.
           To resolve this error, either:

@@ -40,7 +40,15 @@ module Underware
 
       def run
         switch_cluster
+        missing_check
         list_clusters
+      end
+
+      def missing_check
+        return if clusters.include? Config.current_cluster
+        UnderwareLog.warn <<~WARN.squish.chomp
+          The current cluster '#{Config.current_cluster}' does not exist!
+        WARN
       end
 
       def switch_cluster

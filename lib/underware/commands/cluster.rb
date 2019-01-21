@@ -24,7 +24,7 @@
 
 module Underware
   module Commands
-    class Switch < CommandHelpers::BaseCommand
+    class Cluster < CommandHelpers::BaseCommand
       allow_missing_current_cluster
 
       private

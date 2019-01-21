@@ -60,7 +60,7 @@ module Underware
       private
 
       def switch_cluster
-        new_command(Switch).run!(args, self.class.options)
+        new_command(Cluster).run!(args, self.class.options)
       end
 
       def configure_domain

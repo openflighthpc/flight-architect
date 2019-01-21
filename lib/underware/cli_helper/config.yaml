@@ -247,7 +247,7 @@ commands:
       automatically switch to the CLUSTER_IDENTIFIER. This will determine where
       the configuration is saved.
 
-      Please use the `switch` command to change to a different cluster.
+      Please use the `cluster` command to manage the current cluster.
     options:
       - tags: [-b, --bare]
         description: 'Setup a new cluster without any configuration'
@@ -281,10 +281,17 @@ commands:
       group: *render_group
       node: *render_node
 
-  switch:
-    syntax: underware switch CLUSTER_IDENTIFIER [options]
-    summary: Set the current cluster that is being configured
-    action: Commands::Switch
+  cluster:
+    syntax: underware cluster [CLUSTER] [options]
+    summary: List, switch, and delete cluster configurations
+    description: >
+      If called without any arguments, the existing clusters are listed with
+      the current cluster highlighted with an asterisk.
+
+
+      Calling the command with the `CLUSTER` argument will switch the current
+      cluster before listing all the existing clusters as before.
+    action: Commands::Cluster
 
   template:
     syntax: underware template [options]

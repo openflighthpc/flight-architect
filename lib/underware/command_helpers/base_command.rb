@@ -96,7 +96,7 @@ module Underware
           The current cluster '#{Config.current_cluster}' does not exist.
           To resolve this error, either:
           1. `underware init` a new cluster, or
-          2. `underware switch` to an existing cluster
+          2. `underware cluster` to an existing cluster
         ERROR
       end
 

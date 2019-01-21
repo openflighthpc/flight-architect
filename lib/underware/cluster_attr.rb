@@ -22,8 +22,8 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/cluster_attr/expand'
 require 'underware/config_loader'
+require 'nodeattr_utils'
 
 module Underware
   class ClusterAttr
@@ -35,8 +35,7 @@ module Underware
       end
 
       def expand(nodes)
-        # Do not expand single nodes as the libray can not handle it
-        nodes.include?('[') ? Expand.explode_nodes(nodes) : [nodes]
+        NodeattrUtils::NodeParser.expand(nodes)
       end
 
       # TODO: Actually collapse the nodes array instead of joining them

@@ -35,6 +35,8 @@ module Underware
       NODES_GROUP = 'nodes'
       NODES_RANGE = 'node[01-10]'
 
+      allow_missing_current_cluster
+
       private
 
       def run

@@ -25,6 +25,8 @@
 module Underware
   module Commands
     class Switch < CommandHelpers::BaseCommand
+      allow_missing_current_cluster
+
       private
 
       attr_reader :new_cluster_identifier

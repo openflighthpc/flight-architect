@@ -26,7 +26,7 @@ module Underware
   module Commands
     class Cluster < CommandHelpers::BaseCommand
       LIST_TEMPLATE = <<~ERB
-        <% each do |cluster| -%>
+        <% clusters.each do |cluster| -%>
         <%   current = Underware::Config.current_cluster == cluster -%>
         <%=  current ? '*' : ' ' %> <%= cluster %>
         <% end -%>
@@ -45,7 +45,7 @@ module Underware
       end
 
       def missing_check
-        return if clusters.include? Config.current_cluster
+        return if cluster_exists?(Config.current_cluster)
         UnderwareLog.warn <<~WARN.squish.chomp
           The current cluster '#{Config.current_cluster}' does not exist!
         WARN
@@ -53,6 +53,7 @@ module Underware
 
       def switch_cluster
         return unless cluster_input
+        error_if_cluster_missing(cluster_input)
         Config.update { |c| c.current_cluster = cluster_input }
       end
 
@@ -61,8 +62,7 @@ module Underware
       end
 
       def list_clusters
-        puts ERB.new(LIST_TEMPLATE, nil, '-')
-                .result(clusters.get_binding)
+        puts ERB.new(LIST_TEMPLATE, nil, '-').result(binding)
       end
 
       def clusters
@@ -70,6 +70,17 @@ module Underware
           Dir.glob(DataPath.cluster('*').base)
              .map { |p| File.basename(p) }
         end
+      end
+
+      def cluster_exists?(cluster)
+        clusters.include?(cluster)
+      end
+
+      def error_if_cluster_missing(cluster)
+        return if cluster_exists?(cluster)
+        raise InvalidInput, <<~ERROR.squish
+          Can not switch to '#{cluster}' as the cluster does not exist
+        ERROR
       end
     end
   end

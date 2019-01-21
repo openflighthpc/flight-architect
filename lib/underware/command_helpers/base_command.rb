@@ -76,11 +76,23 @@ module Underware
 
       def post_setup
         enforce_dependency
+        cluster_existence_check
       end
 
       def setup_global_log_options(options)
         UnderwareLog.strict = !!options.strict
         UnderwareLog.quiet = !!options.quiet
+      end
+
+      def cluster_existence_check
+        paths = DataPath.cluster(Config.current_cluster)
+        return if File.exists?(paths.configure)
+        raise DataError, <<~ERROR.chomp
+          The current cluster '#{Config.current_cluster}' does not exist.
+          To resolve this error, either:
+          1. `underware init` a new cluster, or
+          2. `underware switch` to an existing cluster
+        ERROR
       end
 
       def dependency_specifications

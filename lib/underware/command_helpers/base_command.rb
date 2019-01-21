@@ -40,11 +40,6 @@ module Underware
         Commander::Command::Options.new
       end
 
-      def self.allow_missing_current_cluster(fetch: false)
-        @allow_missing_cluster = true unless fetch
-        @allow_missing_cluster
-      end
-
       def initialize(args = [], options = nil, noop: false)
         unless noop
           options ||= self.class.options
@@ -83,24 +78,13 @@ module Underware
       end
 
       def post_setup
-        cluster_existence_check
+        current_cluster_existence_check
         enforce_dependency
       end
 
       def setup_global_log_options(options)
         UnderwareLog.strict = !!options.strict
         UnderwareLog.quiet = !!options.quiet
-      end
-
-      def cluster_existence_check
-        return if self.class.allow_missing_current_cluster(fetch: true)
-        return if File.exists?(DataPath.cluster(Config.current_cluster).configure)
-        raise DataError, <<~ERROR.chomp
-          The current cluster '#{Config.current_cluster}' does not exist.
-          To resolve this error, either:
-          1. `underware init` a new cluster, or
-          2. `underware cluster` to an existing cluster
-        ERROR
       end
 
       def dependency_specifications

@@ -25,8 +25,6 @@
 module Underware
   module Commands
     class Cluster < CommandHelpers::BaseCommand
-      include CommandHelpers::Clusters
-
       LIST_TEMPLATE = <<~ERB
         <% clusters.each do |cluster| -%>
         <%   current = Underware::Config.current_cluster == cluster -%>

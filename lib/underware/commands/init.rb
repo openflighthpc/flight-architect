@@ -30,8 +30,6 @@ require 'underware/config'
 module Underware
   module Commands
     class Init < CommandHelpers::BaseCommand
-      include CommandHelpers::Clusters
-
       LOGIN_GROUP = 'login'
       LOGIN_NODE_RANGE = 'gateway1'
       NODES_GROUP = 'nodes'

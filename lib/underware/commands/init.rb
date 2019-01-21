@@ -39,12 +39,20 @@ module Underware
 
       def run
         switch_cluster
-        DataCopy.init_cluster(Config.current_cluster)
-        configure_domain
-        configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
-        configure_group(NODES_GROUP, NODES_RANGE)
-        configure_login_nodes
-        template
+        DataCopy.overlay_to_cluster(nil, Config.current_cluster).all
+        unless options.bare
+          DataCopy.overlay_to_cluster('example', Config.current_cluster).all
+          configure_domain
+
+          # NOTE: The files created by the configure have been cached in
+          # the `data/example` overlay. This code is being maintained for
+          # posterity
+
+          # configure_group(LOGIN_GROUP, LOGIN_NODE_RANGE)
+          # configure_group(NODES_GROUP, NODES_RANGE)
+          # configure_login_nodes
+          template
+        end
       end
 
       private
@@ -57,20 +65,20 @@ module Underware
         new_command(Configure::Domain).run!([], self.class.options)
       end
 
-      def configure_group(name, nodes)
-        new_command(Configure::Group).run!(
-          [name, nodes], load_answers_options("groups/#{name}.yaml")
-        )
-      end
+      # def configure_group(name, nodes)
+      #   new_command(Configure::Group).run!(
+      #     [name, nodes], load_answers_options("groups/#{name}.yaml")
+      #   )
+      # end
 
-      def configure_login_nodes
-        reset_alces
-        alces.groups.login.nodes.each do |node|
-          new_command(Configure::Node).run!(
-            [node.name], load_answers_options("nodes/gateway.yaml")
-          )
-        end
-      end
+      # def configure_login_nodes
+      #   reset_alces
+      #   alces.groups.login.nodes.each do |node|
+      #     new_command(Configure::Node).run!(
+      #       [node.name], load_answers_options("nodes/gateway.yaml")
+      #     )
+      #   end
+      # end
 
       def template
         new_command(Template).run!([], self.class.options)
@@ -80,13 +88,13 @@ module Underware
         klass.new(noop: true)
       end
 
-      def load_answers_options(relative_path)
-        data = Data.load(FilePath.init_data(relative_path))
-        json = JSON.dump(data)
-        options = self.class.options
-        options.default({ answers: json })
-        options
-      end
+      # def load_answers_options(relative_path)
+      #   data = Data.load(FilePath.init_data(relative_path))
+      #   json = JSON.dump(data)
+      #   options = self.class.options
+      #   options.default({ answers: json })
+      #   options
+      # end
     end
   end
 end

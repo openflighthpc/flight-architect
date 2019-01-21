@@ -248,6 +248,9 @@ commands:
       the configuration is saved.
 
       Please use the `switch` command to change to a different cluster.
+    options:
+      - tags: [-b, --bare]
+        description: 'Setup a new cluster without any configuration'
     action: Commands::Init
 
   layout:

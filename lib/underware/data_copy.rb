@@ -26,20 +26,37 @@ require 'underware/data_path'
 
 module Underware
   class DataCopy
+    # NOTE: Deprecated! Use the `overlay_to_cluster` method instead
     def self.init_cluster(cluster)
-      new(nil, cluster).all
+      overlay_to_cluster(nil, cluster).all
     end
 
-    def initialize(source_cluster, destination_cluster)
-      @source = DataPath.new(cluster: source_cluster)
-      @destination = DataPath.new(cluster: destination_cluster)
+    def self.overlay_to_cluster(overlay, cluster)
+      error_if_invalid_cluster(cluster)
+      overlay_path = DataPath.overlay(overlay)
+      cluster_path = DataPath.cluster(cluster)
+      new(overlay_path, cluster_path)
+    end
+
+    private_class_method
+
+    def self.error_if_invalid_cluster(cluster)
+      return if cluster && cluster.present?
+      raise InternalError, <<~ERROR
+        Can not copy to cluster: #{cluster.inspect}
+      ERROR
+    end
+
+    def initialize(source, destination)
+      @source = source
+      @destination = destination
     end
 
     def all
       FileUtils.mkdir_p(destination.base)
-      Dir.glob(source.relative('*')) do |source_path|
+      Dir.glob(source.join('*')) do |source_path|
         relative_path = File.basename(source_path)
-        destination_path = destination.relative(relative_path)
+        destination_path = destination.join(relative_path)
         FileUtils.copy_entry source_path, destination_path
       end
     end

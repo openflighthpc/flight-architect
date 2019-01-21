@@ -32,43 +32,57 @@ RSpec.describe Underware::DataPath do
       end
     end
 
-    describe '#relative' do
-      let(:relative_path) { '/some/relative/path' }
-      let(:absolute_path) { File.join(base_path, relative_path) }
+    describe '#join' do
+      let(:join_path) { '/some/join/path' }
+      let(:absolute_path) { File.join(base_path, join_path) }
 
-      it 'returns the absolute path relative to the base path' do
-        expect(subject.relative(relative_path)).to eq(absolute_path)
+      it 'returns the absolute path join to the base path' do
+        expect(subject.join(join_path)).to eq(absolute_path)
       end
 
       it 'wraps File.join' do
-        expect(subject.relative(*relative_path.split('/'))).to eq(absolute_path)
+        expect(subject.join(*join_path.split('/'))).to eq(absolute_path)
       end
     end
   end
 
   context 'without a cluster' do
     let(:base_path) do
-      File.join(Underware::Config.install_path, 'data')
+      File.join(Underware::Config.install_path, 'data/base')
     end
     subject { described_class.new }
 
     it_behaves_like 'generic path interface'
   end
 
+  context 'with a specified overlay path' do
+    let(:overlay) { 'my-overlay' }
+    let(:base_path) do
+      File.join(Underware::Config.install_path, 'data', overlay)
+    end
+    subject { described_class.new(overlay: overlay) }
+
+    it_behaves_like 'generic path interface'
+  end
+
   context 'with a cluster' do
     let(:cluster) { 'my-cluster' }
+    let(:overlay) { 'this-overlay-should-be-ignored' }
     let(:base_path) do
       File.join(Underware::Config.storage_path, 'clusters', cluster)
     end
-    subject { described_class.new(cluster: cluster) }
+    subject { described_class.new(cluster: cluster, overlay: overlay) }
 
     it_behaves_like 'generic path interface'
   end
 
   context 'with a specified base path' do
     let(:cluster) { 'this-cluster-should-be-ignored' }
+    let(:overlay) { 'this-overlay-should-be-ignored' }
     let(:base_path) { '/some/random/base/path' }
-    subject { described_class.new(cluster: cluster, base: base_path) }
+    subject do
+      described_class.new(cluster: cluster, base: base_path, overlay: overlay)
+    end
 
     it_behaves_like 'generic path interface'
   end

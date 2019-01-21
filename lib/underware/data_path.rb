@@ -28,20 +28,25 @@ module Underware
       new(cluster: cluster)
     end
 
-    def initialize(cluster: nil, base: nil)
+    def self.overlay(overlay)
+      new(overlay: overlay)
+    end
+
+    def initialize(cluster: nil, base: nil, overlay: nil)
       @base = if base
                 base
               elsif cluster
                 File.join(Config.storage_path, 'clusters', cluster)
               else
-                File.join(Config.install_path, 'data')
+                overlay ||= 'base'
+                File.join(Config.install_path, 'data', overlay)
               end
     end
 
     attr_reader :base
 
-    def relative(*relative_path)
-      File.join(base, *relative_path)
+    def join(*join_path)
+      File.join(base, *join_path)
     end
 
     # Generate static path methods
@@ -50,7 +55,7 @@ module Underware
       public_key: ['keys', 'id_rsa.pub'],
       private_key: ['keys', 'id_rsa']
     }.each do |method, path|
-      define_method(method) { relative(*Array.wrap(path)) }
+      define_method(method) { join(*Array.wrap(path)) }
     end
 
     # Generate directory path methods
@@ -61,7 +66,7 @@ module Underware
       plugin: 'plugins',
       rendered: 'rendered'
     }.each do |method, path|
-      define_method(method) { |*a| relative(*Array.wrap(path), *a) }
+      define_method(method) { |*a| join(*Array.wrap(path), *a) }
     end
 
     # Generate named yaml path methods
@@ -69,7 +74,7 @@ module Underware
       data_config: 'data'
     }.each do |method, path|
       define_method(method) do |name|
-        relative(*Array.wrap(path), "#{name}.yaml")
+        join(*Array.wrap(path), "#{name}.yaml")
       end
     end
 
@@ -80,10 +85,10 @@ module Underware
       config: 'configs'
     }.each do |method, path|
       path = Array.wrap(path)
-      define_method(:"domain_#{method}") { relative(path, 'domain.yaml') }
+      define_method(:"domain_#{method}") { join(path, 'domain.yaml') }
       ['group', 'node', 'platform'].each do |type|
         define_method(:"#{type}_#{method}") do |name|
-          relative(path, type.pluralize, "#{name}.yaml")
+          join(path, type.pluralize, "#{name}.yaml")
         end
       end
     end

@@ -151,6 +151,7 @@ RSpec.configure do |config|
     # Run every test using `FakeFS`, this prevents us polluting the real file
     # system
     FileSystem.test do
+      Underware::Config.reset
       example.run
     end
   end

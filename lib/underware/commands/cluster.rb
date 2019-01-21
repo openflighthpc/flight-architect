@@ -25,6 +25,13 @@
 module Underware
   module Commands
     class Cluster < CommandHelpers::BaseCommand
+      LIST_TEMPLATE = <<~ERB
+        <% each do |cluster| -%>
+        <%   current = Underware::Config.current_cluster == cluster -%>
+        <%=  current ? '*' : ' ' %> <%= cluster %>
+        <% end -%>
+      ERB
+
       allow_missing_current_cluster
 
       private
@@ -46,7 +53,8 @@ module Underware
       end
 
       def list_clusters
-        puts clusters
+        puts ERB.new(LIST_TEMPLATE, nil, '-')
+                .result(clusters.get_binding)
       end
 
       def clusters

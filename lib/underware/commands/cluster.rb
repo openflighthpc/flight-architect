@@ -29,19 +29,19 @@ module Underware
 
       private
 
-      attr_reader :new_cluster_identifier
-
-      def setup
-        @new_cluster_identifier = args.first
-      end
+      def setup; end
 
       def run
-        Config.update do |config|
-          config.current_cluster = new_cluster_identifier
-        end
-        puts <<~MESSAGE
-          Switched the current cluster to: #{Config.current_cluster}
-        MESSAGE
+        switch_cluster
+      end
+
+      def switch_cluster
+        return unless cluster_input
+        Config.update { |c| c.current_cluster = cluster_input }
+      end
+
+      def cluster_input
+        args.first
       end
     end
   end

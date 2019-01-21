@@ -25,6 +25,8 @@
 module Underware
   module Commands
     class Cluster < CommandHelpers::BaseCommand
+      include CommandHelpers::Clusters
+
       LIST_TEMPLATE = <<~ERB
         <% clusters.each do |cluster| -%>
         <%   current = Underware::Config.current_cluster == cluster -%>
@@ -63,17 +65,6 @@ module Underware
 
       def list_clusters
         puts ERB.new(LIST_TEMPLATE, nil, '-').result(binding)
-      end
-
-      def clusters
-        @clusters ||= begin
-          Dir.glob(DataPath.cluster('*').base)
-             .map { |p| File.basename(p) }
-        end
-      end
-
-      def cluster_exists?(cluster)
-        clusters.include?(cluster)
       end
 
       def error_if_cluster_missing(cluster)

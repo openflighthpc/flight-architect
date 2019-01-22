@@ -60,10 +60,6 @@ FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
 
 RSpec.configure do |config|
-  # Skip the `commands` specs for the time being as they are royally broken
-  # TODO: Fix this
-  config.exclude_pattern = 'spec/underware/commands/**/*_spec.rb'
-
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

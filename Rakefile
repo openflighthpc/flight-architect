@@ -37,7 +37,7 @@ namespace :spec do
     task.pattern = CMD_PATTERN
   end
 
-  task all: [:unit, :command]
+  RSpec::Core::RakeTask.new(:all)
 end
 
 desc 'Display the test coverage'

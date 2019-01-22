@@ -7,4 +7,6 @@ sudo: required
 install:
   - bin/install-ci-dependencies
   - bundle install
-script: make test
+# TODO: This should be switch to `rake spec:all` once the command specs
+# are working again
+script: rake spec:unit

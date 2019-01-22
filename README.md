@@ -47,6 +47,37 @@ clusters and other Alces tools
 ... etc ...
 ```
 
+### Creating a new cluster
+
+A new generic cluster can be created using the `init` command. It will ask a few
+questions about the cluster such as its name. Then it will generate an
+one compute/ ten node cluster. 
+
+```
+# bin/underware init CLUSTER_IDENTIFIER
+Name of the cluster (1/6)
+> ?
+
+... etc ..
+```
+
+The `CLUSTER_IDENTIFIER` is a label used to manage the cluster from the command
+line. All commands that require a cluster input will use this identifier. It is
+unrelated to the `cluster_name` which is set by the question. This is to allow
+clusters with the same name but different configurations.
+
+#### Creating a bare cluster
+
+The `init` command can also create a cluster without any nodes using the
+`--bare` flag. This skips the configuration of the `domain` and any `nodes`.
+It does however create the cluster's basic directory structure· It further
+configuration needs to use the `configure` commands.
+
+```
+# bin/underware init CLUSTER_IDENTIFIER --bare
+(no questions asked)
+```
+
 ## Documentation
 
 - [Templating system](docs/templating-system.md)

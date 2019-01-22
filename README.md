@@ -78,6 +78,56 @@ configuration needs to use the `configure` commands.
 (no questions asked)
 ```
 
+### Advanced domain configuration
+
+Once the cluster has been created, further configuration can be done by using 
+the `configure` commands. The `init` questions can be re-asked by reconfiguring
+the domain. Unlike the `init` command, this will not recreate the directory
+structure.
+
+```
+bin/underware configure domain
+```
+
+### Adding new nodes
+
+A set of nodes can be added using the `configure group` command. The `GROUP_NAME`,
+and `NODE_RANGE` need to specified on the command line.
+
+```
+# bin/underware configure group GROUP_NAME NODE_RANGE
+```
+
+Examples:
+```
+# Configures 'group1' with a single node 'node1'
+bin/underware configure group group1 node1
+
+# Configures 'group2' with a range of nodes: 'n01', 'n02', ..., 'n10'
+bin/underware configure group group2 n[01-10]
+```
+
+Nodes can be added to additional groups using the `--groups` flag
+
+### Configuring a single node
+
+A singe node can be setup using the `configure node` command. It will
+either re-configure an existing node, or add an orphan node.
+
+```
+# bin/underware configure node NODE_NAME
+```
+
+### Rendering the content
+
+The content templates can be rendered using the `template` command. By default
+the templates are rendered to:
+`/var/lib/underware/clusters/<CLUSTER_IDENTIFIER>/rendered`
+
+```
+# bin/underware template
+```
+
 ## Documentation
 
 - [Templating system](docs/templating-system.md)

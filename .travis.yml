@@ -5,7 +5,7 @@ rvm:
  - 2.4.1
 sudo: required
 install:
-  - bin/install-ci-dependencies
+  - sudo apt-get install cmake -y
   - bundle install
 # TODO: This should be switch to `rake spec:all` once the command specs
 # are working again

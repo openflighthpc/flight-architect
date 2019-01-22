@@ -28,6 +28,8 @@ require 'pry-byebug'
 
 require 'bundler/setup'
 
+task default: ['spec:unit']
+
 namespace :spec do
   CMD_PATTERN = 'spec/underware/commands/**/*_spec.rb'
 

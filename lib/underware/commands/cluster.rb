@@ -49,6 +49,8 @@ module Underware
       end
 
       def run_delete
+        cluster = cluster_input || Config.current_cluster
+        error_if_deleting_current_cluster(cluster)
       end
 
       def missing_check
@@ -75,6 +77,14 @@ module Underware
         return if cluster_exists?(cluster)
         raise InvalidInput, <<~ERROR.squish
           Can not switch to '#{cluster}' as the cluster does not exist
+        ERROR
+      end
+
+      def error_if_deleting_current_cluster(cluster)
+        return unless Config.current_cluster == cluster
+        raise InvalidInput, <<~ERROR.chomp
+          Can not delete the current cluster, please switch cluster and run:
+          '#{Underware::APP_NAME} cluster --delete #{cluster}'
         ERROR
       end
     end

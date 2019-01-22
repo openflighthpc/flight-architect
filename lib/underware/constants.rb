@@ -25,6 +25,9 @@
 require 'underware/hash_mergers/underware_recursive_open_struct'
 
 module Underware
+  # Constants can be named directly within the module
+  APP_NAME = 'underware'
+
   module Constants
     # Directory name where shared 'content' templates live.
     CONTENT_DIR_NAME = 'content'

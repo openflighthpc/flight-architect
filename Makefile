@@ -11,10 +11,6 @@ unit-test:
 test:
 	bundle exec rspec --force-colour
 
-.PHONY: view-test-coverage
-view-test-coverage:
-	xdg-open coverage/index.html
-
 .PHONY: rsync
 rsync:
 	rsync \

@@ -26,6 +26,8 @@ require 'rake'
 require 'rspec/core/rake_task'
 require 'pry-byebug'
 
+require 'bundler/setup'
+
 namespace :spec do
   CMD_PATTERN = 'spec/underware/commands/**/*_spec.rb'
 

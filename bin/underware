@@ -23,6 +23,7 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require_relative '../lib/underware/cli.rb'
+require 'bundler/setup'
+require 'underware/cli.rb'
 
 Underware::Cli.new.run if $PROGRAM_NAME == __FILE__

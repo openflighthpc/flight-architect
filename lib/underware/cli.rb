@@ -22,7 +22,6 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'bundler/setup'
 require 'commander'
 require 'colorize'
 

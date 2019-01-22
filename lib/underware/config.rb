@@ -45,8 +45,12 @@ module Underware
       delegate_missing_to :cache
 
       def update(*a)
-        @cache = nil
+        reset
         super
+      end
+
+      def reset
+        @cache = nil
       end
     end
 

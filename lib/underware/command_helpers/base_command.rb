@@ -29,10 +29,13 @@ require 'underware/dependency_specifications'
 require 'underware/validation/loader'
 require 'underware/file_path'
 require 'underware/namespaces/alces'
+require 'underware/command_helpers/clusters'
 
 module Underware
   module CommandHelpers
     class BaseCommand
+      include CommandHelpers::Clusters
+
       def self.options
         Commander::Command::Options.new
       end
@@ -75,6 +78,7 @@ module Underware
       end
 
       def post_setup
+        current_cluster_existence_check
         enforce_dependency
       end
 

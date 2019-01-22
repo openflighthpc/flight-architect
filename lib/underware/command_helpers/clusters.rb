@@ -23,23 +23,39 @@
 #==============================================================================
 
 module Underware
-  module Commands
-    class Switch < CommandHelpers::BaseCommand
-      private
-
-      attr_reader :new_cluster_identifier
-
-      def setup
-        @new_cluster_identifier = args.first
+  module CommandHelpers
+    module Clusters
+      def self.included(base)
+        base.extend(ClassMethods)
       end
 
-      def run
-        Config.update do |config|
-          config.current_cluster = new_cluster_identifier
+      module ClassMethods
+        def allow_missing_current_cluster(fetch: false)
+          @allow_missing_cluster = true unless fetch
+          @allow_missing_cluster
         end
-        puts <<~MESSAGE
-          Switched the current cluster to: #{Config.current_cluster}
-        MESSAGE
+      end
+
+      def clusters
+        @clusters ||= begin
+          Dir.glob(DataPath.cluster('*').base)
+             .map { |p| File.basename(p) }
+        end
+      end
+
+      def cluster_exists?(cluster)
+        clusters.include?(cluster)
+      end
+
+      def current_cluster_existence_check
+        return if self.class.allow_missing_current_cluster(fetch: true)
+        return if cluster_exists?(Config.current_cluster)
+        raise DataError, <<~ERROR.chomp
+          The current cluster '#{Config.current_cluster}' does not exist.
+          To resolve this error, either:
+          1. `underware init` a new cluster, or
+          2. `underware cluster` to an existing cluster
+        ERROR
       end
     end
   end

@@ -52,7 +52,8 @@ module Underware
         under-lying Alces clusters and other Alces tools
       EOF
 
-      suppress_trace_class UserUnderwareError
+      # Suppress the `--trace` on all outputs. It is now a semi-hidden feature
+      suppress_trace_class Exception
 
       CliHelper::Parser.new(self).parse_commands
 

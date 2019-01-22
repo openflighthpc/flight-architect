@@ -22,9 +22,25 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-namespace :test do
-  desc 'Display the test coverage'
-  task :coverage do
-    `xdg-open coverage/index.html`
+require 'rake'
+require 'rspec/core/rake_task'
+require 'pry-byebug'
+
+namespace :spec do
+  CMD_PATTERN = 'spec/underware/commands/**/*_spec.rb'
+
+  RSpec::Core::RakeTask.new(:unit) do |task|
+    task.exclude_pattern = CMD_PATTERN
   end
+
+  RSpec::Core::RakeTask.new(:command) do |task|
+    task.pattern = CMD_PATTERN
+  end
+
+  task all: [:unit, :command]
+end
+
+desc 'Display the test coverage'
+task :coverage do
+  `xdg-open coverage/index.html`
 end

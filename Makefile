@@ -1,16 +1,6 @@
 
 REMOTE_DIR='/tmp/underware'
 
-.PHONY: unit-test
-unit-test:
-	bundle exec rspec \
-		--force-colour \
-		--exclude-pattern 'spec/slow/**/*, spec/integration/**/*'
-
-.PHONY: test
-test:
-	bundle exec rspec --force-colour
-
 .PHONY: rsync
 rsync:
 	rsync \

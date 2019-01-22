@@ -24,7 +24,6 @@
 
 require 'underware/spec/alces_utils'
 require 'underware/constants'
-require 'underware/dependency'
 
 module Underware
   module SpecUtils

@@ -39,9 +39,16 @@ module Underware
       def setup; end
 
       def run
-        switch_cluster
+        options.delete ? run_delete : run_normal
+      end
+
+      def run_normal
+        switch_cluster if cluster_input
         missing_check
         list_clusters
+      end
+
+      def run_delete
       end
 
       def missing_check
@@ -52,7 +59,6 @@ module Underware
       end
 
       def switch_cluster
-        return unless cluster_input
         error_if_cluster_missing(cluster_input)
         Config.update { |c| c.current_cluster = cluster_input }
       end

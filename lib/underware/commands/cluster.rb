@@ -52,6 +52,7 @@ module Underware
         cluster = cluster_input || Config.current_cluster
         error_if_deleting_current_cluster(cluster)
         error_if_cluster_missing(cluster, action: 'delete')
+        confirm_delete(cluster)
       end
 
       def missing_check
@@ -68,6 +69,13 @@ module Underware
 
       def cluster_input
         args.first
+      end
+
+      def confirm_delete(cluster)
+        cli = HighLine.new
+        question = "Are you sure you want to delete '#{cluster}' (y/n)?"
+        return if cli.agree question
+        raise InvalidInput, 'Cancelled delete'
       end
 
       def list_clusters

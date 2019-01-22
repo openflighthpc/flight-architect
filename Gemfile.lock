@@ -12,6 +12,12 @@ GIT
     commander (4.4.4.pre.alces2)
       highline (~> 1.7.2)
 
+GIT
+  remote: https://github.com/alces-software/nodeattr_utils
+  revision: efe200c44492bf3d17e93920918e824fe7b7d74e
+  specs:
+    nodeattr_utils (0.1.0)
+
 PATH
   remote: .
   specs:
@@ -23,6 +29,7 @@ PATH
       hashie
       highline (= 1.7.8)
       network_interface (~> 0.0.1)
+      nodeattr_utils
       recursive-open-struct
       ruby-progressbar
       rubytree
@@ -74,7 +81,7 @@ GEM
     fakefs (0.18.0)
     hashie (3.6.0)
     highline (1.7.8)
-    i18n (1.5.1)
+    i18n (1.5.2)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
     method_source (0.9.0)
@@ -135,6 +142,7 @@ DEPENDENCIES
   bundler
   commander!
   fakefs
+  nodeattr_utils!
   pry
   pry-byebug
   rspec

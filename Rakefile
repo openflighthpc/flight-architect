@@ -33,11 +33,15 @@ namespace :spec do
     task.exclude_pattern = CMD_PATTERN
   end
 
-  RSpec::Core::RakeTask.new(:command) do |task|
+  RSpec::Core::RakeTask.new(:commands) do |task|
     task.pattern = CMD_PATTERN
   end
 
   RSpec::Core::RakeTask.new(:all)
+
+  RSpec::Core::RakeTask.new(:failures) do |task|
+    task.rspec_opts = '--only-failures'
+  end
 end
 
 desc 'Display the test coverage'

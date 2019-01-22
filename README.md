@@ -32,50 +32,19 @@ Underware is designed to be used both as a library by other Alces tools, and as
 an independent tool in its own right. Documentation has not yet been written on
 using it as a library; see below for documentation on using it as a tool.
 
-Once installed and your shell configuration is sourced, you can access the
-Underware tools via the `underware` command, e.g.:
-
+The application can be invoked directly using the `bin` executable:
 ```
-[root@localhost ~]# underware
+# bin/underware
   NAME:
 
     underware
 
   DESCRIPTION:
 
-    Tool for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools
+    Tool for managing standard config hierarchy and template rendering under-lying Alces
+clusters and other Alces tools
 
-  COMMANDS:
-
-    asset        Manage the asset record files
-    configure    Configure different aspects of this Underware installation
-    each         Runs a command for a node(s)
-    eval         Evaluate argument in context of `alces` namespace
-    help         Display global or [command] help documentation
-    layout       Manage the layout record files
-    overview     Gives an overview of the configured groups
-    plugin       View and manage activated plugins
-    remove       Remove underware controlled files/ objects
-    render       Render a given template
-    view         View domain templating config, optionally in context for given node
-    view-answers View configured answers
-
-  GLOBAL OPTIONS:
-
-    --strict
-        Convert warnings to errors
-
-    --quiet
-        Suppress any warnings from being displayed
-
-    -h, --help
-        Display help documentation
-
-    --version
-        Display version information
-
-    --trace
-        Display backtrace when an error occurs
+... etc ...
 ```
 
 ## Documentation

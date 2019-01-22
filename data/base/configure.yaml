@@ -63,6 +63,7 @@ domain:
   # BASE
   - *cluster_name
   - *root_password
+  - *root_ssh_key
   - *configured_build_interface
 
   # NETWORKS

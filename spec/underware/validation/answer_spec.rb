@@ -61,12 +61,10 @@ RSpec.describe Underware::Validation::Answer do
   end
 
   def run_answer_validation(answers)
-    FileSystem.test do
-      Underware::Data.dump(Underware::FilePath.configure, question_tree)
-      validator = Underware::Validation::Answer.new(answers,
-                                                    answer_section: :domain)
-      [validator.validate, validator]
-    end
+    Underware::Data.dump(Underware::FilePath.configure, question_tree)
+    validator = Underware::Validation::Answer.new(answers,
+                                                  answer_section: :domain)
+    [validator.validate, validator]
   end
 
   def get_question_with_an_incorrect_type(results)

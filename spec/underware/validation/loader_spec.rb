@@ -87,17 +87,16 @@ RSpec.describe Underware::Validation::Loader do
     end
 
     before do
-      FileSystem.setup do |fs|
-        fs.dump(Underware::FilePath.configure, configure_questions_hash)
+      fs = Underware::Data
+      fs.dump(Underware::FilePath.configure, configure_questions_hash)
 
-        # Create example plugin.
-        fs.mkdir_p example_plugin_dir
-        example_plugin_configure_file =
-          File.join(example_plugin_dir, 'configure.yaml')
-        fs.dump(
-          example_plugin_configure_file, example_plugin_configure_questions_hash
-        )
-      end
+      # Create example plugin.
+      FileUtils.mkdir_p example_plugin_dir
+      example_plugin_configure_file =
+        File.join(example_plugin_dir, 'configure.yaml')
+      fs.dump(
+        example_plugin_configure_file, example_plugin_configure_questions_hash
+      )
     end
 
     Underware::Constants::CONFIGURE_SECTIONS.each do |section|
@@ -108,9 +107,7 @@ RSpec.describe Underware::Validation::Loader do
 
         context 'when plugin activated' do
           before do
-            FileSystem.setup do |fs|
-              fs.activate_plugin('example')
-            end
+            Underware::Plugins.activate!('example')
           end
 
           let(:plugin_enabled_question) do
@@ -143,10 +140,9 @@ RSpec.describe Underware::Validation::Loader do
 
           context 'when no configure.yaml for plugin' do
             before do
-              FileSystem.setup do |fs|
-                fs.rm_rf example_plugin_dir
-                fs.mkdir_p example_plugin_dir
-              end
+              fs = FileUtils
+              fs.rm_rf example_plugin_dir
+              fs.mkdir_p example_plugin_dir
             end
 
             include_examples 'includes_generated_plugin_enabled_question' \

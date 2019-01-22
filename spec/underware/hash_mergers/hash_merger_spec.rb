@@ -16,27 +16,33 @@ RSpec.describe Underware::HashMergers::HashMerger do
   before :each do
     fp = Underware::FilePath
 
-    FileSystem.setup do |fs|
-      fs.with_minimal_configure_file
+    base_configure = YAML.dump(
+      questions: [],
+      domain: [],
+      group: [],
+      node: []
+    )
+    dst = Underware::FilePath.configure
+    FileUtils.mkdir_p(File.dirname(dst))
+    File.write(dst, base_configure)
 
-      dump_data = lambda do |data, config_path, answers_path|
-        [config_path, answers_path].each do |path|
-          fs.dump(path, data)
-        end
+    dump_data = lambda do |data, config_path, answers_path|
+      [config_path, answers_path].each do |path|
+        Underware::Data.dump(path, data)
       end
-
-      # We set up various simple, identical data files for both configs and
-      # answers at different levels, so we can test that merging works
-      # correctly for both config and answer HashMergers.
-      dump_data.call(domain_data, fp.domain_config, fp.domain_answers)
-      dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
-      dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
-      dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
-
-      # Platforms only have configs, and no answers, so we only dump a single
-      # data file for the test platform config.
-      fs.dump(fp.platform_config('test_platform'), test_platform_config)
     end
+
+    # We set up various simple, identical data files for both configs and
+    # answers at different levels, so we can test that merging works
+    # correctly for both config and answer HashMergers.
+    dump_data.call(domain_data, fp.domain_config, fp.domain_answers)
+    dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
+    dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
+    dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
+
+    # Platforms only have configs, and no answers, so we only dump a single
+    # data file for the test platform config.
+    Underware::Data.dump(fp.platform_config('test_platform'), test_platform_config)
   end
 
   let :domain_data do
@@ -79,7 +85,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :merged_namespace do
+  def merged_namespace
     config = Underware::HashMergers::Config
       .new(eager_render: false)
       .merge(**hash_input, &:itself)

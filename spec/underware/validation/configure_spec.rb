@@ -31,7 +31,9 @@ require 'underware/spec/alces_utils'
 RSpec.describe Underware::Validation::Configure do
   include Underware::AlcesUtils
 
-  before { FileSystem.setup(&:with_validation_error_file) }
+  before do
+    FakeFS::FileSystem.clone(Underware::FilePath.dry_validation_errors)
+  end
 
   let(:file_path) { Underware::FilePath }
 

@@ -51,7 +51,7 @@ SimpleCov.start 'underware'
 require 'underware/cli'
 
 require 'underware/spec/spec_utils'
-require 'filesystem'
+require 'fakefs/spec_helpers'
 
 require 'pry'
 require 'pry-byebug'
@@ -60,6 +60,13 @@ FIXTURES_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 
 
 RSpec.configure do |config|
+  # Run all the specs within the faked filesystem
+  config.include FakeFS::SpecHelpers
+  config.before { FakeFS.activate! }
+
+  # Create the temporary faked directory
+  config.before { FileUtils.mkdir('/tmp') }
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -148,17 +155,8 @@ RSpec.configure do |config|
   end
 
   config.around do |example|
-    # Run every test using `FakeFS`, this prevents us polluting the real file
-    # system
-    FileSystem.test do
-      Underware::Config.reset
-      example.run
-    end
-  end
-
-  # Resets the filesystem after each test
-  config.after do
-    FileSystem.reset_configurator
+    Underware::Config.reset
+    example.run
   end
 
   # Make our test helper functions available in all tests.

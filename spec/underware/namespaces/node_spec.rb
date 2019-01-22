@@ -176,7 +176,7 @@ RSpec.describe Underware::Namespaces::Node do
       )
     end
 
-    it 'only includes plugins enabled for node' do
+    xit 'only includes plugins enabled for node' do
       node_plugin_names = []
       node.plugins.each do |plugin|
         node_plugin_names << plugin.name
@@ -185,13 +185,13 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node_plugin_names).to eq [enabled_plugin]
     end
 
-    it 'uses plugin namespace for each enabled plugin' do
+    xit 'uses plugin namespace for each enabled plugin' do
       first_plugin = node.plugins.first
 
       expect(first_plugin).to be_a(Underware::Namespaces::Plugin)
     end
 
-    it 'provides access to plugin namespaces by plugin name' do
+    xit 'provides access to plugin namespaces by plugin name' do
       plugin = node.plugins.enabled_plugin
 
       expect(plugin.name).to eq enabled_plugin

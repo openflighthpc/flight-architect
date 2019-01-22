@@ -51,6 +51,7 @@ module Underware
       def run_delete
         cluster = cluster_input || Config.current_cluster
         error_if_deleting_current_cluster(cluster)
+        error_if_cluster_missing(cluster, action: 'delete')
       end
 
       def missing_check
@@ -73,10 +74,10 @@ module Underware
         puts ERB.new(LIST_TEMPLATE, nil, '-').result(binding)
       end
 
-      def error_if_cluster_missing(cluster)
+      def error_if_cluster_missing(cluster, action: 'switch to')
         return if cluster_exists?(cluster)
         raise InvalidInput, <<~ERROR.squish
-          Can not switch to '#{cluster}' as the cluster does not exist
+          Can not #{action} '#{cluster}' as the cluster does not exist
         ERROR
       end
 

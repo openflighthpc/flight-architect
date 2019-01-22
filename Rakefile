@@ -29,16 +29,20 @@ require 'pry-byebug'
 namespace :spec do
   CMD_PATTERN = 'spec/underware/commands/**/*_spec.rb'
 
+  desc 'Run all the unit tests'
   RSpec::Core::RakeTask.new(:unit) do |task|
     task.exclude_pattern = CMD_PATTERN
   end
 
+  desc 'Run the commands integration specs'
   RSpec::Core::RakeTask.new(:commands) do |task|
     task.pattern = CMD_PATTERN
   end
 
+  desc 'Run all the specs'
   RSpec::Core::RakeTask.new(:all)
 
+  desc 'Rerun previously failed specs'
   RSpec::Core::RakeTask.new(:failures) do |task|
     task.rspec_opts = '--only-failures'
   end
@@ -48,3 +52,10 @@ desc 'Display the test coverage'
 task :coverage do
   `xdg-open coverage/index.html`
 end
+
+desc 'Open code in the console'
+task :pry do
+  require File.join(__dir__, 'lib/underware/cli.rb')
+  Pry::REPL.start({})
+end
+

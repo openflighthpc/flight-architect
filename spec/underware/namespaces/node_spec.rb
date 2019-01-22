@@ -126,32 +126,6 @@ RSpec.describe Underware::Namespaces::Node do
         expect(foonode).not_to eq(barnode)
       end
     end
-
-    describe '#asset' do
-      let(:content) do
-        { node: { node_name.to_sym => 'asset_test' } }
-      end
-      let(:asset_name) { 'asset_test' }
-      let(:cache) { Underware::Cache::Asset.new }
-
-      context 'with an assigned asset' do
-        Underware::AlcesUtils.mock(self, :each) do
-          create_asset(asset_name, content)
-          cache.assign_asset_to_node(asset_name, node)
-          cache.save
-        end
-
-        it 'loads the asset data' do
-          expect(node.asset.to_h).to include(**content)
-        end
-      end
-
-      context 'without an assigned asset' do
-        it 'returns nil' do
-          expect(node.asset).to eq(nil)
-        end
-      end
-    end
   end
 
   # Test `#plugins` without the rampant mocking above.

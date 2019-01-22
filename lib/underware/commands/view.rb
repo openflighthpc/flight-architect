@@ -11,8 +11,6 @@ module Underware
 
       include CommandHelpers::AlcesCommand
 
-      ARRAY_TYPES = [Array, Namespaces::AssetArray].freeze
-
       def run
         pretty_print_json(cli_input_object.to_json)
       end
@@ -21,7 +19,7 @@ module Underware
         data = alces_command
         if data.is_a?(Namespaces::UnderwareArray)
           data
-        elsif ARRAY_TYPES.include?(data.class)
+        elsif data.is_a?(Array)
           data.map(&:to_h)
         elsif data.respond_to?(:to_h)
           data.to_h

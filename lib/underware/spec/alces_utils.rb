@@ -149,20 +149,6 @@ module Underware
         alces.groups.find_by_name(name)
       end
 
-      def create_asset(asset_name, data, type: 'server')
-        path = Underware::FilePath.asset(type.pluralize, asset_name)
-        FileUtils.mkdir_p(File.dirname(path))
-        Underware::Data.dump(path, data)
-        alces.instance_variable_set(:@asset_cache, nil)
-        alces.instance_variable_set(:@assets, nil)
-      end
-
-      def create_layout(layout_name, data, type: 'rack')
-        path = Underware::FilePath.layout(type.pluralize, layout_name)
-        FileUtils.mkdir_p(File.dirname(path))
-        Underware::Data.dump(path, data)
-      end
-
       private
 
       attr_reader :alces, :test

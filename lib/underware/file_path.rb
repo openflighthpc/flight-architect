@@ -35,11 +35,6 @@ module Underware
         DataPath.cluster(Config.current_cluster)
       end
 
-      # TODO: Should the asset be configurable on a cluster by cluster basis
-      def asset_type(type)
-        DataPath.new.join('asset_types', type + '.yaml')
-      end
-
       # TODO: Is this going to in built or configurable per cluster?
       def overview
         File.join(DataPath.new.base, 'overview.yaml')
@@ -83,22 +78,6 @@ module Underware
 
       def dry_validation_errors
         File.join(Config.install_path, 'lib/underware/validation/errors.yaml')
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
-      def assets_dir
-        data_path.asset
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
-      def layouts_dir
-        data_path.layout
-      end
-
-      # NOTE: Deprecated! This is a specific method that should be extracted
-      # to a dedicated class
-      def asset_cache
-        data_path.join('assets-cache.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely

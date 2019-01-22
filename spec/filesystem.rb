@@ -114,11 +114,6 @@ class FileSystem
     with_fixtures(fixture_file, at: fixtures_path(fixture_file))
   end
 
-  def with_asset_types
-    asset_types_dir_path = File.dirname(Underware::FilePath.asset_type(''))
-    clone(asset_types_dir_path, asset_types_dir_path)
-  end
-
   # Useful when a `configure.yaml` file is required, but don't want to use real
   # file to avoid actual questions being asked in tests.
   def with_minimal_configure_file

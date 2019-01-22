@@ -94,14 +94,6 @@ module Underware
         @questions ||= loader.question_tree
       end
 
-      def assets
-        @assets ||= AssetArray.new(self)
-      end
-
-      def asset_cache
-        @asset_cache ||= Underware::Cache::Asset.new
-      end
-
       def cluster_attr
         @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end

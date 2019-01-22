@@ -51,9 +51,7 @@ module Underware
 
     # Generate static path methods
     {
-      configure: 'configure.yaml',
-      public_key: ['keys', 'id_rsa.pub'],
-      private_key: ['keys', 'id_rsa']
+      configure: 'configure.yaml'
     }.each do |method, path|
       define_method(method) { join(*Array.wrap(path)) }
     end

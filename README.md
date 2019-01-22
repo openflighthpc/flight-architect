@@ -17,59 +17,14 @@ sufficient.
 
 ## Installation
 
-### TL;DR
+Underware uses ruby `2.4.1` with a corresponding version of `bundler`. It can
+be installed from source using:
 
-One-line installation - **note that you must verify you have the correct value
-for** `alces_OS`:
-
-```bash
-curl -sL http://git.io/underware-installer | sudo alces_OS=el7 /bin/bash
 ```
-
-### Basic installation
-
-Underware is a system-level package and must be installed by the `root` user.
-
-1. Become root.
-
-   ```bash
-   sudo -s
-   ```
-
-2. Set the `alces_OS` environment variable to match the distribution on which
-   you are installing. Currently supported options are `el6` and `el7`:
-
-     ```bash
-     export alces_OS=el7
-     ```
-   
-3. Invoke installation by piping output from `curl` to `bash`:
-
-   ```bash
-   curl -sL http://git.io/underware-installer | /bin/bash
-   ```
-
-   If you want to you can download the script first.  You might want to do this
-   if you want to inspect what it's going to do, or if you're nervous about it
-   being truncated during download:
-
-   ```bash
-   curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
-   less /tmp/bootstrap.sh
-   bash /tmp/bootstrap.sh
-   ```
-
-4. After installation, you can logout and login again in order to set up the
-   appropriate shell configuration, or you can source the shell configuration
-   manually:
-
-   ```bash
-   source /etc/profile.d/alces-underware.sh
-   ```
-
-### Advanced installation
-
-For further installation techniques, please refer to [INSTALL.md](INSTALL.md).
+git clone https://github.com/alces-software/underware.git
+cd underware
+bundle install
+```
 
 ## Usage
 

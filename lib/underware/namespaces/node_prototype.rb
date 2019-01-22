@@ -56,20 +56,12 @@ module Underware
         @kickstart_url ||= DeploymentServer.kickstart_url(name)
       end
 
-      def build_complete_path
-        @build_complete_path ||= FilePath.build_complete(self)
-      end
-
       def build_complete_url
         @build_complete_url ||= DeploymentServer.build_complete_url(name)
       end
 
       def genders_url
         @genders_url ||= DeploymentServer.system_file_url('genders')
-      end
-
-      def events_dir
-        FilePath.event self
       end
 
       def plugins
@@ -92,8 +84,7 @@ module Underware
                        :genders,
                        :index,
                        :kickstart_url,
-                       :build_complete_url,
-                       :build_complete_path,
+                       :build_complete_url
                      ])
       end
 

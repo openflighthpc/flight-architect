@@ -1,43 +1,6 @@
 
 REMOTE_DIR='/tmp/underware'
 
-.PHONY: rsync
-rsync:
-	rsync \
-		-r \
-		--copy-links \
-		--delete \
-		--exclude tmp/ \
-		--exclude .git/ \
-		--exclude coverage/ \
-		--exclude vendor/ \
-		--exclude .bundle/ \
-		--perms \
-		. root@${IP}:${REMOTE_DIR}
-
-.PHONY: watch-rsync
-watch-rsync:
-	rerun \
-		--name 'Underware' \
-		--pattern '**/*' \
-		--exit \
-		--no-notify \
-		make rsync
-
-# Note: need to become root for Underware; -t option allows coloured output.
-.PHONY: remote-run
-remote-run: rsync
-	ssh -t dev@${IP} "sudo su - -c \"cd ${REMOTE_DIR} && ${COMMAND}\""
-
-.PHONY: rubocop
-rubocop:
-	bundle exec rubocop --parallel --display-cop-names --display-style-guide --color
-
-# Fix Rubocop issues, where possible.
-.PHONY: rubocop-fix
-rubocop-fix:
-	bundle exec rubocop --display-cop-names --display-style-guide --color --auto-correct
-
 # Start Pry console, loading main CLI entry point (so all CLI files should be
 # loaded) and all files in `spec` dir.
 .PHONY: console

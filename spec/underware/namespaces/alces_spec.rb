@@ -202,13 +202,10 @@ RSpec.describe Underware::Namespaces::Alces do
     end
 
     it 'gives useful error when try to access data for non-existent file' do
-      data_file_path = Underware::FilePath.namespace_data_file('non_existent')
-
       expect do
         alces.data.non_existent.foo
       end.to raise_error(
-        Underware::UserUnderwareError,
-        "Requested data file doesn't exist: #{data_file_path}"
+        Underware::UnderwareError, /Requested data file doesn't exist:/
       )
     end
 

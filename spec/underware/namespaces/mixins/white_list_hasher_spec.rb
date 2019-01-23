@@ -24,7 +24,7 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
       end
 
       def array_method
-        OpenStruct.new(property: 'value_within_array_object')
+        [OpenStruct.new(property: 'value_within_array_object')]
       end
 
       private

@@ -9,6 +9,16 @@ module Underware
           base.extend(ClassMethods)
         end
 
+        def self.convert_to_hash(obj)
+          if obj.is_a?(Array)
+            obj.map { |o| convert_to_hash(o) }
+          elsif obj.respond_to?(:to_h)
+            obj.to_h
+          else
+            obj
+          end
+        end
+
         module ClassMethods
           def method_added(name)
             super
@@ -39,7 +49,9 @@ module Underware
 
         def to_h
           self.class.hashable_methods.reduce({}) do |memo, method|
-            memo.merge(method => __send__(method))
+            value = __send__(method)
+            hashed_value = WhiteListHasher.convert_to_hash(value)
+            memo.merge(method => hashed_value)
           end
         end
       end

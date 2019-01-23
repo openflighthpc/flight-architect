@@ -26,7 +26,7 @@
 module Underware
   module Namespaces
     module Mixins
-      module WhiteListHasher
+      module ImplicitHasher
         def self.convert_to_hash(obj)
           if obj.is_a?(Array)
             obj.map { |o| convert_to_hash(o) }
@@ -42,7 +42,7 @@ module Underware
             .select { |n| method(n).arity == 0 }
             .reduce({}) do |memo, method|
             value = __send__(method)
-            hashed_value = WhiteListHasher.convert_to_hash(value)
+            hashed_value = ImplicitHasher.convert_to_hash(value)
             memo.merge(method => hashed_value)
           end
         end

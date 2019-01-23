@@ -23,10 +23,10 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/namespaces/mixins/white_list_hasher'
+require 'underware/namespaces/mixins/implicit_hasher'
 require 'ostruct'
 
-RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
+RSpec.describe Underware::Namespaces::Mixins::ImplicitHasher do
   let(:whitelist_double) do
     ctx = __binding__
     Class.new do

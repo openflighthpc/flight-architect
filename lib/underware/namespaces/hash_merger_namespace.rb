@@ -8,7 +8,7 @@ require 'underware/hash_mergers'
 module Underware
   module Namespaces
     class HashMergerNamespace
-      include Mixins::WhiteListHasher
+      include Mixins::ImplicitHasher
 
       def initialize(alces, name = nil)
         @alces = alces

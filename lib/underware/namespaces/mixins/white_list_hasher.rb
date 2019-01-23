@@ -5,6 +5,25 @@ module Underware
   module Namespaces
     module Mixins
       module WhiteListHasher
+        def self.included(base)
+          base.extend(ClassMethods)
+        end
+
+        module ClassMethods
+          def method_added(name)
+            super
+
+            # Register hashable methods
+            if instance_method(name).arity == 0
+              white_list_for_hasher << name
+            end
+          end
+
+          def white_list_for_hasher
+            @white_list_for_hasher ||= []
+          end
+        end
+
         def to_h
           white_list_hash_methods
             .merge(recursive_white_list_hash_methods)
@@ -36,7 +55,7 @@ module Underware
         end
 
         def white_list_for_hasher
-          raise NotImplementedError
+          self.class.white_list_for_hasher
         end
 
         def recursive_white_list_for_hasher

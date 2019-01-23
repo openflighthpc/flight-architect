@@ -20,7 +20,6 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
       white_method3: 3,
       recursive_hash_obj: recursive_hash_obj,
       do_not_hash_me: 'ohh snap',
-      white_list_for_hasher: white_list,
       recursive_white_list_for_hasher: recursive_white_list,
       recursive_array_white_list_for_hasher: array_white_list,
       array_method: [

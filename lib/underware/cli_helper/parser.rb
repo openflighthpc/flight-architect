@@ -59,7 +59,7 @@ module Underware
             next if a == 'autocomplete'
             case a
             when 'action'
-              c.action eval(v)
+              c.action { |args, opts| run_command(eval(v), args, opts) }
             when 'options'
               v.each do |opt|
                 if [:Integer, 'Integer'].include? opt['type']
@@ -94,6 +94,10 @@ module Underware
         else
           default_value
         end
+      end
+
+      def run_command(command, args, options)
+        command.new(noop: true).start(args, options)
       end
     end
   end

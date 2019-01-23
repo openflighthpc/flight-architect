@@ -27,6 +27,20 @@ module Underware
     module Clusters
       def self.included(base)
         base.extend(ClassMethods)
+        current_cluster_existence_check(base)
+      end
+
+      def self.current_cluster_existence_check(base)
+        base.register_dependency do
+          next if self.class.allow_missing_current_cluster(fetch: true)
+          next if cluster_exists?(Config.current_cluster)
+          raise DataError, <<~ERROR.chomp
+            The current cluster '#{Config.current_cluster}' does not exist.
+            To resolve this error, either:
+            1. `underware init` a new cluster, or
+            2. `underware cluster` to an existing cluster
+          ERROR
+        end
       end
 
       module ClassMethods
@@ -45,17 +59,6 @@ module Underware
 
       def cluster_exists?(cluster)
         clusters.include?(cluster)
-      end
-
-      def current_cluster_existence_check
-        return if self.class.allow_missing_current_cluster(fetch: true)
-        return if cluster_exists?(Config.current_cluster)
-        raise DataError, <<~ERROR.chomp
-          The current cluster '#{Config.current_cluster}' does not exist.
-          To resolve this error, either:
-          1. `underware init` a new cluster, or
-          2. `underware cluster` to an existing cluster
-        ERROR
       end
     end
   end

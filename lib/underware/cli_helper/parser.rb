@@ -96,8 +96,19 @@ module Underware
         end
       end
 
+      #
+      # Runs the command by extracting the options from from Commander::Options
+      #
       def run_command(command, args, options)
-        command.new.start(args, options)
+        opt_hash = setup_and_strip_globals(options)
+        command.new.start(args, **opt_hash)
+      end
+
+      def setup_and_strip_globals(commander_options)
+        commander_options.__hash__.symbolize_keys.tap do |options|
+          UnderwareLog.strict = !!options.delete(:strict)
+          UnderwareLog.quiet = !!options.delete(:quiet)
+        end
       end
     end
   end

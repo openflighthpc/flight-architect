@@ -70,20 +70,6 @@ module Underware
 
       private
 
-      def white_list_for_hasher
-        super.concat([
-                       :group,
-                       :genders,
-                       :index,
-                       :kickstart_url,
-                       :build_complete_url
-                     ])
-      end
-
-      def recursive_array_white_list_for_hasher
-        super.push(:plugins)
-      end
-
       def hash_merger_input
         super.merge(node_hash_merger_input)
       end

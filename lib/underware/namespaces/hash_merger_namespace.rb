@@ -48,18 +48,6 @@ module Underware
       attr_reader :alces
       delegate :platform, to: :alces
 
-      def white_list_for_hasher
-        respond_to?(:name) ? [:name] : []
-      end
-
-      def recursive_white_list_for_hasher
-        [:config, :answer]
-      end
-
-      def recursive_array_white_list_for_hasher
-        []
-      end
-
       def run_hash_merger(hash_obj)
         hash_obj.merge(**hash_merger_input) do |template|
           render_string(template)

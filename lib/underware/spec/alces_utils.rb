@@ -111,11 +111,13 @@ module Underware
       end
 
       def config(namespace, h = {})
-        allow(namespace).to receive(:config).and_return(hash_object(h))
+        h = hash_object(h)
+        namespace.define_singleton_method(:config) { h }
       end
 
       def answer(namespace, h = {})
-        allow(namespace).to receive(:answer).and_return(hash_object(h))
+        h = hash_object(h)
+        namespace.define_singleton_method(:answer) { h }
       end
 
       def validation_off

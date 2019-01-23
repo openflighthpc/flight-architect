@@ -14,6 +14,7 @@ module Underware
             super
 
             # Register hashable methods
+            return if name == :initialize
             if instance_method(name).arity == 0
               white_list_for_hasher << name
             end

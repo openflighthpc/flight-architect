@@ -23,9 +23,7 @@
 #==============================================================================
 
 require 'underware/underware_log'
-require 'underware/dependency'
 require 'underware/exceptions'
-require 'underware/dependency_specifications'
 require 'underware/validation/loader'
 require 'underware/file_path'
 require 'underware/namespaces/alces'
@@ -79,27 +77,11 @@ module Underware
 
       def post_setup
         current_cluster_existence_check
-        enforce_dependency
       end
 
       def setup_global_log_options(options)
         UnderwareLog.strict = !!options.strict
         UnderwareLog.quiet = !!options.quiet
-      end
-
-      def dependency_specifications
-        DependencySpecifications.new(alces)
-      end
-
-      def dependency_hash
-        {}
-      end
-
-      def enforce_dependency
-        Dependency.new(
-          command_input: command_name,
-          dependency_hash: dependency_hash
-        ).enforce
       end
 
       def loader

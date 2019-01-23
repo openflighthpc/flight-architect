@@ -59,8 +59,6 @@ module Underware
     # Generate directory path methods
     {
       template: 'templates',
-      layout: 'layouts',
-      asset: 'assets',
       plugin: 'plugins',
       rendered: 'rendered'
     }.each do |method, path|

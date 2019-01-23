@@ -68,14 +68,6 @@ module Underware
         @plugins ||= UnderwareArray.new(enabled_plugin_namespaces)
       end
 
-      def asset
-        @asset ||= begin
-          asset_name = alces.asset_cache.asset_for_node(self)
-          return unless asset_name
-          alces.assets.find_by_name(asset_name)
-        end
-      end
-
       private
 
       def white_list_for_hasher

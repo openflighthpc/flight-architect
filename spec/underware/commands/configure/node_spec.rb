@@ -40,11 +40,9 @@ RSpec.describe Underware::Commands::Configure::Node do
   end
 
   before :each do
-    FileSystem.setup do |fs|
-      fs.with_minimal_configure_file
-      fs.dump(Underware::FilePath.domain_answers, {})
-      fs.dump(Underware::FilePath.group_answers('testnodes'), {})
-    end
+    fs = Underware::Data
+    fs.dump(Underware::FilePath.domain_answers, {})
+    fs.dump(Underware::FilePath.group_answers('testnodes'), {})
   end
 
   it 'creates correct configurator' do

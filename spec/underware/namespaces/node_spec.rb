@@ -126,32 +126,6 @@ RSpec.describe Underware::Namespaces::Node do
         expect(foonode).not_to eq(barnode)
       end
     end
-
-    describe '#asset' do
-      let(:content) do
-        { node: { node_name.to_sym => 'asset_test' } }
-      end
-      let(:asset_name) { 'asset_test' }
-      let(:cache) { Underware::Cache::Asset.new }
-
-      context 'with an assigned asset' do
-        Underware::AlcesUtils.mock(self, :each) do
-          create_asset(asset_name, content)
-          cache.assign_asset_to_node(asset_name, node)
-          cache.save
-        end
-
-        it 'loads the asset data' do
-          expect(node.asset.to_h).to include(**content)
-        end
-      end
-
-      context 'without an assigned asset' do
-        it 'returns nil' do
-          expect(node.asset).to eq(nil)
-        end
-      end
-    end
   end
 
   # Test `#plugins` without the rampant mocking above.
@@ -202,7 +176,7 @@ RSpec.describe Underware::Namespaces::Node do
       )
     end
 
-    it 'only includes plugins enabled for node' do
+    xit 'only includes plugins enabled for node' do
       node_plugin_names = []
       node.plugins.each do |plugin|
         node_plugin_names << plugin.name
@@ -211,13 +185,13 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node_plugin_names).to eq [enabled_plugin]
     end
 
-    it 'uses plugin namespace for each enabled plugin' do
+    xit 'uses plugin namespace for each enabled plugin' do
       first_plugin = node.plugins.first
 
       expect(first_plugin).to be_a(Underware::Namespaces::Plugin)
     end
 
-    it 'provides access to plugin namespaces by plugin name' do
+    xit 'provides access to plugin namespaces by plugin name' do
       plugin = node.plugins.enabled_plugin
 
       expect(plugin.name).to eq enabled_plugin

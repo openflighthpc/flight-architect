@@ -5,8 +5,16 @@ require 'underware/namespaces/mixins/white_list_hasher'
 require 'ostruct'
 
 RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
+  let(:whitelist_double) do
+    Class.new do
+      def self.add_methods(methods)
+        methods.each { |m, v| define_method(m) { v } }
+      end
+    end.include(described_class)
+  end
+
   let(:test_obj) do
-    double(
+    whitelist_double.add_methods(
       white_method1: 1,
       white_method2: 2,
       white_method3: 3,
@@ -18,7 +26,8 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
       array_method: [
         OpenStruct.new(property: 'value_within_array_object'),
       ]
-    ).extend described_class
+    )
+    whitelist_double.new
   end
 
   let(:recursive_hash_obj) do

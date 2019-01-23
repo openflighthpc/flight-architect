@@ -32,50 +32,100 @@ Underware is designed to be used both as a library by other Alces tools, and as
 an independent tool in its own right. Documentation has not yet been written on
 using it as a library; see below for documentation on using it as a tool.
 
-Once installed and your shell configuration is sourced, you can access the
-Underware tools via the `underware` command, e.g.:
-
+The application can be invoked directly using the `bin` executable:
 ```
-[root@localhost ~]# underware
+# bin/underware
   NAME:
 
     underware
 
   DESCRIPTION:
 
-    Tool for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools
+    Tool for managing standard config hierarchy and template rendering under-lying Alces
+clusters and other Alces tools
 
-  COMMANDS:
+... etc ...
+```
 
-    asset        Manage the asset record files
-    configure    Configure different aspects of this Underware installation
-    each         Runs a command for a node(s)
-    eval         Evaluate argument in context of `alces` namespace
-    help         Display global or [command] help documentation
-    layout       Manage the layout record files
-    overview     Gives an overview of the configured groups
-    plugin       View and manage activated plugins
-    remove       Remove underware controlled files/ objects
-    render       Render a given template
-    view         View domain templating config, optionally in context for given node
-    view-answers View configured answers
+### Creating a new cluster
 
-  GLOBAL OPTIONS:
+A new generic cluster can be created using the `init` command. It will ask a few
+questions about the cluster such as its name. Then it will generate an
+one compute/ ten node cluster. 
 
-    --strict
-        Convert warnings to errors
+```
+# bin/underware init CLUSTER_IDENTIFIER
+Name of the cluster (1/6)
+> ?
 
-    --quiet
-        Suppress any warnings from being displayed
+... etc ..
+```
 
-    -h, --help
-        Display help documentation
+The `CLUSTER_IDENTIFIER` is a label used to manage the cluster from the command
+line. All commands that require a cluster input will use this identifier. It is
+unrelated to the `cluster_name` which is set by the question. This is to allow
+clusters with the same name but different configurations.
 
-    --version
-        Display version information
+#### Creating a bare cluster
 
-    --trace
-        Display backtrace when an error occurs
+The `init` command can also create a cluster without any nodes using the
+`--bare` flag. This skips the configuration of the `domain` and any `nodes`.
+It does however create the cluster's basic directory structure· It further
+configuration needs to use the `configure` commands.
+
+```
+# bin/underware init CLUSTER_IDENTIFIER --bare
+(no questions asked)
+```
+
+### Advanced domain configuration
+
+Once the cluster has been created, further configuration can be done by using 
+the `configure` commands. The `init` questions can be re-asked by reconfiguring
+the domain. Unlike the `init` command, this will not recreate the directory
+structure.
+
+```
+bin/underware configure domain
+```
+
+### Adding new nodes
+
+A set of nodes can be added using the `configure group` command. The `GROUP_NAME`,
+and `NODE_RANGE` need to specified on the command line.
+
+```
+# bin/underware configure group GROUP_NAME NODE_RANGE
+```
+
+Examples:
+```
+# Configures 'group1' with a single node 'node1'
+bin/underware configure group group1 node1
+
+# Configures 'group2' with a range of nodes: 'n01', 'n02', ..., 'n10'
+bin/underware configure group group2 n[01-10]
+```
+
+Nodes can be added to additional groups using the `--groups` flag
+
+### Configuring a single node
+
+A singe node can be setup using the `configure node` command. It will
+either re-configure an existing node, or add an orphan node.
+
+```
+# bin/underware configure node NODE_NAME
+```
+
+### Rendering the content
+
+The content templates can be rendered using the `template` command. By default
+the templates are rendered to:
+`/var/lib/underware/clusters/<CLUSTER_IDENTIFIER>/rendered`
+
+```
+# bin/underware template
 ```
 
 ## Documentation

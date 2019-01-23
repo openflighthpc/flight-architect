@@ -86,8 +86,9 @@ module Underware
         data_path.join('plugins.yaml')
       end
 
+      # NOTE: Deprecated! This is set directly from the Config
       def logs_dir
-        '/var/log/underware'
+        Config.log_path
       end
 
       def dry_validation_errors

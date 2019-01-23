@@ -70,6 +70,14 @@ module Underware
       File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
     end
 
+    def log_path
+      __data__.fetch(:logs_path, default: '/var/log/underware')
+    end
+
+    def storage_path
+      __data__.fetch(:storage_path, default: '/var/lib/underware')
+    end
+
     # XXX For now Underware needs some knowledge of Metalware, so it can
     # provide access to Metalware-specific things in the Underware namespace.
     # See from https://alces.slack.com/archives/CD7GNLP8D/p1540303912000100 for
@@ -78,10 +86,6 @@ module Underware
     # nodes.
     def events_dir
       '/var/lib/metalware/events'
-    end
-
-    def storage_path
-      '/var/lib/underware'
     end
   end
 end

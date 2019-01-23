@@ -6,8 +6,7 @@ debug: true
 cluster: '<%= answer.cluster_name %>'
 root_password: '<%= answer.root_password %>'
 configured_build_interface: '<%= answer.configured_build_interface %>'
-publickey: '<%= domain.keys.public %>'
-privatekey: '<%= domain.keys.private %>'
+publickey: '<%= answer.root_ssh_key %>'
 role: '<%=answer.role%>'
 
 

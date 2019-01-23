@@ -147,8 +147,10 @@ module Underware
         raise NotImplementedError
       end
 
-      def handle_interrupt(e)
-        raise e
+      # Interrupt needs to re-raised as a StandardError, to prevent the traceback
+      # from being dumped
+      def handle_interrupt
+        raise CaughtInterrupt, 'Received interrupt, exiting...'
       end
 
       def handle_fatal_exception(e)

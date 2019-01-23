@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -48,13 +48,6 @@ module Underware
 
       # Must be included after the class methods have been defined
       include CommandHelpers::Clusters
-
-      def initialize(args = [], options = nil, noop: false)
-        unless noop
-          options ||= self.class.options
-          start(args, options)
-        end
-      end
 
       def start(args, options)
         global_setup(options)

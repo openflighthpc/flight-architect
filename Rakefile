@@ -31,7 +31,7 @@ require 'bundler/setup'
 task default: ['spec:unit']
 
 namespace :spec do
-  CMD_PATTERN = 'spec/underware/commands/**/*_spec.rb'
+  CMD_PATTERN = 'spec/underware/{commands,command_helpers}/**/*_spec.rb'
 
   desc 'Run all the unit tests'
   RSpec::Core::RakeTask.new(:unit) do |task|

@@ -97,7 +97,7 @@ module Underware
       end
 
       def run_command(command, args, options)
-        command.new(noop: true).start(args, options)
+        command.new.start(args, options)
       end
     end
   end

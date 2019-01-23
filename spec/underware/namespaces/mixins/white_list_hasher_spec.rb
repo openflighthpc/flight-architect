@@ -17,24 +17,27 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
       ctx.eval('white_list').each do |method|
         define_method(method) { "#{method} - return" }
       end
+
+      def recursive_hash_obj
+        OpenStruct.new(am_i_a_ostuct: 'no, I should be a hash')
+      end
+
+      def do_not_hash_me
+        'ohh snap'
+      end
+
+      def array_method
+        OpenStruct.new(property: 'value_within_array_object')
+      end
     end
   end
 
   let(:test_obj) do
     whitelist_double.add_methods(
-      recursive_hash_obj: recursive_hash_obj,
-      do_not_hash_me: 'ohh snap',
       recursive_white_list_for_hasher: recursive_white_list,
       recursive_array_white_list_for_hasher: array_white_list,
-      array_method: [
-        OpenStruct.new(property: 'value_within_array_object'),
-      ]
     )
     whitelist_double.new
-  end
-
-  let(:recursive_hash_obj) do
-    OpenStruct.new(am_i_a_ostuct: 'no, I should be a hash')
   end
 
   let(:white_list) { (1..3).map { |i| "white_method#{i}" } }

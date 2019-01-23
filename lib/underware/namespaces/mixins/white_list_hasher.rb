@@ -16,26 +16,22 @@ module Underware
             # Register hashable methods
             return if name == :initialize
             if instance_method(name).arity == 0
-              white_list_for_hasher << name.to_s
+              hashable_methods << name.to_s
             end
           end
 
-          def white_list_for_hasher
-            @white_list_for_hasher ||= []
+          def hashable_methods
+            @hashable_methods ||= []
           end
         end
 
         def to_h
-          white_list_hash_methods
-            .merge(recursive_white_list_hash_methods)
-            .merge(recursive_array_white_list_hash_methods)
+          self.class.hashable_methods.reduce({}) do |memo, method|
+            memo.merge(method => __send__(method))
+          end
         end
 
         private
-
-        def white_list_hash_methods
-          method_results_hash(white_list_for_hasher)
-        end
 
         def recursive_white_list_hash_methods
           method_results_hash(recursive_white_list_for_hasher)

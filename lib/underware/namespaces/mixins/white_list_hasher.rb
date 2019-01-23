@@ -38,7 +38,7 @@ module Underware
         end
 
         def to_h
-          (public_methods - Object.public_methods - [:to_h])
+          (public_methods - Object.public_methods - [:to_h, :initialize])
             .select { |n| method(n).arity == 0 }
             .reduce({}) do |memo, method|
             value = __send__(method)

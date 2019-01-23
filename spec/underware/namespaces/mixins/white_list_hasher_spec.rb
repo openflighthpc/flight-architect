@@ -6,18 +6,22 @@ require 'ostruct'
 
 RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
   let(:whitelist_double) do
+    ctx = __binding__
     Class.new do
+      include ctx.eval('described_class')
+
       def self.add_methods(methods)
         methods.each { |m, v| define_method(m) { v } }
       end
-    end.include(described_class)
+
+      ctx.eval('white_list').each do |method|
+        define_method(method) { "#{method} - return" }
+      end
+    end
   end
 
   let(:test_obj) do
     whitelist_double.add_methods(
-      white_method1: 1,
-      white_method2: 2,
-      white_method3: 3,
       recursive_hash_obj: recursive_hash_obj,
       do_not_hash_me: 'ohh snap',
       recursive_white_list_for_hasher: recursive_white_list,

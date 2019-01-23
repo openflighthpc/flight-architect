@@ -30,6 +30,12 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
       def array_method
         OpenStruct.new(property: 'value_within_array_object')
       end
+
+      private
+
+      def private_method
+        'Do not hash me'
+      end
     end
   end
 

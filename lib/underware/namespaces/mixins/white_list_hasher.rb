@@ -16,6 +16,7 @@ module Underware
             # Register hashable methods
             return if hasher_skip_method(reset: true)
             return if name == :initialize
+            return unless public_method_defined?(name)
             if instance_method(name).arity == 0
               hashable_methods << name.to_s
             end

@@ -47,8 +47,8 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
     whitelist_double.new
   end
 
-  let(:white_list) { (1..3).map { |i| "white_method#{i}" } }
-  let(:recursive_white_list) { ['recursive_hash_obj'] }
+  let(:white_list) { (1..3).map { |i| :"white_method#{i}" } }
+  let(:recursive_white_list) { [:recursive_hash_obj] }
   let(:array_white_list) { [:array_method] }
 
   let(:test_hash) { test_obj.to_h }

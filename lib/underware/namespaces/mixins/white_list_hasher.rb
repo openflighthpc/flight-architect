@@ -18,7 +18,7 @@ module Underware
             return if name == :initialize
             return unless public_method_defined?(name)
             if instance_method(name).arity == 0
-              hashable_methods << name.to_s
+              hashable_methods << name.to_sym
             end
           end
 

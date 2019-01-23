@@ -14,6 +14,7 @@ module Underware
             super
 
             # Register hashable methods
+            return if hasher_skip_method(reset: true)
             return if name == :initialize
             if instance_method(name).arity == 0
               hashable_methods << name.to_s
@@ -22,6 +23,16 @@ module Underware
 
           def hashable_methods
             @hashable_methods ||= []
+          end
+
+          def hasher_skip_method(reset: false)
+            if reset
+              value = @hasher_skip_method
+              @hasher_skip_method = false
+              return value
+            else
+              @hasher_skip_method = true
+            end
           end
         end
 

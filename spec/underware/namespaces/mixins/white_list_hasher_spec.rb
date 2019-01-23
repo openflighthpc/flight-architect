@@ -14,16 +14,17 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
         methods.each { |m, v| define_method(m) { v } }
       end
 
+      hasher_skip_method
+      def do_not_hash_me
+        'ohh snap'
+      end
+
       ctx.eval('white_list').each do |method|
         define_method(method) { "#{method} - return" }
       end
 
       def recursive_hash_obj
         OpenStruct.new(am_i_a_ostuct: 'no, I should be a hash')
-      end
-
-      def do_not_hash_me
-        'ohh snap'
       end
 
       def array_method

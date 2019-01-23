@@ -10,10 +10,6 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
     Class.new do
       include ctx.eval('described_class')
 
-      def self.add_methods(methods)
-        methods.each { |m, v| define_method(m) { v } }
-      end
-
       hasher_skip_method
       def do_not_hash_me
         'ohh snap'
@@ -40,10 +36,6 @@ RSpec.describe Underware::Namespaces::Mixins::WhiteListHasher do
   end
 
   let(:test_obj) do
-    whitelist_double.add_methods(
-      recursive_white_list_for_hasher: recursive_white_list,
-      recursive_array_white_list_for_hasher: array_white_list,
-    )
     whitelist_double.new
   end
 

@@ -60,14 +60,14 @@ module Underware
     {
       template: 'templates',
       plugin: 'plugins',
-      rendered: 'rendered'
+      rendered: ['var', 'rendered']
     }.each do |method, path|
       define_method(method) { |*a| join(path, *a) }
     end
 
     # Generate named yaml path methods
     {
-      data_config: 'data'
+      data_config: ['etc', 'data']
     }.each do |method, path|
       define_method(method) do |name|
         join(*Array.wrap(path), "#{name}.yaml")
@@ -77,7 +77,7 @@ module Underware
     # Generate domain_/group_/node_/platform_ path methods
     # NOTE: Should 'platform' methods live here or in 'named yaml' above?
     {
-      answers: 'answers',
+      answers: ['var', 'answers'],
       config: ['etc', 'configs']
     }.each do |method, path|
       define_method(:"domain_#{method}") { join(path, 'domain.yaml') }

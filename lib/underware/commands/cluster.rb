@@ -39,6 +39,9 @@ module Underware
       def setup; end
 
       def run
+        # Load the current_cluster from the config to ensure the default
+        # has been created (if required)
+        Config.current_cluster
         options.delete ? run_delete : run_normal
       end
 

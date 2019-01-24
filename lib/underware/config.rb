@@ -28,6 +28,8 @@
 
 require 'active_support/core_ext/module/delegation'
 require 'underware/config_loader'
+require 'underware/data_path'
+require 'underware/data_copy'
 
 # Make 'chassis' both the singular and plural
 ActiveSupport::Inflector.inflections do |inflect|
@@ -59,7 +61,12 @@ module Underware
     end
 
     def current_cluster
-      __data__.fetch(:current_cluster, default: 'default')
+      __data__.fetch(:current_cluster) do
+        'default'.tap do |default|
+          next if Dir.exist?(DataPath.cluster(default).base)
+          DataCopy.overlay_to_cluster(nil, default).all
+        end
+      end
     end
 
     def current_cluster=(cluster_identifier)

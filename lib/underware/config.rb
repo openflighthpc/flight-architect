@@ -37,6 +37,18 @@ ActiveSupport::Inflector.inflections do |inflect|
 end
 
 module Underware
+  InternalConfig = Struct.new(:path) do
+    include ConfigLoader
+
+    def log_path
+      __data__.fetch(:logs_path, default: '/var/log/underware')
+    end
+
+    def storage_path
+      __data__.fetch(:storage_path, default: '/var/lib/underware')
+    end
+  end
+
   class Config
     include ConfigLoader
 
@@ -56,8 +68,14 @@ module Underware
       end
     end
 
+    delegate_missing_to :internal_config
+
     def path
       File.join(install_path, 'etc/config.yaml')
+    end
+
+    def install_path
+      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
     end
 
     def current_cluster
@@ -73,16 +91,12 @@ module Underware
       __data__.set(:current_cluster, value: cluster_identifier)
     end
 
-    def install_path
-      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
-    end
+    private
 
-    def log_path
-      __data__.fetch(:logs_path, default: '/var/log/underware')
-    end
-
-    def storage_path
-      __data__.fetch(:storage_path, default: '/var/lib/underware')
+    def internal_config
+      @internal_config ||= InternalConfig.new(
+        path: path
+      )
     end
   end
 end

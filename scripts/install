@@ -59,6 +59,7 @@ cd underware
 git checkout $alces_VERSION
 
 # Install dependencies
+sed -i 's/2.4.1/2.5.3/g' Gemfile # WORKAROUND FOR 2.4.1 RUBY VERSION DEPENDENCY
 flexec bundle install --path=vendor --without development test
 
 # Setup command file
@@ -89,6 +90,6 @@ cat << EOF > /opt/flight/libexec/commands/underware
 # For more information on the Underware, please visit:
 # https://github.com/alces-software/underware
 #==============================================================================
-cd $alces_INSTALL_DIR/underware/lib
-flexec bundle exec ./underware.rb "\$@"
+cd $alces_INSTALL_DIR/underware/
+flexec ruby bin/underware.rb "\$@"
 EOF

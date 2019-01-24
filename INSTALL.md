@@ -14,7 +14,45 @@ distribution and will install on a minimal base.  For Enterprise Linux
 distributions installation of the `@core` and `@base` package groups is
 sufficient.
 
-## Basic Installation
+## Flight Core Installation
+
+Underware can be installed as a tool to the flight-core environment.
+
+### Automated Installation
+
+- Install Flight Core (if not already installed)
+
+```
+yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
+```
+
+- The installation script (located at `scripts/install`) has variables that can be optionally set in the curl command.
+    - `alces_INSTALL_DIR` - The directory to clone the tool into
+    - `alces_VERSION` - The version of the tool to install
+
+- Run the installation script
+
+```
+# Standard install
+curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |/bin/bash
+
+# Installation with variables
+curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |alces_INSTALL_DIR=/my/install/path/ alces_VERSION=dev-release /bin/bash
+```
+
+- Now logout and in again or source `/etc/profile.d/alces-flight.sh`
+
+- Underware can now be run as follows
+
+```
+flight underware
+```
+
+### Local Installation
+
+Instead of depending on an upstream location, 
+
+## Generic Installation [Basic]
 
 Underware is a system-level package and must be installed by the `root` user.
 
@@ -55,7 +93,7 @@ Underware is a system-level package and must be installed by the `root` user.
    source /etc/profile.d/alces-underware.sh
    ```
 
-## Advanced installation parameters
+## Generic Installation [Advanced]
 
 Additional environment variables may be set to influence the installation
 process.

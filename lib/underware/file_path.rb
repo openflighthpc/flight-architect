@@ -37,7 +37,7 @@ module Underware
 
       # TODO: Is this going to in built or configurable per cluster?
       def overview
-        File.join(DataPath.new.base, 'overview.yaml')
+        File.join(Config.install_path, 'etc', 'overview.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely

@@ -59,7 +59,6 @@ cd underware
 git checkout $alces_VERSION
 
 # Install dependencies
-sed -i 's/2.4.1/2.5.3/g' Gemfile # WORKAROUND FOR 2.4.1 RUBY VERSION DEPENDENCY
 flexec bundle install --path=vendor --without development test
 
 # Setup command file

@@ -51,11 +51,6 @@ module Underware
       end
 
       # NOTE: Deprecated! This method should be removed completely
-      def platform_configs_dir
-        data_path.platform_config('')
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
       def plugins_dir
         data_path.plugin
       end

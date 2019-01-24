@@ -5,9 +5,9 @@ require 'underware/template'
 
 module Underware
   Platform = Struct.new(:name) do
-    def self.all
-      platforms_glob = "#{FilePath.platform_configs_dir}/*.yaml"
-      Pathname.glob(platforms_glob).map do |config_path|
+    def self.all(cluster)
+      glob = DataPath.cluster(cluster).platform_config('*')
+      Pathname.glob(glob).map do |config_path|
         name = config_path.basename.sub_ext('').to_s
         new(name)
       end.sort_by(&:name)

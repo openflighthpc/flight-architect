@@ -91,5 +91,5 @@ cat << EOF > /opt/flight/libexec/commands/underware
 # https://github.com/alces-software/underware
 #==============================================================================
 cd $alces_INSTALL_DIR/underware/
-flexec ruby bin/underware.rb "\$@"
+flexec ruby bin/underware "\$@"
 EOF

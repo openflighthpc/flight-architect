@@ -58,8 +58,8 @@ module Underware
 
     # Generate directory path methods
     {
-      template: 'templates',
-      plugin: 'plugins',
+      template: ['lib', 'templates'],
+      plugin: ['lib', 'plugins'],
       rendered: ['var', 'rendered']
     }.each do |method, path|
       define_method(method) { |*a| join(path, *a) }

@@ -31,11 +31,6 @@ require 'underware/config_loader'
 require 'underware/data_path'
 require 'underware/data_copy'
 
-# Make 'chassis' both the singular and plural
-ActiveSupport::Inflector.inflections do |inflect|
-  inflect.irregular 'chassis', 'chassis'
-end
-
 module Underware
   class InternalConfig
     include ConfigLoader

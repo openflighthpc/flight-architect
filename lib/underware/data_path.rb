@@ -51,7 +51,7 @@ module Underware
 
     # Generate static path methods
     {
-      configure: 'configure.yaml'
+      configure: ['etc', 'configure.yaml']
     }.each do |method, path|
       define_method(method) { join(path) }
     end
@@ -78,7 +78,7 @@ module Underware
     # NOTE: Should 'platform' methods live here or in 'named yaml' above?
     {
       answers: 'answers',
-      config: 'configs'
+      config: ['etc', 'configs']
     }.each do |method, path|
       define_method(:"domain_#{method}") { join(path, 'domain.yaml') }
       ['group', 'node', 'platform'].each do |type|

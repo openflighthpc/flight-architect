@@ -52,7 +52,7 @@ module Underware
 
       # NOTE: Deprecated! This method should be removed completely
       def config_dir
-        data_path.join('configs').tap { |p| FileUtils.mkdir_p(p) }
+        data_path.join('etc/configs').tap { |p| FileUtils.mkdir_p(p) }
       end
 
       # NOTE: Deprecated! This method should be removed completely

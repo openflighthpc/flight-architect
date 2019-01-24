@@ -53,7 +53,7 @@ module Underware
     end
 
     def path
-      DataPath.cluster(cluster).join(self.class.filename + '.yaml')
+      DataPath.cluster(cluster).join('etc', self.class.filename + '.yaml')
     end
 
     def raw_groups

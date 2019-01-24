@@ -23,37 +23,31 @@
 #==============================================================================
 
 module Underware
-  # UnderwareError is the base error class to distinguish the custom errors
-  # from the built ins/ other libraries. The UserUnderwareError is a subset
-  # of the errors that result from a user action (as opposed to underware
-  # failing). The user errors suppress the `--trace` prompt, which should
-  # make it clearer that it isn't an internal underware error.
   class UnderwareError < StandardError; end
-  class UserUnderwareError < UnderwareError; end
 
   # NOTE: Can these be condensed?
-  class NoGenderGroupError < UserUnderwareError; end
-  class NodeNotInGendersError < UserUnderwareError; end
+  class NoGenderGroupError < UnderwareError; end
+  class NodeNotInGendersError < UnderwareError; end
 
-  class SystemCommandError < UserUnderwareError; end
-  class StrictWarningError < UserUnderwareError; end
-  class InvalidInput < UserUnderwareError; end
-  class FileDoesNotExistError < UserUnderwareError; end
-  class DataError < UserUnderwareError; end
-  class UninitializedLocalNode < UserUnderwareError; end
-  class MissingRecordError < UserUnderwareError; end
-  class NoNetworkInterfacesAvailable < UserUnderwareError; end
+  class SystemCommandError < UnderwareError; end
+  class StrictWarningError < UnderwareError; end
+  class InvalidInput < UnderwareError; end
+  class FileDoesNotExistError < UnderwareError; end
+  class DataError < UnderwareError; end
+  class UninitializedLocalNode < UnderwareError; end
+  class MissingRecordError < UnderwareError; end
+  class NoNetworkInterfacesAvailable < UnderwareError; end
 
-  class InvalidGroupName < UserUnderwareError; end
-  class RepeatedGroupError < UserUnderwareError; end
+  class InvalidGroupName < UnderwareError; end
+  class RepeatedGroupError < UnderwareError; end
 
-  class RecursiveConfigDepthExceededError < UserUnderwareError
+  class RecursiveConfigDepthExceededError < UnderwareError
     def initialize(msg = 'Input hash may contain infinitely recursive ERB')
       super
     end
   end
 
-  class CombineHashError < UserUnderwareError
+  class CombineHashError < UnderwareError
     def initialize(msg = 'Could not combine config or answer hashes')
       super
     end
@@ -62,7 +56,9 @@ module Underware
   class InternalError < UnderwareError; end
   class AnswerJSONSyntax < UnderwareError; end
   class ScopeError < UnderwareError; end
-  class ValidationFailure < UserUnderwareError; end
+  class ValidationFailure < UnderwareError; end
+
+  class CaughtInterrupt < UnderwareError; end
 
   # XXX, we need think about the future of the DependencyFailure,
   # It maybe completely replaced with Validation::Loader and a file cache.
@@ -77,7 +73,7 @@ module Underware
 
   # Use this error when the dependency is checked but isn't met
   # NOTE: This is the only dependency error we see in production
-  class DependencyFailure < UserUnderwareError
+  class DependencyFailure < UnderwareError
   end
 
   class SaverNoData < UnderwareError

@@ -32,11 +32,22 @@ require 'underware/command_helpers/clusters'
 module Underware
   module CommandHelpers
     class BaseCommand
-      include CommandHelpers::Clusters
-
       def self.options
         Commander::Command::Options.new
       end
+
+      def self.register_dependency(&b)
+        dependencies << b
+      end
+
+      def self.dependencies
+        @dependencies ||= begin
+          self == BaseCommand ? [] : self.superclass.dependencies.dup
+        end
+      end
+
+      # Must be included after the class methods have been defined
+      include CommandHelpers::Clusters
 
       def initialize(args = [], options = nil, noop: false)
         unless noop
@@ -57,13 +68,13 @@ module Underware
       def run!(args, options)
         pre_setup(args, options)
         setup
-        post_setup
+        run_dependencies
         run
       end
 
-      private
-
       attr_reader :args, :options
+
+      private
 
       def global_setup(options)
         setup_global_log_options(options)
@@ -75,8 +86,8 @@ module Underware
         @options = options
       end
 
-      def post_setup
-        current_cluster_existence_check
+      def run_dependencies
+        self.class.dependencies.each { |d| instance_exec(&d) }
       end
 
       def setup_global_log_options(options)
@@ -136,8 +147,10 @@ module Underware
         raise NotImplementedError
       end
 
-      def handle_interrupt(e)
-        raise e
+      # Interrupt needs to re-raised as a StandardError, to prevent the traceback
+      # from being dumped
+      def handle_interrupt
+        raise CaughtInterrupt, 'Received interrupt, exiting...'
       end
 
       def handle_fatal_exception(e)

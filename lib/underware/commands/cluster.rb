@@ -39,9 +39,20 @@ module Underware
       def setup; end
 
       def run
-        switch_cluster
+        options.delete ? run_delete : run_normal
+      end
+
+      def run_normal
+        switch_cluster if cluster_input
         missing_check
         list_clusters
+      end
+
+      def run_delete
+        cluster = cluster_input || Config.current_cluster
+        error_if_deleting_current_cluster(cluster)
+        error_if_cluster_missing(cluster, action: 'delete')
+        delete_cluster(cluster)
       end
 
       def missing_check
@@ -52,7 +63,6 @@ module Underware
       end
 
       def switch_cluster
-        return unless cluster_input
         error_if_cluster_missing(cluster_input)
         Config.update { |c| c.current_cluster = cluster_input }
       end
@@ -65,10 +75,30 @@ module Underware
         puts ERB.new(LIST_TEMPLATE, nil, '-').result(binding)
       end
 
-      def error_if_cluster_missing(cluster)
+      def delete_cluster(cluster)
+        confirm_delete(cluster)
+        FileUtils.rm_rf DataPath.cluster(cluster).base
+      end
+
+      def confirm_delete(cluster)
+        cli = HighLine.new
+        question = "Are you sure you want to delete '#{cluster}' (y/n)?"
+        return if cli.agree question
+        raise InvalidInput, 'Cancelled delete'
+      end
+
+      def error_if_cluster_missing(cluster, action: 'switch to')
         return if cluster_exists?(cluster)
         raise InvalidInput, <<~ERROR.squish
-          Can not switch to '#{cluster}' as the cluster does not exist
+          Can not #{action} '#{cluster}' as the cluster does not exist
+        ERROR
+      end
+
+      def error_if_deleting_current_cluster(cluster)
+        return unless Config.current_cluster == cluster
+        raise InvalidInput, <<~ERROR.chomp
+          Can not delete the current cluster, please switch cluster and run:
+          '#{Underware::APP_NAME} cluster --delete #{cluster}'
         ERROR
       end
     end

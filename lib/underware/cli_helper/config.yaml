@@ -230,6 +230,9 @@ commands:
 
       Calling the command with the `CLUSTER` argument will switch the current
       cluster before listing all the existing clusters as before.
+    options:
+      - tags: ['--delete']
+        description: 'Destroy the cluster configuration'
     action: Commands::Cluster
 
   template:

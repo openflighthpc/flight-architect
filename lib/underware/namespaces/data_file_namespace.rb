@@ -18,8 +18,9 @@ module Underware
           # mean though that we could get a confusing error message if
           # something else goes wrong in this class, so I could eventually come
           # to regret this.
-          raise UserUnderwareError,
+          raise UnderwareError, <<~ERROR.chomp
             "Requested data file doesn't exist: #{data_file_path}"
+          ERROR
         end
       end
 

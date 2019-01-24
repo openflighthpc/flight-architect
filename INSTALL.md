@@ -1,5 +1,16 @@
 # Installing Alces Underware
 
+## Installing from Git
+
+Underware uses ruby `2.4.1` with a corresponding version of `bundler`. It can
+be installed from source using:
+
+```
+git clone https://github.com/alces-software/underware.git
+cd underware
+bundle install
+```
+
 ## Flight Core Installation
 
 Underware can be installed as a tool to the flight-core environment.

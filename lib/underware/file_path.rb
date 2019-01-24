@@ -51,13 +51,8 @@ module Underware
       end
 
       # NOTE: Deprecated! This method should be removed completely
-      def config_dir
-        data_path.join('etc/configs').tap { |p| FileUtils.mkdir_p(p) }
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
       def platform_configs_dir
-        File.join(config_dir, 'platforms')
+        data_path.platform_config('')
       end
 
       # NOTE: Deprecated! This method should be removed completely

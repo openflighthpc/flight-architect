@@ -3,14 +3,14 @@ RSpec.shared_examples 'namespace_hash_merging' do |args|
   base_description = args.fetch(:description)
   base_expected_hash_merger_input = args.fetch(:expected_hash_merger_input)
 
-  let :alces do
+  let(:alces) do
     Underware::Namespaces::Alces.new(platform: platform)
   end
 
   shared_examples 'calls hash mergers correctly' do |local_args|
     description = local_args.fetch(:description)
 
-    let :expected_hash_merger_input do
+    let(:expected_hash_merger_input) do
       local_args.fetch(:expected_hash_merger_input)
     end
 
@@ -32,7 +32,7 @@ RSpec.shared_examples 'namespace_hash_merging' do |args|
   end
 
   context 'when no platform passed' do
-    let :platform { nil }
+    let(:platform) { nil }
 
     include_examples 'calls hash mergers correctly',
       description: base_description,
@@ -40,7 +40,7 @@ RSpec.shared_examples 'namespace_hash_merging' do |args|
   end
 
   context 'when platform passed' do
-    let :platform { 'my_platform' }
+    let(:platform) { 'my_platform' }
 
     include_examples 'calls hash mergers correctly',
       description: "#{base_description}, with platform as a symbol",

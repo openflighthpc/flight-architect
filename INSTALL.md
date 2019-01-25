@@ -55,7 +55,7 @@ Instead of depending on an upstream location, Underware can be installed from a 
 yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
 ```
 
-- Execute the install script from inside the `inventoryware` directory
+- Execute the install script from inside the `underware` directory
 
 ```
 bash scripts/install

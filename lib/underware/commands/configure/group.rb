@@ -50,10 +50,17 @@ module Underware
         end
 
         def custom_configuration
-          ClusterAttr.update(Underware::Config.current_cluster) do |attr|
-            attr.add_group(group_name)
-            attr.add_nodes(nodes, groups: groups) if nodes
+          attr = ClusterAttr.update(Underware::Config.current_cluster) do |a|
+            a.add_group(group_name)
+            a.add_nodes(nodes, groups: groups) if nodes
           end
+          return if attr.nodes_in_group(group_name).any?
+          msg = <<~WARN.squish
+            Configured '#{group_name}' without any nodes. Run the following to add
+            some:
+          WARN
+          cmd = "#{APP_NAME} configure group #{group_name} <NODES>"
+          UnderwareLog.warn [msg, cmd].join("\n")
         end
 
         def parse_groups

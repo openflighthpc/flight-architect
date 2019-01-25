@@ -37,7 +37,6 @@ module Underware
 
         def setup
           @group_name = args.first
-          @nodes_string = args[1]
           @groups = parse_groups
         end
 
@@ -53,12 +52,16 @@ module Underware
         def custom_configuration
           ClusterAttr.update(Underware::Config.current_cluster) do |attr|
             attr.add_group(group_name)
-            attr.add_nodes(nodes_string, groups: groups)
+            attr.add_nodes(nodes, groups: groups) if nodes
           end
         end
 
         def parse_groups
           GroupListParser.parse("#{group_name},#{options.groups}")
+        end
+
+        def nodes
+          args[1] if args.length > 1
         end
       end
     end

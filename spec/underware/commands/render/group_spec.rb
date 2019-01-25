@@ -11,9 +11,9 @@ RSpec.describe Underware::Commands::Render::Group do
     end
   end
 
-  let :test_group_name { 'testgroup' }
+  let(:test_group_name) { 'testgroup' }
 
-  let :command_args do
+  let(:command_args) do
     [test_group_name, template.path]
   end
 

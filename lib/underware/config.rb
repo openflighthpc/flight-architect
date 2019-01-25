@@ -28,13 +28,30 @@
 
 require 'active_support/core_ext/module/delegation'
 require 'underware/config_loader'
-
-# Make 'chassis' both the singular and plural
-ActiveSupport::Inflector.inflections do |inflect|
-  inflect.irregular 'chassis', 'chassis'
-end
+require 'underware/data_path'
+require 'underware/data_copy'
 
 module Underware
+  class InternalConfig
+    include ConfigLoader
+
+    def path
+      File.join(install_path, 'etc/config.yaml')
+    end
+
+    def install_path
+      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
+    end
+
+    def log_path
+      __data__.fetch(:logs_path, default: '/var/log/underware')
+    end
+
+    def storage_path
+      __data__.fetch(:storage_path, default: '/var/lib/underware')
+    end
+  end
+
   class Config
     include ConfigLoader
 
@@ -54,28 +71,29 @@ module Underware
       end
     end
 
+    delegate_missing_to :internal_config
+
     def path
-      File.join(install_path, 'etc/config.yaml')
+      File.join(storage_path, 'etc/config.yaml')
     end
 
     def current_cluster
-      __data__.fetch(:current_cluster, default: 'default')
+      __data__.fetch(:current_cluster) do
+        'default'.tap do |default|
+          next if Dir.exist?(DataPath.cluster(default).base)
+          DataCopy.overlay_to_cluster(nil, default).all
+        end
+      end
     end
 
     def current_cluster=(cluster_identifier)
       __data__.set(:current_cluster, value: cluster_identifier)
     end
 
-    def install_path
-      File.absolute_path(File.join(File.dirname(__FILE__), '../..'))
-    end
+    private
 
-    def log_path
-      __data__.fetch(:logs_path, default: '/var/log/underware')
-    end
-
-    def storage_path
-      __data__.fetch(:storage_path, default: '/var/lib/underware')
+    def internal_config
+      @internal_config ||= InternalConfig.load
     end
   end
 end

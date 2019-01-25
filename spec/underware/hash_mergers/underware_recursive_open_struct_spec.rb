@@ -30,7 +30,7 @@ RSpec.describe Underware::HashMergers::UnderwareRecursiveOpenStruct do
     build_struct(default_table, eager_render: false)
   end
 
-  let :default_table do
+  let(:default_table) do
     {
       key: 'value',
       erb1: '<%= alces.testing.key %>',

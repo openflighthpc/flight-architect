@@ -12,9 +12,9 @@ RSpec.describe Underware::Commands::Render::Node do
     end
   end
 
-  let :test_node_name { 'testnode01' }
+  let(:test_node_name) { 'testnode01' }
 
-  let :command_args do
+  let(:command_args) do
     [test_node_name, template.path]
   end
 

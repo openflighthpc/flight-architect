@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -59,7 +59,7 @@ module Underware
             next if a == 'autocomplete'
             case a
             when 'action'
-              c.action eval(v)
+              c.action { |args, opts| run_command(eval(v), args, opts) }
             when 'options'
               v.each do |opt|
                 if [:Integer, 'Integer'].include? opt['type']
@@ -93,6 +93,21 @@ module Underware
           DynamicDefaults.send(dynamic_default_method)
         else
           default_value
+        end
+      end
+
+      #
+      # Runs the command by extracting the options from from Commander::Options
+      #
+      def run_command(command, args, options)
+        opt_hash = setup_and_strip_globals(options)
+        command.new.start(args, **opt_hash)
+      end
+
+      def setup_and_strip_globals(commander_options)
+        commander_options.__hash__.symbolize_keys.tap do |options|
+          UnderwareLog.strict = !!options.delete(:strict)
+          UnderwareLog.quiet = !!options.delete(:quiet)
         end
       end
     end

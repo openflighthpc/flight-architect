@@ -5,8 +5,8 @@ require 'underware/managed_file'
 
 RSpec.describe Underware::ManagedFile do
   describe '#content' do
-    let :managed_file { Tempfile.new }
-    let :rendered_content { 'content' }
+    let(:managed_file) { Tempfile.new }
+    let(:rendered_content) { 'content' }
 
     before :each do
       # Want to read and write real temporary files.
@@ -84,7 +84,7 @@ RSpec.describe Underware::ManagedFile do
       end
 
       context 'when initial file just contains managed section' do
-        let :initial_content do
+        let(:initial_content) do
           described_class.content(managed_file, rendered_content)
         end
 
@@ -92,7 +92,7 @@ RSpec.describe Underware::ManagedFile do
       end
 
       context 'when initial file contains content around managed section' do
-        let :initial_content do
+        let(:initial_content) do
           managed_section = described_class.content(managed_file, rendered_content)
           "\nbefore\n#{managed_section}\nafter\n"
         end

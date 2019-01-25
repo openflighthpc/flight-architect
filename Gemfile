@@ -1,7 +1,6 @@
 
 # frozen_string_literal: true
 
-ruby '2.4.1'
 source 'https://rubygems.org'
 
 # Required to fix issue with FakeFS; refer to

@@ -46,28 +46,28 @@ module Underware
     attr_reader :base
 
     def join(*join_path)
-      File.join(base, *join_path)
+      File.join(base, *join_path.flatten)
     end
 
     # Generate static path methods
     {
-      configure: 'configure.yaml'
+      configure: ['etc', 'configure.yaml']
     }.each do |method, path|
-      define_method(method) { join(*Array.wrap(path)) }
+      define_method(method) { join(path) }
     end
 
     # Generate directory path methods
     {
-      template: 'templates',
-      plugin: 'plugins',
-      rendered: 'rendered'
+      template: ['lib', 'templates'],
+      plugin: ['lib', 'plugins'],
+      rendered: ['var', 'rendered']
     }.each do |method, path|
-      define_method(method) { |*a| join(*Array.wrap(path), *a) }
+      define_method(method) { |*a| join(path, *a) }
     end
 
     # Generate named yaml path methods
     {
-      data_config: 'data'
+      data_config: ['etc', 'data']
     }.each do |method, path|
       define_method(method) do |name|
         join(*Array.wrap(path), "#{name}.yaml")
@@ -77,10 +77,9 @@ module Underware
     # Generate domain_/group_/node_/platform_ path methods
     # NOTE: Should 'platform' methods live here or in 'named yaml' above?
     {
-      answers: 'answers',
-      config: 'configs'
+      answers: ['var', 'answers'],
+      config: ['etc', 'configs']
     }.each do |method, path|
-      path = Array.wrap(path)
       define_method(:"domain_#{method}") { join(path, 'domain.yaml') }
       ['group', 'node', 'platform'].each do |type|
         define_method(:"#{type}_#{method}") do |name|

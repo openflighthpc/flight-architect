@@ -45,7 +45,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     Underware::Data.dump(fp.platform_config('test_platform'), test_platform_config)
   end
 
-  let :domain_data do
+  let(:domain_data) do
     {
       value0: 'domain',
       value1: 'domain',
@@ -55,7 +55,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :group1_data do
+  let(:group1_data) do
     {
       value2: 'group1',
       value3: 'group1',
@@ -63,7 +63,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :group2_data do
+  let(:group2_data) do
     {
       value1: 'group2',
       value2: 'group2',
@@ -72,14 +72,14 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :node3_data do
+  let(:node3_data) do
     {
       value3: 'node3',
       value4: 'node3',
     }
   end
 
-  let :test_platform_config do
+  let(:test_platform_config) do
     {
       value4: 'test_platform'
     }
@@ -101,7 +101,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     end
 
     context 'when platform included in hash' do
-      let :hash_input do
+      let(:hash_input) do
         super().merge(platform: 'test_platform')
       end
 
@@ -116,19 +116,19 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with domain scope' do
-    let :hash_input { {} }
+    let(:hash_input) { {} }
 
-    let :expected_merged_config { domain_data }
+    let(:expected_merged_config) { domain_data }
 
     it_behaves_like 'it handles merging config, with and without platform specified'
   end
 
   context 'with single group' do
-    let :hash_input do
+    let(:hash_input) do
       {groups: ['group2']}
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2',
@@ -142,11 +142,11 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups' do
-    let :hash_input do
+    let(:hash_input) do
       {groups: ['group1', 'group2']}
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2', # Not set for group1 so group2's value used.
@@ -160,14 +160,14 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups and a node' do
-    let :hash_input do
+    let(:hash_input) do
       {
         groups: ['group1', 'group2'],
         node: 'node3'
       }
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2',
@@ -177,7 +177,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
       }
     end
 
-    let :expected_merged_answers { expected_merged_config }
+    let(:expected_merged_answers) { expected_merged_config }
 
     it_behaves_like 'it handles merging config, with and without platform specified'
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -49,15 +49,7 @@ module Underware
       # Must be included after the class methods have been defined
       include CommandHelpers::Clusters
 
-      def initialize(args = [], options = nil, noop: false)
-        unless noop
-          options ||= self.class.options
-          start(args, options)
-        end
-      end
-
-      def start(args, options)
-        global_setup(options)
+      def start(args, **options)
         run!(args, options)
       rescue Interrupt => e
         handle_interrupt(e)
@@ -83,16 +75,11 @@ module Underware
 
       def pre_setup(args, options)
         @args = args
-        @options = options
+        @options = OpenStruct.new(options)
       end
 
       def run_dependencies
         self.class.dependencies.each { |d| instance_exec(&d) }
-      end
-
-      def setup_global_log_options(options)
-        UnderwareLog.strict = !!options.strict
-        UnderwareLog.quiet = !!options.quiet
       end
 
       def loader

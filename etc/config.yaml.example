@@ -13,10 +13,3 @@
 # Sets the directory the logs will be stored in
 # Defaults: /var/log/underware
 #
-
-##
-# current_cluster:
-#
-# Sets the current cluster that is being configured/templated. This is an
-# internally managed value and shouldn't be changed directly
-#

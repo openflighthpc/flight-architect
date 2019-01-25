@@ -233,7 +233,7 @@ RSpec.describe Underware::Configurator do
         allow(SecureRandom).to receive(:base64).and_return('mocked_salt')
       end
 
-      let :expected_encrypted_password do
+      let(:expected_encrypted_password) do
         'my_password'.crypt('$6$mocked_salt')
       end
 

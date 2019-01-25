@@ -37,7 +37,7 @@ module Underware
 
       # TODO: Is this going to in built or configurable per cluster?
       def overview
-        File.join(DataPath.new.base, 'overview.yaml')
+        File.join(Config.install_path, 'etc', 'overview.yaml')
       end
 
       # NOTE: Deprecated! This method should be removed completely
@@ -48,16 +48,6 @@ module Underware
       # NOTE: Deprecated! This method should be removed completely
       def answers_dir
         data_path.join('answers').tap { |p| FileUtils.mkdir_p(p) }
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
-      def config_dir
-        data_path.join('configs').tap { |p| FileUtils.mkdir_p(p) }
-      end
-
-      # NOTE: Deprecated! This method should be removed completely
-      def platform_configs_dir
-        File.join(config_dir, 'platforms')
       end
 
       # NOTE: Deprecated! This method should be removed completely

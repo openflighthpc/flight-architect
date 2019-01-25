@@ -88,7 +88,7 @@ module Underware
       end
 
       def new_command(klass)
-        klass.new(noop: true)
+        klass.new
       end
 
       # def load_answers_options(relative_path)

@@ -8,7 +8,7 @@ RSpec.shared_examples 'render command' do |args|
     end[:stdout].read
   end
 
-  let :template do
+  let(:template) do
     template_contents = <<~TEMPLATE.strip_heredoc
       Rendered with scope: <%= scope.class %>
       #{'Scope name: <%= scope.name %>' unless described_class == Underware::Commands::Render::Domain}
@@ -23,7 +23,7 @@ RSpec.shared_examples 'render command' do |args|
   # been left in their respective files to avoid over-abstracting and confusing
   # things.
   describe 'with `--platform` option passed' do
-    let :platform_config_path do
+    let(:platform_config_path) do
       Underware::FilePath.platform_config(:test_platform)
     end
 

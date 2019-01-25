@@ -32,7 +32,7 @@ RSpec.describe Underware::Namespaces::Alces do
   # this and try to test it with as little mocking as possible, and only mock
   # individual functions (and never mock the Alces class itself) as needed.
 
-  let :alces do
+  let(:alces) do
     described_class.new
   end
 

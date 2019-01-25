@@ -5,7 +5,7 @@ require 'underware/commands/render/domain'
 RSpec.describe Underware::Commands::Render::Domain do
   include_context 'render command'
 
-  let :command_args do
+  let(:command_args) do
     [template.path]
   end
 

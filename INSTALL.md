@@ -37,14 +37,6 @@ curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/i
 curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |alces_INSTALL_DIR=/my/install/path/ alces_VERSION=dev-release /bin/bash
 ```
 
-- Now logout and in again or source `/etc/profile.d/alces-flight.sh`
-
-- Underware can now be run as follows
-
-```
-flight underware
-```
-
 ### Local Installation
 
 Instead of depending on an upstream location, Underware can be installed from a local copy of the repository in the following manner.
@@ -63,3 +55,18 @@ bash scripts/install
 
 *Note: Local installations will use the currently checked out branch instead of using the latest release. To override this do `alces_VERSION=branchname bash scripts/install`.*
 
+### Post Installation
+
+- Now logout and in again or source `/etc/profile.d/alces-flight.sh`
+
+- Underware can now be run as follows
+
+```
+flight underware
+```
+
+- Alternatively, a sandbox environment for Underware can be entered as follows
+
+```
+flight shell underware
+```

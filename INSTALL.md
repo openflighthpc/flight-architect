@@ -1,97 +1,72 @@
 # Installing Alces Underware
 
-## Supported platforms
+## Installing from Git
 
-Alces Underware currently supports the following platforms/distributions:
+Underware uses ruby `2.4.1` with a corresponding version of `bundler`. It can
+be installed from source using:
 
-* Enterprise Linux 6 distributions: RHEL, CentOS, Scientific Linux (`el6`)
-* Enterprise Linux 7 distributions: RHEL, CentOS, Scientific Linux (`el7`)
-
-## Prerequisites
-
-The install scripts handle the installation of all required packages from your
-distribution and will install on a minimal base.  For Enterprise Linux
-distributions installation of the `@core` and `@base` package groups is
-sufficient.
-
-## Basic Installation
-
-Underware is a system-level package and must be installed by the `root` user.
-
-1. Become root.
-
-   ```bash
-   sudo -s
-   ```
-
-2. Set the `alces_OS` environment variable to match the distribution on which
-   you are installing. Currently supported options are `el6` and `el7`:
-
-     ```bash
-     export alces_OS=el7
-     ```
-
-3. Invoke installation by piping output from `curl` to `bash`:
-
-   ```bash
-   curl -sL http://git.io/underware-installer | /bin/bash
-   ```
-
-   If you want to you can download the script first.  You might want to do this
-   if you want to inspect what it's going to do, or if you're nervous about it
-   being truncated during download:
-
-   ```bash
-   curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
-   less /tmp/bootstrap.sh
-   bash /tmp/bootstrap.sh
-   ```
-
-4. After installation, you can logout and login again in order to set up the
-   appropriate shell configuration, or you can source the shell configuration
-   manually:
-
-   ```bash
-   source /etc/profile.d/alces-underware.sh
-   ```
-
-## Advanced installation parameters
-
-Additional environment variables may be set to influence the installation
-process.
-
-### Build from upstream source
-
-Set the `alces_SOURCE` variable to indicate that you want to build from
-upstream source code rather than installing prebuilt binaries for your
-distribution.  Choose `fresh` to download and build components from upstream
-sources, or `dist` to use prebuilt binaries downloaded on Amazon S3.
-   
-```bash
-export alces_SOURCE=fresh
-curl -sL http://git.io/underware-installer | /bin/bash
+```
+git clone https://github.com/alces-software/underware.git
+cd underware
+bundle install
 ```
 
-### Build from existing directory
+## Flight Core Installation
 
-Set the `alces_SRC_DIR` variable to point to an existing clone of the
-repository.  If a clone isn't available in the path you specify the path will
-be used to house the downloaded code rather than the default
-`/tmp/underware.XXXXXX` temporary directory.
+Underware can be installed as a tool to the flight-core environment.
 
-```bash
-cd /usr/src
-git clone https://github.com/alces-software/underware
-export alces_SRC_DIR=/usr/src/underware
-/usr/src/underware/scripts/bootstrap
+### Automated Installation
+
+- Install Flight Core (if not already installed)
+
+```
+yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
 ```
 
-### Build from an alternative branch
+- The installation script (located at `scripts/install`) has variables that can be optionally set in the curl command.
+    - `alces_INSTALL_DIR` - The directory to clone the tool into
+    - `alces_VERSION` - The version of the tool to install
 
-Set the `alces_SOURCE_BRANCH` variable with the name of the branch you wish to
-build.  Defaults to `master`. e.g.:
+- Run the installation script
 
-```bash
-export alces_SOURCE_BRANCH=0.1.0
-curl -sL http://git.io/underware-installer | /bin/bash
+```
+# Standard install
+curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |/bin/bash
+
+# Installation with variables
+curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |alces_INSTALL_DIR=/my/install/path/ alces_VERSION=dev-release /bin/bash
+```
+
+### Local Installation
+
+Instead of depending on an upstream location, Underware can be installed from a local copy of the repository in the following manner.
+
+- Install Flight Core (if not already installed)
+
+```
+yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
+```
+
+- Execute the install script from inside the `underware` directory
+
+```
+bash scripts/install
+```
+
+*Note: Local installations will use the currently checked out branch instead of using the latest release. To override this do `alces_VERSION=branchname bash scripts/install`.*
+
+### Post Installation
+
+- Now logout and in again or source `/etc/profile.d/alces-flight.sh`
+
+- Underware can now be run as follows
+
+```
+flight underware
+```
+
+- Alternatively, a sandbox environment for Underware can be entered as follows
+
+```
+flight shell underware
 ```

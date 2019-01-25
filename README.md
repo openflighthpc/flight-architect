@@ -17,14 +17,7 @@ sufficient.
 
 ## Installation
 
-Underware uses ruby `2.4.1` with a corresponding version of `bundler`. It can
-be installed from source using:
-
-```
-git clone https://github.com/alces-software/underware.git
-cd underware
-bundle install
-```
+For installation instructions please see INSTALL.md
 
 ## Usage
 

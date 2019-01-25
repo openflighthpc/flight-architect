@@ -26,4 +26,6 @@
 require 'bundler/setup'
 require 'underware/cli.rb'
 
+require 'pry-byebug' if Underware::Config.debug
+
 Underware::Cli.new.run if $PROGRAM_NAME == __FILE__

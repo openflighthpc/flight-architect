@@ -1,0 +1,9 @@
+set default=0
+set timeout=10
+menuentry 'LOCAL' {
+    exit
+}
+menuentry 'INSTALL' {
+    linuxefi boot/centos7-kernel ks=<%= alces.renderedurl %>/node.ks network ks.sendmac _ALCES_BASE_HOSTNAME=<%= node.name %> <%= config.kernelappendoptions %>
+        initrdefi boot/centos7-initrd.img
+}

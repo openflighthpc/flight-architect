@@ -49,8 +49,8 @@ module Underware
 
         def delete_answer_files
           data_path = DataPath.cluster(Config.current_cluster)
-          FileUtils.rm(data_path.group_answers(group_name))
-          nodes.each { |n| FileUtils.rm(data_path.node_answers(n)) }
+          FileUtils.rm_f(data_path.group_answers(group_name))
+          nodes.each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
         end
       end
     end

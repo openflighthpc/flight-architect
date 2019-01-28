@@ -40,7 +40,7 @@ module Underware
           end
           data_path = DataPath.cluster(Config.current_cluster)
           ClusterAttr.expand(nodes_str)
-                     .each { |n| FileUtils.rm_rf(data_path.node_answers(n)) }
+                     .each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
         end
       end
     end

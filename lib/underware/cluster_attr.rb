@@ -105,6 +105,12 @@ module Underware
       end
     end
 
+    def remove_nodes(node_string)
+      self.class.expand(node_string).map do |node|
+        __data__.delete(:nodes, node)
+      end
+    end
+
     def orphans
       nodes_in_group('orphan')
     end

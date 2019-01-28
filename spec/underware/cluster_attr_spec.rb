@@ -110,6 +110,14 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
+    describe '#remove_nodes' do
+      it 'does nothing' do
+        expect do
+          subject.remove_nodes('missing[1-10]')
+        end.not_to raise_error
+      end
+    end
+
     describe '#nodes_list' do
       it 'is initially an empty array' do
         expect(subject.nodes_list).to eq([])
@@ -248,6 +256,22 @@ RSpec.describe Underware::ClusterAttr do
 
       it 'updates the groups entry' do
         expect(subject.groups_for_node(nodes.first)).to eq(new_groups)
+      end
+    end
+
+    describe '#remove_nodes' do
+      before { subject.add_nodes(node_str) }
+
+      it 'can remove a single node only' do
+        delete_node = nodes.shift
+        subject.remove_nodes(delete_node)
+        expect(subject.nodes_list).not_to include(delete_node)
+        expect(subject.nodes_list).to include(*nodes)
+      end
+
+      it 'can remove a range of nodes' do
+        subject.remove_nodes(node_str)
+        expect(subject.nodes_list).not_to include(*nodes)
       end
     end
 

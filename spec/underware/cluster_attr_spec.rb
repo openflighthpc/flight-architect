@@ -344,19 +344,28 @@ RSpec.describe Underware::ClusterAttr do
 
   context 'when adding multiple nodes' do
     include_context 'with a ClusterAttr instance'
-    let(:group1_nodes) { ['node1', 'node2', 'node4'] }
+    let(:group1) { 'group1' }
+    let(:primary_prefix) { 'primary_' }
+    let(:base_group1_nodes) { ['node1', 'node2', 'node4'] }
+    let(:primary_group1_nodes) do
+      base_group1_nodes.map { |n| "#{primary_prefix}#{n}" }
+    end
+    let(:group1_nodes) do
+      [base_group1_nodes, primary_group1_nodes].flatten
+    end
 
     # Other nodes are injected in to make the example more realistic
     before do
-      group1_nodes.each do |node|
-        subject.add_nodes(node, groups: 'group1')
+      base_group1_nodes.each do |node|
+        subject.add_nodes(node, groups: ['other', group1])
+        subject.add_nodes("#{primary_prefix}#{node}", groups: group1)
         subject.add_nodes("not_#{node}")
       end
     end
 
     describe '#nodes_in_group' do
       it 'returns a specific group of nodes' do
-        expect(subject.nodes_in_group('group1')).to eq(group1_nodes)
+        expect(subject.nodes_in_group('group1')).to contain_exactly(*group1_nodes)
       end
     end
   end

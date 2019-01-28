@@ -61,8 +61,9 @@ subcommands:
       group.
 
 
-      NOTE: Reconfiguring a group with new nodes will not remove the old
-      node entries. Instead the new nodes are appended to the existing list.
+      NOTE: The NODE_RANGE will add the new nodes to the group. It does not
+      replace the nodes within group nor can it change a nodes primary group.
+      Re-adding an existing node will always result in an error.
     examples:
       - - Configures 'group1' with a single node 'node1'
         - underware configure group group1 node1

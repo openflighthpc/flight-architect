@@ -108,6 +108,12 @@ RSpec.describe Underware::ClusterAttr do
           subject.remove_group('missing')
         end.not_to raise_error
       end
+
+      it 'errors when deleting the orphan group' do
+        expect do
+          subject.remove_group('orphan')
+        end.to raise_error(Underware::ClusterAttrError)
+      end
     end
 
     describe '#remove_nodes' do

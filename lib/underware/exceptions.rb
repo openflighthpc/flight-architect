@@ -60,6 +60,8 @@ module Underware
 
   class CaughtInterrupt < UnderwareError; end
 
+  class ClusterAttrError < UnderwareError; end
+
   # XXX, we need think about the future of the DependencyFailure,
   # It maybe completely replaced with Validation::Loader and a file cache.
   # If this is the case Dependency Failure/ InternalError will be replaced

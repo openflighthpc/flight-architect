@@ -95,6 +95,7 @@ module Underware
     end
 
     def remove_group(group_name)
+      error_if_removing_orphan_group(group_name)
       nodes_list.select { |n| groups_for_node(n).first == group_name }
                 .join(',')
                 .tap { |node_str| remove_nodes(node_str) }
@@ -117,6 +118,15 @@ module Underware
 
     def orphans
       nodes_in_group('orphan')
+    end
+
+    private
+
+    def error_if_removing_orphan_group(group)
+      return unless group == 'orphan'
+      raise ClusterAttrError, <<~ERROR
+        Can not remove the orphan group
+      ERROR
     end
   end
 end

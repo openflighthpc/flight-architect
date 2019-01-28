@@ -93,6 +93,10 @@ module Underware
       __data__.append(group_name, to: :groups)
     end
 
+    def remove_group(group_name)
+      __data__.remove(group_name, from: :groups)
+    end
+
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
       self.class.expand(node_string).each do |node|

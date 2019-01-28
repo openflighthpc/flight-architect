@@ -102,6 +102,14 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
+    describe '#remove_group' do
+      it 'does nothing' do
+        expect do
+          subject.remove_group('missing')
+        end.not_to raise_error
+      end
+    end
+
     describe '#nodes_list' do
       it 'is initially an empty array' do
         expect(subject.nodes_list).to eq([])
@@ -160,6 +168,19 @@ RSpec.describe Underware::ClusterAttr do
 
       it 'does not change the index' do
         expect(subject.group_index(first_group)).to eq(original_index)
+      end
+    end
+
+    describe '#remove_group' do
+      let(:second_group) { 'my-second-group' }
+
+      before do
+        subject.add_group(second_group)
+        subject.remove_group(first_group)
+      end
+
+      it 'removes the group' do
+        expect(subject.raw_groups).not_to include(first_group)
       end
     end
 

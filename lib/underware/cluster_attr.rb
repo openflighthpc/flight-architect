@@ -100,6 +100,7 @@ module Underware
 
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
+      add_group(groups.first) unless groups.empty?
       self.class.expand(node_string).each do |node|
         __data__.set(:nodes, node, value: groups)
       end

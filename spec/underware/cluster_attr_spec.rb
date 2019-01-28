@@ -257,6 +257,11 @@ RSpec.describe Underware::ClusterAttr do
       it 'updates the groups entry' do
         expect(subject.groups_for_node(nodes.first)).to eq(new_groups)
       end
+
+      it 'implicitly adds the primary group' do
+        expect(subject.groups_hash.keys).to include(new_groups.first)
+        expect(subject.groups_hash.keys).not_to include(new_groups.last)
+      end
     end
 
     describe '#remove_nodes' do

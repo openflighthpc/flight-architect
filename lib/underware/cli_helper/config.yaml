@@ -101,6 +101,19 @@ subcommands:
       are automatically deleted by this command.
     action: Commands::Remove::Group
 
+  remove_nodes: &remove_nodes
+    syntax: underware remove nodes NODE_RANGE [options]
+    summary: Removes the node from the cluster
+    description: >
+      This command will remove the node from the cluster configuration. The answer
+      files will be removed by this action. However, the static configuration files
+      will remain.
+
+
+      Multiple nodes can be deleted by specifying a node range instead of a single
+      node.
+    action: Commands::Remove::Nodes
+
   render_domain: &render_domain
     syntax: underware render domain TEMPLATE [options]
     summary: Render specified template against domain namespace, and output result
@@ -252,6 +265,7 @@ commands:
     summary: Remove a configured group/nodes from the cluster
     subcommands:
       group: *remove_group
+      nodes: *remove_nodes
 
   render:
     syntax: underware render [SUB_COMMAND] [options]

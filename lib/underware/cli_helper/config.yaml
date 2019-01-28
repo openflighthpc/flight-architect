@@ -154,6 +154,21 @@ subcommands:
       Commands::ViewAnswers::Node
 
 commands:
+  cluster:
+    syntax: underware cluster [CLUSTER] [options]
+    summary: List, switch, and delete cluster configurations
+    description: >
+      If called without any arguments, the existing clusters are listed with
+      the current cluster highlighted with an asterisk.
+
+
+      Calling the command with the `CLUSTER` argument will switch the current
+      cluster before listing all the existing clusters as before.
+    options:
+      - tags: ['--delete']
+        description: 'Destroy the cluster configuration'
+    action: Commands::Cluster
+
   configure:
     syntax: underware configure [SUB_COMMAND] [options]
     summary: Configure different aspects of this Underware installation
@@ -225,21 +240,6 @@ commands:
       domain: *render_domain
       group: *render_group
       node: *render_node
-
-  cluster:
-    syntax: underware cluster [CLUSTER] [options]
-    summary: List, switch, and delete cluster configurations
-    description: >
-      If called without any arguments, the existing clusters are listed with
-      the current cluster highlighted with an asterisk.
-
-
-      Calling the command with the `CLUSTER` argument will switch the current
-      cluster before listing all the existing clusters as before.
-    options:
-      - tags: ['--delete']
-        description: 'Destroy the cluster configuration'
-    action: Commands::Cluster
 
   template:
     syntax: underware template [options]

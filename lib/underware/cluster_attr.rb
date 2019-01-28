@@ -128,7 +128,7 @@ module Underware
 
     def error_if_removing_orphan_group(group)
       return unless group == 'orphan'
-      raise ClusterAttrError, <<~ERROR
+      raise ClusterAttrError, <<~ERROR.chomp
         Can not remove the orphan group
       ERROR
     end

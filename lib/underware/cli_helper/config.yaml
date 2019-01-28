@@ -87,6 +87,20 @@ subcommands:
     options:
       - *configure_answers_option
 
+  remove_group: &remove_group
+    syntax: underware remove group GROUP_NAME [options]
+    summary: Removes the group and associated nodes
+    description: >
+      This will remove the group from the cluster configuration. This action will
+      automatically delete all nodes that have it as the primary group. It will
+      not delete nodes that have it as a secondary group.
+
+
+      NOTE: Nodes that use it as a secondary group will now assume it is missing.
+      They will still merge in the group config if it exists. The group answers
+      are automatically deleted by this command.
+    action: Commands::Remove::Group
+
   render_domain: &render_domain
     syntax: underware render domain TEMPLATE [options]
     summary: Render specified template against domain namespace, and output result
@@ -232,6 +246,12 @@ commands:
       list: *plugin_list
       activate: *plugin_activate
       deactivate: *plugin_deactivate
+
+  remove:
+    syntax: underware remove [SUB_COMMAND] [options]
+    summary: Remove a configured group/nodes from the cluster
+    subcommands:
+      group: *remove_group
 
   render:
     syntax: underware render [SUB_COMMAND] [options]

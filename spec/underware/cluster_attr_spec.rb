@@ -173,14 +173,34 @@ RSpec.describe Underware::ClusterAttr do
 
     describe '#remove_group' do
       let(:second_group) { 'my-second-group' }
-
-      before do
-        subject.add_group(second_group)
-        subject.remove_group(first_group)
-      end
+      let!(:second_group_index) {}
 
       it 'removes the group' do
+        subject.remove_group(first_group)
         expect(subject.raw_groups).not_to include(first_group)
+      end
+
+      it 'preserves latter groups index' do
+        subject.add_group(second_group)
+        original_index = subject.group_index(second_group)
+        subject.remove_group(first_group)
+        expect(subject.group_index(second_group)).to eq(original_index)
+      end
+
+      describe '#groups_hash' do
+        before { subject.remove_group(first_group) }
+
+        it 'does not include nil as a key' do
+          expect(subject.groups_hash.keys).not_to include(nil)
+        end
+      end
+
+      describe '#group_index' do
+        before { subject.remove_group(first_group) }
+
+        it 'returns nil for the nil group' do
+          expect(subject.group_index(nil)).to be(nil)
+        end
       end
     end
 

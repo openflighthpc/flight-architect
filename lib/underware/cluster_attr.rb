@@ -69,12 +69,13 @@ module Underware
     end
 
     def groups_hash
-      raw_groups.map do |group|
+      raw_groups.reject(&:nil?).map do |group|
         [group, group_index(group)]
       end.to_h
     end
 
     def group_index(group)
+      return nil if group.nil?
       raw_groups.find_index(group)
     end
 
@@ -94,7 +95,7 @@ module Underware
     end
 
     def remove_group(group_name)
-      __data__.remove(group_name, from: :groups)
+      __data__.fetch(:groups).map! { |g| g == group_name ? nil : g }
     end
 
     def add_nodes(node_string, groups: [])

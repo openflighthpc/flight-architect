@@ -89,6 +89,10 @@ module Underware
       nodes_list.select { |node| groups_for_node(node).include?(group) }
     end
 
+    def nodes_in_primary_group(group)
+      nodes_list.select { |n| groups_for_node(n).first == group }
+    end
+
     def add_group(group_name)
       return if raw_groups.include?(group_name)
       __data__.append(group_name, to: :groups)

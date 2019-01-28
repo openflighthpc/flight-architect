@@ -368,5 +368,11 @@ RSpec.describe Underware::ClusterAttr do
         expect(subject.nodes_in_group('group1')).to contain_exactly(*group1_nodes)
       end
     end
+
+    describe '#nodes_in_primary_group' do
+      it 'only returns the primary nodes' do
+        expect(subject.nodes_in_primary_group(group1)).to contain_exactly(*primary_group1_nodes)
+      end
+    end
   end
 end

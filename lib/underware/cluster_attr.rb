@@ -95,6 +95,9 @@ module Underware
     end
 
     def remove_group(group_name)
+      nodes_list.select { |n| groups_for_node(n).first == group_name }
+                .join(',')
+                .tap { |node_str| remove_nodes(node_str) }
       __data__.fetch(:groups).map! { |g| g == group_name ? nil : g }
     end
 

@@ -182,32 +182,45 @@ RSpec.describe Underware::ClusterAttr do
     describe '#remove_group' do
       let(:second_group) { 'my-second-group' }
       let!(:second_group_index) {}
+      let(:first_node) { 'first_group_node' }
+      let(:second_node) { 'second_group_node' }
 
-      it 'removes the group' do
-        subject.remove_group(first_group)
-        expect(subject.raw_groups).not_to include(first_group)
+      before do
+        subject.add_nodes(first_node, groups: [first_group, second_group])
+        subject.add_nodes(second_node, groups: [second_group, first_group])
       end
 
       it 'preserves latter groups index' do
-        subject.add_group(second_group)
         original_index = subject.group_index(second_group)
         subject.remove_group(first_group)
         expect(subject.group_index(second_group)).to eq(original_index)
       end
 
-      describe '#groups_hash' do
+      context 'with the first group removed' do
         before { subject.remove_group(first_group) }
 
-        it 'does not include nil as a key' do
-          expect(subject.groups_hash.keys).not_to include(nil)
+        it 'removes the group' do
+          expect(subject.raw_groups).not_to include(first_group)
         end
-      end
 
-      describe '#group_index' do
-        before { subject.remove_group(first_group) }
+        it 'removes the groups primary nodes' do
+          expect(subject.nodes_list).not_to include(first_node)
+        end
 
-        it 'returns nil for the nil group' do
-          expect(subject.group_index(nil)).to be(nil)
+        it 'does not remove the secondary nodes' do
+          expect(subject.nodes_list).to include(second_node)
+        end
+
+        describe '#groups_hash' do
+          it 'does not include nil as a key' do
+            expect(subject.groups_hash.keys).not_to include(nil)
+          end
+        end
+
+        describe '#group_index' do
+          it 'returns nil for the nil group' do
+            expect(subject.group_index(nil)).to be(nil)
+          end
         end
       end
     end

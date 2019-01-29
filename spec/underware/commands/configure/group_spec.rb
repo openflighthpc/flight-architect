@@ -34,13 +34,13 @@ RSpec.describe Underware::Commands::Configure::Group do
   end
 
   def update_cache
-    Underware::ClusterAttr.update(Underware::Config.current_cluster) do
+    Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do
       |a| yield a
     end
   end
 
   def new_cache
-    Underware::ClusterAttr.load(Underware::Config.current_cluster)
+    Underware::ClusterAttr.load(Underware::CommandConfig.load.current_cluster)
   end
 
   before :each do

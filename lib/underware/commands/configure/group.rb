@@ -51,7 +51,7 @@ module Underware
         end
 
         def custom_configuration
-          attr = ClusterAttr.update(Underware::Config.current_cluster) do |a|
+          attr = ClusterAttr.update(__config__.current_cluster) do |a|
             a.add_group(group_name)
             a.add_nodes(nodes, groups: groups) if nodes
           end
@@ -73,7 +73,7 @@ module Underware
         end
 
         def error_if_existing_nodes
-          existing_nodes = ClusterAttr.load(Config.current_cluster).nodes_list
+          existing_nodes = ClusterAttr.load(__config__.current_cluster).nodes_list
           duplicates = ClusterAttr.expand(nodes) & existing_nodes
           return if duplicates.empty?
           raise InvalidInput, <<~ERROR.squish.chomp

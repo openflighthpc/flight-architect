@@ -22,45 +22,33 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/cluster_attr'
-
 module Underware
-  module CommandHelpers
-    module NodeIdentifier
-      private
+  class CommandConfig
+    include ConfigLoader
 
-      MISSING_GENDER_WARNING = 'Could not find nodes for gender: '
-      MISSING_NODE_WARNING = 'Could not find node: '
+    delegate_missing_to Config
 
-      attr_reader :node_identifier
+    def path
+      File.join(storage_path, 'etc/config.yaml')
+    end
 
-      def pre_setup(*a)
-        super(*a)
-        @node_identifier = args.first
+    def current_cluster
+      __data__.fetch(:current_cluster) do
+        'default'.tap do |default|
+          next if Dir.exist?(DataPath.cluster(default).base)
+          DataCopy.overlay_to_cluster(nil, default).all
+        end
       end
+    end
 
-      def nodes
-        raise_missing unless node_names
-        @nodes ||= node_names.map { |n| alces.nodes.find_by_name(n) }
-      end
+    def current_cluster=(cluster_identifier)
+      __data__.set(:current_cluster, value: cluster_identifier)
+    end
 
-      def node_names
-        @node_names ||= if options.gender
-                          ClusterAttr.load(__config__.current_cluster)
-                                     .nodes_in_group(node_identifier)
-                        else
-                          [node_identifier]
-                        end
-      end
+    private
 
-      def raise_missing
-        msg = warning + node_identifier
-        raise InvalidInput, msg
-      end
-
-      def warning
-        options.gender ? MISSING_GENDER_WARNING : MISSING_NODE_WARNING
-      end
+    def internal_config
+      @internal_config ||= InternalConfig.load
     end
   end
 end

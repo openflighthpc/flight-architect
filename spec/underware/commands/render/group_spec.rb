@@ -6,7 +6,7 @@ RSpec.describe Underware::Commands::Render::Group do
   include_context 'render command'
 
   before :each do
-    Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
+    Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do |attr|
       attr.add_group(test_group_name)
     end
   end

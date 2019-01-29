@@ -35,10 +35,10 @@ module Underware
         end
 
         def run
-          ClusterAttr.update(Config.current_cluster) do |attr|
+          ClusterAttr.update(__config__.current_cluster) do |attr|
             attr.remove_nodes(nodes_str)
           end
-          data_path = DataPath.cluster(Config.current_cluster)
+          data_path = DataPath.cluster(__config__.current_cluster)
           ClusterAttr.expand(nodes_str)
                      .each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
         end

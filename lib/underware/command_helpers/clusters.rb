@@ -33,9 +33,9 @@ module Underware
       def self.current_cluster_existence_check(base)
         base.register_dependency do
           next if self.class.allow_missing_current_cluster(fetch: true)
-          next if cluster_exists?(Config.current_cluster)
+          next if cluster_exists?(__config__.current_cluster)
           raise DataError, <<~ERROR.chomp
-            The current cluster '#{Config.current_cluster}' does not exist.
+            The current cluster '#{__config__.current_cluster}' does not exist.
             To resolve this error, either:
             1. `underware init` a new cluster, or
             2. `underware cluster` to an existing cluster

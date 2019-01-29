@@ -25,7 +25,7 @@ module Underware
       DOUBLE_SCOPE_ERROR = 'A node and group can not both be in scope'
 
       delegate :config, :answer, to: :scope
-      attr_reader :platform, :eager_render
+      attr_reader :platform, :eager_render, :cluster_identifier
       alias_method :alces, :itself
 
       class << self
@@ -50,10 +50,7 @@ module Underware
         @platform = platform&.to_sym
         @eager_render = eager_render
         @stacks_hash = {}
-      end
-
-      def cluster_identifier
-        Underware::Config.current_cluster
+        @cluster_identifier = CommandConfig.load.current_cluster
       end
 
       def domain

@@ -28,7 +28,7 @@ RSpec.describe Underware::CommandHelpers::ConfigureCommand do
 
   describe 'option handling' do
     it 'passes answers through to configurator as hash' do
-      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+      Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
       answers = { question_1: 'answer_1' }
       expect_any_instance_of(Underware::Configurator)
         .to receive(:configure).with(answers)

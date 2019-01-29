@@ -32,7 +32,7 @@ module Underware
 
         def setup
           @group_name = args.first
-          @nodes = ClusterAttr.load(Config.current_cluster)
+          @nodes = ClusterAttr.load(__config__.current_cluster)
                               .nodes_in_primary_group(group_name)
         end
 
@@ -42,13 +42,13 @@ module Underware
         end
 
         def delete_group
-          ClusterAttr.update(Config.current_cluster) do |attr|
+          ClusterAttr.update(__config__.current_cluster) do |attr|
             attr.remove_group(group_name)
           end
         end
 
         def delete_answer_files
-          data_path = DataPath.cluster(Config.current_cluster)
+          data_path = DataPath.cluster(__config__.current_cluster)
           FileUtils.rm_f(data_path.group_answers(group_name))
           nodes.each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
         end

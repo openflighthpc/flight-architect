@@ -141,7 +141,7 @@ RSpec.describe Underware::Namespaces::Node do
     let(:deactivated_plugin) { 'deactivated_plugin' }
 
     before :each do
-      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+      Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
 
       # Create all test plugins.
       [
@@ -209,7 +209,7 @@ RSpec.describe Underware::Namespaces::Node do
       stubbed_groups = ['primary_group', 'additional_group']
 
       before :each do
-        Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
+        Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do |attr|
           attr.add_nodes(test_node_name, groups: stubbed_groups)
         end
       end

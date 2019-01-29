@@ -26,8 +26,9 @@ module Underware
   module Commands
     class Cluster < CommandHelpers::BaseCommand
       LIST_TEMPLATE = <<~ERB
+        <% config = CommandConfig.load -%>
         <% clusters.each do |cluster| -%>
-        <%   current = Underware::Config.current_cluster == cluster -%>
+        <%   current = config.current_cluster == cluster -%>
         <%=  current ? '*' : ' ' %> <%= cluster %>
         <% end -%>
       ERB
@@ -41,7 +42,7 @@ module Underware
       def run
         # Load the current_cluster from the config to ensure the default
         # has been created (if required)
-        Config.current_cluster
+        __config__.current_cluster
         options.delete ? run_delete : run_normal
       end
 
@@ -52,22 +53,22 @@ module Underware
       end
 
       def run_delete
-        cluster = cluster_input || Config.current_cluster
+        cluster = cluster_input || __config__.current_cluster
         error_if_deleting_current_cluster(cluster)
         error_if_cluster_missing(cluster, action: 'delete')
         delete_cluster(cluster)
       end
 
       def missing_check
-        return if cluster_exists?(Config.current_cluster)
+        return if cluster_exists?(__config__.current_cluster)
         UnderwareLog.warn <<~WARN.squish.chomp
-          The current cluster '#{Config.current_cluster}' does not exist!
+          The current cluster '#{__config__.current_cluster}' does not exist!
         WARN
       end
 
       def switch_cluster
         error_if_cluster_missing(cluster_input)
-        Config.update { |c| c.current_cluster = cluster_input }
+        CommandConfig.update { |c| c.current_cluster = cluster_input }
       end
 
       def cluster_input
@@ -98,7 +99,7 @@ module Underware
       end
 
       def error_if_deleting_current_cluster(cluster)
-        return unless Config.current_cluster == cluster
+        return unless __config__.current_cluster == cluster
         raise InvalidInput, <<~ERROR.chomp
           Can not delete the current cluster, please switch cluster and run:
           '#{Underware::APP_NAME} cluster --delete #{cluster}'

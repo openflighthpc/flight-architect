@@ -48,7 +48,7 @@ module Underware
 
         def custom_configuration
           return if alces.nodes.find_by_name(node_name)
-          ClusterAttr.update(Underware::Config.current_cluster) do |attr|
+          ClusterAttr.update(__config__.current_cluster) do |attr|
             attr.add_nodes(node_name)
           end
         end

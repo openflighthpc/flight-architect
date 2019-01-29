@@ -26,7 +26,7 @@ RSpec.describe Underware::Commands::Overview do
   end
 
   it 'does not error when using the real overview.yaml' do
-    Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+    Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
     expect do
       run_command
     end.not_to raise_error

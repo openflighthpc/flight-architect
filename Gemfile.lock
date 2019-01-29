@@ -98,6 +98,7 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     rainbow (3.0.0)
+    rake (12.3.2)
     recursive-open-struct (1.1.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -145,6 +146,7 @@ DEPENDENCIES
   nodeattr_utils!
   pry
   pry-byebug
+  rake
   rspec
   rubocop (~> 0.52.1)
   rubocop-rspec

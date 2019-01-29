@@ -102,6 +102,28 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
+    describe '#remove_group' do
+      it 'does nothing' do
+        expect do
+          subject.remove_group('missing')
+        end.not_to raise_error
+      end
+
+      it 'errors when deleting the orphan group' do
+        expect do
+          subject.remove_group('orphan')
+        end.to raise_error(Underware::ClusterAttrError)
+      end
+    end
+
+    describe '#remove_nodes' do
+      it 'does nothing' do
+        expect do
+          subject.remove_nodes('missing[1-10]')
+        end.not_to raise_error
+      end
+    end
+
     describe '#nodes_list' do
       it 'is initially an empty array' do
         expect(subject.nodes_list).to eq([])
@@ -163,6 +185,52 @@ RSpec.describe Underware::ClusterAttr do
       end
     end
 
+    describe '#remove_group' do
+      let(:second_group) { 'my-second-group' }
+      let!(:second_group_index) {}
+      let(:first_node) { 'first_group_node' }
+      let(:second_node) { 'second_group_node' }
+
+      before do
+        subject.add_nodes(first_node, groups: [first_group, second_group])
+        subject.add_nodes(second_node, groups: [second_group, first_group])
+      end
+
+      it 'preserves latter groups index' do
+        original_index = subject.group_index(second_group)
+        subject.remove_group(first_group)
+        expect(subject.group_index(second_group)).to eq(original_index)
+      end
+
+      context 'with the first group removed' do
+        before { subject.remove_group(first_group) }
+
+        it 'removes the group' do
+          expect(subject.raw_groups).not_to include(first_group)
+        end
+
+        it 'removes the groups primary nodes' do
+          expect(subject.nodes_list).not_to include(first_node)
+        end
+
+        it 'does not remove the secondary nodes' do
+          expect(subject.nodes_list).to include(second_node)
+        end
+
+        describe '#groups_hash' do
+          it 'does not include nil as a key' do
+            expect(subject.groups_hash.keys).not_to include(nil)
+          end
+        end
+
+        describe '#group_index' do
+          it 'returns nil for the nil group' do
+            expect(subject.group_index(nil)).to be(nil)
+          end
+        end
+      end
+    end
+
     describe '#raw_groups' do
       it 'contains the group' do
         expect(subject.raw_groups).to include(first_group)
@@ -207,6 +275,27 @@ RSpec.describe Underware::ClusterAttr do
 
       it 'updates the groups entry' do
         expect(subject.groups_for_node(nodes.first)).to eq(new_groups)
+      end
+
+      it 'implicitly adds the primary group' do
+        expect(subject.groups_hash.keys).to include(new_groups.first)
+        expect(subject.groups_hash.keys).not_to include(new_groups.last)
+      end
+    end
+
+    describe '#remove_nodes' do
+      before { subject.add_nodes(node_str) }
+
+      it 'can remove a single node only' do
+        delete_node = nodes.shift
+        subject.remove_nodes(delete_node)
+        expect(subject.nodes_list).not_to include(delete_node)
+        expect(subject.nodes_list).to include(*nodes)
+      end
+
+      it 'can remove a range of nodes' do
+        subject.remove_nodes(node_str)
+        expect(subject.nodes_list).not_to include(*nodes)
       end
     end
 
@@ -255,19 +344,34 @@ RSpec.describe Underware::ClusterAttr do
 
   context 'when adding multiple nodes' do
     include_context 'with a ClusterAttr instance'
-    let(:group1_nodes) { ['node1', 'node2', 'node4'] }
+    let(:group1) { 'group1' }
+    let(:primary_prefix) { 'primary_' }
+    let(:base_group1_nodes) { ['node1', 'node2', 'node4'] }
+    let(:primary_group1_nodes) do
+      base_group1_nodes.map { |n| "#{primary_prefix}#{n}" }
+    end
+    let(:group1_nodes) do
+      [base_group1_nodes, primary_group1_nodes].flatten
+    end
 
     # Other nodes are injected in to make the example more realistic
     before do
-      group1_nodes.each do |node|
-        subject.add_nodes(node, groups: 'group1')
+      base_group1_nodes.each do |node|
+        subject.add_nodes(node, groups: ['other', group1])
+        subject.add_nodes("#{primary_prefix}#{node}", groups: group1)
         subject.add_nodes("not_#{node}")
       end
     end
 
     describe '#nodes_in_group' do
       it 'returns a specific group of nodes' do
-        expect(subject.nodes_in_group('group1')).to eq(group1_nodes)
+        expect(subject.nodes_in_group('group1')).to contain_exactly(*group1_nodes)
+      end
+    end
+
+    describe '#nodes_in_primary_group' do
+      it 'only returns the primary nodes' do
+        expect(subject.nodes_in_primary_group(group1)).to contain_exactly(*primary_group1_nodes)
       end
     end
   end

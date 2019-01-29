@@ -35,8 +35,17 @@ module Underware
   class InternalConfig
     include ConfigLoader
 
+    def initialize
+      __data__.env_prefix = APP_NAME.dup
+      __data__.set_from_env(:debug)
+    end
+
     def path
       File.join(install_path, 'etc/config.yaml')
+    end
+
+    def debug
+      __data__.fetch(:debug)
     end
 
     def install_path

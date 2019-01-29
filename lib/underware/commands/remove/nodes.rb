@@ -1,8 +1,7 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -23,9 +22,27 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'bundler/setup'
-require 'underware/cli.rb'
+module Underware
+  module Commands
+    module Remove
+      class Nodes < CommandHelpers::BaseCommand
+        private
 
-require 'pry-byebug' if Underware::Config.debug
+        attr_reader :nodes_str
 
-Underware::Cli.new.run if $PROGRAM_NAME == __FILE__
+        def setup
+          @nodes_str = args.first
+        end
+
+        def run
+          ClusterAttr.update(Config.current_cluster) do |attr|
+            attr.remove_nodes(nodes_str)
+          end
+          data_path = DataPath.cluster(Config.current_cluster)
+          ClusterAttr.expand(nodes_str)
+                     .each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
+        end
+      end
+    end
+  end
+end

@@ -69,12 +69,13 @@ module Underware
     end
 
     def groups_hash
-      raw_groups.map do |group|
+      raw_groups.reject(&:nil?).map do |group|
         [group, group_index(group)]
       end.to_h
     end
 
     def group_index(group)
+      return nil if group.nil?
       raw_groups.find_index(group)
     end
 
@@ -88,20 +89,48 @@ module Underware
       nodes_list.select { |node| groups_for_node(node).include?(group) }
     end
 
+    def nodes_in_primary_group(group)
+      nodes_list.select { |n| groups_for_node(n).first == group }
+    end
+
     def add_group(group_name)
       return if raw_groups.include?(group_name)
       __data__.append(group_name, to: :groups)
     end
 
+    def remove_group(group_name)
+      error_if_removing_orphan_group(group_name)
+      nodes_list.select { |n| groups_for_node(n).first == group_name }
+                .join(',')
+                .tap { |node_str| remove_nodes(node_str) }
+      __data__.fetch(:groups).map! { |g| g == group_name ? nil : g }
+    end
+
     def add_nodes(node_string, groups: [])
       groups = Array.wrap(groups)
+      add_group(groups.first) unless groups.empty?
       self.class.expand(node_string).each do |node|
         __data__.set(:nodes, node, value: groups)
       end
     end
 
+    def remove_nodes(node_string)
+      self.class.expand(node_string).map do |node|
+        __data__.delete(:nodes, node)
+      end
+    end
+
     def orphans
       nodes_in_group('orphan')
+    end
+
+    private
+
+    def error_if_removing_orphan_group(group)
+      return unless group == 'orphan'
+      raise ClusterAttrError, <<~ERROR.chomp
+        Can not remove the orphan group
+      ERROR
     end
   end
 end

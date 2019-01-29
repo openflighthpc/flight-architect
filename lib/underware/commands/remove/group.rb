@@ -1,8 +1,7 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 #==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# Copyright (C) 2019 Stephen F. Norledge and Alces Software Ltd.
 #
 # This file/package is part of Alces Underware.
 #
@@ -23,9 +22,37 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'bundler/setup'
-require 'underware/cli.rb'
+module Underware
+  module Commands
+    module Remove
+      class Group < CommandHelpers::BaseCommand
+        private
 
-require 'pry-byebug' if Underware::Config.debug
+        attr_reader :group_name, :nodes
 
-Underware::Cli.new.run if $PROGRAM_NAME == __FILE__
+        def setup
+          @group_name = args.first
+          @nodes = ClusterAttr.load(Config.current_cluster)
+                              .nodes_in_primary_group(group_name)
+        end
+
+        def run
+          delete_group
+          delete_answer_files
+        end
+
+        def delete_group
+          ClusterAttr.update(Config.current_cluster) do |attr|
+            attr.remove_group(group_name)
+          end
+        end
+
+        def delete_answer_files
+          data_path = DataPath.cluster(Config.current_cluster)
+          FileUtils.rm_f(data_path.group_answers(group_name))
+          nodes.each { |n| FileUtils.rm_f(data_path.node_answers(n)) }
+        end
+      end
+    end
+  end
+end

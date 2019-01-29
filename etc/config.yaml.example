@@ -13,3 +13,10 @@
 # Sets the directory the logs will be stored in
 # Defaults: /var/log/underware
 #
+
+##
+# debug: true
+#
+# Puts underware into a debugging mode. Can also be set using an environment
+# variable: UNDERWARE_DEBUG
+#

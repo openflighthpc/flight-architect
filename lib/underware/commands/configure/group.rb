@@ -37,8 +37,8 @@ module Underware
 
         def setup
           @group_name = args.first
-          @nodes_string = args[1]
           @groups = parse_groups
+          error_if_existing_nodes
         end
 
         def configurator
@@ -51,14 +51,35 @@ module Underware
         end
 
         def custom_configuration
-          ClusterAttr.update(Underware::Config.current_cluster) do |attr|
-            attr.add_group(group_name)
-            attr.add_nodes(nodes_string, groups: groups)
+          attr = ClusterAttr.update(Underware::Config.current_cluster) do |a|
+            a.add_group(group_name)
+            a.add_nodes(nodes, groups: groups) if nodes
           end
+          return if attr.nodes_in_group(group_name).any?
+          msg = <<~WARN.squish
+            Configured '#{group_name}' without any nodes. Re-run the following
+            command to add some:
+          WARN
+          cmd = "#{APP_NAME} configure group #{group_name} <NODES>"
+          UnderwareLog.warn [msg, cmd].join("\n")
         end
 
         def parse_groups
           GroupListParser.parse("#{group_name},#{options.groups}")
+        end
+
+        def nodes
+          args[1] if args.length > 1
+        end
+
+        def error_if_existing_nodes
+          existing_nodes = ClusterAttr.load(Config.current_cluster).nodes_list
+          duplicates = ClusterAttr.expand(nodes) & existing_nodes
+          return if duplicates.empty?
+          raise InvalidInput, <<~ERROR.squish.chomp
+            Can not configure group as the following node(s) already exist:
+            #{duplicates.join(',')}
+          ERROR
         end
       end
     end

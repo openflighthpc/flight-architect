@@ -32,8 +32,28 @@ require 'underware/data_path'
 require 'underware/data_copy'
 
 module Underware
-  class InternalConfig
+  class Config
     include ConfigLoader
+
+    class << self
+      def cache
+        @cache ||= self.load
+      end
+      delegate_missing_to :cache
+
+      def update(*a)
+        # Updating this config is never allowed. The `load` method
+        # is bootstrapped using `update` so a `nil` block is passed
+        # instead
+        b = nil
+        super(*a, &b)
+      end
+
+      def reset
+        # The config should always be static
+        # :noop:
+      end
+    end
 
     def initialize
       __data__.env_prefix = APP_NAME.dup
@@ -58,51 +78,6 @@ module Underware
 
     def storage_path
       __data__.fetch(:storage_path, default: '/var/lib/underware')
-    end
-  end
-
-  class Config
-    include ConfigLoader
-
-    class << self
-      def cache
-        @cache ||= self.load
-      end
-      delegate_missing_to :cache
-
-      def update(*a)
-        reset
-        super
-      end
-
-      def reset
-        @cache = nil
-      end
-    end
-
-    delegate_missing_to :internal_config
-
-    def path
-      File.join(storage_path, 'etc/config.yaml')
-    end
-
-    def current_cluster
-      __data__.fetch(:current_cluster) do
-        'default'.tap do |default|
-          next if Dir.exist?(DataPath.cluster(default).base)
-          DataCopy.overlay_to_cluster(nil, default).all
-        end
-      end
-    end
-
-    def current_cluster=(cluster_identifier)
-      __data__.set(:current_cluster, value: cluster_identifier)
-    end
-
-    private
-
-    def internal_config
-      @internal_config ||= InternalConfig.load
     end
   end
 end

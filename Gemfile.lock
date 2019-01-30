@@ -13,6 +13,13 @@ GIT
       highline (~> 1.7.2)
 
 GIT
+  remote: https://github.com/alces-software/flight_config
+  revision: e3135c14acb6599f4bc3d13ffea955a943d40e31
+  specs:
+    flight_config (0.1.0)
+      tty-config
+
+GIT
   remote: https://github.com/alces-software/nodeattr_utils
   revision: efe200c44492bf3d17e93920918e824fe7b7d74e
   specs:
@@ -26,6 +33,7 @@ PATH
       colorize
       commander
       dry-validation
+      flight_config
       hashie
       highline (= 1.7.8)
       network_interface (~> 0.0.1)
@@ -34,7 +42,6 @@ PATH
       ruby-progressbar
       rubytree
       terminal-table
-      tty-config
 
 GEM
   remote: https://rubygems.org/
@@ -60,24 +67,24 @@ GEM
       concurrent-ruby (~> 1.0)
     dry-equalizer (0.2.1)
     dry-inflector (0.1.2)
-    dry-logic (0.4.2)
+    dry-logic (0.5.0)
       dry-container (~> 0.2, >= 0.2.6)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
-    dry-types (0.13.4)
+    dry-types (0.14.0)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer (~> 0.2)
       dry-inflector (~> 0.1, >= 0.1.2)
-      dry-logic (~> 0.4, >= 0.4.2)
-    dry-validation (0.12.2)
+      dry-logic (~> 0.5, >= 0.5)
+    dry-validation (0.13.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
       dry-core (~> 0.2, >= 0.2.1)
       dry-equalizer (~> 0.2)
-      dry-logic (~> 0.4, >= 0.4.0)
-      dry-types (~> 0.13.1)
+      dry-logic (~> 0.5, >= 0.5.0)
+      dry-types (~> 0.14, >= 0.14)
     fakefs (0.18.0)
     hashie (3.6.0)
     highline (1.7.8)
@@ -131,7 +138,7 @@ GEM
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thread_safe (0.3.6)
-    tty-config (0.3.0)
+    tty-config (0.3.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (1.4.0)
@@ -143,6 +150,7 @@ DEPENDENCIES
   bundler
   commander!
   fakefs
+  flight_config!
   nodeattr_utils!
   pry
   pry-byebug

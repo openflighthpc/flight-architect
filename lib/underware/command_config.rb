@@ -22,9 +22,11 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
+require 'flight_config/loader'
+
 module Underware
   class CommandConfig
-    include ConfigLoader
+    include FlightConfig::Loader
 
     delegate_missing_to Config
 

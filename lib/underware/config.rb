@@ -27,13 +27,13 @@
 #
 
 require 'active_support/core_ext/module/delegation'
-require 'underware/config_loader'
+require 'flight_config/loader'
 require 'underware/data_path'
 require 'underware/data_copy'
 
 module Underware
   class Config
-    include ConfigLoader
+    include FlightConfig::Loader
 
     class << self
       def cache

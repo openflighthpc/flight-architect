@@ -22,12 +22,12 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/config_loader'
+require 'flight_config/loader'
 require 'nodeattr_utils'
 
 module Underware
   class ClusterAttr
-    include ConfigLoader
+    include FlightConfig::Loader
 
     class << self
       def filename

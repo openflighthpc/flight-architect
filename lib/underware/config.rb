@@ -27,7 +27,7 @@
 #
 
 require 'active_support/core_ext/module/delegation'
-require 'flight_config/loader'
+require 'flight_config'
 require 'underware/data_path'
 require 'underware/data_copy'
 
@@ -40,14 +40,6 @@ module Underware
         @cache ||= self.load
       end
       delegate_missing_to :cache
-
-      def update(*a)
-        # Updating this config is never allowed. The `load` method
-        # is bootstrapped using `update` so a `nil` block is passed
-        # instead
-        b = nil
-        super(*a, &b)
-      end
 
       def reset
         # The config should always be static

@@ -2,6 +2,7 @@ disklabel: vda
 kernelappendoptions: "console=tty0 console=ttyS0,115200n8"
 
 # VM Settings
+vm_disk_pool: 'local'
 vm_disk_pool_path: '/opt/vm'
 vm_root_disk_size: 80
 

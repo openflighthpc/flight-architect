@@ -41,9 +41,9 @@ module Underware
 
       def run
         switch_cluster
-        DataCopy.overlay_to_cluster(nil, Config.current_cluster).all
+        DataCopy.overlay_to_cluster(nil, __config__.current_cluster).all
         unless options.bare
-          DataCopy.overlay_to_cluster('example', Config.current_cluster).all
+          DataCopy.overlay_to_cluster('example', __config__.current_cluster).all
           configure_domain
 
           # NOTE: The files created by the configure have been cached in
@@ -61,7 +61,7 @@ module Underware
 
       def switch_cluster
         error_if_cluster_exists(args.first)
-        Config.update { |c| c.current_cluster = args.first }
+        CommandConfig.update { |c| c.current_cluster = args.first }
       end
 
       def configure_domain

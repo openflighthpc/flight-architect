@@ -8,7 +8,7 @@ module Underware
 
       def run
         clear_current_rendered_dir
-        Platform.all(Config.current_cluster).each(&:render_templates)
+        Platform.all(__config__.current_cluster).each(&:render_templates)
       end
 
       def clear_current_rendered_dir

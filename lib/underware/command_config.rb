@@ -22,46 +22,35 @@
 # https://github.com/alces-software/underware
 #==============================================================================
 
-require 'underware/patches/tty_config'
+require 'flight_config'
 
 module Underware
-  module ConfigLoader
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
+  class CommandConfig
+    include FlightConfig::Updater
 
-    def self.read(obj)
-      return unless File.exists?(obj.path)
-      obj.__data__.read(obj.path)
-    end
-
-    def self.write(obj)
-      FileUtils.mkdir_p(File.dirname(obj.path))
-      obj.__data__.write(obj.path, force: true)
-    end
-
-    module ClassMethods
-      def update(*a)
-        new(*a).tap do |attr|
-          ConfigLoader.read(attr)
-          if block_given?
-            yield attr
-            ConfigLoader.write(attr)
-          end
-        end
-      end
-
-      def load(*a, &_b)
-        update(*a)
-      end
-    end
-
-    def __data__
-      @__data__ ||= TTY::Config.new
-    end
+    delegate_missing_to Config
 
     def path
-      raise NotImplementedError
+      File.join(storage_path, 'etc/config.yaml')
+    end
+
+    def current_cluster
+      __data__.fetch(:current_cluster) do
+        'default'.tap do |default|
+          next if Dir.exist?(DataPath.cluster(default).base)
+          DataCopy.overlay_to_cluster(nil, default).all
+        end
+      end
+    end
+
+    def current_cluster=(cluster_identifier)
+      __data__.set(:current_cluster, value: cluster_identifier)
+    end
+
+    private
+
+    def internal_config
+      @internal_config ||= InternalConfig.load
     end
   end
 end

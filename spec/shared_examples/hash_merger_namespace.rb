@@ -19,7 +19,7 @@ RSpec.shared_examples \
 
   describe '#to_h' do
     Underware::AlcesUtils.mock self, :each do
-      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+      Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
       config(subject, test_config)
       answer(subject, test_answer)
     end

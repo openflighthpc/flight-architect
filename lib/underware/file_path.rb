@@ -24,7 +24,7 @@
 
 require 'underware/constants'
 require 'underware/data_path'
-require 'underware/config'
+require 'underware/command_config'
 
 module Underware
   module FilePath
@@ -32,7 +32,7 @@ module Underware
       delegate_missing_to :data_path
 
       def data_path
-        DataPath.cluster(Config.current_cluster)
+        DataPath.cluster(CommandConfig.load.current_cluster)
       end
 
       # TODO: Is this going to in built or configurable per cluster?

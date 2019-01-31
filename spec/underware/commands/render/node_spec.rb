@@ -7,7 +7,7 @@ RSpec.describe Underware::Commands::Render::Node do
   include_context 'render command'
 
   before :each do
-    Underware::ClusterAttr.update(Underware::Config.current_cluster) do |attr|
+    Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do |attr|
       attr.add_nodes(test_node_name)
     end
   end

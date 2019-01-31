@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'colorize'
   spec.add_runtime_dependency 'commander'
   spec.add_runtime_dependency 'dry-validation'
+  spec.add_runtime_dependency 'flight_config'
   spec.add_runtime_dependency 'hashie'
   spec.add_runtime_dependency 'highline', '1.7.8'
   spec.add_runtime_dependency 'nodeattr_utils'
@@ -40,7 +41,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'ruby-progressbar'
   spec.add_runtime_dependency 'rubytree'
   spec.add_runtime_dependency 'terminal-table'
-  spec.add_runtime_dependency 'tty-config'
 
   # Test dependencies.
   spec.add_development_dependency 'fakefs'
@@ -51,6 +51,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler"
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-byebug'
+  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop', '~> 0.52.1'
   spec.add_development_dependency 'rubocop-rspec'
 end

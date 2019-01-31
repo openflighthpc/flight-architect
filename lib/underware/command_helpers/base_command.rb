@@ -68,6 +68,12 @@ module Underware
 
       private
 
+      # `config` is a heavily used term in underware so it is safest
+      # just to use the double underscore method
+      def __config__
+        @__config__ ||= CommandConfig.load
+      end
+
       def global_setup(options)
         setup_global_log_options(options)
         log_command

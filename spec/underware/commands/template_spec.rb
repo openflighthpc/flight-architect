@@ -34,7 +34,7 @@ RSpec.describe Underware::Commands::Template do
     expect(File.exists?(Underware::FilePath.rendered(path))).to be false
   end
 
-  let(:cluster) { Underware::Config.current_cluster }
+  let(:cluster) { Underware::CommandConfig.load.current_cluster }
 
   before :each do
     # Ensure templates directory is initially empty, so only testing with files

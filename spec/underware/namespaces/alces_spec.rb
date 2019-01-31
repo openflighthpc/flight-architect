@@ -166,7 +166,7 @@ RSpec.describe Underware::Namespaces::Alces do
 
   describe '#build_interface' do
     before :each do
-      Underware::DataCopy.init_cluster(Underware::Config.current_cluster)
+      Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
       allow(Underware::Network)
         .to receive(:available_interfaces)
         .and_return(['eth2', 'eth4'])

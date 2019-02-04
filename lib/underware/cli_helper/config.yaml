@@ -270,6 +270,11 @@ commands:
       - *platform_option
       - *render_option
 
+  export:
+    syntax: underware export [options]
+    summary: Dump the rendered templates to a zip file
+    action: Commands::Export
+
   overview:
     syntax: underware overview [options]
     summary: Gives an overview of the configured groups

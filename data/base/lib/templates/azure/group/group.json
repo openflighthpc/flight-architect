@@ -9,12 +9,12 @@ end
   "contentVersion": "1.0.0.0",
   "parameters": {
 <% networks=group.config.networks.select{|_,n| n.defined && !n.dhcp }
-networks.each_with_index do |(networkname,network),idx| -%>
-      "<%=networkname%>SubnetId": {
+networks.each_with_index do |(netname,network),idx| -%>
+      "<%=netname%>SubnetId": {
           "type": "string",
-          "defaultValue": "%<%=networkname%>SubnetID%",
+          "defaultValue": "%<%=netname%>SubnetID%",
           "metadata": {
-              "description": "The ID of the domain Network Subnet for <%=networkname%>"
+              "description": "The ID of the domain Network Subnet for <%=netname%>"
           }
       },
 <%end%>
@@ -48,10 +48,10 @@ networks.each_with_index do |(networkname,network),idx| -%>
     },
 <% end -%>
 <% networks=node.config.networks.select{|_,n| n.defined && !n.dhcp }
-networks.each_with_index do |(networkname,network),idx| -%>
+networks.each_with_index do |(netname,network),idx| -%>
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "<%=config.cluster%><%=node.name%><%=networkname%>interface",
+      "name": "<%=config.cluster%><%=node.name%><%=netname%>interface",
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
@@ -60,7 +60,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [{
-          "name": "<%=config.cluster%><%=node.name%><%=networkname%>ip",
+          "name": "<%=config.cluster%><%=node.name%><%=netname%>ip",
           "properties": {
             "privateIPAllocationMethod": "Static",
             "privateIPAddress": "<%=network.ip%>",
@@ -70,7 +70,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
             },
 <% end -%>
             "subnet": {
-              "id": "[parameters('<%=networkname%>SubnetId')]"
+              "id": "[parameters('<%=netname%>SubnetId')]"
             }
           }
         }],
@@ -126,9 +126,9 @@ networks.each_with_index do |(networkname,network),idx| -%>
         "networkProfile": {
           "networkInterfaces": [
 <% networks = config.networks.select{|_,n| n.defined && !n.dhcp}
-networks.each_with_index do |(networkname,network),idx| -%>
+networks.each_with_index do |(netname,network),idx| -%>
           {
-	    "id": "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=networkname%>interface')]",
+	    "id": "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=netname%>interface')]",
 	    "properties": {
 	      "primary": <%if network.primary%>true<%else%>false<%end%>
 	    }
@@ -139,8 +139,8 @@ networks.each_with_index do |(networkname,network),idx| -%>
       },
       "dependsOn": [
 <% networks = config.networks.select{|_,n| n.defined && !n.dhcp}
-networks.each_with_index do |(networkname,network),idx| -%>
-        "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=networkname%>interface')]"<%= (idx + 1 == networks.length) ? '' : ',' %>
+networks.each_with_index do |(netname,network),idx| -%>
+        "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=netname%>interface')]"<%= (idx + 1 == networks.length) ? '' : ',' %>
 <%end-%>
       ]  
     },

@@ -167,7 +167,7 @@ networks.each_with_index do |(netname,network),idx| -%>
           "commandToExecute": "<% unless node.config.gateway -%>ip route replace default via <%= node.config.networks.network1.gateway %> && <% end -%>curl <%= node.config.nodescripturl %> | /bin/bash | tee /tmp/mainscript-default-output"
         }
       }
-    }<%= (idx + 1 == nodes.length) ? '' : ',' %>
+    }<%= (idx + 1 == group.nodes.length) ? '' : ',' %>
 <%end -%>
   ],
   "outputs": {
@@ -185,7 +185,7 @@ networks.each_with_index do |(netname,network),idx| -%>
     "<%=node.name%>TAGgroups": {
       "type": "string",
       "value": "<%= node.genders.join(',') %>"
-    }<%= (idx + 1 == nodes.length) ? '' : ',' %>
+    }<%= (idx + 1 == group.nodes.length) ? '' : ',' %>
 <% end -%>
   }
 }    

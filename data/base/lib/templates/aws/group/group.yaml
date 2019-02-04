@@ -13,7 +13,7 @@ Parameters:
     Type: String
     Description: 'The ID of the domain Security Group'
     Default: '%securitygroup%'
-<% node.config.networks.each do |netname,network| -%>
+<% group.config.networks.each do |netname,network| -%>
 <% if network.defined -%>
   <%=netname%>SubnetId:
     Type: String

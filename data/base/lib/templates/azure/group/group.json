@@ -8,7 +8,7 @@ end
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "resources": [
-<% nodes.each_with_index do |node,idx| -%>
+<% group.nodes.each_with_index do |node,idx| -%>
 <% if node.config.role == 'login' -%>
     {
       "type": "Microsoft.Network/publicIPAddresses",
@@ -152,7 +152,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
 <%end -%>
   ],
   "outputs": {
-<% nodes.each_with_index do |node,idx| -%>
+<% group.nodes.each_with_index do |node,idx| -%>
     "<%= node.name %>TAGID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"

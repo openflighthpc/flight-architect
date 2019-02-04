@@ -40,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'recursive-open-struct'
   spec.add_runtime_dependency 'ruby-progressbar'
   spec.add_runtime_dependency 'rubytree'
+  spec.add_runtime_dependency 'rubyzip'
   spec.add_runtime_dependency 'terminal-table'
 
   # Test dependencies.

@@ -35,6 +35,18 @@ global_options:
       Suppress any warnings from being displayed
 
 subcommands:
+  cluster_delete: &cluster_delete
+    syntax: underware cluster delete CLUSTER_IDENTIFIER [options]
+    summary: Deletes the specified cluster and associated files
+    description: >
+      Deletes the configuration files and rendered templates associated
+      with the cluster. It can not delete the current cluster.
+
+
+      Deleting the 'default' cluster will remove all the current configuration.
+      It will still however be recreated as a bare cluster if required.
+    action: Commands::Cluster::Delete
+
   cluster_init: &cluster_init
     syntax: underware cluster init CLUSTER_IDENTIFIER [options]
     summary: Create a basic cluster configuration
@@ -205,11 +217,9 @@ commands:
 
       Calling the command with the `CLUSTER` argument will switch the current
       cluster before listing all the existing clusters as before.
-    options:
-      - tags: ['--delete']
-        description: 'Destroy the cluster configuration'
     action: Commands::Cluster
     subcommands:
+      delete: *cluster_delete
       init: *cluster_init
 
   configure:

@@ -43,20 +43,9 @@ module Underware
         # Load the current_cluster from the config to ensure the default
         # has been created (if required)
         __config__.current_cluster
-        options.delete ? run_delete : run_normal
-      end
-
-      def run_normal
         switch_cluster if cluster_input
         missing_check
         list_clusters
-      end
-
-      def run_delete
-        cluster = cluster_input || __config__.current_cluster
-        error_if_deleting_current_cluster(cluster)
-        error_if_cluster_missing(cluster, action: 'delete')
-        delete_cluster(cluster)
       end
 
       def missing_check
@@ -104,6 +93,15 @@ module Underware
           Can not delete the current cluster, please switch cluster and run:
           '#{Underware::APP_NAME} cluster --delete #{cluster}'
         ERROR
+      end
+
+      class Delete < Cluster
+        def run
+          cluster = cluster_input || __config__.current_cluster
+          error_if_deleting_current_cluster(cluster)
+          error_if_cluster_missing(cluster, action: 'delete')
+          delete_cluster(cluster)
+        end
       end
     end
   end

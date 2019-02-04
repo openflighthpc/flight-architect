@@ -41,6 +41,7 @@ PATH
       recursive-open-struct
       ruby-progressbar
       rubytree
+      rubyzip
       terminal-table
 
 GEM
@@ -130,6 +131,7 @@ GEM
     rubocop-rspec (1.23.0)
       rubocop (>= 0.52.1)
     ruby-progressbar (1.10.0)
+    rubyzip (1.2.2)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)

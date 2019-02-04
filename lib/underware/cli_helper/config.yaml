@@ -35,24 +35,63 @@ global_options:
       Suppress any warnings from being displayed
 
 subcommands:
+  cluster_delete: &cluster_delete
+    syntax: underware cluster delete CLUSTER_IDENTIFIER [options]
+    summary: Deletes the specified cluster and associated files
+    description: >
+      Deletes the configuration files and rendered templates associated
+      with the cluster. It can not delete the current cluster.
+    action: Commands::Cluster::Delete
+
+  cluster_init: &cluster_init
+    syntax: underware cluster init CLUSTER_IDENTIFIER [options]
+    summary: Create a basic cluster configuration
+    description: >
+      Creates a new cluster with a basic cluster layout. This command will
+      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
+      the configuration is saved.
+
+      Please use the `cluster` command to manage the current cluster.
+    options:
+      - tags: [-b, --bare]
+        description: 'Setup a new cluster without any configuration'
+    action: Commands::Init
+
+  cluster_list: &cluster_list
+    syntax: underware cluster list [options]
+    summary: List the current and available clusters
+    description: >
+      Returns a list of all available clusters. The current cluster is marked
+      by an asterisks ('*')
+    action: Commands::Cluster
+
+  cluster_switch: &cluster_switch
+    syntax: underware cluster switch CLUSTER_IDENTIFIER [options]
+    summary: Change the current cluster
+    description: >
+      Change the current cluster to CLUSTER_IDENTIFIER. The cluster must exist
+      before it can be switched to. Use the `cluster init` command to create
+      a new cluster
+    action: Commands::Cluster
+
   configure_domain: &configure_domain
     syntax: underware configure domain [options]
     summary: Configure Underware domain
     description: >
-      Asks a sequence of questions to configure the domain for this Underware
-      installation. The configuration answers will then be used when rendering
-      templates.
+      General configuration questions about how the cluster should be setup.
+      The configuration answers will then be used when rendering templates.
     action: Commands::Configure::Domain
     options:
       - *configure_answers_option
 
   configure_group: &configure_group
-    syntax: underware configure group GROUP_NAME [NODE_RANGE] [options]
-    summary: Configure a Underware group
+    syntax: underware configure group GROUP [NODE_RANGE] [options]
+    summary: Add or modifies a group of nodes within the cluster
     description: >
-      Asks a sequence of questions to configure a group for this Underware
-      installation. The configuration answers will then be used when rendering
-      templates.
+      Configure a group of nodes within the cluster. The `GROUP` will be
+      automatically created and assigned an index. The `NODE_RANGE` will add
+      the nodes to the group (see below). The answers will be used when rendering
+      templates specific to the group/nodes.
 
 
       The NODE_RANGE specifies the nodes to be added to the group. It supports
@@ -77,12 +116,15 @@ subcommands:
         description: 'A comma separated list of additional secondary groups'
 
   configure_node: &configure_node
-    syntax: underware configure node NODE_NAME [options]
+    syntax: underware configure node NODE [options]
     summary: Configure a Underware node
     description: >
-      Asks a sequence of questions to configure a node for this Underware
-      installation. The configuration answers will then be used when rendering
-      templates.
+      Additional qustions or overrides about a particular node. This will update
+      the configuration for this node only.
+
+      This allows for a single node to be configured differently within a group.
+      If the `NODE` does not exist, it is automatically assigned to the orphan
+      group.
     action: Commands::Configure::Node
     options:
       - *configure_answers_option
@@ -183,23 +225,18 @@ subcommands:
 commands:
   cluster:
     syntax: underware cluster [CLUSTER] [options]
-    summary: List, switch, and delete cluster configurations
-    description: >
-      If called without any arguments, the existing clusters are listed with
-      the current cluster highlighted with an asterisk.
-
-
-      Calling the command with the `CLUSTER` argument will switch the current
-      cluster before listing all the existing clusters as before.
-    options:
-      - tags: ['--delete']
-        description: 'Destroy the cluster configuration'
-    action: Commands::Cluster
+    summary: Initialize, list, switch, and delete cluster configurations
+    subcommands:
+      delete: *cluster_delete
+      list: *cluster_list
+      init: *cluster_init
+      switch: *cluster_switch
 
   configure:
     syntax: underware configure [SUB_COMMAND] [options]
-    summary: Configure different aspects of this Underware installation
+    summary: Manage the cluster and node configurations
     subcommands:
+      cluster: *configure_domain
       domain: *configure_domain
       group: *configure_group
       node: *configure_node
@@ -233,19 +270,10 @@ commands:
       - *platform_option
       - *render_option
 
-  init: &init
-    syntax: underware init CLUSTER_IDENTIFIER [options]
-    summary: Create a basic cluster configuration
-    description: >
-      Creates a new cluster with a basic cluster layout. This command will
-      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
-      the configuration is saved.
-
-      Please use the `cluster` command to manage the current cluster.
-    options:
-      - tags: [-b, --bare]
-        description: 'Setup a new cluster without any configuration'
-    action: Commands::Init
+  export:
+    syntax: underware export [options]
+    summary: Dump the rendered templates to a zip file
+    action: Commands::Export
 
   overview:
     syntax: underware overview [options]

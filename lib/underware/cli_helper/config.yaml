@@ -41,10 +41,6 @@ subcommands:
     description: >
       Deletes the configuration files and rendered templates associated
       with the cluster. It can not delete the current cluster.
-
-
-      Deleting the 'default' cluster will remove all the current configuration.
-      It will still however be recreated as a bare cluster if required.
     action: Commands::Cluster::Delete
 
   cluster_init: &cluster_init
@@ -60,6 +56,23 @@ subcommands:
       - tags: [-b, --bare]
         description: 'Setup a new cluster without any configuration'
     action: Commands::Init
+
+  cluster_list: &cluster_list
+    syntax: underware cluster list [options]
+    summary: List the current and available clusters
+    description: >
+      Returns a list of all available clusters. The current cluster is marked
+      by an asterisks ('*')
+    action: Commands::Cluster
+
+  cluster_switch: &cluster_switch
+    syntax: underware cluster switch CLUSTER_IDENTIFIER [options]
+    summary: Change the current cluster
+    description: >
+      Change the current cluster to CLUSTER_IDENTIFIER. The cluster must exist
+      before it can be switched to. Use the `cluster init` command to create
+      a new cluster
+    action: Commands::Cluster
 
   configure_domain: &configure_domain
     syntax: underware configure domain [options]
@@ -209,18 +222,12 @@ subcommands:
 commands:
   cluster:
     syntax: underware cluster [CLUSTER] [options]
-    summary: List, switch, and delete cluster configurations
-    description: >
-      If called without any arguments, the existing clusters are listed with
-      the current cluster highlighted with an asterisk.
-
-
-      Calling the command with the `CLUSTER` argument will switch the current
-      cluster before listing all the existing clusters as before.
-    action: Commands::Cluster
+    summary: Initialize, list, switch, and delete cluster configurations
     subcommands:
       delete: *cluster_delete
+      list: *cluster_list
       init: *cluster_init
+      switch: *cluster_switch
 
   configure:
     syntax: underware configure [SUB_COMMAND] [options]

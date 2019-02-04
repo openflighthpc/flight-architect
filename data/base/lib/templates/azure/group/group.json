@@ -7,6 +7,25 @@ end
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "parameters": {
+<% networks=group.config.networks.select{|_,n| n.defined && !n.dhcp }
+networks.each_with_index do |(networkname,network),idx| -%>
+      "<%=networkname%>SubnetId": {
+          "type": "string",
+          "defaultValue": "%<%=networkname%>SubnetID%",
+          "metadata": {
+              "description": "The ID of the domain Network Subnet for <%=networkname%>"
+          }
+      },
+<%end%>
+      "securityGroup": {
+          "type": "string",
+          "defaultValue": "%securitygroup%",
+          "metadata": {
+              "description": "The ID of the domain Security Group"
+          }
+      }
+  },
   "resources": [
 <% group.nodes.each_with_index do |node,idx| -%>
 <% if node.config.role == 'login' -%>
@@ -51,12 +70,12 @@ networks.each_with_index do |(networkname,network),idx| -%>
             },
 <% end -%>
             "subnet": {
-              "id": "%<%=networkname%>SubnetID%"
+              "id": "[parameters('<%=networkname%>SubnetId')]"
             }
           }
         }],
         "networkSecurityGroup": {
-          "id": "%securitygroup%"
+          "id": "[parameters('securitygroup')]"
         }
       }<%if network.primary && node.config.role == 'login'%>,
       "dependsOn": [

@@ -35,6 +35,20 @@ global_options:
       Suppress any warnings from being displayed
 
 subcommands:
+  cluster_init: &cluster_init
+    syntax: underware cluster init CLUSTER_IDENTIFIER [options]
+    summary: Create a basic cluster configuration
+    description: >
+      Creates a new cluster with a basic cluster layout. This command will
+      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
+      the configuration is saved.
+
+      Please use the `cluster` command to manage the current cluster.
+    options:
+      - tags: [-b, --bare]
+        description: 'Setup a new cluster without any configuration'
+    action: Commands::Init
+
   configure_domain: &configure_domain
     syntax: underware configure domain [options]
     summary: Configure Underware domain
@@ -195,6 +209,8 @@ commands:
       - tags: ['--delete']
         description: 'Destroy the cluster configuration'
     action: Commands::Cluster
+    subcommands:
+      init: *cluster_init
 
   configure:
     syntax: underware configure [SUB_COMMAND] [options]
@@ -232,20 +248,6 @@ commands:
       - *color_output
       - *platform_option
       - *render_option
-
-  init: &init
-    syntax: underware init CLUSTER_IDENTIFIER [options]
-    summary: Create a basic cluster configuration
-    description: >
-      Creates a new cluster with a basic cluster layout. This command will
-      automatically switch to the CLUSTER_IDENTIFIER. This will determine where
-      the configuration is saved.
-
-      Please use the `cluster` command to manage the current cluster.
-    options:
-      - tags: [-b, --bare]
-        description: 'Setup a new cluster without any configuration'
-    action: Commands::Init
 
   overview:
     syntax: underware overview [options]

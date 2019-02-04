@@ -1,0 +1,20 @@
+<volume type='file'>
+  <name><%= node.name %></name>
+  <key><%= node.config.vm_disk_pool %>/<%= node.name %></key>
+  <source>
+  </source>
+  <capacity unit='G'><%= node.config.vm_root_disk_size %></capacity>
+  <target>
+    <path><%= node.config.vm_disk_pool_path %>/<%= node.name %></path>
+    <format type='qcow2'/>
+    <permissions>
+      <mode>0644</mode>
+      <owner>0</owner>
+      <group>0</group>
+    </permissions>
+    <compat>1.1</compat>
+    <features>
+      <lazy_refcounts/>
+    </features>
+  </target>
+</volume>

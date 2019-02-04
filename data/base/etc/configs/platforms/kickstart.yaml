@@ -1,0 +1,2 @@
+disklabel: sda
+kernelappendoptions: "console=tty0 console=ttyS1,115200n8"

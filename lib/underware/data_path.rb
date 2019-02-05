@@ -71,16 +71,8 @@ module Underware
       template(dir, scope, *parts)
     end
 
-    # Add the rendered file helper methods
-    def rendered_file(*parts, platform:, scope:, name: nil, core: false)
-      section = core ? Constants::CONTENT_DIR_NAME : 'platform'
-      if scope.to_s == 'domain'
-        rendered(platform, scope, section, *parts)
-      elsif name
-        rendered(platform, scope, name, section, *parts)
-      else
-        raise InternalError, 'The name has not been set'
-      end
+    def rendered_file(*a, name: nil, **h)
+      raw_rendered_file(*a, name: name, **h).sub('__name__', name.to_s)
     end
 
     # Generate named yaml path methods
@@ -103,6 +95,20 @@ module Underware
         define_method(:"#{type}_#{method}") do |name|
           join(path, type.pluralize, "#{name}.yaml")
         end
+      end
+    end
+
+    private
+
+    # Add the rendered file helper methods
+    def raw_rendered_file(*parts, platform:, scope:, name: nil, core: false)
+      section = core ? Constants::CONTENT_DIR_NAME : 'platform'
+      if scope.to_s == 'domain'
+        rendered(platform, scope, section, *parts)
+      elsif name
+        rendered(platform, scope, name, section, *parts)
+      else
+        raise InternalError, 'The name has not been set'
       end
     end
   end

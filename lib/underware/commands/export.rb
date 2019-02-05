@@ -31,11 +31,11 @@ module Underware
       def run
         paths = DataPath.cluster(CommandConfig.load.current_cluster)
         Zip::File.open(generate_export_path, Zip::File::CREATE) do |zip|
-          Dir.glob(paths.template('**/*'))
+          Dir.glob(paths.rendered('**/*'))
              .map { |p| Pathname.new(p) }
              .reject(&:directory?)
              .each do |path|
-            zip.add(path.relative_path_from(Pathname.new(paths.template)), path)
+            zip.add(path.relative_path_from(Pathname.new(paths.rendered)), path)
           end
           puts "Exported: #{zip.name}"
         end

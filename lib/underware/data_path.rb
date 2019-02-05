@@ -66,6 +66,11 @@ module Underware
       define_method(method) { |*a| join(path, *a) }
     end
 
+    # Helper function for finding a specific platform template
+    def template_file(*parts, dir:, scope:)
+      template(dir, scope, *parts)
+    end
+
     # Add the rendered file helper methods
     def rendered_file(*parts, platform:, scope:, name: nil, core: false)
       section = core ? Constants::CONTENT_DIR_NAME : platform

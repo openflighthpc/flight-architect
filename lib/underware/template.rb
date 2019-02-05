@@ -13,9 +13,10 @@ module Underware
 
       private
 
-      def templates_in_dir(cluster, template_dir, scope_type:)
+      def templates_in_dir(cluster, dir, scope_type:)
         paths = DataPath.cluster(cluster)
-        Pathname.glob(paths.template(template_dir, scope_type, '**/*'))
+        glob = paths.template_file('**/*', dir: dir, scope: scope_type)
+        Pathname.glob(glob)
                 .select(&:file?)
                 .map { |p| p.relative_path_from(paths.template) }
                 .map { |p| new(cluster, p) }

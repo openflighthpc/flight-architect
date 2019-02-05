@@ -46,7 +46,7 @@ module Underware
     attr_reader :base
 
     def join(*join_path)
-      File.join(base, *join_path.flatten)
+      File.join(base, *join_path.flatten.map(&:to_s))
     end
 
     # Generate static path methods
@@ -63,6 +63,19 @@ module Underware
       rendered: ['var', 'rendered']
     }.each do |method, path|
       define_method(method) { |*a| join(path, *a) }
+    end
+
+    # Add the rendered file helper methods
+    [:platform, :core].each do |helper|
+      define_method(:"rendered_#{helper}") do |scope, *a, **h|
+        if scope.to_s == 'domain'
+          rendered(scope, helper, *a)
+        elsif h.key?(:name)
+          rendered(scope, h[:name], helper, *a)
+        else
+          raise InternalError, ':name input is missing'
+        end
+      end
     end
 
     # Generate named yaml path methods

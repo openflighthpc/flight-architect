@@ -155,7 +155,7 @@ RSpec.describe Underware::ClusterAttr do
     describe '#path' do
       it 'returns a cluster path' do
         base = Underware::DataPath.cluster(subject.cluster).base
-        expect(subject.path).to match(/#{base}.*\.yaml/)
+        expect(subject.path.to_s).to match(/#{base}.*\.yaml/)
       end
     end
   end

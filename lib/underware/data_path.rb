@@ -33,7 +33,7 @@ module Underware
     end
 
     def initialize(cluster: nil, base: nil, overlay: nil)
-      @base = if base
+      input = if base
                 base
               elsif cluster
                 File.join(Config.storage_path, 'clusters', cluster)
@@ -41,12 +41,13 @@ module Underware
                 overlay ||= 'base'
                 File.join(Config.install_path, 'data', overlay)
               end
+      @base = Pathname.new(input)
     end
 
     attr_reader :base
 
     def join(*join_path)
-      File.join(base, *join_path.flatten.map(&:to_s))
+      Pathname.new(File.join(base, *join_path.flatten.map(&:to_s)))
     end
 
     # Generate static path methods

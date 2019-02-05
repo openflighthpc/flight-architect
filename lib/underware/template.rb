@@ -1,6 +1,6 @@
 
 module Underware
-  Template = Struct.new(:cluster, :template_path) do
+  Template = Struct.new(:cluster, :relative_path) do
     TEMPLATES_DIR_PATH = Pathname.new(FilePath.templates_dir)
 
     class << self
@@ -17,9 +17,10 @@ module Underware
 
       def templates_in_dir(cluster, templates_dir_name, scope_type:)
         glob = "#{TEMPLATES_DIR_PATH}/#{templates_dir_name}/#{scope_type}/**/*"
-        Pathname.glob(glob).select(&:file?).map do |template_path|
-          new(cluster, template_path)
-        end
+        Pathname.glob(glob)
+                .select(&:file?)
+                .map { |p| p.relative_path_from(TEMPLATES_DIR_PATH) }
+                .map { |p| new(cluster, p) }
       end
     end
 
@@ -29,6 +30,10 @@ module Underware
       Utils.create_file(rendered_path, content: rendered_template)
     end
 
+    def template_path
+      data_path.template(relative_path)
+    end
+
     private
 
     def data_path
@@ -36,8 +41,6 @@ module Underware
     end
 
     def rendered_path_for_namespace(namespace)
-      template_dir = Pathname.new(data_path.template)
-      relative_path = template_path.relative_path_from(template_dir)
       platform_part, scope_type_part, *rest = relative_path.each_filename.to_a
 
       # Content templates should be rendered once for each platform, to

@@ -1,25 +1,23 @@
 
 module Underware
   Template = Struct.new(:cluster, :relative_path) do
-    TEMPLATES_DIR_PATH = Pathname.new(FilePath.templates_dir)
-
     class << self
-      def all_under_directory(cluster, templates_dir_name)
+      def all_under_directory(cluster, template_dir)
         [:domain, :group, :node].map do |scope_type|
           [
             scope_type,
-            templates_in_dir(cluster, templates_dir_name, scope_type: scope_type)
+            templates_in_dir(cluster, template_dir, scope_type: scope_type)
           ]
         end.to_h
       end
 
       private
 
-      def templates_in_dir(cluster, templates_dir_name, scope_type:)
-        glob = "#{TEMPLATES_DIR_PATH}/#{templates_dir_name}/#{scope_type}/**/*"
-        Pathname.glob(glob)
+      def templates_in_dir(cluster, template_dir, scope_type:)
+        paths = DataPath.cluster(cluster)
+        Pathname.glob(paths.template(template_dir, scope_type, '**/*'))
                 .select(&:file?)
-                .map { |p| p.relative_path_from(TEMPLATES_DIR_PATH) }
+                .map { |p| p.relative_path_from(paths.template) }
                 .map { |p| new(cluster, p) }
       end
     end

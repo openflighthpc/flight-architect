@@ -2,8 +2,7 @@
 
 ## Installing from Git
 
-Underware uses ruby `2.4.1` with a corresponding version of `bundler`. It can
-be installed from source using:
+Underware requires at least version `2.5` of Ruby with a corresponding version of `bundler`. It can be installed from source using:
 
 ```
 git clone https://github.com/alces-software/underware.git

@@ -8,6 +8,19 @@ clustername="#{config.cluster}"
 -%>
 ---
 Description: 'Flight Domain Template'
+Parameters:
+  securityGroup:
+    Type: String
+    Description: 'The ID of the domain Security Group'
+    Default: '%securitygroup%'
+<% group.config.networks.each do |netname,network| -%>
+<% if network.defined -%>
+  <%=netname%>SubnetId:
+    Type: String
+    Description: 'The ID of the domain Network Subnet for <%=netname%>'
+    Default: '%<%=netname%>SubnetID%'
+<% end -%>
+<% end -%>
 Mappings:
   RegionMap:
     eu-west-1:
@@ -15,7 +28,7 @@ Mappings:
     eu-west-2:
       "AMI": "ami-c5f11ea2"
 Resources:
-<% nodes.each do |node| -%>
+<% group.nodes.each do |node| -%>
 <% name=node.name -%>
 <% node.config.networks.each do |netname,network| -%>
 <% if network.defined -%>
@@ -25,9 +38,9 @@ Resources:
     Properties:
       SourceDestCheck: false
       GroupSet:
-        - %securitygroup%
+        - !Ref securityGroup
       PrivateIpAddress: <%=network.ip %>
-      SubnetId: %<%=netname%>SubnetID%
+      SubnetId: !Ref <%=netname%>SubnetId
       Tags:
         -
           Key: 'Name'
@@ -92,7 +105,7 @@ Resources:
 <% end -%>
 
 Outputs:
-<% nodes.each do |node| -%>
+<% group.nodes.each do |node| -%>
   <%=node.name%>TAGID:
     Description: <%=node.name%>TAGID
     Value: !Ref <%=node.name%>

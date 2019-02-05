@@ -8,6 +8,19 @@ clustername="#{config.cluster}"
 -%>
 ---
 Description: 'Flight Domain Template'
+Parameters:
+  securityGroup:
+    Type: String
+    Description: 'The ID of the domain Security Group'
+    Default: '%securitygroup%'
+<% node.config.networks.each do |netname,network| -%>
+<% if network.defined -%>
+  <%=netname%>SubnetId:
+    Type: String
+    Description: 'The ID of the domain Network Subnet for <%=netname%>'
+    Default: '%<%=netname%>SubnetID%'
+<% end -%>
+<% end -%>
 Mappings:
   RegionMap:
     eu-west-1:

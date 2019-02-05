@@ -34,6 +34,7 @@ if [ ! -x /opt/flight/bin/bundle ]; then
     exit 1
 fi
 
+source /etc/profile.d/alces-flight.sh
 
 # Detect whether script is being curled or run locally from within `scripts` directory
 SCRIPT_PARENT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)

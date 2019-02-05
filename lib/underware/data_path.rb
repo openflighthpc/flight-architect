@@ -73,11 +73,11 @@ module Underware
 
     # Add the rendered file helper methods
     def rendered_file(*parts, platform:, scope:, name: nil, core: false)
-      section = core ? Constants::CONTENT_DIR_NAME : platform
+      section = core ? Constants::CONTENT_DIR_NAME : 'platform'
       if scope.to_s == 'domain'
-        rendered(platform, scope, section, *a)
+        rendered(platform, scope, section, *parts)
       elsif name
-        rendered(platform, scope, name, section, *a)
+        rendered(platform, scope, name, section, *parts)
       else
         raise InternalError, 'The name has not been set'
       end

@@ -40,29 +40,17 @@ module Underware
     end
 
     def rendered_path_for_namespace(namespace)
-      platform_part, scope_type_part, *rest = relative_path.each_filename.to_a
+      template_dir, _, *rest = relative_path.each_filename.to_a
 
-      # Content templates should be rendered once for each platform, to
-      # platform-specific directory, therefore if platform part of path is
-      # 'content' directory this should be replaced with platform name in
-      # rendered path.
-      if platform_part == Constants::CONTENT_DIR_NAME
-        platform_part = namespace.platform.to_s
-      end
+      # Platform specific file are stored separately from the core templates
+      platform = namespace.platform.to_s
+      platform_template = (template_dir == platform)
 
-      namespace_name_dirs = any_namespace_name_dirs(namespace)
-      Pathname.new(FilePath.rendered).join(
-        platform_part, scope_type_part, *namespace_name_dirs, *rest
-      )
-    end
-
-    def any_namespace_name_dirs(namespace)
-      scope_type = namespace.scope_type
-      case scope_type
-      when :domain then []
-      when :group, :node then [namespace.name]
-      else raise "Unhandled scope type: #{scope_type}"
-      end
+      data_path.rendered_file(*rest,
+                              platform: platform,
+                              scope: namespace.scope_type,
+                              name: namespace.name,
+                              core: !platform_template)
     end
   end
 end

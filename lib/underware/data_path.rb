@@ -66,15 +66,14 @@ module Underware
     end
 
     # Add the rendered file helper methods
-    [:platform, :core].each do |helper|
-      define_method(:"rendered_#{helper}") do |scope, *a, **h|
-        if scope.to_s == 'domain'
-          rendered(scope, helper, *a)
-        elsif h.key?(:name)
-          rendered(scope, h[:name], helper, *a)
-        else
-          raise InternalError, ':name input is missing'
-        end
+    def rendered_file(*parts, platform:, scope:, name: nil, core: false)
+      section = core ? Constants::CONTENT_DIR_NAME : platform
+      if scope.to_s == 'domain'
+        rendered(platform, scope, section, *a)
+      elsif name
+        rendered(platform, scope, name, section, *a)
+      else
+        raise InternalError, 'The name has not been set'
       end
     end
 

@@ -71,6 +71,7 @@ module Underware
       template(dir, scope, *parts)
     end
 
+    # Add the rendered file helper methods
     def rendered_file(*a, name: nil, **h)
       raw_rendered_file(*a, name: name, **h).sub('__name__', name.to_s)
     end
@@ -100,7 +101,6 @@ module Underware
 
     private
 
-    # Add the rendered file helper methods
     def raw_rendered_file(*parts, platform:, scope:, name: nil, core: false)
       section = core ? Constants::CONTENT_DIR_NAME : 'platform'
       if scope.to_s == 'domain'

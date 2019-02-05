@@ -49,7 +49,7 @@ module Underware
       # We cache this so we only load the platform templates once when a single
       # Platform instance is reused to render for multiple namespaces.
       @platform_templates ||=
-        Template.all_under_directory(name)
+        Template.all_under_directory(cluster, name)
     end
 
     def content_templates
@@ -57,7 +57,7 @@ module Underware
       # platforms these may still be loaded multiple times, once per Platform
       # instance which is rendered against.
       @content_templates ||=
-        Template.all_under_directory(Constants::CONTENT_DIR_NAME)
+        Template.all_under_directory(cluster, Constants::CONTENT_DIR_NAME)
     end
   end
 end

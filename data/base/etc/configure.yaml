@@ -15,11 +15,6 @@ questions:
     identifier: root_ssh_key
     question: "Root user SSH key (in the format 'ssh-rsa <key data> user@host')"
 
-  - &configured_build_interface
-    identifier: configured_build_interface
-    question: 'Interface of this machine that the cluster should be built on (will determine IP of this machine to use when templating)'
-    type: interface
-
   #
   # GROUPS
   #
@@ -64,7 +59,6 @@ domain:
   - *cluster_name
   - *root_password
   - *root_ssh_key
-  - *configured_build_interface
 
   # NETWORKS
   - *domain

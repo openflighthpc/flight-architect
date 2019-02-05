@@ -31,9 +31,14 @@ module Underware
 
     private
 
+    def data_path
+      @data_path ||= DataPath.cluster(cluster)
+    end
+
     def rendered_path_for_namespace(namespace)
-      relative_path = template_path.relative_path_from(TEMPLATES_DIR_PATH)
-      platform_part, scope_type_part, *rest = relative_path.to_s.split(File::SEPARATOR)
+      template_dir = Pathname.new(data_path.template)
+      relative_path = template_path.relative_path_from(template_dir)
+      platform_part, scope_type_part, *rest = relative_path.each_filename.to_a
 
       # Content templates should be rendered once for each platform, to
       # platform-specific directory, therefore if platform part of path is

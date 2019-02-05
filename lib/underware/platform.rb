@@ -4,12 +4,12 @@ require 'ruby-progressbar'
 require 'underware/template'
 
 module Underware
-  Platform = Struct.new(:name) do
+  Platform = Struct.new(:cluster, :name) do
     def self.all(cluster)
       glob = DataPath.cluster(cluster).platform_config('*')
       Pathname.glob(glob).map do |config_path|
-        name = config_path.basename.sub_ext('').to_s
-        new(name)
+        provider_name = config_path.basename.sub_ext('').to_s
+        new(cluster, provider_name)
       end.sort_by(&:name)
     end
 

@@ -29,8 +29,8 @@ module Underware
   APP_NAME = 'underware'
 
   module Constants
-    # Directory name where shared 'content' templates live.
-    CONTENT_DIR_NAME = 'content'
+    # Directory name where core templates live
+    CONTENT_DIR_NAME = 'core'
 
     MAXIMUM_RECURSIVE_CONFIG_DEPTH = 10
 

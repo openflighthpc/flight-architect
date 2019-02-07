@@ -9,6 +9,7 @@ module Underware
   module Namespaces
     class HashMergerNamespace
       include Mixins::ImplicitHasher
+      attr_reader :name
 
       def initialize(alces, name = nil)
         @alces = alces

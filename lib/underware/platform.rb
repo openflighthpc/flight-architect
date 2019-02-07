@@ -4,12 +4,12 @@ require 'ruby-progressbar'
 require 'underware/template'
 
 module Underware
-  Platform = Struct.new(:name) do
+  Platform = Struct.new(:cluster, :name) do
     def self.all(cluster)
       glob = DataPath.cluster(cluster).platform_config('*')
       Pathname.glob(glob).map do |config_path|
-        name = config_path.basename.sub_ext('').to_s
-        new(name)
+        provider_name = config_path.basename.sub_ext('').to_s
+        new(cluster, provider_name)
       end.sort_by(&:name)
     end
 
@@ -49,7 +49,7 @@ module Underware
       # We cache this so we only load the platform templates once when a single
       # Platform instance is reused to render for multiple namespaces.
       @platform_templates ||=
-        Template.all_under_directory(name)
+        Template.all_under_directory(cluster, name)
     end
 
     def content_templates
@@ -57,7 +57,7 @@ module Underware
       # platforms these may still be loaded multiple times, once per Platform
       # instance which is rendered against.
       @content_templates ||=
-        Template.all_under_directory(Constants::CONTENT_DIR_NAME)
+        Template.all_under_directory(cluster, Constants::CONTENT_DIR_NAME)
     end
   end
 end

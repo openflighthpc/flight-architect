@@ -33,7 +33,7 @@ module Underware
     end
 
     def initialize(cluster: nil, base: nil, overlay: nil)
-      @base = if base
+      input = if base
                 base
               elsif cluster
                 File.join(Config.storage_path, 'clusters', cluster)
@@ -41,12 +41,13 @@ module Underware
                 overlay ||= 'base'
                 File.join(Config.install_path, 'data', overlay)
               end
+      @base = Pathname.new(input)
     end
 
     attr_reader :base
 
     def join(*join_path)
-      File.join(base, *join_path.flatten)
+      Pathname.new(File.join(base, *join_path.flatten.map(&:to_s)))
     end
 
     # Generate static path methods
@@ -63,6 +64,16 @@ module Underware
       rendered: ['var', 'rendered']
     }.each do |method, path|
       define_method(method) { |*a| join(path, *a) }
+    end
+
+    # Helper function for finding a specific platform template
+    def template_file(*parts, dir:, scope:)
+      template(dir, scope, *parts)
+    end
+
+    # Add the rendered file helper methods
+    def rendered_file(*a, name: nil, **h)
+      raw_rendered_file(*a, name: name, **h).sub('__name__', name.to_s)
     end
 
     # Generate named yaml path methods
@@ -85,6 +96,19 @@ module Underware
         define_method(:"#{type}_#{method}") do |name|
           join(path, type.pluralize, "#{name}.yaml")
         end
+      end
+    end
+
+    private
+
+    def raw_rendered_file(*parts, platform:, scope:, name: nil, core: false)
+      section = core ? Constants::CONTENT_DIR_NAME : 'platform'
+      if scope.to_s == 'domain'
+        rendered(platform, scope, section, *parts)
+      elsif name
+        rendered(platform, scope, name, section, *parts)
+      else
+        raise InternalError, 'The name has not been set'
       end
     end
   end

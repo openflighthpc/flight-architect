@@ -28,7 +28,7 @@ RSpec.describe Underware::DataPath do
   shared_examples 'generic path interface' do
     describe '#base' do
       it 'returns the dynamic base path' do
-        expect(subject.base).to eq(base_path)
+        expect(subject.base.to_s).to eq(base_path)
       end
     end
 
@@ -37,11 +37,11 @@ RSpec.describe Underware::DataPath do
       let(:absolute_path) { File.join(base_path, join_path) }
 
       it 'returns the absolute path join to the base path' do
-        expect(subject.join(join_path)).to eq(absolute_path)
+        expect(subject.join(join_path).to_s).to eq(absolute_path)
       end
 
       it 'wraps File.join' do
-        expect(subject.join(*join_path.split('/'))).to eq(absolute_path)
+        expect(subject.join(*join_path.split('/')).to_s).to eq(absolute_path)
       end
     end
   end

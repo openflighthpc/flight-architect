@@ -1,25 +1,25 @@
 
 module Underware
-  Template = Struct.new(:template_path) do
-    TEMPLATES_DIR_PATH = Pathname.new(FilePath.templates_dir)
-
+  Template = Struct.new(:cluster, :relative_path) do
     class << self
-      def all_under_directory(templates_dir_name)
+      def all_under_directory(cluster, template_dir)
         [:domain, :group, :node].map do |scope_type|
           [
             scope_type,
-            templates_in_dir(templates_dir_name, scope_type: scope_type)
+            templates_in_dir(cluster, template_dir, scope_type: scope_type)
           ]
         end.to_h
       end
 
       private
 
-      def templates_in_dir(templates_dir_name, scope_type:)
-        glob = "#{TEMPLATES_DIR_PATH}/#{templates_dir_name}/#{scope_type}/**/*"
-        Pathname.glob(glob).select(&:file?).map do |template_path|
-          new(template_path)
-        end
+      def templates_in_dir(cluster, dir, scope_type:)
+        paths = DataPath.cluster(cluster)
+        glob = paths.template_file('**/*', dir: dir, scope: scope_type)
+        Pathname.glob(glob)
+                .select(&:file?)
+                .map { |p| p.relative_path_from(paths.template) }
+                .map { |p| new(cluster, p) }
       end
     end
 
@@ -29,33 +29,28 @@ module Underware
       Utils.create_file(rendered_path, content: rendered_template)
     end
 
-    private
-
-    def rendered_path_for_namespace(namespace)
-      relative_path = template_path.relative_path_from(TEMPLATES_DIR_PATH)
-      platform_part, scope_type_part, *rest = relative_path.to_s.split(File::SEPARATOR)
-
-      # Content templates should be rendered once for each platform, to
-      # platform-specific directory, therefore if platform part of path is
-      # 'content' directory this should be replaced with platform name in
-      # rendered path.
-      if platform_part == Constants::CONTENT_DIR_NAME
-        platform_part = namespace.platform.to_s
-      end
-
-      namespace_name_dirs = any_namespace_name_dirs(namespace)
-      Pathname.new(FilePath.rendered).join(
-        platform_part, scope_type_part, *namespace_name_dirs, *rest
-      )
+    def template_path
+      data_path.template(relative_path)
     end
 
-    def any_namespace_name_dirs(namespace)
-      scope_type = namespace.scope_type
-      case scope_type
-      when :domain then []
-      when :group, :node then [namespace.name]
-      else raise "Unhandled scope type: #{scope_type}"
-      end
+    private
+
+    def data_path
+      @data_path ||= DataPath.cluster(cluster)
+    end
+
+    def rendered_path_for_namespace(namespace)
+      template_dir, _, *rest = relative_path.each_filename.to_a
+
+      # Platform specific file are stored separately from the core templates
+      platform = namespace.platform.to_s
+      platform_template = (template_dir == platform)
+
+      data_path.rendered_file(*rest,
+                              platform: platform,
+                              scope: namespace.scope_type,
+                              name: namespace.name,
+                              core: !platform_template)
     end
   end
 end

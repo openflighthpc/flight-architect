@@ -1,4 +1,4 @@
-CENTOS7IMAGE=/Users/steve/iso/centos7.vdi
+CENTOS7IMAGE=~/iso/centos7.vdi
 EXTERNALBRIDGEADAPTER=en0
 CONSOLE=0
 
@@ -6,7 +6,7 @@ VMPATH=/tmp/alcesvm/<%=node.name%>/
 
 mkdir -p $VMPATH
 
-#STOP SHIT FIRST
+# Delete VM if it already exists
 VBoxManage controlvm <%=node.name%> poweroff
 VBoxManage unregistervm <%=node.name%> --delete
 rm -rf $VMPATH

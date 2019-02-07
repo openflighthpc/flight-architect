@@ -1,0 +1,8 @@
+<% nodes.each do |node| %>
+host <%= node.name %> {
+  hardware ethernet %<%= node.name %>MacAddress%;
+  option host-name "<%= node.name %>.<%= node.config.networks.network1.domain %>.<%= config.domain %>";
+  option routers <%= node.config.dhcp_router %>;
+  fixed-address <%= node.config.networks.network1.ip %>;
+}
+<% end %>

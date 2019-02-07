@@ -1,2 +1,5 @@
 disklabel: sda
 kernelappendoptions: "console=tty0 console=ttyS1,115200n8"
+
+# DHCP
+dhcp_router: 10.10.0.1

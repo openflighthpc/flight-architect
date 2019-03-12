@@ -1,0 +1,49 @@
+questions:
+  - &flightdirect_isserver
+    identifier: flightdirect_isserver
+    question: 'Is a login node?'
+    type: 'boolean'
+    default: false
+
+  - &flightdirect_isclient
+    identifier: flightdirect_isclient
+    question: 'Is a compute node?'
+    type: 'boolean'
+
+  - &flightdirect_iscache
+    identifier: flightdirect_iscache
+    question: 'Is a local cache server?'
+    type: 'boolean'
+    default: false
+
+  - &flightdirect_cacheserver
+    identifier: flightdirect_cacheserver
+    question: 'IP address of the cache server'
+
+  - &flightdirect_version
+    identifier: flightdirect_version
+    question: 'Version of flightdirect to install'
+    default: '2.1.3'
+
+domain:
+  - *flightdirect_isclient
+  - *flightdirect_version
+  - *flightdirect_cacheserver
+
+group:
+  - *flightdirect_isserver
+  - *flightdirect_isclient
+  - *flightdirect_version
+
+node:
+  - *flightdirect_isserver
+  - *flightdirect_isclient
+  - *flightdirect_iscache
+  - *flightdirect_version
+
+local:
+  - *flightdirect_isserver
+  - *flightdirect_isclient
+  - *flightdirect_iscache
+  - *flightdirect_version
+

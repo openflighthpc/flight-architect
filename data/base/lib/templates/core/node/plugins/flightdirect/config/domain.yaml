@@ -1,0 +1,9 @@
+priority: 20
+files:
+  setup:
+    - /var/lib/metalware/plugins/flightdirect/files/flightdirect.sh
+flightdirect_isserver: <%= node.answer.flightdirect_isserver %>
+flightdirect_isclient: <%= node.answer.flightdirect_isclient %>
+flightdirect_iscache: <%= node.answer.flightdirect_iscache %>
+flightdirect_version: <%= node.answer.flightdirect_version %>
+flightdirect_cacheserver: <%= node.answer.flightdirect_cacheserver %>

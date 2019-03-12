@@ -1,0 +1,26 @@
+questions:
+  - &nfs_isserver
+    identifier: nfs_isserver
+    question: 'Is an NFS server?'
+    type: 'boolean'
+    default: false
+        
+  - &nfs_isclient
+    identifier: nfs_isclient
+    question: 'Is an NFS client?'
+    type: 'boolean'
+
+domain:
+  - *nfs_isclient
+
+group:
+  - *nfs_isserver
+  - *nfs_isclient
+
+node:
+  - *nfs_isserver
+  - *nfs_isclient
+
+local:
+  - *nfs_isserver
+  - *nfs_isclient

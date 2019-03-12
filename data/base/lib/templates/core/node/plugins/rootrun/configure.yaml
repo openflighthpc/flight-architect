@@ -1,0 +1,32 @@
+question:
+  - &rootrun_scriptdir
+    identifier: rootrun_scriptdir
+    question: 'Directory containing rootrun scripts'
+
+  - &rootrun_userlogdir
+    identifier: rootrun_userlogdir
+    question: 'User logs directory' 
+
+  - &rootrun_adminlogdir
+    identifier: rootrun_adminlogdir
+    question: 'Admin logs directory' 
+
+domain:
+  - *rootrun_scriptdir
+  - *rootrun_userlogdir
+  - *rootrun_adminlogdir
+
+group:
+  - *rootrun_scriptdir
+  - *rootrun_userlogdir
+  - *rootrun_adminlogdir
+
+node:
+  - *rootrun_scriptdir
+  - *rootrun_userlogdir
+  - *rootrun_adminlogdir
+
+local:
+  - *rootrun_scriptdir
+  - *rootrun_userlogdir
+  - *rootrun_adminlogdir

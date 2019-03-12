@@ -1,0 +1,43 @@
+questions:
+  - &yumrepo_isserver
+    identifier: yumrepo_isserver
+    question: 'Is a repo server?'
+    type: 'boolean'
+    default: false
+    dependent:
+      - identifier: yumrepo_sourcerepos
+        question: 'Repoman source repo filenames'
+        default: 'base.upstream'
+
+  - &yumrepo_buildurl
+    identifier: yumrepo_buildurl
+    question: 'Upstream URL for nodes to build from'
+    default: 'http://mirror.ox.ac.uk/sites/mirror.centos.org/7/os/x86_64/'
+
+  - &yumrepo_useclientrepofile
+    identifier: yumrepo_useclientrepofile
+    question: 'Define an upstream repofile for nodes to use locally?'
+    type: 'boolean'
+    dependent:
+      - identifier: yumrepo_clientrepofile
+        question: 'URL for nodes'
+        default: 'http://10.10.0.1/repo/client.repo'
+
+domain:
+  - *yumrepo_buildurl
+  - *yumrepo_useclientrepofile
+
+group:
+  - *yumrepo_isserver
+  - *yumrepo_buildurl
+  - *yumrepo_useclientrepofile
+
+node:
+  - *yumrepo_isserver
+  - *yumrepo_buildurl
+  - *yumrepo_useclientrepofile
+
+local:
+  - *yumrepo_isserver
+  - *yumrepo_buildurl
+  - *yumrepo_useclientrepofile

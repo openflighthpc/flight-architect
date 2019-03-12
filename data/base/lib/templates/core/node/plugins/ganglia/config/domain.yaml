@@ -1,0 +1,6 @@
+priority: 3
+files:
+  scripts:
+    - /var/lib/metalware/plugins/ganglia/files/ganglia.sh
+ganglia_isserver: <%= node.answer.ganglia_isserver %>
+ganglia_serverip: <%= node.answer.ganglia_serverip %>

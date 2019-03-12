@@ -1,0 +1,12 @@
+priority: 1
+files:
+  scripts: 
+    - /var/lib/metalware/plugins/lustre/files/lustre.sh
+lustre_isserver: <%= node.answer.lustre_isserver %>
+lustre_isclient: <%= node.answer.lustre_isclient %>
+lustre_networks: <%= node.answer.lustre_networks %>
+lustre_mounts:
+  /mnt/lustre:
+    defined: true
+    server: mds1.ib@o2ib0
+    export: /lustre

@@ -1,0 +1,28 @@
+questions:
+  - &ipa_serverip
+    identifier: ipa_serverip
+    question: 'IP address of the IPA server'
+
+  - &ipa_servername
+    identifier: ipa_servername
+    question: 'Hostname of the IP server'
+
+  - &ipa_insecurepassword
+    identifier: ipa_insecurepassword
+    question: 'Insecure password for IPA authentication'
+
+  - &ipa_userdir
+    identifier: ipa_userdir
+    question: 'User directory for IPA users'
+
+domain:
+  - *ipa_serverip
+  - *ipa_servername
+  - *ipa_insecurepassword
+  - *ipa_userdir
+
+group: []
+
+node: []
+
+local: []

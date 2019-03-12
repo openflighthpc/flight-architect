@@ -1,0 +1,25 @@
+questions:
+  - &ganglia_isserver
+    identifier: ganglia_isserver
+    question: 'Is a Ganglia server?'
+    type: 'boolean'
+    default: false
+
+  - &ganglia_serverip
+    identifier: ganglia_serverip
+    question: 'IP address of the Ganglia server'
+
+domain:
+  - *ganglia_serverip
+
+group:
+  - *ganglia_isserver
+  - *ganglia_serverip
+
+node:
+  - *ganglia_isserver
+  - *ganglia_serverip
+
+local:
+  - *ganglia_isserver
+  - *ganglia_serverip

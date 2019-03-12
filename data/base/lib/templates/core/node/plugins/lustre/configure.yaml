@@ -1,0 +1,36 @@
+questions:
+  - &lustre_isserver
+    identifier: lustre_isserver
+    question: 'Is a Lustre server?'
+    type: 'boolean'
+    default: false
+
+  - &lustre_isclient
+    identifier: lustre_isclient
+    question: 'Is a Lustre client?'
+    type: 'boolean'
+
+  - &lustre_networks
+    identifier: lustre_networks
+    question: 'Networks to use for lustre mounts'
+    default: 'o2ib(<%= config.networks.ib.interface %>),tcp0(<%= config.networks.pri.interface %>)'
+
+domain:
+  - *lustre_isclient
+  - *lustre_networks
+
+group:
+  - *lustre_isserver
+  - *lustre_isclient
+  - *lustre_networks
+
+node:
+  - *lustre_isserver
+  - *lustre_isclient
+  - *lustre_networks
+
+local:
+  - *lustre_isserver
+  - *lustre_isclient
+  - *lustre_networks
+

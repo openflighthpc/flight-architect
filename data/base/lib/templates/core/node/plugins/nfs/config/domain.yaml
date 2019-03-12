@@ -1,0 +1,21 @@
+priority: 1
+files:
+  scripts:
+    - /var/lib/metalware/plugins/nfs/files/nfs.sh
+nfs_isserver: <%= node.answer.nfs_isserver %>
+nfs_exports:
+  /export/users:
+  /export/data:
+    # Modify the export options [optional]
+    #options: <%= config.networks.pri.network %>/<%= config.networks.pri.netmask %>(ro,no_root_squash,async)
+nfs_isclient: <%= node.answer.nfs_issclient %>
+nfs_mounts:
+  /users:
+    defined: true
+    server: 10.10.0.3
+    export: /export/users
+  /opt/data:
+    defined: true
+    server: 10.10.0.3
+    export: /export/data
+    options: intr,sync,rsize=32768,wsize=32768,_netdev

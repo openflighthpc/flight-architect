@@ -1,0 +1,6 @@
+priority: 6
+files:
+  setup:
+    - /var/lib/metalware/plugins/infiniband/files/infiniband.sh
+ib_use_installer: <%= node.answer.ib_use_installer %>
+mellanoxinstaller: <%= node.answer.mellanoxinstaller %>

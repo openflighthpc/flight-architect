@@ -1,0 +1,4 @@
+priority: 0
+files:
+  setup:
+    - /var/lib/metalware/plugins/firstrun/files/firstrun.sh

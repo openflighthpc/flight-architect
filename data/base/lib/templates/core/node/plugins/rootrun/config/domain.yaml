@@ -1,0 +1,7 @@
+priority: 15
+files:
+  setup:
+    - /var/lib/metalware/plugins/rootrun/files/rootrun.sh
+rootrun_scriptdir: <%= node.answer.rootrun_scriptdir %>
+rootrun_userlogdir: <%= node.answer.rootrun_userlogdir %>
+rootrun_adminlogdir: <%= node.answer.rootrun_adminlogdir %>

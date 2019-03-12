@@ -1,0 +1,8 @@
+priority: 2
+files:
+  scripts:
+    - /var/lib/metalware/plugins/ipa/files/ipa.sh
+ipa_serverip: <%= node.answer.ipa_serverip %>
+ipa_servername: <%= node.answer.ipa_servername %>
+ipa_insecurepassword: <%= node.answer.ipa_insecurepassword %>
+ipa_userdir: <%= node.answer.ipa_userdir %>

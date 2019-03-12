@@ -1,0 +1,4 @@
+priority: 7
+files:
+  scripts:
+    - /var/lib/metalware/plugins/nvidia/files/nvidia.sh

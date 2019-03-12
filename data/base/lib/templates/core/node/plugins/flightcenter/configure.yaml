@@ -1,0 +1,35 @@
+questions:
+  - &flightcenter_archivedir
+    identifier: flightcenter_archivedir
+    question: 'User archive directory'
+    default: ''
+
+  - &flightcenter_sharedscratchdir
+    identifier: flightcenter_sharedscratchdir
+    question: 'User shared scratch directory'
+    default: ''
+
+  - &flightcenter_localscratchdir
+    identifier: flightcenter_localscratchdir
+    question: 'User local scratch directory'
+    default: ''
+
+domain:
+  - *flightcenter_archivedir
+  - *flightcenter_sharedscratchdir
+  - *flightcenter_localscratchdir
+
+group:
+  - *flightcenter_archivedir
+  - *flightcenter_sharedscratchdir
+  - *flightcenter_localscratchdir
+
+node:
+  - *flightcenter_archivedir
+  - *flightcenter_sharedscratchdir
+  - *flightcenter_localscratchdir
+
+local:
+  - *flightcenter_archivedir
+  - *flightcenter_sharedscratchdir
+  - *flightcenter_localscratchdir

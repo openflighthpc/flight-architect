@@ -1,0 +1,37 @@
+question:
+  - &slurm_isserver
+    identifier: slurm_isserver
+    question: 'Is this the SLURM controller?'
+    type: 'boolean'
+    default: false
+
+  - &slurm_servername
+    identifier: slurm_servername
+    question: 'SLURM server name'
+
+  - &slurm_mungekey
+    identifier: slurm_mungekey
+    question: 'Munge auth key'
+
+  - &slurm_nodelist
+    identifier: slurm_nodelist
+    question: 'List of compute nodes to be available on the queue'
+    default: '<% nodes.each do |node| %><%= node.name %>,<% end %>'
+
+domain:
+  - *slurm_servername
+  - *slurm_mungekey
+  - *slurm_nodelist
+
+group:
+  - *slurm_isserver
+  - *slurm_servername
+
+node:
+  - *slurm_isserver
+  - *slurm_servername
+
+local:
+  - *slurm_isserver
+  - *slurm_servername
+

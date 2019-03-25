@@ -10,66 +10,41 @@ cd underware
 bundle install
 ```
 
-## Flight Core Installation
+## Installing with Flight Runway
 
-Underware can be installed as a tool to the flight-core environment.
+Flight Runway (and Flight Tools) provides the Ruby environment and command-line helpers for running openflightHPC tools.
 
-### Automated Installation
+To install Flight Runway, see the [Flight Runway installation docs](https://github.com/openflighthpc/flight-runway#installation>) and for Flight Tools, see the [Flight Tools installation docs](https://github.com/openflighthpc/openflight-tools#installation>).
 
-- Install Flight Core (if not already installed)
+These instructions assume that `flight-runway` and `flight-tools` have been installed from the openflightHPC yum repository and [system-wide integration](https://github.com/openflighthpc/flight-runway#system-wide-integration) enabled.
 
-```
-yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
-```
-
-- **Note: If Flight Core has just been installed then logout and in again or source `/etc/profile.d/alces-flight.sh`**
-
-- The installation script (located at `scripts/install`) has variables that can be optionally set in the curl command.
-    - `alces_INSTALL_DIR` - The directory to clone the tool into
-    - `alces_VERSION` - The version of the tool to install
-
-- Run the installation script
+Integrate Flight Architect to runway:
 
 ```
-# Standard install
-curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |/bin/bash
-
-# Installation with variables
-curl https://raw.githubusercontent.com/alces-software/underware/master/scripts/install |alces_INSTALL_DIR=/my/install/path/ alces_VERSION=dev-release /bin/bash
+[root@myhost ~]# flintegrate /opt/flight/opt/openflight-tools/tools/flight-architect.yml
+Loading integration instructions ... OK.
+Verifying instructions ... OK.
+Downloading from URL: https://github.com/alces-software/underware/archive/0.6.0-rc4.zip ... OK.
+Extracting archive ... OK.
+Performing configuration ... OK.
+Integrating ... OK.
 ```
 
-### Local Installation
-
-Instead of depending on an upstream location, Underware can be installed from a local copy of the repository in the following manner.
-
-- Install Flight Core (if not already installed)
+Flight Architect is now available via the `flight` tool::
 
 ```
-yum install https://s3-eu-west-1.amazonaws.com/alces-flight/rpms/flight-core-0.1.0%2B20190121150201-1.el7.x86_64.rpm
-```
+[root@myhost ~]# flight architect
+  NAME:
 
-- **Note: If Flight Core has just been installed then logout and in again or source `/etc/profile.d/alces-flight.sh`**
+    underware
 
-- Execute the install script from inside the `underware` directory
+  DESCRIPTION:
 
-```
-bash scripts/install
-```
+    Tool for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools
 
-*Note: Local installations will use the currently checked out branch instead of using the latest release. To override this do `alces_VERSION=branchname bash scripts/install`.*
+  COMMANDS:
 
-### Post Installation
-
-- Now logout and in again or source `/etc/profile.d/alces-flight.sh`
-
-- Underware can now be run as follows
-
-```
-flight underware
-```
-
-- Alternatively, a sandbox environment for Underware can be entered as follows
-
-```
-flight shell underware
+    cluster      Initialize, list, switch, and delete cluster configurations
+    configure    Manage the cluster and node configurations
+    <snip>
 ```

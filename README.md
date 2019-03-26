@@ -1,7 +1,7 @@
-# Alces Underware
+# Flight Architect
 
 Tool/library for managing standard config hierarchy and template rendering
-under-lying Alces clusters and other Alces tools.
+for HPC clusters and other openflightHPC tools.
 
 ## Supported platforms
 
@@ -21,7 +21,7 @@ For installation instructions please see INSTALL.md
 
 ## Usage
 
-Underware is designed to be used both as a library by other Alces tools, and as
+Flight Architect is designed to be used both as a library by other openflightHPC tools, and as
 an independent tool in its own right. Documentation has not yet been written on
 using it as a library; see below for documentation on using it as a tool.
 
@@ -35,7 +35,7 @@ The application can be invoked directly using the `bin` executable:
   DESCRIPTION:
 
     Tool for managing standard config hierarchy and template rendering under-lying Alces
-clusters and other Alces tools
+clusters and other openflightHPC tools
 
 ... etc ...
 ```
@@ -132,19 +132,6 @@ Bonus points for topic branches.
 
 ## Copyright and License
 
-AGPLv3+ License, see [LICENSE.txt](LICENSE.txt) for details.
+Eclipse Public License 2.0, see [LICENSE.txt](LICENSE.txt) for details.
 
-Copyright (C) 2018 Alces Software Ltd.
-
-Alces Underware is free software: you can redistribute it and/or modify it
-under the terms of the GNU Affero General Public License as published by the
-Free Software Foundation, either version 3 of the License, or (at your option)
-any later version.
-
-Alces Underware is made available under a dual licensing model whereby use of
-the package in projects that are licensed so as to be compatible with AGPL
-Version 3 may use the package under the terms of that license. However, if AGPL
-Version 3.0 terms are incompatible with your planned use of this package,
-alternative license terms are available from Alces Software Ltd - please direct
-inquiries about licensing to
-[licensing@alces-software.com](mailto:licensing@alces-software.com).
+Copyright (C) 2019-present Alces Flight Ltd.

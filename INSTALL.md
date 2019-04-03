@@ -1,8 +1,6 @@
 # Installing Flight Architect
 
-## Installation
-
-### Generic
+## Generic
 
 Flight Architect requires a recent version of `ruby` (2.5.1<=) and `bundler`.
 The following will install from source using `git`:
@@ -14,7 +12,7 @@ bundle install
 
 The entry script is located at `bin/architect`
 
-### Installing with Flight Runway
+## Installing with Flight Runway
 
 Flight Runway (and Flight Tools) provides the Ruby environment and command-line helpers for running openflightHPC tools.
 

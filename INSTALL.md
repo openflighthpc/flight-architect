@@ -48,6 +48,5 @@ Flight Architect is now available via the `flight` tool::
 
     cluster      Initialize, list, switch, and delete cluster configurations
     configure    Manage the cluster and node configurations
-    each         Runs a command for a node(s)
     <snip>
 ```

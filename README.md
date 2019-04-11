@@ -1,27 +1,31 @@
-# Alces Underware
+# Flight Architect
+
+## Overview
 
 Tool/library for managing standard config hierarchy and template rendering
-under-lying Alces clusters and other Alces tools.
+for HPC clusters and other openflightHPC tools.
 
-## Supported platforms
+## Installation
+
+For installation instructions please see INSTALL.md
+
+## Configuration
+
+### Supported platforms
 
 * Enterprise Linux 6 distributions: RHEL, CentOS, Scientific Linux (`el6`)
 * Enterprise Linux 7 distributions: RHEL, CentOS, Scientific Linux (`el7`)
 
-## Prerequisites
+### Prerequisites
 
 The install scripts handle the installation of all required packages from your
 distribution and will install on a minimal base.  For Enterprise Linux
 distributions installation of the `@core` and `@base` package groups is
 sufficient.
 
-## Installation
+## Operation
 
-For installation instructions please see INSTALL.md
-
-## Usage
-
-Underware is designed to be used both as a library by other Alces tools, and as
+Flight Architect is designed to be used both as a library by other openflightHPC tools, and as
 an independent tool in its own right. Documentation has not yet been written on
 using it as a library; see below for documentation on using it as a tool.
 
@@ -35,7 +39,7 @@ The application can be invoked directly using the `bin` executable:
   DESCRIPTION:
 
     Tool for managing standard config hierarchy and template rendering under-lying Alces
-clusters and other Alces tools
+clusters and other openflightHPC tools
 
 ... etc ...
 ```
@@ -44,7 +48,7 @@ clusters and other Alces tools
 
 A new generic cluster can be created using the `init` command. It will ask a few
 questions about the cluster such as its name. Then it will generate an
-one compute/ ten node cluster. 
+one compute/ ten node cluster.
 
 ```
 # bin/underware init CLUSTER_IDENTIFIER
@@ -73,7 +77,7 @@ configuration needs to use the `configure` commands.
 
 ### Advanced domain configuration
 
-Once the cluster has been created, further configuration can be done by using 
+Once the cluster has been created, further configuration can be done by using
 the `configure` commands. The `init` questions can be re-asked by reconfiguring
 the domain. Unlike the `init` command, this will not recreate the directory
 structure.
@@ -125,26 +129,29 @@ the templates are rendered to:
 
 - [Templating system](docs/templating-system.md)
 
-## Contributing
+# Contributing
 
-Fork the project. Make your feature addition or bug fix. Send a pull request.
-Bonus points for topic branches.
+Fork the project. Make your feature addition or bug fix. Send a pull
+request. Bonus points for topic branches.
 
-## Copyright and License
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
-AGPLv3+ License, see [LICENSE.txt](LICENSE.txt) for details.
+# Copyright and License
 
-Copyright (C) 2018 Alces Software Ltd.
+Eclipse Public License 2.0, see [LICENSE.txt](LICENSE.txt) for details.
 
-Alces Underware is free software: you can redistribute it and/or modify it
-under the terms of the GNU Affero General Public License as published by the
-Free Software Foundation, either version 3 of the License, or (at your option)
-any later version.
+Copyright (C) 2019-present Alces Flight Ltd.
 
-Alces Underware is made available under a dual licensing model whereby use of
-the package in projects that are licensed so as to be compatible with AGPL
-Version 3 may use the package under the terms of that license. However, if AGPL
-Version 3.0 terms are incompatible with your planned use of this package,
-alternative license terms are available from Alces Software Ltd - please direct
-inquiries about licensing to
-[licensing@alces-software.com](mailto:licensing@alces-software.com).
+This program and the accompanying materials are made available under
+the terms of the Eclipse Public License 2.0 which is available at
+[https://www.eclipse.org/legal/epl-2.0](https://www.eclipse.org/legal/epl-2.0),
+or alternative license terms made available by Alces Flight Ltd -
+please direct inquiries about licensing to
+[licensing@alces-flight.com](mailto:licensing@alces-flight.com).
+
+Flight Architect is distributed in the hope that it will be
+useful, but WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER
+EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR
+CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR
+A PARTICULAR PURPOSE. See the [Eclipse Public License 2.0](https://opensource.org/licenses/EPL-2.0) for more
+details.

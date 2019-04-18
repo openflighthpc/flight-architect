@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+No changes yet.
+
 ## [1.0.0] - 2019-04-18
 
 - First release of Flight Architect

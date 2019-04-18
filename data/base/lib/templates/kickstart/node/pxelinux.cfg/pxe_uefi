@@ -4,6 +4,6 @@ menuentry 'LOCAL' {
     exit
 }
 menuentry 'INSTALL' {
-    linuxefi boot/centos7-kernel ks=<%= config.renderedurl %>/node.ks network ks.sendmac _ALCES_BASE_HOSTNAME=<%= node.name %> <%= config.kernelappendoptions %>
+    linuxefi boot/centos7-kernel ks=<%= config.renderedurl %>/platform/node.ks network ks.sendmac _ALCES_BASE_HOSTNAME=<%= node.name %> <%= config.kernelappendoptions %>
         initrdefi boot/centos7-initrd.img
 }

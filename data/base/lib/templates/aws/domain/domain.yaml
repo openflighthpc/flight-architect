@@ -20,7 +20,7 @@ Resources:
           Key: 'Name'
           Value: '<%=clustername%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
 
   <%=clustername%>InternetGateway:
@@ -32,7 +32,7 @@ Resources:
           Key: 'Name'
           Value: '<%=clustername%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
   
   <%=clustername%>InternetGatewayAttachment:
@@ -51,7 +51,7 @@ Resources:
           Key: 'Name'
           Value: '<%=clustername%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
   
 <% config.networks.each do |networkname,network|-%>
@@ -70,7 +70,7 @@ Resources:
           Key: 'Name'
           Value: '<%=clustername%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
 <% if network.primary -%>
 
@@ -128,7 +128,7 @@ Resources:
           Key: 'Name'
           Value: '<%=clustername%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
 
 Outputs:

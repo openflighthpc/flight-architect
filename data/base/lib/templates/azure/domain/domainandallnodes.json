@@ -45,7 +45,7 @@ end
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -73,7 +73,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -100,7 +100,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -120,7 +120,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -154,7 +154,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       "apiVersion": "2016-04-30-preview",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -219,7 +219,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
       ],
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",

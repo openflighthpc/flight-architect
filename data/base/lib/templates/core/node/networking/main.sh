@@ -6,7 +6,7 @@ systemctl disable iptables
 systemctl disable NetworkManager
 
 mkdir -p /etc/systemd/system-preset
-cat <<EOF > /etc/systemd/system-preset/00-alces-base.preset
+cat <<EOF > /etc/systemd/system-preset/00-flight-base.preset
 disable libvirtd.service
 disable NetworkManager.service
 EOF

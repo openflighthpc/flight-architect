@@ -2,7 +2,7 @@ CENTOS7IMAGE=/Users/steve/iso/centos7.vdi
 EXTERNALBRIDGEADAPTER=en0
 CONSOLE=0
 
-VMPATH=/tmp/alcesvm/<%=node.name%>/
+VMPATH=/tmp/flightvm/<%=node.name%>/
 
 mkdir -p $VMPATH
 
@@ -29,7 +29,7 @@ cat << EOF > $USER
 #cloud-config
 system_info:
   default_user:
-    name: alces
+    name: centos
     lock_passwd: true
     gecos: Local Administrator
     groups: [wheel, adm, systemd-journal]

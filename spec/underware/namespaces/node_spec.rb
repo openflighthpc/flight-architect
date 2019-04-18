@@ -1,6 +1,33 @@
 
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'shared_examples/hash_merger_namespace'
 require 'shared_examples/namespace_hash_merging'
 
@@ -67,18 +94,9 @@ RSpec.describe Underware::Namespaces::Node do
       allow(Underware::HashMergers::Answer).to receive(:new)
         .and_return(answer_double)
 
-      ##
-      # Spoofs the results of NodeattrInterface
-      #
-      allow(Underware::NodeattrInterface).to \
-        receive(:genders_for_node).and_return(['primary_group'])
-      allow(Underware::NodeattrInterface).to \
-        receive(:nodes_in_gender).and_return(node_array)
-      allow(Underware::NodeattrInterface).to \
-        receive(:all_nodes).and_return(node_array)
-
-      # Spoofs the hostip
-      use_mock_determine_hostip_script
+      Underware::ClusterAttr.update(alces.cluster_identifier) do |attr|
+        node_array.each { |n| attr.add_nodes(n, groups: 'primary_group') }
+      end
     end
 
     it 'can access the node name' do
@@ -101,14 +119,21 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node.index).to eq(2)
     end
 
-    it 'has a kickstart_url' do
-      expected = "http://1.2.3.4/metalware/kickstart/#{node_name}"
-      expect(node.kickstart_url).to eq(expected)
-    end
+    context 'with a mocked ip' do
+      let(:ip) { '1.2.3.4' }
+      before do
+        allow(Underware::DeploymentServer).to receive(:ip).and_return(ip)
+      end
 
-    it 'has a build complete url' do
-      exp = "http://1.2.3.4/metalware/exec/kscomplete.php?name=#{node_name}"
-      expect(node.build_complete_url).to eq(exp)
+      it 'has a kickstart_url' do
+        expected = "http://#{ip}/metalware/kickstart/#{node_name}"
+        expect(node.kickstart_url).to eq(expected)
+      end
+
+      it 'has a build complete url' do
+        exp = "http://#{ip}/metalware/exec/kscomplete.php?name=#{node_name}"
+        expect(node.build_complete_url).to eq(exp)
+      end
     end
 
     describe '#==' do
@@ -128,46 +153,6 @@ RSpec.describe Underware::Namespaces::Node do
         expect(foonode).not_to eq(barnode)
       end
     end
-
-    describe '#local?' do
-      context 'with a regular node' do
-        subject { described_class.new(alces, 'node01') }
-
-        it { is_expected.not_to be_local }
-      end
-
-      context "with the 'local' node" do
-        subject { described_class.new(alces, 'local') }
-
-        it { is_expected.to be_local }
-      end
-    end
-
-    describe '#asset' do
-      let(:content) do
-        { node: { node_name.to_sym => 'asset_test' } }
-      end
-      let(:asset_name) { 'asset_test' }
-      let(:cache) { Underware::Cache::Asset.new }
-
-      context 'with an assigned asset' do
-        Underware::AlcesUtils.mock(self, :each) do
-          create_asset(asset_name, content)
-          cache.assign_asset_to_node(asset_name, node)
-          cache.save
-        end
-
-        it 'loads the asset data' do
-          expect(node.asset.to_h).to include(**content)
-        end
-      end
-
-      context 'without an assigned asset' do
-        it 'returns nil' do
-          expect(node.asset).to eq(nil)
-        end
-      end
-    end
   end
 
   # Test `#plugins` without the rampant mocking above.
@@ -183,6 +168,8 @@ RSpec.describe Underware::Namespaces::Node do
     let(:deactivated_plugin) { 'deactivated_plugin' }
 
     before :each do
+      Underware::DataCopy.init_cluster(Underware::CommandConfig.load.current_cluster)
+
       # Create all test plugins.
       [
         enabled_plugin,
@@ -202,10 +189,6 @@ RSpec.describe Underware::Namespaces::Node do
         Underware::Plugins.activate!(plugin)
       end
 
-      # NOTE: Must be after fs setup otherwise the initially spoofed
-      # genders file will be deleted
-      Underware::AlcesUtils.spoof_nodeattr(self)
-
       # Enable/disable plugins for node as needed.
       enabled_identifier = \
         Underware::Plugins.enabled_question_identifier(enabled_plugin)
@@ -220,7 +203,7 @@ RSpec.describe Underware::Namespaces::Node do
       )
     end
 
-    it 'only includes plugins enabled for node' do
+    xit 'only includes plugins enabled for node' do
       node_plugin_names = []
       node.plugins.each do |plugin|
         node_plugin_names << plugin.name
@@ -229,13 +212,13 @@ RSpec.describe Underware::Namespaces::Node do
       expect(node_plugin_names).to eq [enabled_plugin]
     end
 
-    it 'uses plugin namespace for each enabled plugin' do
+    xit 'uses plugin namespace for each enabled plugin' do
       first_plugin = node.plugins.first
 
       expect(first_plugin).to be_a(Underware::Namespaces::Plugin)
     end
 
-    it 'provides access to plugin namespaces by plugin name' do
+    xit 'provides access to plugin namespaces by plugin name' do
       plugin = node.plugins.enabled_plugin
 
       expect(plugin.name).to eq enabled_plugin
@@ -253,10 +236,9 @@ RSpec.describe Underware::Namespaces::Node do
       stubbed_groups = ['primary_group', 'additional_group']
 
       before :each do
-        allow(Underware::NodeattrInterface)
-          .to receive(:genders_for_node)
-          .with(test_node_name)
-          .and_return(stubbed_groups)
+        Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do |attr|
+          attr.add_nodes(test_node_name, groups: stubbed_groups)
+        end
       end
 
       include_examples 'namespace_hash_merging',
@@ -264,22 +246,6 @@ RSpec.describe Underware::Namespaces::Node do
         expected_hash_merger_input: {
           node: test_node_name,
           groups: stubbed_groups
-        }
-    end
-
-    context 'when node not in genders file' do
-      before :each do
-        allow(Underware::NodeattrInterface)
-          .to receive(:genders_for_node)
-          .with(test_node_name)
-          .and_raise(Underware::NodeNotInGendersError)
-      end
-
-      include_examples 'namespace_hash_merging',
-        description: 'passes own name as `node`, just `orphan` as `groups`',
-        expected_hash_merger_input: {
-          node: test_node_name,
-          groups: ['orphan'],
         }
     end
   end

@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
-#==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file/package is part of Alces Underware.
+# This file is part of Flight Architect.
 #
-# Alces Underware is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Affero General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
 #
-# Alces Underware is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Affero General Public License for more details.
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
 #
-# For more information on the Alces Underware, please visit:
-# https://github.com/alces-software/underware
-#==============================================================================
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 require 'underware/validation/loader'
 
@@ -87,17 +92,16 @@ RSpec.describe Underware::Validation::Loader do
     end
 
     before do
-      FileSystem.setup do |fs|
-        fs.dump(Underware::FilePath.configure, configure_questions_hash)
+      fs = Underware::Data
+      fs.dump(Underware::FilePath.configure, configure_questions_hash)
 
-        # Create example plugin.
-        fs.mkdir_p example_plugin_dir
-        example_plugin_configure_file =
-          File.join(example_plugin_dir, 'configure.yaml')
-        fs.dump(
-          example_plugin_configure_file, example_plugin_configure_questions_hash
-        )
-      end
+      # Create example plugin.
+      FileUtils.mkdir_p example_plugin_dir
+      example_plugin_configure_file =
+        File.join(example_plugin_dir, 'configure.yaml')
+      fs.dump(
+        example_plugin_configure_file, example_plugin_configure_questions_hash
+      )
     end
 
     Underware::Constants::CONFIGURE_SECTIONS.each do |section|
@@ -108,9 +112,7 @@ RSpec.describe Underware::Validation::Loader do
 
         context 'when plugin activated' do
           before do
-            FileSystem.setup do |fs|
-              fs.activate_plugin('example')
-            end
+            Underware::Plugins.activate!('example')
           end
 
           let(:plugin_enabled_question) do
@@ -143,10 +145,9 @@ RSpec.describe Underware::Validation::Loader do
 
           context 'when no configure.yaml for plugin' do
             before do
-              FileSystem.setup do |fs|
-                fs.rm_rf example_plugin_dir
-                fs.mkdir_p example_plugin_dir
-              end
+              fs = FileUtils
+              fs.rm_rf example_plugin_dir
+              fs.mkdir_p example_plugin_dir
             end
 
             include_examples 'includes_generated_plugin_enabled_question' \

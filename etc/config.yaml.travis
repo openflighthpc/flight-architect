@@ -1,0 +1,5 @@
+# vi: set syntax=yaml
+
+storage_path: ~/var/lib/underware
+log_path: ~/var/log/underware
+

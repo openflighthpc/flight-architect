@@ -1,168 +1,84 @@
 # frozen_string_literal: true
 
-#==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file/package is part of Alces Underware.
+# This file is part of Flight Architect.
 #
-# Alces Underware is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Affero General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
 #
-# Alces Underware is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Affero General Public License for more details.
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
 #
-# For more information on the Alces Underware, please visit:
-# https://github.com/alces-software/underware
-#==============================================================================
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 require 'underware/constants'
-require 'underware/file_path/config_path'
+require 'underware/data_path'
+require 'underware/command_config'
 
 module Underware
   module FilePath
     class << self
-      delegate :domain_config,
-               :group_config,
-               :node_config,
-               :local_config,
-               :config_dir,
-               to: :config_path
+      delegate_missing_to :data_path
 
-      def genders_template
-        File.join(templates_dir, 'genders')
+      def data_path
+        DataPath.cluster(CommandConfig.load.current_cluster)
       end
 
-      def templates_dir
-        File.join(internal_data_dir, 'templates')
-      end
-
-      def configure
-        File.join(internal_data_dir, 'configure.yaml')
-      end
-
-      def domain_answers
-        File.join(answers_dir, 'domain.yaml')
-      end
-
-      def group_answers(group)
-        file_name = "#{group}.yaml"
-        File.join(answers_dir, 'groups', file_name)
-      end
-
-      def node_answers(node)
-        file_name = "#{node}.yaml"
-        File.join(answers_dir, 'nodes', file_name)
-      end
-
-      def local_answers
-        node_answers('local')
-      end
-
-      def answers_dir
-        File.join(underware_storage, 'answers')
-      end
-
+      # TODO: Is this going to in built or configurable per cluster?
       def overview
-        File.join(internal_data_dir, 'overview.yaml')
+        File.join(Config.install_path, 'etc', 'overview.yaml')
       end
 
+      # NOTE: Deprecated! This method should be removed completely
+      def templates_dir
+        data_path.template
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
+      def answers_dir
+        data_path.join('answers').tap { |p| FileUtils.mkdir_p(p) }
+      end
+
+      # NOTE: Deprecated! This method should be removed completely
       def plugins_dir
-        File.join(underware_storage, 'plugins')
+        data_path.plugin
       end
 
-      def build_complete(node_namespace)
-        event(node_namespace, 'complete')
+      # NOTE: Deprecated! This is a specific method that should be extracted
+      # to a dedicated class
+      def plugin_cache
+        data_path.join('plugins.yaml')
       end
 
-      def define_constant_paths
-        Constants.constants
-                 .map(& :to_s)
-                 .select { |const| /\A.+_PATH\Z/.match?(const) }
-                 .each do |const|
-                   method_name = :"#{const.chomp('_PATH').downcase}"
-                   define_singleton_method method_name do
-                     Constants.const_get(const)
-                   end
-                 end
-      end
-
-      def event(node_namespace, event = '')
-        File.join(events_dir, node_namespace.name, event)
-      end
-
+      # NOTE: Deprecated! This is set directly from the Config
       def logs_dir
-        '/var/log/underware'
+        Config.log_path
       end
 
-      def asset_type(type)
-        File.join(underware_install, 'data/asset_types', type + '.yaml')
+      def dry_validation_errors
+        File.join(Config.install_path, 'lib/underware/validation/errors.yaml')
       end
 
-      def asset(*a)
-        record(assets_dir, *a)
-      end
-
-      def assets_dir
-        File.join(underware_storage, 'assets')
-      end
-
-      def layout(*a)
-        record(layouts_dir, *a)
-      end
-
-      def layouts_dir
-        File.join(underware_storage, 'layouts')
-      end
-
-      def asset_cache
-        File.join(cache, 'assets.yaml')
-      end
-
+      # NOTE: Deprecated! This method should be removed completely
       def namespace_data_file(name)
-        File.join(
-          Constants::NAMESPACE_DATA_PATH,
-          "#{name}.yaml"
-        )
-      end
-
-      def internal_data_dir
-        File.join(underware_install, 'data')
-      end
-
-      def platform_config(platform)
-        File.join(platform_configs_dir, "#{platform}.yaml")
-      end
-
-      def platform_configs_dir
-        File.join(config_dir, 'platforms')
-      end
-
-      def public_key
-        File.join(keys, 'id_rsa.pub')
-      end
-
-      def private_key
-        File.join(keys, 'id_rsa')
-      end
-
-      private
-
-      def record(record_dir, types_dir, name)
-        File.join(record_dir, types_dir, name + '.yaml')
-      end
-
-      def config_path
-        ConfigPath.new(base: internal_data_dir)
+        data_path.data_config(name)
       end
     end
   end
 end
-
-Underware::FilePath.define_constant_paths

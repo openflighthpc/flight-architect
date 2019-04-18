@@ -1,6 +1,33 @@
 
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'underware/validation/configure'
 
 RSpec.describe Underware::QuestionTree do
@@ -13,7 +40,6 @@ RSpec.describe Underware::QuestionTree do
         domain2: 'second_domain_identifier',
         group: 'group_identifier',
         node: 'node_identifier',
-        local: 'local_identifier',
         dependent: 'dependent_identifier',
         dependent2: 'second_dependent_identifier',
       }
@@ -50,10 +76,6 @@ RSpec.describe Underware::QuestionTree do
         node: [
           identifier: identifier_hash[:node],
           question: 'Am I a question for the node?',
-        ],
-        local: [
-          identifier: identifier_hash[:local],
-          question: 'Am I a question for the local node?',
         ],
       }
     end
@@ -133,16 +155,11 @@ RSpec.describe Underware::QuestionTree do
       { identifier: 'node_question' }
     end
 
-    let(:local_question) do
-      { identifier: 'local_question' }
-    end
-
     let(:correct_defaults) do
       {
         domain_question[:identifier].to_sym => 'domain_default',
         group_question[:identifier].to_sym => 'group_default',
         node_question[:identifier].to_sym => 'node_default',
-        local_question[:identifier].to_sym => 'local_default',
       }
     end
 
@@ -154,11 +171,6 @@ RSpec.describe Underware::QuestionTree do
                    domain_question,
                    group_question,
                    node_question),
-        local: make('local_default',
-                    domain_question,
-                    group_question,
-                    node_question,
-                    local_question),
       }
     end
 
@@ -170,7 +182,7 @@ RSpec.describe Underware::QuestionTree do
 
     let(:tree) { Underware::Validation::Configure.new(question_hash).tree }
 
-    [:domain, :group, :node, :local].each do |section|
+    [:domain, :group, :node].each do |section|
       context "when called on the '#{section}' section" do
         subject { tree.section_tree(section) }
 

@@ -1,15 +1,41 @@
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 require 'ruby-progressbar'
 
 require 'underware/template'
 
 module Underware
-  Platform = Struct.new(:name) do
-    def self.all
-      platforms_glob = "#{FilePath.platform_configs_dir}/*.yaml"
-      Pathname.glob(platforms_glob).map do |config_path|
-        name = config_path.basename.sub_ext('').to_s
-        new(name)
+  Platform = Struct.new(:cluster, :name) do
+    def self.all(cluster)
+      glob = DataPath.cluster(cluster).platform_config('*')
+      Pathname.glob(glob).map do |config_path|
+        provider_name = config_path.basename.sub_ext('').to_s
+        new(cluster, provider_name)
       end.sort_by(&:name)
     end
 
@@ -49,7 +75,7 @@ module Underware
       # We cache this so we only load the platform templates once when a single
       # Platform instance is reused to render for multiple namespaces.
       @platform_templates ||=
-        Template.all_under_directory(name)
+        Template.all_under_directory(cluster, name)
     end
 
     def content_templates
@@ -57,7 +83,7 @@ module Underware
       # platforms these may still be loaded multiple times, once per Platform
       # instance which is rendered against.
       @content_templates ||=
-        Template.all_under_directory(Constants::CONTENT_DIR_NAME)
+        Template.all_under_directory(cluster, Constants::CONTENT_DIR_NAME)
     end
   end
 end

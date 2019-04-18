@@ -1,0 +1,80 @@
+debug: true
+
+#
+# BASE
+#
+cluster: '<%= answer.cluster_name %>'
+root_password: '<%= answer.root_password %>'
+publickey: '<%= answer.root_ssh_key %>'
+role: '<%=answer.role%>'
+
+# PLATFORM: KICKSTART/LIBVIRT
+kernelappendoptions: "console=tty0 console=ttyS1,115200n8"
+
+# UPSTREAM URLS
+yumrepo_buildurl: http://mirror.ox.ac.uk/sites/mirror.centos.org/7/os/x86_64/
+renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
+nodescripturl: <%= config.renderedurl %>/main.sh
+
+# DISK
+disklabel: sda
+disksetup: |
+  clearpart --all --initlabel
+  zerombr
+  bootloader --location=mbr --driveorder=<%= config.disklabel %> --append="$bootloaderappend"
+
+  #Disk partitioning information
+  part /boot --fstype ext4 --size=4096 --asprimary --ondisk <%= config.disklabel %>
+  part pv.01 --size=1 --grow --asprimary --ondisk <%= config.disklabel %>
+  volgroup system pv.01
+  logvol  /  --fstype ext4 --vgname=system  --size=16384 --name=root
+  logvol  /var --fstype ext4 --vgname=system --size=16384 --name=var
+  logvol  /tmp --fstype ext4 --vgname=system --size=1 --grow --name=tmp
+  logvol  swap  --fstype swap --vgname=system  --size=8096  --name=swap1
+
+#
+# NETWORKS
+#
+domain: '<%= answer.domain %>'
+
+domainnetwork: '10.10.0.0'
+domainnetmask: '255.255.0.0'
+
+controllernetworking: false
+internaldns: 10.10.0.1
+searchdomains: "<%= config.networks.network1.domain %> <%= config.domain %>"
+gateway: <%= answer.is_gateway %>
+
+networks:
+  network1:
+    defined: true
+    domain:  'pri'
+    interface: 'em1'
+    short_hostname: '<%= node.name %>.<%= config.networks.network1.domain %>'
+    hostname: '<%= config.networks.network1.short_hostname %>.<%= config.domain %>'
+    ip: "10.10.<%= node.group.index %>.<%= node.index.to_i + 100 %>"
+    netmask: 255.255.224.0
+    network: 10.10.0.0
+    gateway: 10.10.0.1
+    primary: true
+  network2:
+    defined: <%= answer.network2_defined %>
+    domain: 'mgt'
+    interface: 'em2'
+    short_hostname: '<%= node.name %>.<%= config.networks.network2.domain %>'
+    hostname: '<%= config.networks.network2.short_hostname %>.<%= config.domain %>'
+    ip: "10.10.<%= node.group.index.to_i + 32 %>.<%= node.index.to_i + 100 %>"
+    netmask: 255.255.224.0
+    network: 10.10.32.0
+  network3:
+    defined: <%= answer.network3_defined %>
+    domain: 'ib'
+    interface: 'ib0'
+    short_hostname: '<%= node.name %>.<%= config.networks.network3.domain %>'
+    hostname: '<%= config.networks.network3.short_hostname %>.<%= config.domain %>'
+    ip: "10.10.<%= node.group.index.to_i + 64 %>.<%= node.index.to_i + 100 %>"
+    netmask: 255.255.224.0
+    network: 10.10.64.0
+
+external:
+  defined: <%= if config.role == 'login' then true else false end %>

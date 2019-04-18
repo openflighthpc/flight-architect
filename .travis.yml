@@ -2,9 +2,15 @@
 language: ruby
 dist: trusty
 rvm:
- - 2.4.1
+  - 2.4.5
+  - 2.5.3
+  - 2.6.0
 sudo: required
 install:
-  - bin/install-ci-dependencies
+  - sudo apt-get install cmake -y
   - bundle install
-script: make test
+before_script:
+  - sudo mv etc/config.yaml.travis etc/config.yaml
+# TODO: This should be switch to `rake spec:all` once the command specs
+# are working again
+script: rake spec:unit

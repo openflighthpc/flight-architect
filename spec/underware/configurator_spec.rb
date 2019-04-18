@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
-#==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file/package is part of Alces Underware.
+# This file is part of Flight Architect.
 #
-# Alces Underware is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Affero General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
 #
-# Alces Underware is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Affero General Public License for more details.
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
 #
-# For more information on the Alces Underware, please visit:
-# https://github.com/alces-software/underware
-#==============================================================================
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 require 'tempfile'
 require 'yaml'
@@ -233,7 +238,7 @@ RSpec.describe Underware::Configurator do
         allow(SecureRandom).to receive(:base64).and_return('mocked_salt')
       end
 
-      let :expected_encrypted_password do
+      let(:expected_encrypted_password) do
         'my_password'.crypt('$6$mocked_salt')
       end
 
@@ -536,30 +541,6 @@ RSpec.describe Underware::Configurator do
     end
   end
 
-  context 'with an orphan node' do
-    let(:orphan) { 'i_am_a_orphan_node' }
-    let(:configure_orphan) { described_class.for_node(alces, orphan) }
-
-    def new_group_cache
-      Underware::GroupCache.new
-    end
-
-    before do
-      define_questions(node: [
-                         {
-                           identifier: 'string_q',
-                           question: 'String?',
-                           default: 'default',
-                         },
-                       ])
-      configure_with_answers(['answer', 'sagh'], test_obj: configure_orphan)
-    end
-
-    it 'creates the orphan node' do
-      expect(new_group_cache.orphans).to include(orphan)
-    end
-  end
-
   context 'with a dependent questions' do
     before do
       define_questions(domain: [
@@ -594,7 +575,6 @@ RSpec.describe Underware::Configurator do
     let(:group_name) { 'my-super-awesome-group' }
     let(:group_default) { 'I am the group level yaml default' }
     let(:node_default) { 'I am the node level yaml default' }
-    let(:local_default) { 'I am the local level yaml default' }
     let(:domain_answer) { 'Domain answer with ERB, <%= node.name %>' }
     let(:identifier) { :question_identifier }
     let(:question) do
@@ -609,8 +589,7 @@ RSpec.describe Underware::Configurator do
       define_questions(
         domain: [question.merge(default: original_default)],
         group: [question.merge(default: group_default)],
-        node: [question.merge(default: node_default)],
-        local: [question.merge(default: local_default)]
+        node: [question.merge(default: node_default)]
       )
       configure_with_answers([domain_answer])
     end
@@ -707,38 +686,6 @@ RSpec.describe Underware::Configurator do
       context 'when the answer matches the group level' do
         let(:answer) { group_answer }
         let(:saved_answer) { nil }
-
-        include_examples 'gets the answer'
-      end
-    end
-
-    context 'when configuring the local node' do
-      subject do
-        alces.local.answer.to_h[identifier]
-      end
-
-      let(:load_answer) do
-        path = Underware::FilePath.local_answers
-        Underware::Data.load(path)[identifier]
-      end
-
-      before do
-        conf = described_class.for_local(alces)
-        configure_with_answers([answer], test_obj: conf)
-      end
-
-      context 'when the answer matches the domain default' do
-        let(:answer) { domain_answer }
-        let(:saved_answer) { nil }
-
-        include_examples 'gets the answer'
-      end
-
-      # The local yaml defaults should be ignored and thus treated like
-      # any other answer
-      context 'when the answer matches the local level default' do
-        let(:answer) { local_default }
-        let(:saved_answer) { local_default }
 
         include_examples 'gets the answer'
       end

@@ -1,6 +1,33 @@
 
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'ostruct'
 
 require 'underware/exceptions'
@@ -14,6 +41,7 @@ require 'underware/namespaces/hash_merger_namespace'
 require 'underware/namespaces/node'
 require 'underware/hash_mergers.rb'
 require 'underware/underware_log'
+require 'underware/cluster_attr'
 Underware::Utils::DynamicRequire.relative('.')
 
 module Underware
@@ -22,13 +50,9 @@ module Underware
       NODE_ERROR = 'Error, a Node is not in scope'
       GROUP_ERROR = 'Error, a Group is not in scope'
       DOUBLE_SCOPE_ERROR = 'A node and group can not both be in scope'
-      LOCAL_ERROR = <<-EOF.strip_heredoc
-        The local node has not been configured Please run: `underware
-        configure local`
-      EOF
 
       delegate :config, :answer, to: :scope
-      attr_reader :platform, :eager_render
+      attr_reader :platform, :eager_render, :cluster_identifier
       alias_method :alces, :itself
 
       class << self
@@ -53,6 +77,7 @@ module Underware
         @platform = platform&.to_sym
         @eager_render = eager_render
         @stacks_hash = {}
+        @cluster_identifier = CommandConfig.load.current_cluster
       end
 
       def domain
@@ -61,7 +86,7 @@ module Underware
 
       def nodes
         @nodes ||= begin
-          arr = NodeattrInterface.all_nodes.map do |node_name|
+          arr = cluster_attr.nodes_list.map do |node_name|
             Namespaces::Node.new(alces, node_name)
           end
           Namespaces::UnderwareArray.new(arr)
@@ -70,9 +95,8 @@ module Underware
 
       def groups
         @groups ||= begin
-          arr = group_cache.map do |group_name|
-            index = group_cache.index(group_name)
-            Namespaces::Group.new(alces, group_name, index: index)
+          arr = cluster_attr.groups_hash.map do |name, index|
+            Namespaces::Group.new(alces, name, index: index)
           end
           Namespaces::UnderwareArray.new(arr)
         end
@@ -82,33 +106,20 @@ module Underware
         DataFileNamespace.new
       end
 
-      def local
-        @local ||= begin
-          unless nodes.respond_to?(:local)
-            raise UninitializedLocalNode, LOCAL_ERROR
-          end
-          nodes.local
-        end
-      end
-
       def build_interface
         @build_interface ||= determine_build_interface
       end
 
       def orphan_list
-        @orphan_list ||= group_cache.orphans
+        @orphan_list ||= cluster_attr.orphans
       end
 
       def questions
         @questions ||= loader.question_tree
       end
 
-      def assets
-        @assets ||= AssetArray.new(self)
-      end
-
-      def asset_cache
-        @asset_cache ||= Underware::Cache::Asset.new
+      def cluster_attr
+        @cluster_attr ||= ClusterAttr.load(cluster_identifier)
       end
 
       def node
@@ -211,10 +222,6 @@ module Underware
 
       def wrapped_binding
         Templating::NilDetectionWrapper.wrap(self)
-      end
-
-      def group_cache
-        @group_cache ||= GroupCache.new
       end
 
       def loader

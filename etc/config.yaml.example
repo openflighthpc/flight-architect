@@ -1,0 +1,22 @@
+# vi: set syntax=yaml
+
+##
+# storage_path:
+#
+# Sets the content directory where cluster information will be stored
+# Defaults: /var/lib/underware
+#
+
+##
+# log_path:
+#
+# Sets the directory the logs will be stored in
+# Defaults: /var/log/underware
+#
+
+##
+# debug: true
+#
+# Puts underware into a debugging mode. Can also be set using an environment
+# variable: UNDERWARE_DEBUG
+#

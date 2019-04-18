@@ -1,97 +1,52 @@
-# Installing Alces Underware
+# Installing Flight Architect
 
-## Supported platforms
+## Generic
 
-Alces Underware currently supports the following platforms/distributions:
-
-* Enterprise Linux 6 distributions: RHEL, CentOS, Scientific Linux (`el6`)
-* Enterprise Linux 7 distributions: RHEL, CentOS, Scientific Linux (`el7`)
-
-## Prerequisites
-
-The install scripts handle the installation of all required packages from your
-distribution and will install on a minimal base.  For Enterprise Linux
-distributions installation of the `@core` and `@base` package groups is
-sufficient.
-
-## Basic Installation
-
-Underware is a system-level package and must be installed by the `root` user.
-
-1. Become root.
-
-   ```bash
-   sudo -s
-   ```
-
-2. Set the `alces_OS` environment variable to match the distribution on which
-   you are installing. Currently supported options are `el6` and `el7`:
-
-     ```bash
-     export alces_OS=el7
-     ```
-
-3. Invoke installation by piping output from `curl` to `bash`:
-
-   ```bash
-   curl -sL http://git.io/underware-installer | /bin/bash
-   ```
-
-   If you want to you can download the script first.  You might want to do this
-   if you want to inspect what it's going to do, or if you're nervous about it
-   being truncated during download:
-
-   ```bash
-   curl -sL http://git.io/underware-installer > /tmp/bootstrap.sh
-   less /tmp/bootstrap.sh
-   bash /tmp/bootstrap.sh
-   ```
-
-4. After installation, you can logout and login again in order to set up the
-   appropriate shell configuration, or you can source the shell configuration
-   manually:
-
-   ```bash
-   source /etc/profile.d/alces-underware.sh
-   ```
-
-## Advanced installation parameters
-
-Additional environment variables may be set to influence the installation
-process.
-
-### Build from upstream source
-
-Set the `alces_SOURCE` variable to indicate that you want to build from
-upstream source code rather than installing prebuilt binaries for your
-distribution.  Choose `fresh` to download and build components from upstream
-sources, or `dist` to use prebuilt binaries downloaded on Amazon S3.
-   
-```bash
-export alces_SOURCE=fresh
-curl -sL http://git.io/underware-installer | /bin/bash
+Flight Architect requires a recent version of `ruby` (2.5.1<=) and `bundler`.
+The following will install from source using `git`:
+```
+git clone https://github.com/openflighthpc/flight-architect.git
+cd flight-architect
+bundle install
 ```
 
-### Build from existing directory
+The entry script is located at `bin/architect`
 
-Set the `alces_SRC_DIR` variable to point to an existing clone of the
-repository.  If a clone isn't available in the path you specify the path will
-be used to house the downloaded code rather than the default
-`/tmp/underware.XXXXXX` temporary directory.
+## Installing with Flight Runway
 
-```bash
-cd /usr/src
-git clone https://github.com/alces-software/underware
-export alces_SRC_DIR=/usr/src/underware
-/usr/src/underware/scripts/bootstrap
+Flight Runway (and Flight Tools) provides the Ruby environment and command-line helpers for running openflightHPC tools.
+
+To install Flight Runway, see the [Flight Runway installation docs](https://github.com/openflighthpc/flight-runway#installation>) and for Flight Tools, see the [Flight Tools installation docs](https://github.com/openflighthpc/openflight-tools#installation>).
+
+These instructions assume that `flight-runway` and `flight-tools` have been installed from the openflightHPC yum repository and [system-wide integration](https://github.com/openflighthpc/flight-runway#system-wide-integration) enabled.
+
+Integrate Flight Architect to runway:
+
+```
+[root@myhost ~]# flintegrate /opt/flight/opt/openflight-tools/tools/flight-architect.yml
+Loading integration instructions ... OK.
+Verifying instructions ... OK.
+Downloading from URL: https://github.com/openflighthpc/flight-architect/archive/master.zip ... OK.
+Extracting archive ... OK.
+Performing configuration ... OK.
+Integrating ... OK.
 ```
 
-### Build from an alternative branch
+Flight Architect is now available via the `flight` tool::
 
-Set the `alces_SOURCE_BRANCH` variable with the name of the branch you wish to
-build.  Defaults to `master`. e.g.:
+```
+[root@myhost ~]# flight architect
+  NAME:
 
-```bash
-export alces_SOURCE_BRANCH=0.1.0
-curl -sL http://git.io/underware-installer | /bin/bash
+    flight architect
+
+  DESCRIPTION:
+
+    Tool for managing standard config hierarchy and template rendering under-lying Alces clusters and other Alces tools
+
+  COMMANDS:
+
+    cluster      Initialize, list, switch, and delete cluster configurations
+    configure    Manage the cluster and node configurations
+    <snip>
 ```

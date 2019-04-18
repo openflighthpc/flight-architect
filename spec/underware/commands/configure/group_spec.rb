@@ -1,28 +1,32 @@
 # frozen_string_literal: true
 
-#==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file/package is part of Alces Underware.
+# This file is part of Flight Architect.
 #
-# Alces Underware is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Affero General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
 #
-# Alces Underware is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Affero General Public License for more details.
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
 #
-# For more information on the Alces Underware, please visit:
-# https://github.com/alces-software/underware
-#==============================================================================
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
-require 'underware/group_cache'
 require 'underware/spec/alces_utils'
 
 RSpec.describe Underware::Commands::Configure::Group do
@@ -30,20 +34,18 @@ RSpec.describe Underware::Commands::Configure::Group do
 
   def run_configure_group(group)
     Underware::Utils.run_command(
-      Underware::Commands::Configure::Group, group
+      Underware::Commands::Configure::Group, group, 'node[01-10]'
     )
   end
 
   def update_cache
-    Underware::GroupCache.update { |c| yield c }
+    Underware::ClusterAttr.update(Underware::CommandConfig.load.current_cluster) do
+      |a| yield a
+    end
   end
 
   def new_cache
-    Underware::GroupCache.new
-  end
-
-  before do
-    mock_validate_genders_success
+    Underware::ClusterAttr.load(Underware::CommandConfig.load.current_cluster)
   end
 
   before :each do
@@ -65,36 +67,36 @@ RSpec.describe Underware::Commands::Configure::Group do
       it 'creates it and inserts new primary group' do
         run_configure_group 'testnodes'
 
-        expect(new_cache.primary_groups).to eq [
+        expect(new_cache.raw_groups).to contain_exactly *[
           'testnodes',
           'orphan',
         ]
       end
     end
 
-    context 'when `cache/groups.yaml` exists' do
+    context 'with an existing unrelated group' do
       it 'inserts primary group if new' do
-        update_cache { |c| c.add('first_group') }
+        update_cache { |c| c.add_group('firstgroup') }
 
-        run_configure_group 'second_group'
+        run_configure_group 'secondgroup'
 
-        expect(new_cache.primary_groups).to eq [
-          'first_group',
-          'second_group',
+        expect(new_cache.raw_groups).to contain_exactly *[
+          'firstgroup',
+          'secondgroup',
           'orphan',
         ]
       end
 
       it 'does nothing if primary group already present' do
-        ['first_group', 'second_group'].each do |group|
-          update_cache { |c| c.add(group) }
+        ['firstgroup', 'secondgroup'].each do |group|
+          update_cache { |c| c.add_group(group) }
         end
 
-        run_configure_group 'second_group'
+        run_configure_group 'secondgroup'
 
-        expect(new_cache.primary_groups).to eq [
-          'first_group',
-          'second_group',
+        expect(new_cache.raw_groups).to contain_exactly *[
+          'firstgroup',
+          'secondgroup',
           'orphan',
         ]
       end

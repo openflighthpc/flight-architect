@@ -1,0 +1,78 @@
+questions:
+  #
+  # BASE
+  #
+  - &cluster_name
+    identifier: cluster_name
+    question: 'Name of the cluster'
+
+  - &root_password
+    identifier: root_password
+    question: 'Password to use for root user'
+    type: password
+
+  - &root_ssh_key
+    identifier: root_ssh_key
+    question: "Root user SSH key (in the format 'ssh-rsa <key data> user@host')"
+
+  #
+  # GROUPS
+  #
+  - &role
+    identifier: role
+    question: "Role of nodes in this group"
+    choices:
+      - 'service'
+      - 'login'
+      - 'compute'
+      - 'storage'
+      - 'other'
+    default: 'other'
+
+  #
+  # NETWORKS
+  #
+  - &domain
+    identifier: domain
+    question: 'Fully-qualified domain name for cluster nodes'
+    default: '<%= domain.config.cluster %>.cluster.local'
+
+  - &network2_defined
+    identifier: network2_defined
+    question: 'Define a second network?'
+    type: boolean
+
+  - &network3_defined
+    identifier: network3_defined
+    question: 'Define a third network?'
+    type: boolean
+
+  - &is_gateway
+    identifier: is_gateway
+    question: 'Use this machine as a gateway for network traffic?'
+    type: boolean
+    default: false
+
+
+domain:
+  # BASE
+  - *cluster_name
+  - *root_password
+  - *root_ssh_key
+
+  # NETWORKS
+  - *domain
+  - *network2_defined
+  - *network3_defined
+
+group:
+  # BASE
+  - *role
+
+  # NETWORKS
+  - *network2_defined
+  - *network3_defined
+
+node:
+  - *is_gateway
+

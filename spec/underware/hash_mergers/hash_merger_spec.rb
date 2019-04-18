@@ -1,6 +1,33 @@
 
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'underware/hash_mergers'
 require 'underware/data'
 require 'underware/constants'
@@ -16,30 +43,36 @@ RSpec.describe Underware::HashMergers::HashMerger do
   before :each do
     fp = Underware::FilePath
 
-    FileSystem.setup do |fs|
-      fs.with_minimal_configure_file
+    base_configure = YAML.dump(
+      questions: [],
+      domain: [],
+      group: [],
+      node: []
+    )
+    dst = Underware::FilePath.configure
+    FileUtils.mkdir_p(File.dirname(dst))
+    File.write(dst, base_configure)
 
-      dump_data = lambda do |data, config_path, answers_path|
-        [config_path, answers_path].each do |path|
-          fs.dump(path, data)
-        end
+    dump_data = lambda do |data, config_path, answers_path|
+      [config_path, answers_path].each do |path|
+        Underware::Data.dump(path, data)
       end
-
-      # We set up various simple, identical data files for both configs and
-      # answers at different levels, so we can test that merging works
-      # correctly for both config and answer HashMergers.
-      dump_data.call(domain_data, fp.domain_config, fp.domain_answers)
-      dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
-      dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
-      dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
-
-      # Platforms only have configs, and no answers, so we only dump a single
-      # data file for the test platform config.
-      fs.dump(fp.platform_config('test_platform'), test_platform_config)
     end
+
+    # We set up various simple, identical data files for both configs and
+    # answers at different levels, so we can test that merging works
+    # correctly for both config and answer HashMergers.
+    dump_data.call(domain_data, fp.domain_config, fp.domain_answers)
+    dump_data.call(group1_data, fp.group_config('group1'), fp.group_answers('group1'))
+    dump_data.call(group2_data, fp.group_config('group2'), fp.group_answers('group2'))
+    dump_data.call(node3_data, fp.node_config('node3'), fp.node_answers('node3'))
+
+    # Platforms only have configs, and no answers, so we only dump a single
+    # data file for the test platform config.
+    Underware::Data.dump(fp.platform_config('test_platform'), test_platform_config)
   end
 
-  let :domain_data do
+  let(:domain_data) do
     {
       value0: 'domain',
       value1: 'domain',
@@ -49,7 +82,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :group1_data do
+  let(:group1_data) do
     {
       value2: 'group1',
       value3: 'group1',
@@ -57,7 +90,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :group2_data do
+  let(:group2_data) do
     {
       value1: 'group2',
       value2: 'group2',
@@ -66,20 +99,20 @@ RSpec.describe Underware::HashMergers::HashMerger do
     }
   end
 
-  let :node3_data do
+  let(:node3_data) do
     {
       value3: 'node3',
       value4: 'node3',
     }
   end
 
-  let :test_platform_config do
+  let(:test_platform_config) do
     {
       value4: 'test_platform'
     }
   end
 
-  let :merged_namespace do
+  def merged_namespace
     config = Underware::HashMergers::Config
       .new(eager_render: false)
       .merge(**hash_input, &:itself)
@@ -95,7 +128,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
     end
 
     context 'when platform included in hash' do
-      let :hash_input do
+      let(:hash_input) do
         super().merge(platform: 'test_platform')
       end
 
@@ -110,19 +143,19 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with domain scope' do
-    let :hash_input { {} }
+    let(:hash_input) { {} }
 
-    let :expected_merged_config { domain_data }
+    let(:expected_merged_config) { domain_data }
 
     it_behaves_like 'it handles merging config, with and without platform specified'
   end
 
   context 'with single group' do
-    let :hash_input do
+    let(:hash_input) do
       {groups: ['group2']}
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2',
@@ -136,11 +169,11 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups' do
-    let :hash_input do
+    let(:hash_input) do
       {groups: ['group1', 'group2']}
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2', # Not set for group1 so group2's value used.
@@ -154,14 +187,14 @@ RSpec.describe Underware::HashMergers::HashMerger do
   end
 
   context 'with multiple groups and a node' do
-    let :hash_input do
+    let(:hash_input) do
       {
         groups: ['group1', 'group2'],
         node: 'node3'
       }
     end
 
-    let :expected_merged_config do
+    let(:expected_merged_config) do
       {
         value0: 'domain',
         value1: 'group2',
@@ -171,7 +204,7 @@ RSpec.describe Underware::HashMergers::HashMerger do
       }
     end
 
-    let :expected_merged_answers { expected_merged_config }
+    let(:expected_merged_answers) { expected_merged_config }
 
     it_behaves_like 'it handles merging config, with and without platform specified'
 

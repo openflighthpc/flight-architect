@@ -1,7 +1,6 @@
 
 # frozen_string_literal: true
 
-ruby '2.4.1'
 source 'https://rubygems.org'
 
 # Required to fix issue with FakeFS; refer to
@@ -16,6 +15,12 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gemspec
 
 gem 'commander', github: 'alces-software/commander'
+
+# Currently NodeattrUtils isn't on rubygems. As such it needs to be sourced
+# from the GitHub repo directly. This can be removed once it is on `rubygems`
+
+gem 'nodeattr_utils', github: 'alces-software/nodeattr_utils'
+gem 'flight_config', github: 'alces-software/flight_config'
 
 # Forked of a fork containing a logger fix. The main gem can be used
 # again once StructuredWarnings is removed

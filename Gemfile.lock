@@ -12,20 +12,36 @@ GIT
     commander (4.4.4.pre.alces2)
       highline (~> 1.7.2)
 
+GIT
+  remote: https://github.com/alces-software/flight_config
+  revision: de4d05a03aa3aec791cc1429da346cda84b38527
+  specs:
+    flight_config (0.1.0)
+      tty-config
+
+GIT
+  remote: https://github.com/alces-software/nodeattr_utils
+  revision: efe200c44492bf3d17e93920918e824fe7b7d74e
+  specs:
+    nodeattr_utils (0.1.0)
+
 PATH
   remote: .
   specs:
-    underware (0.5.0)
+    underware (0.6.0)
       activesupport (~> 5.1.6)
       colorize
       commander
       dry-validation
+      flight_config
       hashie
       highline (= 1.7.8)
       network_interface (~> 0.0.1)
+      nodeattr_utils
       recursive-open-struct
       ruby-progressbar
       rubytree
+      rubyzip
       terminal-table
 
 GEM
@@ -37,6 +53,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     ast (2.4.0)
+    byebug (10.0.2)
     coderay (1.1.2)
     colorize (0.8.1)
     concurrent-ruby (1.1.4)
@@ -51,28 +68,28 @@ GEM
       concurrent-ruby (~> 1.0)
     dry-equalizer (0.2.1)
     dry-inflector (0.1.2)
-    dry-logic (0.4.2)
+    dry-logic (0.5.0)
       dry-container (~> 0.2, >= 0.2.6)
       dry-core (~> 0.2)
       dry-equalizer (~> 0.2)
-    dry-types (0.13.3)
+    dry-types (0.14.0)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer (~> 0.2)
       dry-inflector (~> 0.1, >= 0.1.2)
-      dry-logic (~> 0.4, >= 0.4.2)
-    dry-validation (0.12.2)
+      dry-logic (~> 0.5, >= 0.5)
+    dry-validation (0.13.0)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
       dry-core (~> 0.2, >= 0.2.1)
       dry-equalizer (~> 0.2)
-      dry-logic (~> 0.4, >= 0.4.0)
-      dry-types (~> 0.13.1)
+      dry-logic (~> 0.5, >= 0.5.0)
+      dry-types (~> 0.14, >= 0.14)
     fakefs (0.18.0)
     hashie (3.6.0)
     highline (1.7.8)
-    i18n (1.2.0)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
     method_source (0.9.0)
@@ -85,7 +102,11 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
     rainbow (3.0.0)
+    rake (12.3.2)
     recursive-open-struct (1.1.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -110,6 +131,7 @@ GEM
     rubocop-rspec (1.23.0)
       rubocop (>= 0.52.1)
     ruby-progressbar (1.10.0)
+    rubyzip (1.2.2)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -118,6 +140,7 @@ GEM
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thread_safe (0.3.6)
+    tty-config (0.3.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (1.4.0)
@@ -126,10 +149,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.16)
+  bundler
   commander!
   fakefs
+  flight_config!
+  nodeattr_utils!
   pry
+  pry-byebug
+  rake
   rspec
   rubocop (~> 0.52.1)
   rubocop-rspec
@@ -137,8 +164,5 @@ DEPENDENCIES
   simplecov
   underware!
 
-RUBY VERSION
-   ruby 2.4.1p111
-
 BUNDLED WITH
-   1.16.6
+   1.16.0

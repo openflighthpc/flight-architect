@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
-#==============================================================================
-# Copyright (C) 2017 Stephen F. Norledge and Alces Software Ltd.
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file/package is part of Alces Underware.
+# This file is part of Flight Architect.
 #
-# Alces Underware is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Affero General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
 #
-# Alces Underware is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Affero General Public License for more details.
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this package.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
 #
-# For more information on the Alces Underware, please visit:
-# https://github.com/alces-software/underware
-#==============================================================================
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 require 'yaml'
 
 require 'underware/commands'
@@ -53,14 +58,13 @@ module Underware
 
       private
 
-      # TODO: Currently the parser does not support the example option
       def parse_command_attributes(command, attributes)
         @calling_obj.command command do |c|
           attributes.each do |a, v|
             next if a == 'autocomplete'
             case a
             when 'action'
-              c.action eval(v)
+              c.action { |args, opts| run_command(eval(v), args, opts) }
             when 'options'
               v.each do |opt|
                 if [:Integer, 'Integer'].include? opt['type']
@@ -78,6 +82,8 @@ module Underware
                 subcommand = "#{command} #{subcommand}"
                 parse_command_attributes(subcommand, subattributes)
               end
+            when 'examples'
+              v.each { |e| c.example(*e) }
             else
               c.send("#{a}=", v.respond_to?(:chomp) ? v.chomp : v)
             end
@@ -92,6 +98,21 @@ module Underware
           DynamicDefaults.send(dynamic_default_method)
         else
           default_value
+        end
+      end
+
+      #
+      # Runs the command by extracting the options from from Commander::Options
+      #
+      def run_command(command, args, options)
+        opt_hash = setup_and_strip_globals(options)
+        command.new.start(args, **opt_hash)
+      end
+
+      def setup_and_strip_globals(commander_options)
+        commander_options.__hash__.symbolize_keys.tap do |options|
+          UnderwareLog.strict = !!options.delete(:strict)
+          UnderwareLog.quiet = !!options.delete(:quiet)
         end
       end
     end

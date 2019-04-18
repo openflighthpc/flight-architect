@@ -1,12 +1,38 @@
-
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'underware/namespaces/alces'
+require 'underware/cluster_attr'
 require 'recursive_open_struct'
 
 module Underware
   module AlcesUtils
-    GENDERS_FILE_REGEX = /-f [[:graph:]]+/
     # Causes the testing version of alces (/config) to be used by underware
     class << self
       def start(example_group)
@@ -27,47 +53,11 @@ module Underware
             @spec_alces = nil
             alces
           end
-
-          before { AlcesUtils.spoof_nodeattr(self) }
         end
       end
 
       def included(base)
         start(base)
-      end
-
-      def nodeattr_genders_file_path(command)
-        return Underware::FilePath.genders unless command.include?('-f')
-        command.match(AlcesUtils::GENDERS_FILE_REGEX)[0].sub('-f ', '')
-      end
-
-      def nodeattr_cmd_trim_f(command)
-        command.sub(AlcesUtils::GENDERS_FILE_REGEX, '')
-      end
-
-      # Mocks nodeattr to use faked genders file
-      def spoof_nodeattr(context)
-        context.instance_exec do
-          genders_path = Underware::FilePath.genders
-          genders_exist = File.exist? genders_path
-          File.write(genders_path, "local local\n") unless genders_exist
-
-          allow(Underware::NodeattrInterface)
-            .to receive(:nodeattr).and_wrap_original do |method, *args|
-            AlcesUtils.check_and_raise_fakefs_error
-            path = AlcesUtils.nodeattr_genders_file_path(args[0])
-            cmd = AlcesUtils.nodeattr_cmd_trim_f(args[0])
-            genders_data = File.read(path).tr('`', '"')
-            tempfile = `mktemp /tmp/genders.XXXXX`.chomp
-            begin
-              `echo "#{genders_data}" > #{tempfile}`
-              nodeattr_cmd = "nodeattr -f #{tempfile}"
-              method.call(cmd, mock_nodeattr: nodeattr_cmd)
-            ensure
-              `rm #{tempfile} -f`
-            end
-          end
-        end
       end
 
       def redirect_std(*input, &_b)
@@ -126,11 +116,13 @@ module Underware
       end
 
       def config(namespace, h = {})
-        allow(namespace).to receive(:config).and_return(hash_object(h))
+        h = hash_object(h)
+        namespace.define_singleton_method(:config) { h }
       end
 
       def answer(namespace, h = {})
-        allow(namespace).to receive(:answer).and_return(hash_object(h))
+        h = hash_object(h)
+        namespace.define_singleton_method(:answer) { h }
       end
 
       def validation_off
@@ -142,11 +134,13 @@ module Underware
         allow(namespace).to receive(:answer).and_return(OpenStruct.new)
       end
 
-      # TODO: Get the new node by reloading the genders file
       def mock_node(name, *genders)
         AlcesUtils.check_and_raise_fakefs_error
-        raise_if_node_exists(name)
-        add_node_to_genders_file(name, *genders)
+        ClusterAttr.update(alces.cluster_identifier) do |attr|
+          genders.push AlcesUtils.default_group if genders.empty?
+          attr.add_nodes(name, groups: genders)
+        end
+        alces.instance_variable_set(:@cluster_attr, nil)
         Underware::Namespaces::Node.new(alces, name).tap do |node|
           new_nodes = alces.nodes.reduce([node], &:push)
           underware_nodes = Underware::Namespaces::UnderwareArray.new(new_nodes)
@@ -156,42 +150,15 @@ module Underware
 
       def mock_group(name)
         AlcesUtils.check_and_raise_fakefs_error
-        group_cache { |c| c.add(name) }
+        ClusterAttr.update(alces.cluster_identifier) { |a| a.add_group(name) }
         alces.instance_variable_set(:@groups, nil)
-        alces.instance_variable_set(:@group_cache, nil)
-        group = alces.groups.find_by_name(name)
-        group
-      end
-
-      def create_asset(asset_name, data, type: 'server')
-        path = Underware::FilePath.asset(type.pluralize, asset_name)
-        FileUtils.mkdir_p(File.dirname(path))
-        Underware::Data.dump(path, data)
-        alces.instance_variable_set(:@asset_cache, nil)
-        alces.instance_variable_set(:@assets, nil)
-      end
-
-      def create_layout(layout_name, data, type: 'rack')
-        path = Underware::FilePath.layout(type.pluralize, layout_name)
-        FileUtils.mkdir_p(File.dirname(path))
-        Underware::Data.dump(path, data)
+        alces.instance_variable_set(:@cluster_attr, nil)
+        alces.groups.find_by_name(name)
       end
 
       private
 
       attr_reader :alces, :test
-
-      def raise_if_node_exists(name)
-        return unless File.exist? Underware::FilePath.genders
-        msg = "Node '#{name}' already exists"
-        raise Underware::InternalError, msg if alces.nodes.find_by_name(name)
-      end
-
-      def add_node_to_genders_file(name, *genders)
-        genders = [AlcesUtils.default_group] if genders.empty?
-        genders_entry = "#{name} #{genders.join(',')}\n"
-        File.write(Underware::FilePath.genders, genders_entry, mode: 'a')
-      end
 
       # Allows the RSpec methods to be accessed
       def respond_to_missing?(s, *_a)
@@ -200,10 +167,6 @@ module Underware
 
       def method_missing(s, *a, &b)
         respond_to_missing?(s) ? test.send(s, *a, &b) : super
-      end
-
-      def group_cache
-        Underware::GroupCache.update { |c| yield c }
       end
 
       def hash_object(h = {})

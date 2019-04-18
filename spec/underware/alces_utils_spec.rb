@@ -1,5 +1,31 @@
-
 # frozen_string_literal: true
+
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 require 'underware/spec/alces_utils'
 
@@ -7,7 +33,6 @@ RSpec.describe Underware::AlcesUtils do
   include described_class
 
   let(:file_path) { Underware::FilePath }
-  let(:group_cache) { Underware::GroupCache.new }
 
   describe '#new' do
     it 'returns the mocked alces' do
@@ -29,11 +54,6 @@ RSpec.describe Underware::AlcesUtils do
     before do
       Underware::AlcesUtils::Mock.new(self)
                       .define_method_testing {} # Intentionally blank
-    end
-
-    it 'only has the local node by default' do
-      expect(alces.nodes.length).to eq(1)
-      expect(alces.nodes[0]).to be_local
     end
 
     context 'with a block before each test' do
@@ -97,12 +117,7 @@ RSpec.describe Underware::AlcesUtils do
       let(:group2) { 'some other group' }
 
       described_class.mock self, :each do
-        expect(File.exist?(file_path.group_cache)).to eq(false)
         mock_group(group)
-      end
-
-      it 'creates the group cache' do
-        expect(File.exist?(file_path.group_cache)).to eq(true)
       end
 
       it 'creates the group' do
@@ -157,45 +172,8 @@ RSpec.describe Underware::AlcesUtils do
         expect(node.genders).to eq([described_class.default_group])
       end
 
-      it 'errors if the node already exists' do
-        expect do
-          described_class.mock(self) { mock_node(name) }
-        end.to raise_error(Underware::InternalError)
-      end
-
       it 'uses the genders input' do
         expect(second_node.genders).to eq(second_node_genders)
-      end
-    end
-
-    describe '#create_asset' do
-      let(:asset_name) { 'my-new-asset' }
-      let(:asset_data) { { key: "#{asset_name}-data" } }
-      let(:new_data) { { key: "#{new_name}-data" } }
-      let(:new_name) { 'new-asset-name' }
-
-      described_class.mock(self, :each) do
-        create_asset(asset_name, asset_data)
-      end
-
-      def add_new_asset
-        alces.assets
-        described_class.mock(self) do
-          create_asset(new_name, new_data)
-        end
-        alces.assets.find_by_name(new_name)
-      end
-
-      it 'creates an new asset' do
-        asset = alces.assets.find_by_name(asset_name)
-        expect(asset).not_to eq(nil)
-        expect(asset.to_h).to include(:metadata, **asset_data)
-      end
-
-      it 'can add new assets after the asset array is loaded' do
-        new_asset = add_new_asset
-        expect(new_asset).not_to eq(nil)
-        expect(new_asset.to_h).to include(:metadata, **new_data)
       end
     end
 

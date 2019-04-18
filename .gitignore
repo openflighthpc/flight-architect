@@ -2,5 +2,6 @@ coverage
 tmp
 spec/examples.txt
 vendor
+etc/config.yaml
 .bundle
 .vagrant

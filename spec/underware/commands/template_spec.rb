@@ -1,3 +1,29 @@
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
 
 RSpec.describe Underware::Commands::Template do
   def run_command
@@ -21,7 +47,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_rendered(path:, for_platform:, for_scope_type:, for_scope_name: nil)
-    rendered_template = File.read("#{Underware::Constants::RENDERED_PATH}/#{path}")
+    rendered_template = File.read(Underware::FilePath.rendered(path))
 
     expect(rendered_template).to include("platform: #{for_platform}")
     expect(rendered_template).to include("scope_type: #{for_scope_type}")
@@ -31,23 +57,19 @@ RSpec.describe Underware::Commands::Template do
   end
 
   def expect_not_rendered(path:)
-    expect(
-      File.exists?("#{Underware::Constants::RENDERED_PATH}/#{path}")
-    ).to be false
+    expect(File.exists?(Underware::FilePath.rendered(path))).to be false
   end
+
+  let(:cluster) { Underware::CommandConfig.load.current_cluster }
 
   before :each do
     # Ensure templates directory is initially empty, so only testing with files
     # setup in individual tests.
     FileUtils.rm_rf(Underware::FilePath.templates_dir)
 
+    FileUtils.mkdir_p(Underware::FilePath.platform_configs_dir)
     FileUtils.touch(Underware::FilePath.platform_config(:platform_x))
     FileUtils.touch(Underware::FilePath.platform_config(:platform_y))
-
-    # To render templates for nodes we need to be able to call this and have an
-    # array of nodes returned; stub this out so don't need to care about this
-    # when not explicitly testing rendering for nodes.
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return([])
   end
 
   it 'correctly renders all platform files for domain' do
@@ -94,7 +116,9 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all platform files for each group (including orphan group)' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::ClusterAttr.update(cluster) do |attr|
+      attr.add_group('user_configured_group')
+    end
     create_template 'platform_x/group/some/path/x_template'
     create_template 'platform_y/group/some/path/y_template'
 
@@ -127,7 +151,9 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all content files for each group, for each platform' do
-    Underware::GroupCache.update { |cache| cache.add(:user_configured_group) }
+    Underware::ClusterAttr.update(cluster)  do |attr|
+      attr.add_group('user_configured_group')
+    end
     create_template 'content/group/some/path/shared_template'
 
     run_command
@@ -159,7 +185,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all platform files for each node' do
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'platform_x/node/some/path/x_template'
     create_template 'platform_y/node/some/path/y_template'
 
@@ -180,7 +206,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'correctly renders all content files for each node, for each platform' do
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'content/node/some/path/shared_template'
 
     run_command
@@ -208,8 +234,7 @@ RSpec.describe Underware::Commands::Template do
   end
 
   it 'clears out pre-existing files from rendered files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
+    previously_rendered_file_path = Underware::FilePath.rendered(
       'some_platform/node/some_node/some_template'
     )
     Underware::Utils.create_file(previously_rendered_file_path)
@@ -219,23 +244,9 @@ RSpec.describe Underware::Commands::Template do
     expect(File.exists?(previously_rendered_file_path)).not_to be true
   end
 
-  # Do not clear previously rendered system files to preserve rendered genders
-  # file, as well as any possible other future rendered system filess.
-  it 'does not clear out pre-existing files in rendered system files directory' do
-    previously_rendered_file_path = File.join(
-      Underware::Constants::RENDERED_PATH,
-      'system/some_file'
-    )
-    Underware::Utils.create_file(previously_rendered_file_path)
-
-    run_command
-
-    expect(File.exists?(previously_rendered_file_path)).to be true
-  end
-
   it 'is not over-eager when replacing in rendered paths' do
     FileUtils.touch(Underware::FilePath.platform_config(:node_platform))
-    allow(Underware::NodeattrInterface).to receive(:all_nodes).and_return(['some_node'])
+    Underware::ClusterAttr.update(cluster) { |a| a.add_nodes('some_node') }
     create_template 'node_platform/node/my_favourite_node_templates/node/template'
 
     run_command

@@ -1,6 +1,33 @@
 
 # frozen_string_literal: true
 
+# =============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of Flight Architect.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# Flight Architect is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with Flight Architect. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on Flight Architect, please visit:
+# https://github.com/openflighthpc/flight-architect
+# ==============================================================================
+
 require 'shared_examples/hash_merger_namespace'
 require 'shared_examples/namespace_hash_merging'
 require 'underware/namespaces/alces'
@@ -13,51 +40,25 @@ RSpec.describe Underware::Namespaces::Domain do
 
     include_examples Underware::Namespaces::HashMergerNamespace
 
-    before { use_mock_determine_hostip_script }
+    context 'with mocked ip' do
+      let(:ip) { '1.2.3.4' }
 
-    before :each do
-      # Create key pair files here (in production created on install), both so
-      # can test in `#keys` (below) and so `HashMergerNamespace#to_h` tests
-      # pass as key values will be included in hashed domain.
-      Underware::Utils.create_file(
-        Underware::FilePath.private_key, content: 'my_private_key'
-      )
-      Underware::Utils.create_file(
-        Underware::FilePath.public_key, content: 'my_public_key'
-      )
-    end
-
-    it 'has a hostip' do
-      expect(subject.hostip).to eq('1.2.3.4')
-    end
-
-    it 'has a hosts_url' do
-      url = 'http://1.2.3.4/metalware/system/hosts'
-      expect(subject.hosts_url).to eq(url)
-    end
-
-    it 'has a genders_url' do
-      url = 'http://1.2.3.4/metalware/system/genders'
-      expect(subject.genders_url).to eq(url)
-    end
-
-    describe '#keys' do
-      describe '#private' do
-        it 'provides access to private key from file' do
-
-          expect(subject.keys.private).to eq('my_private_key')
-        end
+      before do
+        allow(Underware::DeploymentServer).to receive(:ip).and_return(ip)
       end
 
-      describe '#public' do
-        it 'provides access to public key from file' do
-
-          expect(subject.keys.public).to eq('my_public_key')
-        end
+      it 'has a hostip' do
+        expect(subject.hostip).to eq(ip)
       end
 
-      it 'errors if attempt to access any other properties' do
-        expect { subject.keys.foo }.to raise_error(NoMethodError)
+      it 'has a hosts_url' do
+        url = "http://#{ip}/metalware/system/hosts"
+        expect(subject.hosts_url).to eq(url)
+      end
+
+      it 'has a genders_url' do
+        url = "http://#{ip}/metalware/system/genders"
+        expect(subject.genders_url).to eq(url)
       end
     end
   end

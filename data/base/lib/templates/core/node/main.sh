@@ -13,16 +13,16 @@ echo 'root:<%=config.root_password%>' | chpasswd -e
 <% end -%>
 
 info "Running base"
-curl <%= config.renderedurl %>/base/main.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/core/base/main.sh  | /bin/bash -x
 
 info "Running cloudimage"
-curl <%= config.renderedurl %>/cloudimage/main.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/platform/cloudimage/main.sh  | /bin/bash -x
 
 info "Running networking"
-curl <%= config.renderedurl %>/networking/main.sh  | /bin/bash -x
-curl <%= config.renderedurl %>/networking/networking.sh  | /bin/bash -x
-curl <%= config.renderedurl %>/networking/gateway.sh  | /bin/bash -x
-curl <%= config.renderedurl %>/networking/hosts.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/core/networking/main.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/core/networking/networking.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/core/networking/gateway.sh  | /bin/bash -x
+curl <%= config.renderedurl %>/core/networking/hosts.sh  | /bin/bash -x
 
 info "Configuration complete - rebooting"
 shutdown -r +1 &

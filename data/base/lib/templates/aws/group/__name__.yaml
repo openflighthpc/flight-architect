@@ -74,7 +74,7 @@ Resources:
           Key: 'Name'
           Value: '<%=name%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
 <% end -%>
 <% end -%>
@@ -103,7 +103,7 @@ Resources:
           Key: 'Name'
           Value: '<%=name%>'
         -
-          Key: 'alcescluster'
+          Key: 'flightcluster'
           Value: <%=clustername%>
       UserData:
         Fn::Base64:

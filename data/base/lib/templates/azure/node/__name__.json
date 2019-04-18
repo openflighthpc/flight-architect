@@ -65,7 +65,7 @@ networks.each_with_index do |(netname,network),idx| -%>
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -85,7 +85,7 @@ networks.each_with_index do |(netname,network),idx| -%>
       "apiVersion": "2017-03-01",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -119,7 +119,7 @@ networks.each_with_index do |(netname,network),idx| -%>
       "apiVersion": "2016-04-30-preview",
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -142,12 +142,12 @@ networks.each_with_index do |(netname,network),idx| -%>
 	},
 	"osProfile": {
           "computerName": "<%=node.config.networks.network1.hostname%>",
-          "adminUsername": "alces",
+          "adminUsername": "centos",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {
             "publicKeys": [{
-              "path": "[concat ('/home/alces', '/.ssh/authorized_keys')]",
+              "path": "[concat ('/home/centos', '/.ssh/authorized_keys')]",
               "keyData": "<%=config.publickey%>"
               }]
             }
@@ -184,7 +184,7 @@ networks.each_with_index do |(netname,network),idx| -%>
       ],
       "tags": {
         "Name": "<%=config.cluster%>",
-        "alcescluster": "<%=config.cluster%>"
+        "flightcluster": "<%=config.cluster%>"
       },
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",

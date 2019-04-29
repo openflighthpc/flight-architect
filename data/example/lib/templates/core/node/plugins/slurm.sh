@@ -35,7 +35,7 @@ AccountingStorageLoc=/var/log/slurm/accounting
 AccountingStorageType=accounting_storage/slurmdbd
 JobAcctGatherType=jobacct_gather/linux
 AccountingStorageHost=gateway1
-NodeName=<%= NodeattrInterface.nodes_in_gender('compute').each do |node| %><%=node.name%>,<% end %> State=UNKNOWN
+NodeName=<%= groups.nodes.hostlist_nodes %>
 PartitionName=all Nodes=ALL Default=YES MaxTime=UNLIMITED
 EOF
 `

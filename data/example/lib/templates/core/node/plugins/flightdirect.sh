@@ -27,14 +27,7 @@ cat << EOD > /opt/flight-direct/etc/genders
 ## Copyright (c) 2018 Alces Software Ltd
 ##
 ################################################################################
-<% groups = [] -%>
-<% NodeattrInterface.nodes_in_gender('compute').each do |node| -%>
-<% groups << NodeattrInterface.genders_for_node(node).first -%>
-<% end -%>
-<% groups = groups.uniq -%>
-<% groups.uniq.each do |group| -%>
-<%= NodeattrInterface.hostlist_nodes_in_gender(group) %>    <%= group %>,compute
-<% end -%>
+<%= groups.nodes.hostlist_nodes %>    nodes,compute
 EOD
 
 # Generate munge key

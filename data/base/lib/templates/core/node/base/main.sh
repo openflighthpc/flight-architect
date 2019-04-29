@@ -10,3 +10,12 @@ systemctl restart sshd
 
 echo "StrictHostKeyChecking no" >> /root/.ssh/config
 chmod 600 /root/.ssh/config
+
+# Cluster prompt
+cat << "EOF" > /etc/profile.d/flightcenter.sh
+#Custom PS1 with client name
+c=34
+if [ "$PS1" ]; then
+  PS1="[\u@\h\[\e[1;${c}m\] [<%=domain.config.cluster%>]\[\e[0m\] \W]\\$ "
+fi
+EOF

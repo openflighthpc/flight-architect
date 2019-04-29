@@ -1,3 +1,7 @@
+#!/bin/bash
+#FLIGHTdescription: Install Flight Direct
+#FLIGHTstages: first
+
 CACHESERVER=<%= nodes.gateway1.config.networks.network1.ip %>
 VERSION=2.4.1
 
@@ -33,8 +37,15 @@ cat << EOD > /opt/flight-direct/etc/genders
 <% end -%>
 EOD
 
+# Generate munge key
+mkdir -p /etc/munge
+cat << EOD > /etc/munge/munge.key
+$(dd if=/dev/urandom bs=1 count=1024)
+EOD
+
 # Share genders file
 flight sync cache file /opt/flight-direct/etc/genders
+flight sync cache file /etc/munge/munge.key
 
 <% end -%>
 
@@ -57,6 +68,7 @@ flight session enable base/gnome
 <% end -%>
 
 flight sync add files genders
+flight sync add files munge.key
 flight sync run-sync
 
 # Disable user gridware

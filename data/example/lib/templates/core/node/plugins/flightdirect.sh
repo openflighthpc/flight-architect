@@ -76,5 +76,3 @@ sed -i 's/.*cw_GRIDWARE_allow_users=.*/cw_GRIDWARE_allow_users=false/g' /opt/fli
 
 # Enable storage types
 flight storage enable base/s3
-
-<% end -%>

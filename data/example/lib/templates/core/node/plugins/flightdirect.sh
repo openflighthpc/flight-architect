@@ -1,6 +1,6 @@
 #!/bin/bash
 #FLIGHTdescription: Install Flight Direct
-#FLIGHTstages: first
+#FLIGHTstages: second
 
 CACHESERVER=<%= nodes.gateway1.config.networks.network1.ip %>
 VERSION=2.4.1

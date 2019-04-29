@@ -1,6 +1,6 @@
 #!/bin/bash
 #FLIGHTdescription: Install SLURM
-#FLIGHTstages: second
+#FLIGHTstages: third
 
 SLURMCONF=`cat << EOF
 ClusterName=<%= config.domain %>

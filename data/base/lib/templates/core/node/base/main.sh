@@ -19,3 +19,6 @@ if [ "$PS1" ]; then
   PS1="[\u@\h\[\e[1;${c}m\] [<%=domain.config.cluster%>]\[\e[0m\] \W]\\$ "
 fi
 EOF
+
+# Install packages
+yum -y install epel-release

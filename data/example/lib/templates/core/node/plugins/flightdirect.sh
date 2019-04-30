@@ -3,7 +3,7 @@
 #FLIGHTstages: second
 
 CACHESERVER=<%= nodes.gateway1.config.networks.network1.ip %>
-VERSION=2.4.1
+VERSION=2.1.4
 
 <% if (node.config.gateway rescue false) -%>
 # Setup cache server

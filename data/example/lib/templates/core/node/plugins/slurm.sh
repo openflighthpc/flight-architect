@@ -2,6 +2,8 @@
 #FLIGHTdescription: Install SLURM
 #FLIGHTstages: third
 
+MUNGEDIR=/opt/data/
+
 SLURMCONF=`cat << EOF
 ClusterName=<%= config.domain %>
 ControlMachine=gateway1
@@ -96,8 +98,13 @@ StorageUser=slurm
 EOF
 
 systemctl start slurmdbd
+
+cat << EOF > $MUNGEDIR/munge.key
+$(dd if=/dev/urandom bs=1 count=1024)
+EOF
 <% end -%>
 
+cp $MUNGEDIR/munge.key /etc/munge/
 chmod 400 /etc/munge/munge.key
 chown munge /etc/munge/munge.key
 

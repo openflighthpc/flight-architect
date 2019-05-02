@@ -8,6 +8,6 @@ NODEDIR=/opt/service/nodescripts/<%= node.name %>
 mkdir -p $NODEDIR
 
 # Download scripts
-curl <%= config.renderedurl %>/flightdirect.sh > $NODEDIR/flightdirect.sh 
-curl <%= config.renderedurl %>/nfs.sh > $NODEDIR/nfs.sh 
-curl <%= config.renderedurl %>/slurm.sh > $NODEDIR/slurm.sh 
+curl <%= config.renderedurl %>/flightdirect.bash > $NODEDIR/flightdirect.bash 
+curl <%= config.renderedurl %>/nfs.bash > $NODEDIR/nfs.bash 
+curl <%= config.renderedurl %>/slurm.bash > $NODEDIR/slurm.bash 

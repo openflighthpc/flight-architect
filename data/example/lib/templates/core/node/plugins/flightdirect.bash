@@ -7,6 +7,9 @@ VERSION=2.1.4
 curl -L https://raw.githubusercontent.com/alces-software/flight-direct/master/scripts/bootstrap.sh | bash -s $VERSION
 source /etc/profile
 
+unset RUBYLIB RUBYOPT
+unset $(env | grep ^BUNDLE | cut -f1 -d=)
+
 <% if (node.config.gateway rescue false) -%>
 ROLE=login
 <% else -%>

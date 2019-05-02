@@ -4,6 +4,9 @@
 
 VERSION=2.1.4
 
+unset RUBYLIB RUBYOPT
+unset $(env | grep ^BUNDLE | cut -f1 -d=)
+
 curl -L https://raw.githubusercontent.com/alces-software/flight-direct/master/scripts/bootstrap.sh | bash -s $VERSION
 source /etc/profile
 

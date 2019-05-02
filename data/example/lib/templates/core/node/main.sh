@@ -26,7 +26,7 @@ info "Configuring repo"
 curl <%= config.renderedurl %>/core/base/repo.sh  | /bin/bash -x
 
 info "Configuring plugins"
-curl <%= config.renderedurl %>/plugins/plugins.sh | /bin/bash -x
+curl <%= config.renderedurl %>/core/plugins/plugins.sh | /bin/bash -x
 
 info "Configuration complete - rebooting"
 shutdown -r +1 &

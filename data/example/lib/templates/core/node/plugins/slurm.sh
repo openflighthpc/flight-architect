@@ -2,8 +2,8 @@
 #FLIGHTdescription: Install SLURM
 #FLIGHTstages: third
 
+VERSION=18.08.7
 MUNGEDIR=/opt/data/
-
 SLURMCONF=`cat << EOF
 ClusterName=<%= config.domain %>
 ControlMachine=gateway1
@@ -41,6 +41,19 @@ NodeName=<%= groups.nodes.hostlist_nodes %>
 PartitionName=all Nodes=ALL Default=YES MaxTime=UNLIMITED
 EOF
 `
+
+<% if (node.config.gateway rescue false) -%>
+# Build SLURM RPMs
+yum -y install wget rpm-build munge munge-devel munge-libs perl-Switch numactl pam-devel perl-ExtUtils-MakeMaker mariadb-devel gcc readline-devel
+cd /tmp/
+wget https://download.schedmd.com/slurm/slurm-$VERSION.tar.bz2
+rpmbuild -ta slurm-$VERSION.tar.bz2
+
+mkdir -p /opt/repo/flight/packages
+cp /root/rpmbuild/RPMS/x86_64/slurm-*.rpm /opt/repo/flight/packages/
+cd /opt/repo
+createrepo flight
+<% end -%>
 
 yum -y -e0 install munge munge-devel munge-libs perl-Switch numactl
 yum --enablerepo flight -y -e 0 --nogpgcheck install slurm slurm-devel slurm-perlapi slurm-torque slurm-slurmd slurm-example-configs slurm-libpmi

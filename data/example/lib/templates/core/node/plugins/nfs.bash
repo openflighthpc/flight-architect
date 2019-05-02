@@ -1,6 +1,6 @@
 #!/bin/bash
 #FLIGHTdescription: Configure NFS for cluster
-#FLIGHTstage: first
+#FLIGHTstages: first
 
 yum -y install nfs-utils
 

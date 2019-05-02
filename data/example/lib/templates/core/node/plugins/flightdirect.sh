@@ -2,51 +2,14 @@
 #FLIGHTdescription: Install Flight Direct
 #FLIGHTstages: second
 
-CACHESERVER=<%= nodes.gateway1.config.networks.network1.ip %>
 VERSION=2.1.4
 
-<% if (node.config.gateway rescue false) -%>
-# Setup cache server
 curl -L https://raw.githubusercontent.com/alces-software/flight-direct/master/scripts/bootstrap.sh | bash -s $VERSION
-
 source /etc/profile
 
-flight forge install flight-cache
-flight cache snapshot $CACHESERVER
-systemctl start flight-cache
-
-# sleep to ensure server comes up
-sleep 20
-flight forge install flight-syncer
-
-# Setup genders file
-cat << EOD > /opt/flight-direct/etc/genders
-################################################################################
-##
-## Alces Clusterware - Genders configuration
-## Copyright (c) 2018 Alces Software Ltd
-##
-################################################################################
-<%= groups.nodes.hostlist_nodes %>    nodes,compute
-EOD
-
-# Generate munge key
-mkdir -p /etc/munge
-cat << EOD > /etc/munge/munge.key
-$(dd if=/dev/urandom bs=1 count=1024)
-EOD
-
-# Share genders file
-flight sync cache file /opt/flight-direct/etc/genders
-flight sync cache file /etc/munge/munge.key
-
-<% end -%>
-
-<% unless (node.config.gateway rescue false) -%>
-curl http://$CACHESERVER/flight-direct/bootstrap.sh | bash
-source /etc/profile
+<% if (node.config.gateway rescue false) -%>
 ROLE=login
-<% else %>
+<% else -%>
 ROLE=compute
 <% end -%>
 
@@ -57,12 +20,7 @@ flight forge install flight-$ROLE
 <% if (node.config.gateway rescue false) -%>
 # Enable sessions
 flight session enable base/gnome
-
 <% end -%>
-
-flight sync add files genders
-flight sync add files munge.key
-flight sync run-sync
 
 # Disable user gridware
 sed -i 's/.*cw_GRIDWARE_allow_users=.*/cw_GRIDWARE_allow_users=false/g' /opt/flight-direct/etc/gridware.rc

@@ -23,6 +23,8 @@ EOF`
 
 echo "$EXPORTS" > /etc/exports
 
+firewall-cmd --add-service nfs --add-service mountd --add-service rpc-bind --zone external --permanent
+firewall-cmd --reload
 <% end -%>
 
 MOUNTS=`cat << EOF

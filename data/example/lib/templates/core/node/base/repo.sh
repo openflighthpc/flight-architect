@@ -30,7 +30,7 @@ createrepo flight
 cat << EOF > /etc/yum.repos.d/flight.repo
 [flight]
 name=flight
-baseurl=http://10.10.0.1/repo/flight
+baseurl=http://<%= nodes.gateway1.config.networks.network1.ip %>/repo/flight
 description=Flight RPMs and files
 enabled=0
 skip_if_unavailable=1

@@ -20,5 +20,11 @@ if [ "$PS1" ]; then
 fi
 EOF
 
+# Firewalls
+systemctl disable firewalld
+systemctl stop firewalld
+systemctl disable firewalld
+systemctl stop iptables
+
 # Install packages
 yum -y install epel-release

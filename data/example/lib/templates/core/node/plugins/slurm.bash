@@ -3,7 +3,7 @@
 #FLIGHTstages: third
 
 VERSION=18.08.7
-MUNGEDIR=/opt/data/
+MUNGEDIR=/data/
 SLURMCONF=`cat << EOF
 ClusterName=<%= config.domain %>
 ControlMachine=gateway1

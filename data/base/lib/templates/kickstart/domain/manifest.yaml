@@ -1,0 +1,5 @@
+<% nodes.each do |node| -%>
+<%= node.name %>:
+  kickstart_file: kickstart/node/<%= node.name %>/platform/<%= node.name %>.ks
+  pxelinux_file: kickstart/node/<%= node.name %>/platform/pxelinux.cfg/pxe_bios
+<% end -%>

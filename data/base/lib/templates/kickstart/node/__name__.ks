@@ -31,6 +31,7 @@ url --url=<%= node.config.yumrepo_buildurl %>
 
 #PRESCRIPT
 %pre
+echo '{ "node": "<%= node.name %>", "message": "Formatting disk" }' |ncat -u <%= config.build_server_ip %> 24680
 set -x -v
 exec 1>/tmp/ks-pre.log 2>&1
 
@@ -39,6 +40,11 @@ bootloaderappend="<%= config.kernelappendoptions %>"
 cat > $DISKFILE << EOF
 <%= config.disksetup %>
 EOF
+%end
+
+#PRE-INSTALL (after disk format, before package install)
+%pre-install
+echo '{ "node": "<%= node.name %>", "message": "Installing packages" }' |ncat -u <%= config.build_server_ip %> 24680
 %end
 
 #PACKAGES
@@ -59,6 +65,7 @@ patch
 tcl-devel
 gettext
 wget
+nmap-ncat
 
 %end
 
@@ -76,5 +83,8 @@ exec 1>/root/ks-post.log 2>&1
 
 # Example of using rendered Metalware file; this file itself also uses other
 # rendered files.
+echo '{ "node": "<%= node.name %>", "message": "Running post installation scripts" }' |ncat -u <%= config.build_server_ip %> 24680
 curl <%= node.config.nodescripturl %> | /bin/bash -x | tee /tmp/mainscript-default-output
+
+echo '{ "node": "<%= node.name %>", "message": "Build complete", "built": "true" }' |ncat -u <%= config.build_server_ip %> 24680
 %end

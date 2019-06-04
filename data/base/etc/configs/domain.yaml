@@ -13,7 +13,8 @@ kernelappendoptions: "console=tty0 console=ttyS1,115200n8"
 
 # UPSTREAM URLS
 yumrepo_buildurl: http://mirror.ox.ac.uk/sites/mirror.centos.org/7/os/x86_64/
-renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
+build_server_ip: 10.10.0.1
+renderedurl: https://<%= config.build_server_ip %>/architect/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
 nodescripturl: <%= config.renderedurl %>/core/main.sh
 
 # DISK

@@ -25,13 +25,13 @@ disksetup: |
   bootloader --location=mbr --driveorder=<%= config.disklabel %> --append="$bootloaderappend"
 
   #Disk partitioning information
-  part /boot --fstype ext4 --size=4096 --asprimary --ondisk <%= config.disklabel %>
+  part /boot --fstype ext4 --size=1024 --asprimary --ondisk <%= config.disklabel %>
   part pv.01 --size=1 --grow --asprimary --ondisk <%= config.disklabel %>
   volgroup system pv.01
-  logvol  /  --fstype ext4 --vgname=system  --size=16384 --name=root
-  logvol  /var --fstype ext4 --vgname=system --size=16384 --name=var
-  logvol  /tmp --fstype ext4 --vgname=system --size=1 --grow --name=tmp
-  logvol  swap  --fstype swap --vgname=system  --size=8096  --name=swap1
+  logvol  /  --fstype ext4 --vgname=system --size=4096 --maxsize=16384 --grow --name=root
+  logvol  /var --fstype ext4 --vgname=system --size=2048 --maxsize=16384 --grow --name=var
+  logvol  /tmp --fstype ext4 --vgname=system --size=1024 --grow --name=tmp
+  logvol  swap  --fstype swap --vgname=system --size=1024 --maxsize=8096 --grow --name=swap1
 
 #
 # NETWORKS

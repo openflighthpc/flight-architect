@@ -11,9 +11,9 @@ nodes:
     fqdn: <%= node.config.networks.network1.hostname %>
     build_ip: <%= node.config.networks.network1.ip %>
     primary_group: <%= node.group.name %>
-    secondary_groups: <%= "#{node.config.role},#{node.answer.secondary_groups},all".split(',').uniq.reject(&:empty?).join(',')  %>
-    kickstart: kickstart/node/<%= node.name %>/platform/<%= node.name %>.ks
-    pxelinux: kickstart/node/<%= node.name %>/platform/pxelinux.cfg/pxe_bios
-    aws: aws/node/<%= node.name %>/platform/<%= node.name %>.yaml
-    azure: azure/node/<%= node.name %>/platform/<%= node.name %>.json
+    secondary_groups: <%= "#{node.config.role},#{node.answer.secondary_groups},all".split(',').uniq.reject(&:empty?)  %>
+    kickstart_file: kickstart/node/<%= node.name %>/platform/<%= node.name %>.ks
+    pxelinux_file: kickstart/node/<%= node.name %>/platform/pxelinux.cfg/pxe_bios
+    aws_files: aws/node/<%= node.name %>/platform/<%= node.name %>.yaml
+    azure_files: azure/node/<%= node.name %>/platform/<%= node.name %>.json
 <% end -%>

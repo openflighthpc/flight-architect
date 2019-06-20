@@ -13,7 +13,8 @@ kernelappendoptions: "console=tty0 console=ttyS1,115200n8"
 
 # UPSTREAM URLS
 yumrepo_buildurl: http://mirror.ox.ac.uk/sites/mirror.centos.org/7/os/x86_64/
-renderedurl: https://s3-eu-west-1.amazonaws.com/stufranks/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
+build_server_ip: 10.10.0.1
+renderedurl: http://<%= config.build_server_ip %>/architect/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
 nodescripturl: <%= config.renderedurl %>/core/main.sh
 
 # DISK
@@ -24,13 +25,13 @@ disksetup: |
   bootloader --location=mbr --driveorder=<%= config.disklabel %> --append="$bootloaderappend"
 
   #Disk partitioning information
-  part /boot --fstype ext4 --size=4096 --asprimary --ondisk <%= config.disklabel %>
+  part /boot --fstype ext4 --size=1024 --asprimary --ondisk <%= config.disklabel %>
   part pv.01 --size=1 --grow --asprimary --ondisk <%= config.disklabel %>
   volgroup system pv.01
-  logvol  /  --fstype ext4 --vgname=system  --size=16384 --name=root
-  logvol  /var --fstype ext4 --vgname=system --size=16384 --name=var
-  logvol  /tmp --fstype ext4 --vgname=system --size=1 --grow --name=tmp
-  logvol  swap  --fstype swap --vgname=system  --size=8096  --name=swap1
+  logvol  /  --fstype ext4 --vgname=system --size=4096 --maxsize=16384 --grow --name=root
+  logvol  /var --fstype ext4 --vgname=system --size=2048 --maxsize=16384 --grow --name=var
+  logvol  /tmp --fstype ext4 --vgname=system --size=1024 --grow --name=tmp
+  logvol  swap  --fstype swap --vgname=system --size=1024 --maxsize=8096 --grow --name=swap1
 
 #
 # NETWORKS

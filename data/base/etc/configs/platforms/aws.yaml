@@ -1,3 +1,5 @@
+renderedurl: https://s3-eu-west-1.amazonaws.com/architect/<%=node.config.cluster%>/var/rendered/<%=node.platform%>/node/<%=node.name%>
+
 networks:
   network1:
     interface: eth0

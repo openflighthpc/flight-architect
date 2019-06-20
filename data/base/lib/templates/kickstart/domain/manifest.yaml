@@ -13,8 +13,7 @@ nodes:
     primary_group: <%= node.group.name %>
     secondary_groups: <%= "#{node.config.role},#{node.answer.secondary_groups},all".split(',').uniq.reject(&:empty?)  %>
     kickstart_file: kickstart/node/<%= node.name %>/platform/<%= node.name %>.ks
-    pxelinux_files:
-      - kickstart/node/<%= node.name %>/platform/pxelinux.cfg/pxe_bios
+    pxelinux_file: kickstart/node/<%= node.name %>/platform/pxelinux.cfg/pxe_bios
     aws_files:
       - aws/node/<%= node.name %>/platform/<%= node.name %>.yaml
     azure_files:

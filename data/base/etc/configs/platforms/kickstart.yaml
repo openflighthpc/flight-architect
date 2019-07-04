@@ -11,7 +11,7 @@ networks:
   bmc:
     defined: true
     interface: bmc
-    hostname: "<%= config.networks.bmc.short_hostname %>.<%= config.networks.mgt.domain %>.<%= config.domain %>"
+    hostname: "<%= config.networks.bmc.short_hostname %>.<%= config.networks.network2.domain %>.<%= config.domain %>"
     domain: 'bmc'
     short_hostname: "<%= node.name %>.<%= config.networks.bmc.domain %>"
     ip: "10.11.<%= node.group.index %>.<%= node.index %>"

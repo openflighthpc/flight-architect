@@ -1,2 +1,25 @@
 disklabel: sda
 kernelappendoptions: "console=tty0 console=ttyS1,115200n8"
+
+networks:
+  network1:
+    ip: "10.10.<%= node.group.index %>.<%= node.index %>"
+  network2:
+    ip: "10.11.<%= node.group.index.to_i + 100 %>.<%= node.index %>"
+  network2:
+    ip: "10.12.<%= node.group.index %>.<%= node.index %>"
+  bmc:
+    defined: true
+    interface: bmc
+    hostname: "<%= config.networks.bmc.short_hostname %>.<%= config.networks.network2.domain %>.<%= config.domain %>"
+    domain: 'bmc'
+    short_hostname: "<%= node.name %>.<%= config.networks.bmc.domain %>"
+    ip: "10.11.<%= node.group.index %>.<%= node.index %>"
+    netmask: "255.255.0.0"
+    network: "10.11.0.0"
+    gateway: 0.0.0.0
+    bmcpassword: "admin"
+    bmcchannel: 1
+    bmcuser: "admin"
+    bmcuserid: 2
+    bmcvlan: ''

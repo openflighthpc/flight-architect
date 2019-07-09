@@ -136,7 +136,7 @@ Outputs:
     Value: !Ref <%=node.name%>
   <%=node.name%>TAGgroups:
     Description: <%=node.name%>TAGgroups
-    Value: <%=node.genders.join(',') %>
+    Value: <%=node.genders.join(',') %>,all
 <% if node.config.role == 'login' -%>
   <%=node.name%>TAGIP:
     Description: <%=node.name%>TAGIP

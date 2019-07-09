@@ -3,6 +3,7 @@
 CONFIGDIR='/etc/sysconfig/network-scripts/'
 <% config.networks.each do |name, network| %>
 <% if network.defined %>
+<% unless name.to_s == 'bmc' %>
 cat << EOF > "${CONFIGDIR}ifcfg-<%=network.interface%>"
 <% if (network.bridge rescue false) -%>
 TYPE='Bridge'
@@ -113,6 +114,37 @@ MTU="9001"
 VLAN=yes
 <%end-%>
 EOF
+<% end -%>
+<% else -%>
+BMCPASSWORD="<%= network.bmcpassword %>"
+BMCCHANNEL="<%= network.bmcchannel %>"
+BMCUSER="<%= network.bmcuser %>"
+BMCUSERID="<%= network.bmcuserid %>"
+BMCVLAN="<%= network.bmcvlan %>"
+
+yum -y install ipmitool
+
+service ipmi start
+sleep 1
+ipmitool lan set "$BMCCHANNEL" ipsrc static
+sleep 2
+ipmitool lan set "$BMCCHANNEL" ipaddr "<%= network.ip %>"
+sleep 2
+ipmitool lan set "$BMCCHANNEL" netmask "<%= network.netmask %>"
+sleep 2
+ipmitool lan set "$BMCCHANNEL" defgw ipaddr "<%= network.gateway %>"
+sleep 2
+if ! [ -z "${BMCVLAN}" ] ; then
+ipmitool lan set "$BMCCHANNEL" vlan id "${BMCVLAN}"
+sleep 2
+fi
+ipmitool user set name "$BMCUSERID" "$BMCUSER"
+sleep 2
+ipmitool user set password "$BMCUSERID" "$BMCPASSWORD"
+sleep 2
+ipmitool lan print "$BMCCHANNEL"
+ipmitool user list "$BMCUSERID"
+ipmitool mc reset cold
 <% end -%>
 <% end -%>
 <% end -%>

@@ -143,12 +143,12 @@ networks.each_with_index do |(netname,network),idx| -%>
 	},
 	"osProfile": {
           "computerName": "<%=node.config.networks.network1.hostname%>",
-          "adminUsername": "tist",
+          "adminUsername": "centos",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {
             "publicKeys": [{
-              "path": "[concat ('/home/tist', '/.ssh/authorized_keys')]",
+              "path": "[concat ('/home/centos', '/.ssh/authorized_keys')]",
               "keyData": "<%=config.publickey%>"
               }]
             }

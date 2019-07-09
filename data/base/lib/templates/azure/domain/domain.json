@@ -52,7 +52,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
              "protocol": "TCP",
              "sourcePortRange": "*",
              "destinationPortRange": "22",
-             "sourceAddressPrefix": "213.83.69.6/32",
+             "sourceAddressPrefix": "*",
              "destinationAddressPrefix": "*",
              "access": "Allow",
              "priority": 1000,

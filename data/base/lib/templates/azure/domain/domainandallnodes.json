@@ -83,7 +83,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
              "protocol": "TCP",
              "sourcePortRange": "*",
              "destinationPortRange": "22",
-             "sourceAddressPrefix": "213.83.69.6/32",
+             "sourceAddressPrefix": "*",
              "destinationAddressPrefix": "*",
              "access": "Allow",
              "priority": 1000,
@@ -177,12 +177,12 @@ networks.each_with_index do |(networkname,network),idx| -%>
 	},
 	"osProfile": {
           "computerName": "<%=node.config.networks.network1.hostname%>",
-          "adminUsername": "tist",
+          "adminUsername": "centos",
           "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {
             "publicKeys": [{
-              "path": "[concat ('/home/tist', '/.ssh/authorized_keys')]",
+              "path": "[concat ('/home/centos', '/.ssh/authorized_keys')]",
               "keyData": "<%=config.publickey%>"
               }]
             }

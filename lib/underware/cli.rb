@@ -50,7 +50,7 @@ module Underware
     include Commander::Methods
 
     def run
-      program :name, 'underware'
+      program :name, 'architect'
       program :version, VERSION
       program :description, <<-EOF.squish
         Tool for managing standard config hierarchy and template rendering

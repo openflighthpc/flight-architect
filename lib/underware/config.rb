@@ -70,11 +70,11 @@ module Underware
     end
 
     def log_path
-      __data__.fetch(:logs_path, default: '/var/log/underware')
+      __data__.fetch(:logs_path, default: '/var/log/architect')
     end
 
     def storage_path
-      __data__.fetch(:storage_path, default: '/var/lib/underware')
+      __data__.fetch(:storage_path, default: '/var/lib/architect')
     end
   end
 end

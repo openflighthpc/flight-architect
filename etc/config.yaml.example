@@ -4,14 +4,14 @@
 # storage_path:
 #
 # Sets the content directory where cluster information will be stored
-# Defaults: /var/lib/underware
+# Defaults: /var/lib/architect
 #
 
 ##
 # log_path:
 #
 # Sets the directory the logs will be stored in
-# Defaults: /var/log/underware
+# Defaults: /var/log/architect
 #
 
 ##

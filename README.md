@@ -31,10 +31,10 @@ using it as a library; see below for documentation on using it as a tool.
 
 The application can be invoked directly using the `bin` executable:
 ```
-# bin/underware
+# bin/architect
   NAME:
 
-    underware
+    architect
 
   DESCRIPTION:
 
@@ -51,7 +51,7 @@ questions about the cluster such as its name. Then it will generate an
 one compute/ ten node cluster.
 
 ```
-# bin/underware init CLUSTER_IDENTIFIER
+# bin/architect init CLUSTER_IDENTIFIER
 Name of the cluster (1/6)
 > ?
 
@@ -71,7 +71,7 @@ It does however create the cluster's basic directory structure· It further
 configuration needs to use the `configure` commands.
 
 ```
-# bin/underware init CLUSTER_IDENTIFIER --bare
+# bin/architect init CLUSTER_IDENTIFIER --bare
 (no questions asked)
 ```
 
@@ -83,7 +83,7 @@ the domain. Unlike the `init` command, this will not recreate the directory
 structure.
 
 ```
-bin/underware configure domain
+bin/architect configure domain
 ```
 
 ### Adding new nodes
@@ -92,16 +92,16 @@ A set of nodes can be added using the `configure group` command. The `GROUP_NAME
 and `NODE_RANGE` need to specified on the command line.
 
 ```
-# bin/underware configure group GROUP_NAME NODE_RANGE
+# bin/architect configure group GROUP_NAME NODE_RANGE
 ```
 
 Examples:
 ```
 # Configures 'group1' with a single node 'node1'
-bin/underware configure group group1 node1
+bin/architect configure group group1 node1
 
 # Configures 'group2' with a range of nodes: 'n01', 'n02', ..., 'n10'
-bin/underware configure group group2 n[01-10]
+bin/architect configure group group2 n[01-10]
 ```
 
 Nodes can be added to additional groups using the `--groups` flag
@@ -112,17 +112,17 @@ A singe node can be setup using the `configure node` command. It will
 either re-configure an existing node, or add an orphan node.
 
 ```
-# bin/underware configure node NODE_NAME
+# bin/architect configure node NODE_NAME
 ```
 
 ### Rendering the content
 
 The content templates can be rendered using the `template` command. By default
 the templates are rendered to:
-`/var/lib/underware/clusters/<CLUSTER_IDENTIFIER>/rendered`
+`/var/lib/architect/clusters/<CLUSTER_IDENTIFIER>/rendered`
 
 ```
-# bin/underware template
+# bin/architect template
 ```
 
 ## Documentation

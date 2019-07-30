@@ -264,7 +264,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
 <% end -%>
     "<%=node.name%>TAGgroups": {
       "type": "string",
-      "value": "<%= node.genders.join(',') %>,all"
+      "value": "<%= "#{node.group.name},#{node.config.role},#{node.answer.secondary_groups},all".split(',').uniq.reject(&:empty?).join(',')  %>"
     }<%= (idx + 1 == nodes.length) ? '' : ',' %>
 <% end -%>
   }

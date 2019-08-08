@@ -8,7 +8,6 @@ yum -y install nfs-utils
 # Create export directories
 mkdir -p /export/data
 mkdir -p /export/gridware
-mkdir -p /export/home
 
 # Increase nfsd thread count
 sed -ie "s/^#\RPCNFSDCOUNT.*$/\RPCNFSDCOUNT=32/g" /etc/sysconfig/nfs
@@ -18,7 +17,7 @@ EXPORTOPTS="<%= config.networks.network1.network %>/<%= config.networks.network1
 EXPORTS=`cat << EOF
 /export/data "$EXPORTOPTS"
 /export/gridware "$EXPORTOPTS"
-/export/home "$EXPORTOPTS"
+/home "$EXPORTOPTS"
 EOF`
 
 echo "$EXPORTS" > /etc/exports
@@ -30,7 +29,9 @@ firewall-cmd --reload
 MOUNTS=`cat << EOF
 gateway1:/export/data   /data   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
 gateway1:/export/gridware   /opt/gridware   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
-gateway1:/export/users   /home   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
+<% unless (node.config.gateway rescue false) -%>
+gateway1:/home   /home   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
+<% end %>
 EOF`
 
 echo "$MOUNTS" >> /etc/fstab

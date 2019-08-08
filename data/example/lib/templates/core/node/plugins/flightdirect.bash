@@ -33,6 +33,7 @@ sed -i 's/.*cw_GRIDWARE_allow_users=.*/cw_GRIDWARE_allow_users=false/g' /opt/fli
 
 # Add OpenFlight branding
 curl https://openflighthpc-compute.s3.eu-west-2.amazonaws.com/banner/openflight.sh > /opt/flight-direct/scripts/openflight.sh
+chmod +x /opt/flight-direct/scripts/openflight.sh
 sed -i 's,scripts/moosebird,scripts/openflight,g' /opt/flight-direct/etc/profile.d/01-banner.sh
 
 # Enable storage types

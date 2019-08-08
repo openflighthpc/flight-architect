@@ -34,9 +34,6 @@ chmod 600 /home/centos/.ssh/authorized_keys
 chown -R centos:centos /home/centos
 <% end -%>
 
-# Disable user gridware
-sed -i 's/.*cw_GRIDWARE_allow_users=.*/cw_GRIDWARE_allow_users=false/g' /opt/flight-direct/etc/gridware.rc
-
 # Add OpenFlight branding
 curl https://openflighthpc-compute.s3.eu-west-2.amazonaws.com/banner/openflight.sh > /opt/flight-direct/scripts/openflight.sh
 chmod +x /opt/flight-direct/scripts/openflight.sh

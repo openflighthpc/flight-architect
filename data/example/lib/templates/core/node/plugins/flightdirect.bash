@@ -21,6 +21,7 @@ ROLE=compute
 
 flight config set role=$ROLE clustername=<%= config.cluster %>
 
+export ALCES_CONFIG_PATH=/opt/flight-direct/etc:/opt/gridware/etc # Because compute node installs will find /opt/gridware config first (due to login share) and therefore fail with volatile stuff and it'll be a real PITA
 flight forge install flight-$ROLE
 
 <% if (node.config.gateway rescue false) -%>

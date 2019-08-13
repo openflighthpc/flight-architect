@@ -42,3 +42,6 @@ sed -i 's,scripts/moosebird,scripts/openflight,g' /opt/flight-direct/etc/profile
 
 # Enable storage types
 flight storage enable base/s3
+
+# Install VTE for srun over terminal
+yum install -y vte vte-profile

@@ -151,7 +151,7 @@ yum install -y vte vte-profile
 cat << EOF > /opt/flight-direct/etc/genders
 <% groups.each do |group| -%>
 <% next if group.name == 'orphan' -%>
-<%= group.answer.hostname_range %>    <%= "#{group.name},#{group.config.role},#{group.answer.secondary_groups},all".split(',').uniq.reject(&:empty?).join(',')  %>
+<%= group.hostlist_nodes %>    <%= "#{group.name},#{group.config.role},#{group.answer.secondary_groups},all".split(',').uniq.reject(&:empty?).join(',')  %>
 <% end -%>
 <% orphan_list.each do |node| -%>
 <%= node %>    orphan

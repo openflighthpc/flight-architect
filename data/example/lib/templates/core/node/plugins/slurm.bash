@@ -45,11 +45,7 @@ EOF
 # Setup repo
 curl https://openflighthpc-compute.s3.eu-west-2.amazonaws.com/slurm/openflight-slurm.repo > /etc/yum.repos.d/openflight-slurm.repo
 
-<% if (node.config.gateway rescue false) -%>
-# Build SLURM RPMs
-yum -y install wget rpm-build munge munge-devel munge-libs perl-Switch numactl pam-devel perl-ExtUtils-MakeMaker mariadb-devel gcc readline-devel
-<% end -%>
-
+yum -y -e0 install epel-release
 yum -y -e0 install munge munge-devel munge-libs perl-Switch numactl
 yum --enablerepo flight -y -e 0 --nogpgcheck install slurm slurm-devel slurm-perlapi slurm-torque slurm-slurmd slurm-example-configs slurm-libpmi
 <% if (node.config.gateway rescue false) -%>

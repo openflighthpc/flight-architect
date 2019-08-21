@@ -1,0 +1,144 @@
+<%
+require 'ipaddr'
+def to_cidr(network,netmask)
+  "#{network.to_s}/#{IPAddr.new(netmask.to_s).to_i.to_s(2).count('1')}"
+end
+clustername="#{config.cluster}"
+
+-%>
+---
+Description: 'Flight Domain Template'
+Parameters:
+  securityGroup:
+    Type: String
+    Description: 'The ID of the domain Security Group'
+    Default: '%securitygroup%'
+<% node.config.networks.each do |netname,network| -%>
+<% if network.defined -%>
+  <%=netname%>SubnetId:
+    Type: String
+    Description: 'The ID of the domain Network Subnet for <%=netname%>'
+    Default: '%<%=netname%>SubnetID%'
+<% end -%>
+<% end -%>
+Mappings:
+  RegionMap:
+    eu-west-2:
+      "AMI": "ami-0856d6bfdba0132c9"
+    eu-north-1:
+      "AMI": "ami-08270d7e5609c43fe"
+    ap-south-1:
+      "AMI": "ami-0172b92b87b435f9f"
+    eu-west-3:
+      "AMI": "ami-0ef0a38a3be9b6153"
+    eu-west-1:
+      "AMI": "ami-0019f18ee3d4157d3"
+    ap-northeast-2:
+      "AMI": "ami-0a6297ef0fed4feab"
+    ap-northeast-1:
+      "AMI": "ami-0d594fc450b16d989"
+    sa-east-1:
+      "AMI": "ami-04c64e0377ef9611f"
+    ca-central-1:
+      "AMI": "ami-0f06da2b1f27ebfce"
+    ap-southeast-1:
+      "AMI": "ami-06f961d694adb87d2"
+    ap-southeast-2:
+      "AMI": "ami-00240f6f25c5a080b"
+    eu-central-1:
+      "AMI": "ami-0516856a7af16297a"
+    us-east-1:
+      "AMI": "ami-02946ce583813a223"
+    us-east-2:
+      "AMI": "ami-0d42c2a1cd2a7d60c"
+    us-west-1:
+      "AMI": "ami-07bafb3a6a0aaeb86"
+    us-west-2:
+      "AMI": "ami-04cb5d5d2babce63b"
+Resources:
+<% name=node.name -%>
+<% node.config.networks.each do |netname,network| -%>
+<% if network.defined -%>
+
+  <%=name%><%=netname%>Interface:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SourceDestCheck: false
+      GroupSet:
+        - %securitygroup%
+      PrivateIpAddress: <%=network.ip %>
+      SubnetId: %<%=netname%>SubnetID% 
+      Tags:
+        -
+          Key: 'Name'
+          Value: '<%=name%>'
+        -
+          Key: 'flightcluster'
+          Value: '<%=config.cluster%>'
+<% end -%>
+<% end -%>
+
+  <%=node.name%>:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
+      ImageId: !FindInMap ["RegionMap", !Ref "AWS::Region", "AMI"]
+      InstanceType: t2.small
+      Monitoring: true
+      NetworkInterfaces:
+<% count=0; node.config.networks.each do |netname,network| -%>
+<% if network.defined -%>
+        -
+          NetworkInterfaceId: !Ref <%=name%><%=netname%>Interface
+          DeviceIndex: <%=count%>
+<% count+=1 -%>
+<% end -%>
+<% end -%>
+
+      Tags:
+        -
+          Key: 'Name'
+          Value: '<%=name%>'
+        -
+          Key: 'flightcluster'
+          Value: '<%=config.cluster%>'
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+            - ''
+            - - "#cloud-config\n"
+              - "hostname: <%=name%>\n"
+              - "fqdn: <%=node.config.networks.network1.hostname%>\n"
+              - "runcmd:\n"
+<% unless (node.config.gateway rescue false) -%>
+              - "  - ip route replace default via <%= node.config.networks.network1.gateway %>\n"
+<% end -%>
+              - "  - curl <%= node.config.nodescripturl %> |NAMETEXT='%nametext%' USERSSHKEY='%user_ssh_pub_key%' /bin/bash -x | tee /tmp/mainscript-default-output\n"
+
+<% if node.config.role == 'login' -%>
+  <%=node.name%>publicIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  <%=node.name%>publicIpAssociation:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      NetworkInterfaceId: !Ref <%=node.name%>network1Interface
+      AllocationId: !GetAtt <%=node.name%>publicIp.AllocationId
+<% end -%>
+
+Outputs:
+  <%=node.name%>TAGID:
+    Description: <%=node.name%>TAGID
+    Value: !Ref <%=node.name%>
+  <%=node.name%>TAGgroups:
+    Description: <%=node.name%>TAGgroups
+    Value: <%=node.genders.join(',') %>,all
+<% if node.config.role == 'login' -%>
+  <%=node.name%>TAGIP:
+    Description: <%=node.name%>TAGIP
+    Value: !Ref <%=node.name%>publicIp
+<% end -%>

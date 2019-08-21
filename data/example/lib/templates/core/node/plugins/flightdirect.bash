@@ -107,10 +107,12 @@ diff -urw bin.orig/flight bin/flight
 EOF
 
 ## Apply patches
+echo "Applying patches"
 cd /opt/flight-direct/
 patch -r - -N -p1 < /opt/flight-direct/patches/post1.patch
 patch -r - -N -p0 < /opt/flight-direct/patches/post2.patch
 patch -r - -N -p0 < /opt/flight-direct/patches/post3.patch
+echo "Finished patching"
 
 # Install role
 export ALCES_CONFIG_PATH=/opt/flight-direct/etc:/opt/gridware/etc # Because compute node installs will find /opt/gridware config first (due to login share) and therefore fail with volatile stuff and it'll be a real PITA
@@ -132,7 +134,7 @@ usermod -a -G gridware centos
 # Whitelist user to install everything
 cat << EOF > /opt/gridware/etc/whitelist.yml
 :users:
-- centos:
+- centos
 EOF
 <% end -%>
 

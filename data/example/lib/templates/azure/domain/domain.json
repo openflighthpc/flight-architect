@@ -67,7 +67,7 @@ networks.each_with_index do |(networkname,network),idx| -%>
              "sourceAddressPrefix": "*",
              "destinationAddressPrefix": "*",
              "access": "Allow",
-             "priority": 1000,
+             "priority": 1001,
              "direction": "Inbound"
            }
          }]

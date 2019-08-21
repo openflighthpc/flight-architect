@@ -1,3 +1,4 @@
 networks:
   network1:
     gateway: 10.10.0.1
+user_ssh_pub_key: USERSSHKEY

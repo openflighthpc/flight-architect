@@ -124,7 +124,7 @@ flight session enable base/gnome
 
 # Allow root SSH login
 mkdir -p /home/centos/.ssh/
-echo "<%= config.user_ssh_pub_key %>" >> /home/centos/.ssh/authorized_keys
+echo "$USERSSHKEY" >> /home/centos/.ssh/authorized_keys
 chmod 600 /home/centos/.ssh/authorized_keys
 chown -R centos:centos /home/centos
 

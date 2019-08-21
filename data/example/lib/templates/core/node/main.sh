@@ -5,6 +5,9 @@ info () {
 
 export -f info
 
+# Variable overrides
+export USERSSHKEY=${USERSSHKEY:-<%= config.user_ssh_pub_key %>}
+
 <% if (config.debug rescue false) -%>
 info "Setting root password"
 echo 'root:<%=config.root_password%>' | chpasswd -e

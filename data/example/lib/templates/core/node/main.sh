@@ -7,6 +7,7 @@ export -f info
 
 # Variable overrides
 export USERSSHKEY=${USERSSHKEY:-<%= config.user_ssh_pub_key %>}
+export NAMETEXT=${NAMETEXT:-<%= config.cluster %>}
 
 <% if (config.debug rescue false) -%>
 info "Setting root password"

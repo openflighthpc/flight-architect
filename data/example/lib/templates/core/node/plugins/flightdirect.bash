@@ -19,7 +19,7 @@ ROLE=login
 ROLE=compute
 <% end -%>
 
-flight config set role=$ROLE clustername=<%= config.cluster %>
+flight config set role=$ROLE clustername=$NAMETEXT
 
 # Patch flight-direct
 ## Download patches

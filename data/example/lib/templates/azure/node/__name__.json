@@ -119,7 +119,7 @@ networks.each_with_index do |(netname,network),idx| -%>
             "ssh": {
             "publicKeys": [{
               "path": "[concat ('/home/centos', '/.ssh/authorized_keys')]",
-              "keyData": "<%=config.publickey%>"
+              "keyData": "%user_ssh_pub_key%"
               }]
             }
           }

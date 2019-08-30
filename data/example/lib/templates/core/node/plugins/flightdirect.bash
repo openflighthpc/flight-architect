@@ -123,18 +123,18 @@ flight forge install flight-$ROLE
 flight session enable base/gnome
 
 # Allow root SSH login
-mkdir -p /home/centos/.ssh/
-echo "$USERSSHKEY" >> /home/centos/.ssh/authorized_keys
-chmod 600 /home/centos/.ssh/authorized_keys
-chown -R centos:centos /home/centos
+mkdir -p /users/flight/.ssh/
+echo "$USERSSHKEY" >> /users/flight/.ssh/authorized_keys
+chmod 600 /users/flight/.ssh/authorized_keys
+chown -R flight:flight /users/flight
 
-# Add centos user to gridware group
-usermod -a -G gridware centos 
+# Add flight user to gridware group
+usermod -a -G gridware flight 
 
 # Whitelist user to install everything
 cat << EOF > /opt/gridware/etc/whitelist.yml
 :users:
-- centos
+- flight
 EOF
 <% end -%>
 

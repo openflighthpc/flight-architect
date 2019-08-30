@@ -42,7 +42,7 @@ EOF`
 
 echo "$MOUNTS" >> /etc/fstab
 
-mkdir -p /data /opt/gridware /opt/service /opt/site /users
+mkdir -p /data /opt/gridware /opt/service /opt/site 
 
 
 systemctl enable nfs

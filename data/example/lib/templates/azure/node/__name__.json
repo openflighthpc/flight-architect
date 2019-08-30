@@ -35,18 +35,18 @@ networks.each_with_index do |(netname,network),idx| -%>
 <% if node.config.role == 'login' -%>
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "<%=config.cluster%><%=node.name%>pubIP",
+      "name": "%nametext%<%=node.name%>pubIP",
       "apiVersion": "2017-03-01",
       "tags": {
-        "Name": "<%=config.cluster%>",
-        "flightcluster": "<%=config.cluster%>"
+        "Name": "%nametext%",
+        "flightcluster": "%nametext%"
       },
       "location": "[resourceGroup().location]",
       "properties": {
         "publicIPAllocationMethod": "Static",
         "idleTimeoutInMinutes": 30,
         "dnsSettings": {
-          "domainNameLabel": "<%=config.cluster%>-<%=node.name%>"
+          "domainNameLabel": "%nametext%-<%=node.name%>"
         }
       }
     },
@@ -55,22 +55,22 @@ networks.each_with_index do |(netname,network),idx| -%>
 networks.each_with_index do |(netname,network),idx| -%>
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "<%=config.cluster%><%=node.name%><%=netname%>interface",
+      "name": "%nametext%<%=node.name%><%=netname%>interface",
       "apiVersion": "2017-03-01",
       "tags": {
-        "Name": "<%=config.cluster%>",
-        "flightcluster": "<%=config.cluster%>"
+        "Name": "%nametext%",
+        "flightcluster": "%nametext%"
       },
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [{
-          "name": "<%=config.cluster%><%=node.name%><%=netname%>ip",
+          "name": "%nametext%<%=node.name%><%=netname%>ip",
           "properties": {
             "privateIPAllocationMethod": "Static",
             "privateIPAddress": "<%=network.ip%>",
 <% if network.primary && node.config.role == 'login' -%>
             "publicIPAddress": {
-              "id": "[resourceId('Microsoft.Network/publicIpAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
+              "id": "[resourceId('Microsoft.Network/publicIpAddresses', '%nametext%<%=node.name%>pubIP')]"
             },
 <% end -%>
             "subnet": {
@@ -83,17 +83,17 @@ networks.each_with_index do |(netname,network),idx| -%>
         }
       }<%if network.primary && node.config.role == 'login'%>,
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIpAddresses', '<%=config.cluster%><%=node.name%>pubIP')]"
+        "[resourceId('Microsoft.Network/publicIpAddresses', '%nametext%<%=node.name%>pubIP')]"
       ]<%end%>
     },
 <% end -%>
     {
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "<%=config.cluster%><%=node.name%>",
+      "name": "%nametext%<%=node.name%>",
       "apiVersion": "2016-04-30-preview",
       "tags": {
-        "Name": "<%=config.cluster%>",
-        "flightcluster": "<%=config.cluster%>"
+        "Name": "%nametext%",
+        "flightcluster": "%nametext%"
       },
       "location": "[resourceGroup().location]",
       "properties": {
@@ -129,7 +129,7 @@ networks.each_with_index do |(netname,network),idx| -%>
 <% networks = config.networks.select{|_,n| n.defined && !n.dhcp}
 networks.each_with_index do |(netname,network),idx| -%>
           {
-	    "id": "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=netname%>interface')]",
+	    "id": "[resourceId('Microsoft.Network/networkInterfaces', '%nametext%<%=node.name%><%=netname%>interface')]",
 	    "properties": {
 	      "primary": <%if network.primary%>true<%else%>false<%end%>
 	    }
@@ -141,21 +141,21 @@ networks.each_with_index do |(netname,network),idx| -%>
       "dependsOn": [
 <% networks = config.networks.select{|_,n| n.defined && !n.dhcp}
 networks.each_with_index do |(netname,network),idx| -%>
-        "[resourceId('Microsoft.Network/networkInterfaces', '<%=config.cluster%><%=node.name%><%=netname%>interface')]"<%= (idx + 1 == networks.length) ? '' : ',' %>
+        "[resourceId('Microsoft.Network/networkInterfaces', '%nametext%<%=node.name%><%=netname%>interface')]"<%= (idx + 1 == networks.length) ? '' : ',' %>
 <%end-%>
       ]  
     },
     {
-      "name": "<%=config.cluster%><%=node.name%>/startupscript",
+      "name": "%nametext%<%=node.name%>/startupscript",
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"
+        "[resourceId('Microsoft.Compute/virtualMachines/', '%nametext%<%=node.name%>')]"
       ],
       "tags": {
-        "Name": "<%=config.cluster%>",
-        "flightcluster": "<%=config.cluster%>"
+        "Name": "%nametext%",
+        "flightcluster": "%nametext%"
       },
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -173,12 +173,12 @@ networks.each_with_index do |(netname,network),idx| -%>
   "outputs": {
     "<%= node.name %>TAGID": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Compute/virtualMachines/', '<%=config.cluster%><%=node.name%>')]"
+      "value": "[resourceId('Microsoft.Compute/virtualMachines/', '%nametext%<%=node.name%>')]"
     },
 <% if node.config.role == 'login' -%>
     "<%=node.name%>TAGIP": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', '<%=config.cluster%><%=node.name%>pubIP')).ipAddress]"
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', '%nametext%<%=node.name%>pubIP')).ipAddress]"
     },
 <% end -%>
     "<%=node.name%>TAGgroups": {

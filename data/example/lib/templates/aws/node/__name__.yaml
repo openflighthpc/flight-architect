@@ -74,7 +74,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'flightcluster'
-          Value: '<%=config.cluster%>'
+          Value: '%nametext%'
 <% end -%>
 <% end -%>
 
@@ -103,7 +103,7 @@ Resources:
           Value: '<%=name%>'
         -
           Key: 'flightcluster'
-          Value: '<%=config.cluster%>'
+          Value: '%nametext%'
       UserData:
         Fn::Base64:
           Fn::Join:

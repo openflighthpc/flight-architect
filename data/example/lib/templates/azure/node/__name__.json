@@ -118,7 +118,7 @@ networks.each_with_index do |(netname,network),idx| -%>
             "disablePasswordAuthentication": true,
             "ssh": {
             "publicKeys": [{
-              "path": "[concat ('/users/flight', '/.ssh/authorized_keys')]",
+              "path": "[concat ('/home/flight', '/.ssh/authorized_keys')]",
               "keyData": "%user_ssh_pub_key%"
               }]
             }

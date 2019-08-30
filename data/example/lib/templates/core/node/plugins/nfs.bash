@@ -8,6 +8,8 @@ yum -y install nfs-utils
 # Create export directories
 mkdir -p /export/data
 mkdir -p /export/gridware
+mkdir -p /export/service
+mkdir -p /export/site
 
 # Increase nfsd thread count
 sed -ie "s/^#\RPCNFSDCOUNT.*$/\RPCNFSDCOUNT=32/g" /etc/sysconfig/nfs
@@ -17,6 +19,8 @@ EXPORTOPTS="<%= config.networks.network1.network %>/<%= config.networks.network1
 EXPORTS=`cat << EOF
 /export/data "$EXPORTOPTS"
 /export/gridware "$EXPORTOPTS"
+/export/service "$EXPORTOPTS"
+/export/site "$EXPORTOPTS"
 /home "$EXPORTOPTS"
 EOF`
 
@@ -29,14 +33,17 @@ firewall-cmd --reload
 MOUNTS=`cat << EOF
 gateway1:/export/data   /data   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
 gateway1:/export/gridware   /opt/gridware   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
+gateway1:/export/service   /opt/service   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
+gateway1:/export/site   /opt/site   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
 <% unless (node.config.gateway rescue false) -%>
 gateway1:/home   /home   nfs     intr,rsize=32768,wsize=32768,vers=3,_netdev     0 0
-<% end %>
+<% end -%>
 EOF`
 
 echo "$MOUNTS" >> /etc/fstab
 
-mkdir -p /data /opt/gridware /home
+mkdir -p /data /opt/gridware /opt/service /opt/site /users
+
 
 systemctl enable nfs
 systemctl restart nfs
@@ -46,3 +53,5 @@ exportfs -va
 <% end -%>
 
 mount -a
+
+ln -s /home /users

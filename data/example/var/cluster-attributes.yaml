@@ -1,11 +1,11 @@
 ---
 groups:
 - orphan
-- login
+- gateway
 - nodes
 nodes:
   gateway1:
-  - login
+  - gateway
   node01: &1
   - nodes
   node02: *1

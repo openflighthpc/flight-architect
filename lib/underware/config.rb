@@ -52,7 +52,8 @@ module Underware
       end
     end
 
-    def initialize
+    def initialize(*_a)
+      super
       __data__.env_prefix = APP_NAME.dup
       __data__.set_from_env(:debug)
     end

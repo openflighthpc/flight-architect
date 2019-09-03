@@ -44,6 +44,7 @@ require 'active_support/string_inquirer'
 require 'underware/config'
 require 'underware/cli_helper/parser'
 require 'underware/data'
+require 'underware/version'
 
 module Underware
   class Cli
@@ -56,9 +57,6 @@ module Underware
         Tool for managing standard config hierarchy and template rendering
         under-lying Alces clusters and other Alces tools
       EOF
-
-      # Suppress the `--trace` on all outputs. It is now a semi-hidden feature
-      suppress_trace_class Exception
 
       CliHelper::Parser.new(self).parse_commands
 

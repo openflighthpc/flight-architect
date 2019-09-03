@@ -52,7 +52,8 @@ module Underware
 
     attr_reader :cluster
 
-    def initialize(cluster)
+    def initialize(cluster, *_a)
+      super
       @cluster = cluster
       __data__.set_if_empty(:groups, value: ['orphan'])
     end

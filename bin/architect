@@ -28,8 +28,14 @@
 # https://github.com/openflighthpc/flight-architect
 # ==============================================================================
 
+
+base = File.expand_path('..', __dir__)
+ENV['BUNDLE_GEMFILE'] = File.join(base, 'Gemfile')
+$LOAD_PATH << File.join(base, 'lib')
+
+require 'rubygems'
 require 'bundler/setup'
-require 'underware/cli.rb'
+require 'underware/cli'
 
 require 'pry-byebug' if Underware::Config.debug
 

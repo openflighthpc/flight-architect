@@ -13,9 +13,9 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 # again once StructuredWarnings is removed
 gem 'rubytree', github: 'alces-software/RubyTree'
 
-gem 'nodeattr_utils', github: 'alces-software/nodeattr_utils'
-gem 'flight_config', github: 'alces-software/flight_config'
-gem 'commander', github: 'alces-software/commander'
+gem 'nodeattr_utils'
+gem 'flight_config'
+gem 'commander-openflighthpc'
 
 gem 'activesupport', '~> 5.1.6'
 gem 'colorize'

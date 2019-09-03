@@ -9,19 +9,34 @@ require 'pp'
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-# All Underware dependencies are specified in gemspec; some individual Gems
-# have different sources specified below as needed (see
-# https://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile)
-gemspec
-
-gem 'commander', github: 'alces-software/commander'
-
-# Currently NodeattrUtils isn't on rubygems. As such it needs to be sourced
-# from the GitHub repo directly. This can be removed once it is on `rubygems`
-
-gem 'nodeattr_utils', github: 'alces-software/nodeattr_utils'
-gem 'flight_config', github: 'alces-software/flight_config'
-
 # Forked of a fork containing a logger fix. The main gem can be used
 # again once StructuredWarnings is removed
 gem 'rubytree', github: 'alces-software/RubyTree'
+
+gem 'nodeattr_utils', github: 'alces-software/nodeattr_utils'
+gem 'flight_config', github: 'alces-software/flight_config'
+gem 'commander', github: 'alces-software/commander'
+
+gem 'activesupport', '~> 5.1.6'
+gem 'colorize'
+gem 'dry-validation', '~> 0.13.3'
+gem 'hashie'
+gem 'highline', '1.7.8'
+gem 'network_interface', '~> 0.0.1'
+gem 'recursive-open-struct'
+gem 'ruby-progressbar'
+gem 'rubyzip'
+gem 'terminal-table'
+
+group :development do
+  gem 'fakefs'
+  gem 'rspec'
+  gem 'simplecov'
+
+  gem "bundler"
+  gem 'pry'
+  gem 'pry-byebug'
+  gem 'rake'
+  gem 'rubocop', '~> 0.52.1'
+  gem 'rubocop-rspec'
+end

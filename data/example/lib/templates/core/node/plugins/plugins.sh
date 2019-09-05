@@ -10,7 +10,7 @@
 
 # Download scripts
 curl <%= config.renderedurl %>/core/plugins/nfs.bash | /bin/bash -x
-curl <%= config.renderedurl %>/core/plugins/flightdirect.bash | /bin/bash -x
+curl <%= config.renderedurl %>/core/plugins/flightenv.bash | /bin/bash -x
 curl <%= config.renderedurl %>/core/plugins/slurm.bash | /bin/bash -x
 
 # Set executable

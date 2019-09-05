@@ -27,6 +27,8 @@ cd /opt/flight/opt
 git clone https://github.com/alces-flight/flight-env flight-env
 /opt/flight/bin/flintegrate /opt/flight/opt/flight-env
 
+flight set always on
+
 # Allow user SSH login
 mkdir -p /users/flight/.ssh/
 echo "$USERSSHKEY" >> /users/flight/.ssh/authorized_keys

@@ -165,7 +165,7 @@ networks.each_with_index do |(netname,network),idx| -%>
         "settings": {
         },
         "protectedSettings": {
-          "commandToExecute": "<% unless node.config.gateway -%>ip route replace default via <%= node.config.networks.network1.gateway %> && <% end -%>curl <%= node.config.nodescripturl %> |NAMETEXT='%nametext%' USERSSHKEY='%user_ssh_pub_key%' /bin/bash | tee /tmp/mainscript-default-output"
+          "commandToExecute": "<% unless node.config.gateway -%>ip route replace default via <%= node.config.networks.network1.gateway %> && <% end -%>curl <%= node.config.nodescripturl %> |NAMETEXT='%nametext%' USERSSHKEY='%user_ssh_pub_key%' /bin/bash -x 2>&1 | tee /tmp/mainscript-default-output"
         }
       }
     }

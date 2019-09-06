@@ -28,9 +28,6 @@ git clone https://github.com/alces-flight/flight-env flight-env
 export HOME=/root
 /opt/flight/bin/flintegrate /opt/flight/opt/flight-env
 
-source /etc/profile.d/zz-flight-starter.sh
-flight set always on
-
 # Allow user SSH login
 mkdir -p /users/flight/.ssh/
 echo "$USERSSHKEY" >> /users/flight/.ssh/authorized_keys

@@ -28,6 +28,11 @@ git clone https://github.com/alces-flight/flight-env flight-env
 export HOME=/root
 /opt/flight/bin/flintegrate /opt/flight/opt/flight-env
 
+# Set cluster name
+source /etc/profile.d/zz-flight-starter.sh
+flight start
+flight config set cluster.name $NAMETEXT
+
 # Allow user SSH login
 mkdir -p /users/flight/.ssh/
 echo "$USERSSHKEY" >> /users/flight/.ssh/authorized_keys

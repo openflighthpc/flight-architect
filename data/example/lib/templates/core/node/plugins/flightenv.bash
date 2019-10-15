@@ -2,36 +2,21 @@
 #FLIGHTdescription: Install Flight Environment
 #FLIGHTstages: second
 
-#
-# Prerequisite
-#
-yum -y install git
-
-#
-# Flight Direct 
-#
-curl https://openflighthpc.s3-eu-west-1.amazonaws.com/repos/openflight/openflight.repo > /etc/yum.repos.d/openflight.repo
-yum -y install flight-runway
+yum install -y https://openflighthpc.s3-eu-west-1.amazonaws.com/repos/openflight/x86_64/openflighthpc-release-1-1.noarch.rpm
+yum install -y https://alces-flight.s3-eu-west-1.amazonaws.com/repos/alces-flight/x86_64/alces-flight-release-1-1.noarch.rpm
 
 #
 # Flight Starter
 #
-git clone https://github.com/openflighthpc/flight-starter /tmp/flight-starter
-cp -Rv /tmp/flight-starter/dist/* /
-rm -rf /tmp/flight-starter
+yum -y install flight-starter
 
 #
 # Flight Environment
 #
-cd /opt/flight/opt
-git clone https://github.com/alces-flight/flight-env flight-env
-export HOME=/root
-/opt/flight/bin/flintegrate /opt/flight/opt/flight-env
+yum -y install flight-env flight-desktop
 
 # Set cluster name
-source /etc/profile.d/zz-flight-starter.sh
-flight start
-flight config set cluster.name $NAMETEXT
+/opt/flight/bin/flight config set cluster.name $NAMETEXT
 
 # Allow user SSH login
 mkdir -p /users/flight/.ssh/

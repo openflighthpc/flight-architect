@@ -17,7 +17,7 @@ gem 'nodeattr_utils'
 gem 'flight_config'
 gem 'commander-openflighthpc'
 
-gem 'activesupport', '~> 5.1.6'
+gem 'activesupport', '~> 6.1.7'
 gem 'colorize'
 gem 'dry-validation', '~> 0.13.3'
 gem 'hashie'
